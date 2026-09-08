@@ -10,12 +10,12 @@
     "level": 8,
     "ac": 14,
     "hp": {
-      "cur": 32,
+      "cur": 36,
       "max": 45,
       "tmp": 8
     },
     "slots": {
-      "cur": 1,
+      "cur": 0,
       "max": 2,
       "lvl": 4
     },
