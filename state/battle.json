@@ -1,6 +1,6 @@
 {
   "battle": {
-    "name": "[테스트] 상태·전투 렌더링 확인용 모의전",
+    "name": "(전투 없음 — 직전: [테스트] 상태·전투 렌더링 확인용 모의전, 1라운드 전멸 종료)",
     "cols": 8,
     "rows": 6,
     "terrain": [
@@ -13,53 +13,7 @@
         "label": "테스트 격자방"
       }
     ],
-    "tokens": [
-      {
-        "id": "tok_pc",
-        "name": "베릭스",
-        "side": "pc",
-        "x": 6,
-        "y": 2,
-        "hp": "36/45",
-        "note": "임시HP 8 별도 표기(core.json). 미스티 스텝으로 A 뒤쪽 이동, 슬롯 0/2."
-      },
-      {
-        "id": "tok_isabel",
-        "name": "이자벨",
-        "side": "ally",
-        "x": 1,
-        "y": 2,
-        "hp": "26/26"
-      },
-      {
-        "id": "tok_liv",
-        "name": "리브",
-        "side": "ally",
-        "x": 1,
-        "y": 4,
-        "hp": "32/32"
-      },
-      {
-        "id": "tok_enemy_a",
-        "name": "테스트 표적 A",
-        "side": "enemy",
-        "x": 5,
-        "y": 2,
-        "hp": "2/10",
-        "down": false,
-        "note": "1라운드, 베릭스의 갈망하는 문지기의 검에 피격(8 피해)"
-      },
-      {
-        "id": "tok_enemy_b",
-        "name": "테스트 표적 B",
-        "side": "enemy",
-        "x": 5,
-        "y": 4,
-        "hp": "4/10",
-        "down": false,
-        "note": "피해 누적 표시 테스트용(부분 HP)"
-      }
-    ],
+    "tokens": [],
     "round": 1
   }
 }
