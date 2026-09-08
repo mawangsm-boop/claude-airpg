@@ -10,7 +10,7 @@
   "arc": "상단로의 나날들 (41~43회차 예정)",
   "place": "새벽문 동쪽 상단로 1일차",
   "checkpoint": "CP-S41-START",
-  "hp": { "cur": 45, "max": 45, "tmp": 0 },
+  "hp": { "cur": 45, "max": 45, "tmp": 14 },
   "slots": { "cur": 2, "max": 2, "lvl": 4 },
   "gold": 3971,
   "status": "이동 중, 특이 상태 없음",
