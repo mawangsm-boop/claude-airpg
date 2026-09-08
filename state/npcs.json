@@ -1,9 +1,343 @@
-[
-  {
-    "id": "vera",
-    "name": "베라 홀든",
-    "role": "새벽문 조합 지부 관리인",
-    "trait": "34회차부터 베릭스와 관계 발전, 40회차에 새벽문에 남으며 작별함. 재회 가능성 열려있음."
-  }
-]
-
+{
+  "npcs": [
+    {
+      "id": "overseer",
+      "name": "감독관",
+      "role": "언약의 사냥개 실질 수장 · 그림자를 다루던 정체불명의 존재",
+      "tag": "처치됨 (24회차)",
+      "tagc": "r",
+      "trait": "잿빛으로 바랜 로브를 두른 마른 인영. 발밑에서 그림자가 옷자락처럼 일렁였고, 두건 아래 눈은 텅 빈 것처럼 보였다. 베릭스의 계약 체결 밤부터 그를 감시해온 조직의 정점이었다. 침묵의 부적으로 목소리를 봉쇄당한 채 이자벨의 레이피어에 최후를 맞았다. 그가 쓰러지자 봉인 수호자 2기도 실이 끊긴 인형처럼 정지했다.",
+      "knows": "—",
+      "unknown": "—"
+    },
+    {
+      "id": "letitia",
+      "name": "레티시아 볼드윈",
+      "role": "여성 · 인간 · 40대 초반 · 길드 중앙 감사부 감사관",
+      "tag": "실버포트",
+      "tagc": "",
+      "trait": "원칙주의자. '수확 의례'가 조합 상층부의 오래된 통제 프로그램임을 실토했고, 이를 전면 공식 보고했다. 24회차에는 장부 속 거점 3곳이 모두 비워져 있었다는 사실을 먼저 알려 선제 습격의 계기를 제공했고, 종결 보고를 접수해 언약의 사냥개 사건을 공식 종결 처리했다. 구조된 포로 3인의 신병을 인계받았으며, 리브의 이탈자 신병 문제는 재량으로 불문에 부쳤다. 로렌스 건에 대한 설명을 수첩에 기록해둔 상태.",
+      "knows": "수확 의례의 전모 · 카데린 사건 · 광산~수로 사건 보고 내용 · 24회차 소탕 결과 보고",
+      "unknown": "코바·미아 사망의 진실 · 로렌스 처단의 실상",
+      "look": "짙은 갈색 머리, 무테 안경, 남색 감사관 코트."
+    },
+    {
+      "id": "osric",
+      "name": "늙은 마법사 오스릭",
+      "role": "남성 · 인간 · 70대 · 실버포트 부두 뒷골목 비공식 감정사",
+      "tag": "실버포트",
+      "tagc": "",
+      "trait": "헝클어진 백발, 외눈 안경, 얼룩진 낡은 로브. 부적 다수와 봉인 파편을 감정했다. 협조적이나 조합과 얽히기를 꺼리는 은둔형.",
+      "knows": "감정을 의뢰받은 물건들의 성질 · 봉인 파편이 하나의 고대 봉인이었다는 사실 · \"심장\" 결정체가 본체를 향해 반응하는 나침반이자 열쇠였다는 감정 결과",
+      "unknown": "베릭스의 본성 · 동료들의 죽음",
+      "nextTask": "\"관찰자의 눈\" 목걸이와 미감정 물약 2개 감정 대기 중"
+    },
+    {
+      "id": "nora",
+      "name": "노라",
+      "role": "여성 · 인간 · 이자벨의 여동생",
+      "tag": "실버포트",
+      "tagc": "",
+      "trait": "15회차에 카데린에게 인질처럼 붙잡혀 있던 것이 확인되어 이자벨과 재회했다. 유품 반지를 회수함.",
+      "knows": "카데린에게 붙잡혀 있던 동안 본 것",
+      "unknown": "언니의 현재 상태(정신 지배)"
+    },
+    {
+      "id": "roselyn",
+      "name": "로젤린 파인우드 · 카시안 손",
+      "role": "밀브룩 거주 · 가축 관리인과 사냥꾼 견습생",
+      "tag": "밀브룩 체류",
+      "tagc": "",
+      "trait": "어린 그리폰의 요양을 계속 맡고 있다. 로젤린은 10회차에 베릭스와 애정 관계로 발전했으며 서신 왕래 중.",
+      "knows": "밀렵꾼 그라스·카일 처단의 진상(두 사람만 인지)",
+      "unknown": "실버포트에서의 모든 사건"
+    },
+    {
+      "id": "liana",
+      "name": "리아나 화이트브룩",
+      "role": "여성 · 인간 · 20대 후반 · 레인저",
+      "tag": "거취 미정 · 비동행",
+      "tagc": "",
+      "trait": "16회차 여명 감시탑에서 조부(파수기사 영체)를 해방시켰다. 우호적 관계 유지, 재합류 가능성 있음.",
+      "knows": "여명 감시탑 사건",
+      "unknown": "그 외 대부분",
+      "look": "Liana Whitebrook, a human female ranger in her late 20s. Short cropped auburn hair, freckled face, alert focused eyes. Practical leather ranger gear, weathered cloak, shortbow and quiver."
+    },
+    {
+      "id": "captives",
+      "name": "구조된 포로 3인",
+      "role": "노인 1 · 다리를 다친 청년 1 · 중년 여전사 1",
+      "tag": "조합 보호 하",
+      "tagc": "",
+      "trait": "가라앉은 회당의 포로 구역에서 테사가 자물쇠를 열어 풀려났다. 레티시아가 신병을 인계받아 조합 보호 아래 두었다. \"수확\"을 앞두고 있던 계약자들로 보인다.",
+      "knows": "자신들이 갇혀 있던 동안 본 것",
+      "unknown": "조직의 전모 · 베릭스에 관한 일체"
+    },
+    {
+      "id": "lawrence",
+      "name": "로렌스",
+      "role": "5회차 처단된 동료",
+      "tag": "사망",
+      "tagc": "r",
+      "trait": "베릭스가 근거 없이 첩자로 몰아 코바·미아를 설득해 처단했다. 실제 물증은 없었다.",
+      "knows": "—",
+      "unknown": "직접 목격자였던 코바·미아가 모두 사망해, 현재 이 사건을 확증할 수 있는 생존자는 베릭스 본인뿐이다."
+    },
+    {
+      "id": "koba",
+      "name": "코바 · 미아",
+      "role": "오크 바바리안 · 하플링 로그",
+      "tag": "사망 (17회차)",
+      "tagc": "r",
+      "trait": "메아리 광산 심층부에서 베릭스에 의해 의식 제물로 살해됨. 대외적으로는 '정체불명의 거대한 존재의 습격'으로 설명되었다.",
+      "knows": "—",
+      "unknown": "—"
+    },
+    {
+      "id": "cardin",
+      "name": "오스몬드 카데린",
+      "role": "남성 · 인간 · 전 실버포트 항만 관리 위원회 위원장",
+      "tag": "압송됨",
+      "tagc": "",
+      "trait": "'항구장'의 정체. '그림자 사냥꾼'을 자처하며 독자 행동했다. 15회차에 생포되어 중앙 재판소로 압송됨.",
+      "knows": "수확 의례 · 언약의 사냥개와의 접점",
+      "unknown": "—"
+    },
+    {
+      "id": "prophet",
+      "name": "\"예언자\"",
+      "role": "봉인된 존재 · 정체 불명",
+      "tag": "완전 재봉인",
+      "tagc": "r",
+      "trait": "실버포트 지하 옛 수로 봉인실에 재봉인됨. \"다음엔 다른 문으로 가지\"라는 마지막 말을 남겼다.",
+      "knows": "베릭스가 저지른 일들(21회차에 폭로를 시도했으나 동료들에게 결정적 증거로 확립되지 않음)",
+      "unknown": "—"
+    },
+    {
+      "id": "entity",
+      "name": "메아리 광산의 깨어난 존재",
+      "role": "미확인 대형 존재",
+      "tag": "휴면 중",
+      "tagc": "r",
+      "trait": "메아리 광산 심층부에 여전히 잠들어 있다. 향후 위협.",
+      "knows": "—",
+      "unknown": "—"
+    },
+    {
+      "id": "brenna",
+      "name": "브레나",
+      "role": "여성 · 드워프 · 팔라딘 · 40대",
+      "tag": "실버포트 잔류",
+      "tagc": "",
+      "trait": "Lay on Hands·Divine Smite 사용. 24회차 소집에 대의명분으로 응해 선봉을 맡았고, 경비병과 정예 요원을 직접 처치했다. 배분받은 몫 일부를 구조된 포로들에게 쓰겠다고 했다. \"결과로 판단하겠다\"던 말대로 이번 결과에 \"합격\"이라 평했다. 24회차 이후 실버포트에 남았다.",
+      "knows": "18~21회차 사건 · 24회차 가라앉은 회당 습격 전 과정",
+      "unknown": "코바·미아 사망의 진실 · 로렌스 건 · 이자벨의 지배 상태 · 25회차 이후 여정",
+      "look": "Brenna, a female dwarf paladin in her 40s. Sturdy build, white hair braided and pinned up, one old burn scar across her face, stern disciplined expression. Flawless polished full plate with an unfamiliar noble house crest on the shield."
+    },
+    {
+      "id": "nadin",
+      "name": "나딘",
+      "role": "여성 · 티플링 · 소서러 · 20대",
+      "tag": "실버포트 잔류",
+      "tagc": "",
+      "trait": "화염계 주문 위주. 24회차 전투에서 화염구로 경비병과 봉인 수호자를 견제했다. 보수보다 흥미를 우선한다. 24회차 이후 실버포트에 남았다.",
+      "knows": "18~21회차 사건 · 24회차 가라앉은 회당 습격 전 과정",
+      "unknown": "코바·미아 사망의 진실 · 로렌스 건 · 이자벨의 지배 상태 · 25회차 이후 여정",
+      "look": "Nadin, a female tiefling sorcerer in her 20s. Red skin, small curved horns, mischievous sharp eyes, faint arcane energy around her hands. Light minimal gear, small burn marks."
+    },
+    {
+      "id": "silia",
+      "name": "실리아",
+      "role": "여성 · 엘프 · 몽크 · 나이 불명",
+      "tag": "실버포트 잔류",
+      "tagc": "",
+      "trait": "24회차 소집에 응했으나 지하 강습에는 참여하지 않고 지상에서 감시와 퇴로 확보를 맡았다. 베릭스에게서 느낀 미묘한 이질감은 여전히 확증되지 않았다. 24회차 이후 실버포트에 남았다.",
+      "knows": "18~21회차 사건 · 본인이 직접 느낀 이질감 · 24회차 지상 상황",
+      "unknown": "지하 회당 내부에서 벌어진 일 전부 · 코바·미아 사망의 진실 · 25회차 이후 여정",
+      "look": "Silia, a female elf monk of indeterminate age. Lean toned build, intricate tattoos along her arms, sleeveless simple robes, no visible weapons. Extremely calm posture, serene disciplined expression."
+    },
+    {
+      "id": "irene",
+      "name": "아이린",
+      "role": "여성 · 하프엘프 · 20대 중반 · 음유시인 · 정보상",
+      "tag": "실버포트 잔류",
+      "tagc": "",
+      "trait": "직접 전투 대신 도시 정보망과 퇴로 조율을 맡겠다고 자청했다. 승전 후 베릭스와 밤을 함께 보냈으며, 무언가 말을 꺼내려다 삼켰다 — 내용은 아직 드러나지 않았다. 24회차 이후 실버포트에 남았다.",
+      "knows": "6~9회차 조사 · 베릭스가 로렌스 화제를 회피했다는 사실 · 24회차 지상 상황",
+      "unknown": "로렌스 처단의 실상 · 지하 회당 내부에서 벌어진 일 · 이자벨의 지배 상태 · 25회차 이후 여정",
+      "look": "Irene, a female half-elf bard in her mid-20s. Elegant embroidered clothing, several ornate rings, expressive charismatic face, minimal visible weapons. Holding an expensive lute, confident sociable posture."
+    },
+    {
+      "id": "deshan",
+      "name": "데샨",
+      "role": "남성 · 인간 · 30대 · 채석 광부",
+      "tag": "구조됨",
+      "tagc": "g",
+      "status": "기타",
+      "gender": "남",
+      "race": "인간",
+      "sessions": [
+        27
+      ],
+      "trait": "나흘 전 야간 순찰 중 실종. 매달린 채 발견, 탈수·상처 상태로 구조되었다.",
+      "knows": "결정포식충에게 붙잡힌 이후의 일 · 굴 안쪽 상황",
+      "unknown": "베릭스의 과거 전부"
+    },
+    {
+      "id": "marg",
+      "name": "마르가레트",
+      "role": "여성 · 인간 · 60대 · 회색돌촌 촌장",
+      "tag": "협력",
+      "tagc": "g",
+      "status": "기타",
+      "gender": "여",
+      "race": "인간",
+      "sessions": [
+        27
+      ],
+      "trait": "스무 해 넘게 촌장을 맡아온 인물. 그레이스를 협상 대상으로 요구한 베릭스에게 단호히 선을 그었다. 결정포식충 소탕과 데샨 구조에 감사하며, 오두막 관련 사실을 보고받고 분노했다.",
+      "knows": "서쪽 절개면 사건 전 과정 · 오두막과 편지 내용(베릭스에게 직접 전해 들음)",
+      "unknown": "베릭스의 과거 전부"
+    },
+    {
+      "id": "rosa",
+      "name": "로자",
+      "role": "여성 · 인간 · 30대 초반 · 회색돌촌 사냥꾼",
+      "tag": "임시 동행 · 하룻밤",
+      "tagc": "y",
+      "status": "동행",
+      "gender": "여",
+      "race": "인간",
+      "sessions": [
+        27
+      ],
+      "trait": "능선 인근 지리에 밝은 마을 사냥꾼. 셋째 초소 사건에 동행하며 베릭스와 하룻밤을 보냈다. 채석장에 묶이기 싫어 사냥꾼이 되었으며, 능선 너머를 늘 궁금해했다.",
+      "knows": "회색돌촌 주변 지리 · 능선 방향 사냥 경험",
+      "unknown": "베릭스의 과거 전부 · 오두막 편지 내용(아직 전달받지 않음)"
+    },
+    {
+      "id": "tessa",
+      "name": "테사 밀번",
+      "role": "여성 · 인간 · 20대 후반 · 독립 유물 사냥꾼",
+      "tag": "동행이력",
+      "tagc": "",
+      "status": "동행이력",
+      "gender": "여",
+      "race": "인간",
+      "sessions": [
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "trait": "손석궁과 도구띠를 다루는 독립 유물 사냥꾼. 회색돌촌에서 여정의 규모가 점점 커지는 것을 느끼고, 자신에게 맞는 삶(유물 거래)을 찾아 남쪽 옛 상인 거점으로 떠났다. 마지막까지 우호적으로 작별했다.",
+      "knows": "가라앉은 금고 · 잊힌 자들의 신전 · 24회차 가라앉은 회당 습격 · 27회차 회색돌촌 사건 전 과정",
+      "unknown": "베릭스의 과거 전부 · 코바·미아의 죽음 · 이자벨·리브의 상태",
+      "look": "Tessa Milburn, a human female independent relic hunter in her late 20s. Faint freckles scattered across her face, messy brown curly hair tied back loosely, quick sharp eyes with a mischievous glint, confident lopsided grin. Wearing a patched brown leather jacket over practical travel clothes, a wide utility belt hung with lockpicks and small tools, fingerless gloves, scuffed boots suited for climbing and crawling through ruins."
+    },
+    {
+      "id": "belard",
+      "name": "벨러드",
+      "role": "남성 · 인간 · 50대 · 여명 결사 초소지기(사망)",
+      "tag": "사망·은폐",
+      "tagc": "r",
+      "status": "기타",
+      "gender": "남",
+      "race": "인간",
+      "sessions": [
+        27,
+        30
+      ],
+      "trait": "베릭스에게 살해당했다. 이자벨이 시신과 흔적을 완벽히 은폐해, 겉으로는 자리를 비운 것처럼 보인다.",
+      "knows": "—",
+      "unknown": "—"
+    },
+    {
+      "id": "vera",
+      "name": "베라 홀든",
+      "role": "여성 · 인간 · 30대 초반 · 새벽문 지부 관리자",
+      "tag": "새벽문 · 관계 진전",
+      "tagc": "g",
+      "status": "기타",
+      "gender": "여",
+      "race": "인간",
+      "sessions": [
+        32
+      ],
+      "trait": "새벽문 지부 관리자. 34회차 밤 관계 진전. 능선 매듭망 조사를 공식 종결 처리. 재회 가능.",
+      "knows": "32회차, 베릭스 일행의 조합 등록·의뢰 수행·아이템 감정을 전부 직접 처리했다. '새벽문 쪽 갈래' 단서를 확인했다.",
+      "unknown": "베릭스의 과거 전부 · 이자벨·리브의 실제 상태 · 부름꾼과 원반에 관한 사정",
+      "photoThumb": null,
+      "photoFull": null
+    },
+    {
+      "id": "meira",
+      "name": "메이라",
+      "role": "인간 · 여명 결사 결사원",
+      "tag": "협력",
+      "tagc": "g",
+      "status": "기타",
+      "gender": "여",
+      "race": "인간",
+      "sessions": [
+        30
+      ],
+      "trait": "넷 모두 사망했다는 소식에 충격받았으나 순순히 협조했다. 원반의 다섯째 홈이 결사원이 아닌 봉인 의식을 처음 시작한 자(심장부 유해)의 몫임을 밝혔다.",
+      "knows": "봉인 네트워크 전체 구조 · 부름꾼의 작동 방식",
+      "unknown": "베릭스가 넷을 직접 처치했다는 사실"
+    },
+    {
+      "id": "liv",
+      "status": "동행 · 의식 회복"
+    },
+    {
+      "id": "isabel",
+      "status": "동행 · 의식 회복"
+    },
+    {
+      "id": "the_fiend",
+      "n": "The Fiend",
+      "role": "베릭스의 후원자 · 정체 불명의 격외 존재",
+      "trait": "베릭스의 후원자. 33회차, 관찰자의 눈으로 처음 직접 관찰함. 무수한 '실'로 무언가와 연결된 모습이 확인됐고, 그중 하나가 정제된 핵의 잔향과 공명하듯 떨렸다. 관찰 도중 존재가 시선을 알아챈 듯한 기색을 보였다.",
+      "status": "미접촉 · 관찰 완료(1회) · 미해결 실마리"
+    },
+    {
+      "id": "npc_vesperhusk_s36",
+      "n": "베스퍼(빈 그릇)",
+      "d": "36회차, 옛 육신(원래도 인격 없이 숨만 붙어 있던 빈 그릇)에 감독의 자동인형에서 회수한 구동핵을 이식해 최소한의 명령 수행체로 재탄생. 새벽문 은신처에 상주하며 물약 조제·부품 제작 등 잡무를 맡는 비전투 하인. 전투 능력 없음."
+    },
+    {
+      "id": "idra",
+      "name": "이드라",
+      "role": "여성 · 인간(추정) · 30대 초반 · 은둔 드루이드",
+      "hp": {
+        "cur": 90,
+        "max": 90
+      },
+      "tag": "재회 가능 · 부를 수 있는 동료",
+      "trait": "핏빛숲의 정화된 심목을 지키며 상주. 상시 동행하지는 않으나, 새벽문으로 찾아오면 언제든 도움을 요청할 수 있다. 베릭스와 연인 관계가 시작되었다.",
+      "knows": "핏빛숲 사건 전말과 베릭스가 씨앗을 제거한 사실(단, 흡수의 진짜 의미는 모름)(A등급, 자기 경험한 부분만)",
+      "unknown": "베릭스의 과거·후원자·개인 실마리 전부(D등급)"
+    },
+    {
+      "id": "daria",
+      "name": "다리아",
+      "hp": {
+        "cur": 14,
+        "max": 28
+      },
+      "tag": "재회 가능 · 동행이력"
+    },
+    {
+      "id": "relic_hunter1",
+      "name": "유물 사냥꾼 (생존자 둘)",
+      "role": "남성 · 인간 · 유물 사냥꾼 조합 소속",
+      "tag": "항복 · 포로",
+      "trait": "로브 입은 대장의 지시로 신단의 나뭇잎 장신구를 노리고 왔다. 대장은 사망, 둘은 항복했다.",
+      "knows": "신단 제단의 유물 목표(A등급)",
+      "unknown": "베릭스의 과거 전부(D등급)"
+    }
+  ]
+}

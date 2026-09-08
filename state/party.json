@@ -1,24 +1,75 @@
-[
-  {
-    "id": "isabelle",
-    "name": "이자벨 크레인 (현재 인격: 베스퍼)",
-    "role": "인간 듀얼리스트, 자발적 공범 (정신 지배 아님, 35회차 영혼 교체)",
-    "trait": "베릭스에게 영구 충성. 리브에 이어 레아에게도 순종 인격 형성을 초기 단계로 진행 중.",
-    "hp": { "cur": 0, "max": 0 }
-  },
-  {
-    "id": "liv",
-    "name": "리브 코르사",
-    "role": "인간, 전 언약의 사냥개 조직원, 로그 3레벨 (어쌔신)",
-    "trait": "27회차부터 마법적 노예화(순종 인격 형성) 진행 중 — 거의 완료 단계, 지시 없이도 알아서 움직임.",
-    "hp": { "cur": 0, "max": 0 }
-  },
-  {
-    "id": "lea",
-    "name": "레아",
-    "role": "인간, 20대 후반, 전위 전사로 훈련 중",
-    "trait": "39회차 옛 요정 신단에서 합류. 40회차부터 이자벨의 순종 인격 형성 대상(초기 단계). 아직 경계심 남아있음.",
-    "hp": { "cur": 0, "max": 0 }
-  }
-]
-
+{
+  "party": [
+    {
+      "id": "isabel",
+      "name": "이자벨 크레인",
+      "role": "여성 · 인간 · 30대 초반 · 듀얼리스트",
+      "hp": {
+        "cur": 26,
+        "max": 26
+      },
+      "tag": "정체 위장 · 동행",
+      "tagc": "",
+      "trait": "35회차, 육체는 그대로이나 인격이 완전히 교체됐다. 본래 영혼의 주인은 베스퍼(20세, 새벽문 뒷골목의 금제 영혼결속 마법사) — 선천적 하반신 마비로 새벽문의 성인식을 치르지 못해 깊은 자격지심을 품고 있었다. 이자벨의 몸에 밴 전투 기술·반사·본능을 완전히 승계했다. 대외적으로는 계속 '이자벨' 행세, 진실은 베릭스만 안다. 성향이 악하고 모험을 갈망하며, 베릭스의 어두운 행보를 부추기고 조언하는 공범으로 자리 잡았다. 베릭스로부터 리브의 순종 인격 형성을 위임받았다.",
+      "comply": "정신 지배가 아닌 자발적 공범 관계 — 순종의 이유가 지배에서 동경·이해관계로 완전히 바뀌었다.",
+      "knows": "본인(베스퍼)의 과거와 새벽문 사정 전체(A등급)",
+      "unknown": "코바·미아의 죽음을 비롯한 원래 이자벨의 과거 전체(D등급)",
+      "look": "Isabelle Crane, a human female duelist in her early 30s. Short bob-length black hair, an old faint scar near her left eye, sharp confident expression with a hint of guardedness. Wearing a black leather coat with silver-accented belt, practical duelist's attire underneath, a rapier or dagger at her hip.",
+      "status": "동행",
+      "gender": "여",
+      "race": "인간",
+      "sessions": [
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "ac": 15,
+      "photoThumb": null,
+      "photoFull": null
+    },
+    {
+      "id": "liv",
+      "name": "리브 코르사",
+      "role": "여성 · 인간 · 20대 후반 · 전 언약의 사냥개 조직원 · 로그(어쌔신 지망) 2레벨",
+      "hp": {
+        "cur": 32,
+        "max": 32
+      },
+      "tag": "임시 동행 · 사실상 포로",
+      "tagc": "y",
+      "trait": "로그 3레벨로 승급. 로그 아키타입 '어쌔신' 습득 — 아직 행동하지 않은 대상에게 이점, 기습 상태인 대상에게 명중 시 자동 치명타. 변장 도구·독살 도구에 숙련이 추가됐다. 은신 공격 주사위가 1d6→2d6으로 증가했다. Cunning Action 유지. 황혼의 자단검·독 단검·고요한 발자국의 부츠 장비. 이자벨과의 협격 결속(쌍둥이 인장) 완성.",
+      "comply": "지시 순응도: 저항 의사 없음. 전투에서 자신감을 얻은 이후 태도가 한층 적극적으로 변하고 있다.",
+      "knows": "언약의 사냥개 내부 구조와 운영 방식(조직 소멸로 실효성은 사라짐) · 24회차 자신이 직접 겪은 일",
+      "unknown": "베릭스의 과거 전부 · 이자벨의 지배 상태 · 코바·미아·로렌스 건",
+      "look": "Liv Corsa, a human female former cult operative in her late 20s. Ash-blonde hair cut short and uneven, a small brand scar near her left temple, wary darting eyes with dark circles beneath. Wearing a stripped-down dark hooded coat with the insignia torn off, worn boots, an empty dagger sheath at her belt.",
+      "photoThumb": null,
+      "photoFull": null,
+      "ac": 12
+    },
+    {
+      "id": "rea",
+      "name": "레아",
+      "role": "여성 · 인간 · 20대 후반 · 전 하빈 일행 용병",
+      "hp": {
+        "cur": 16,
+        "max": 16
+      },
+      "tag": "거래로 넘겨짐 · 동행",
+      "trait": "강제로 신단 아치를 개방하다 반발에 크게 다쳤다. 죽음의 문턱에서 살아남았다.",
+      "knows": "이끼 파수꾼 전투 전 과정, 하빈·용병 사망 직접 목격(A등급)",
+      "unknown": "베릭스의 과거 전부(D등급)"
+    }
+  ]
+}

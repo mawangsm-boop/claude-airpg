@@ -1,0 +1,27 @@
+{
+  "battle": {
+    "name": "빛나방 떼",
+    "cols": 12,
+    "rows": 10,
+    "terrain": [
+      {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 10,
+        "type": "glare",
+        "label": "눈부신 결정 지반"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "w": 2,
+        "h": 2,
+        "type": "structure",
+        "label": "중앙 제단(결정 기둥)"
+      }
+    ],
+    "tokens": [],
+    "round": 1
+  }
+}
