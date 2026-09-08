@@ -1,1 +1,8 @@
+{
+  "here": "TODO-상단로",
+  "discovered": [],
+  "customPlaces": [
+    { "id": "TODO-상단로", "n": "카를렌행 상단로", "t": "waypoint", "x": 0, "y": 0, "d": "새벽문을 떠나 동쪽 카를렌으로 향하는 길목. 좌표는 임의값이므로 실제 좌표계에 맞춰 조정 필요.", "cat": "waypoint" }
+  ]
+}
 
