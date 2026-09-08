@@ -1,27 +1,65 @@
 {
   "battle": {
-    "name": "빛나방 떼",
-    "cols": 12,
-    "rows": 10,
+    "name": "[테스트] 상태·전투 렌더링 확인용 모의전",
+    "cols": 8,
+    "rows": 6,
     "terrain": [
       {
         "x": 0,
         "y": 0,
-        "w": 12,
-        "h": 10,
-        "type": "glare",
-        "label": "눈부신 결정 지반"
-      },
-      {
-        "x": 5,
-        "y": 1,
-        "w": 2,
-        "h": 2,
+        "w": 8,
+        "h": 6,
         "type": "structure",
-        "label": "중앙 제단(결정 기둥)"
+        "label": "테스트 격자방"
       }
     ],
-    "tokens": [],
+    "tokens": [
+      {
+        "id": "tok_pc",
+        "name": "베릭스",
+        "side": "pc",
+        "x": 1,
+        "y": 3,
+        "hp": "32/45",
+        "note": "임시HP 8 별도 표기(core.json). 슬롯 1/2 소모 상태 테스트."
+      },
+      {
+        "id": "tok_isabel",
+        "name": "이자벨",
+        "side": "ally",
+        "x": 1,
+        "y": 2,
+        "hp": "26/26"
+      },
+      {
+        "id": "tok_liv",
+        "name": "리브",
+        "side": "ally",
+        "x": 1,
+        "y": 4,
+        "hp": "32/32"
+      },
+      {
+        "id": "tok_enemy_a",
+        "name": "테스트 표적 A",
+        "side": "enemy",
+        "x": 5,
+        "y": 2,
+        "hp": "10/10",
+        "down": false,
+        "note": "가상 표적 — 렌더링 테스트용"
+      },
+      {
+        "id": "tok_enemy_b",
+        "name": "테스트 표적 B",
+        "side": "enemy",
+        "x": 5,
+        "y": 4,
+        "hp": "4/10",
+        "down": false,
+        "note": "피해 누적 표시 테스트용(부분 HP)"
+      }
+    ],
     "round": 1
   }
 }
