@@ -1,1 +1,17 @@
+{
+  "name": "베릭스 나이트블레이드 (Verrix Nightblade)",
+  "class": "티플링 워락 (The Fiend)",
+  "level": 8,
+  "cha_mod": 6,
+  "session": 40,
+  "arc": "미정 (문지기 아크 완결)",
+  "place": "새벽문 → 카를렌 방면 상단로",
+  "checkpoint": "CP-S40-DEPART",
+  "hp": { "cur": 0, "max": 0, "tmp": 0 },
+  "slots": { "cur": 0, "max": 0 },
+  "gold": 0,
+  "items": [
+    { "id": "TODO-1", "n": "TODO: 실제 소지품으로 교체", "q": 1, "d": "핸드북 데이터 탭에서 최신 소지품 목록을 내보내 이 배열을 채워주세요.", "cat": "misc" }
+  ]
+}
 
