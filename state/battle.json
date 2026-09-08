@@ -1,0 +1,20 @@
+{
+  "name": "상단로 매복 — 도적 정찰조",
+  "cols": 12,
+  "rows": 8,
+  "round": 1,
+  "terrain": [
+    { "x": 0, "y": 0, "w": 12, "h": 3, "type": "tree", "label": "길가 수풀 (북)" },
+    { "x": 0, "y": 5, "w": 12, "h": 3, "type": "tree", "label": "길가 수풀 (남)" }
+  ],
+  "tokens": [
+    { "id": "berix", "name": "베릭스", "side": "pc", "x": 5, "y": 4, "hp": "45/45", "note": "이니셔티브 12" },
+    { "id": "isabelle", "name": "이자벨(베스퍼)", "side": "ally", "x": 4, "y": 4, "hp": "26/26", "note": "이니셔티브 7" },
+    { "id": "liv", "name": "리브", "side": "ally", "x": 6, "y": 3, "hp": "32/32", "note": "이니셔티브 18, 1라운드: 은신 이동 중" },
+    { "id": "rea", "name": "레아", "side": "ally", "x": 6, "y": 5, "hp": "16/16", "note": "이니셔티브 8" },
+    { "id": "camilla", "name": "카밀라 소른", "side": "ally", "x": 3, "y": 3, "hp": "27/27", "note": "이니셔티브 19, AC15" },
+    { "id": "bandit1", "name": "도적 정찰조 1 (궁수)", "side": "enemy", "x": 2, "y": 1, "hp": "11/11", "note": "이니셔티브 14" },
+    { "id": "bandit2", "name": "도적 정찰조 2", "side": "enemy", "x": 9, "y": 1, "hp": "11/11", "note": "이니셔티브 6" },
+    { "id": "bandit3", "name": "도적 정찰조 3", "side": "enemy", "x": 9, "y": 6, "hp": "11/11", "note": "이니셔티브 9" }
+  ]
+}
