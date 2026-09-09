@@ -1,5 +1,5 @@
 {
-  "rev": "S41-012",
-  "updated": "2026-09-09T02:15:00Z",
-  "note": "레아 party.json HP 14/16 정정(전투 종료 후 반영 누락됐던 것 수정), look 필드 고정. characters.md 신규 생성."
+  "rev": "S41-013",
+  "updated": "2026-09-09T03:00:00Z",
+  "note": "세렌 관계 형성 완료 — npcs.json 태그/knows 갱신, log.json 반영."
 }

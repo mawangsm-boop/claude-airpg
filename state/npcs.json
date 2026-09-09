@@ -334,11 +334,11 @@
       "id": "seren",
       "name": "세렌",
       "role": "여성 · 인간 · 20대 후반 · 여명 결사 소속 조사원",
-      "tag": "초면 · 경계",
-      "tagc": "y",
-      "trait": "결사 본부의 지시로 코르빈의 마지막 행적을 쫓아 파견됐다. 말투가 건조하고 사무적이며, 필요 이상의 정보는 내주지 않는다. 아직 코르빈의 죽음을 모른다.",
-      "knows": "코르빈이 결사 본부와 연락을 끊었다는 사실 · 본부 지시로 그의 행적을 추적 중이라는 것 · 그의 마지막 행선지가 새벽문 인근이었다는 것(A등급, 본부 지시 문서)",
-      "unknown": "코르빈의 죽음 · 그가 쫓던 \"문지기\" 진실 · 베릭스 일행의 정체(D등급)",
+      "tag": "관계 형성 · 재회 가능",
+      "tagc": "g",
+      "trait": "결사 본부의 지시로 코르빈의 마지막 행적을 쫓아 파견됐다. 말투가 건조하고 사무적이나, 베릭스와 하룻밤을 보내며 태도가 누그러졌다. 코르빈의 죽음을 전해 듣고 임무를 종결, 카를렌 쪽에 우호적으로 보고하기로 약속했다. 카를렌에서 계속 근무한다.",
+      "knows": "코르빈이 결사 본부와 연락을 끊었다는 사실 · 본부 지시로 그의 행적을 추적 중이었다는 것 · 그의 마지막 행선지가 새벽문 인근이었다는 것 · 코르빈이 죽었다는 사실(베릭스에게 구두로 전해 들음, B등급)",
+      "unknown": "코르빈의 정확한 사인·죽음의 경위 · 그가 쫓던 \"문지기\" 진실 · 베릭스 일행의 정체(D등급)",
       "look": "Seren, a human female investigator in her late 20s. Straight dark hair tied back tightly, sharp calculating eyes, composed unreadable expression. Wearing a plain traveler's cloak over a fitted dark coat, no visible insignia, a slim ledger and short blade at her belt."
     },
     {
