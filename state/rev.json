@@ -1,0 +1,5 @@
+{
+  "rev": "S41-005",
+  "updated": "2026-09-08T15:00:00Z",
+  "note": "dungeon/battle.json 부재 시 핸드북 전체 로딩 실패하던 버그 수정, feats.json 죽은 items 필드 제거"
+}
