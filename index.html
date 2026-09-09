@@ -2118,7 +2118,8 @@ const $=id=>document.getElementById(id);
    - rev 가 같으면 localStorage(수동 @@PATCH 결과)를 유지한다.
    - fetch 실패(file:// 로 직접 열기 등) 시 내장 SEED/로컬 저장본으로 동작한다. */
 const REMOTE_BASE = "./state/";
-const REMOTE_PARTS = ["core","party","npcs","world","dungeon","battle","threads","log","feats"];
+const REMOTE_PARTS = ["core","party","npcs","world","threads","log","feats"];
+const REMOTE_OPTIONAL = ["dungeon","battle"]; // 던전 밖·평시엔 파일 자체가 없는 게 정상 — 404를 오류로 취급하지 않는다
 const REV_KEY = KEY + "_rev";
 let SYNC_TIMER = null, SYNC_BUSY = false;
 
@@ -2128,14 +2129,23 @@ function syncBadge(text, cls){
   b.textContent = text;
   b.className = "syncbadge" + (cls ? " " + cls : "");
 }
-async function fetchJSON(name){
+async function fetchJSON(name, optional){
   const r = await fetch(REMOTE_BASE + name + "?t=" + Date.now(), {cache:"no-store"});
-  if(!r.ok) throw new Error(name + " " + r.status);
+  if(!r.ok){
+    if(optional && r.status===404) return null; // 평시엔 dungeon.json/battle.json이 없는 게 정상
+    throw new Error(name + " " + r.status);
+  }
   return r.json();
 }
 async function fetchRemoteState(){
-  const parts = await Promise.all(REMOTE_PARTS.map(n => fetchJSON(n + ".json")));
-  return Object.assign({}, ...parts);
+  const required = await Promise.all(REMOTE_PARTS.map(n => fetchJSON(n + ".json")));
+  const optional = await Promise.all(REMOTE_OPTIONAL.map(n => fetchJSON(n + ".json", true)));
+  const merged = Object.assign({}, ...required);
+  optional.forEach(o => { if(o) Object.assign(merged, o); });
+  // 파일이 없으면(던전 밖·평시) 빈 상태로 채운다 — renderDungeon/renderBattle이 참조할 수 있게
+  if(!merged.dungeon) merged.dungeon = {name:"", here:"", note:"", rooms:[], doors:[]};
+  if(!merged.battle)  merged.battle  = {name:"", cols:16, rows:12, round:1, terrain:[], tokens:[]};
+  return merged;
 }
 /* force=true 면 rev가 같아도 원격을 강제로 채택한다(“지금 불러오기”). */
 async function syncRemote(force){
@@ -2277,7 +2287,7 @@ function applyPatch(obj){
 
 /* ==================== 렌더 ==================== */
 function renderAll(){ header(); renderChar(); renderParty(); renderDungeon(); renderBattle(); renderWorldMarkers(); renderLog(); $("fullBox").value=JSON.stringify(S,null,1); }
-const HB_VERSION="v2.19";
+const HB_VERSION="v2.20";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;

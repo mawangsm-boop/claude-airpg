@@ -5,18 +5,22 @@
 ## 파일 구조 (중요: 필요한 것만 읽으세요)
 
 ```
-state/pc.json      — 베릭스 본인 스탯/소지품 (거의 매 턴 필요)
-state/party.json   — 동료 명단/상태 (전투·대화 장면에서 필요)
+state/core.json    — 회차/아크/위치·베릭스 본인 스탯·소지품(pc.items, 거의 매 턴 필요)
+state/party.json   — 동료 명단/상태/장비(equipment, 전투·대화 장면에서 필요)
 state/npcs.json    — 주요 NPC (해당 인물 등장 시에만 필요)
 state/world.json   — 대륙 위치/발견 지점 (이동할 때만 필요)
-state/dungeon.json — 현재 던전 (던전 안에 있을 때만 존재, 평소엔 없음)
-state/battle.json  — 현재 전투 (전투 중일 때만 존재, 평소엔 없음)
-log.md             — 회차 요약 로그 (구역 전환 등 큰 사건만 기록)
+state/dungeon.json — 현재 던전, {"dungeon":{...}} 래핑 (던전 안에 있을 때만 존재, 평소엔 없음 — 없어도 핸드북은 정상 동작)
+state/battle.json  — 현재 전투, {"battle":{...}} 래핑 (전투 중일 때만 존재, 평소엔 없음 — 없어도 핸드북은 정상 동작)
+state/log.json     — 핸드북 "로그" 탭에 뜨는 사용자용 로그. {"log":[{"t":"세션 N","x":"..."}]}
+state/rev.json     — 핸드북 동기화 버전 표식. state 파일을 고칠 때마다 이 값을 반드시 갱신
+log.md             — Claude Code 자신의 계속 진행용 압축 메모(사용자에게 보이지 않음, 세션 재개 시 참고용)
 state/checkpoint.json — 체크포인트 카운터 (긴 휴식/짧은 휴식 트리거 추적, 아래 별도 설명)
 tools/dice.js       — 주사위 굴리기 스크립트
 characters.md       — 캐릭터 외모/설정 잠금 (장면 묘사용, 이미지 프롬프트 만들 때만 참조)
 archive/            — 과거 회차 원문·설정 아카이브 (아래 별도 설명 — 기본적으로 열지 않음)
 ```
+
+**주의**: `state/pc.json`이라는 파일은 없습니다. 베릭스 본인 데이터는 전부 `state/core.json`의 `pc` 객체 안에 있습니다(`core.json.pc.items`, `core.json.pc.hp` 등). 예전 문서에 `pc.json`이 등장한다면 오기이니 무시하세요 — 이 저장소는 핸드북(GitHub Pages)과 같은 저장소이고, 핸드북은 애초에 `pc.json`이라는 파일을 읽지 않습니다.
 
 ### archive/ 폴더 — 절대 매 턴 열지 마세요
 
@@ -33,10 +37,10 @@ archive/gm_guidelines_full.md — GM 지침 전체 원본 (이 CLAUDE.md는 그 
 
 
 **토큰 절약 원칙**: 매 턴 모든 파일을 다 읽지 마세요. 지금 장면에 필요한 파일만 `cat`으로 읽으세요.
-- 마을 대화 장면 → pc.json + party.json (+ 해당 NPC가 npcs.json에 있으면 그것도)
+- 마을 대화 장면 → core.json + party.json (+ 해당 NPC가 npcs.json에 있으면 그것도)
 - 이동 중 → world.json
-- 던전 진입 → dungeon.json 새로 생성, 이후 그 파일만 갱신
-- 전투 중 → battle.json 새로 생성, 매 턴 그 파일만 갱신, 전투 끝나면 파일 삭제(`rm state/battle.json`)
+- 던전 진입 → dungeon.json 새로 생성(`{"dungeon":{...}}` 래핑 형태로), 이후 그 파일만 갱신
+- 전투 중 → battle.json 새로 생성(`{"battle":{...}}` 래핑 형태로), 매 턴 그 파일만 갱신, 전투 끝나면 파일 삭제(`rm state/battle.json`) — 핸드북 v2.20부터 이 파일이 없어도 정상 동작하도록 수정되었으니 안심하고 삭제해도 됩니다.
 
 ## 상태 갱신 방법
 
@@ -44,8 +48,8 @@ archive/gm_guidelines_full.md — GM 지침 전체 원본 (이 CLAUDE.md는 그 
 
 - `party.json`, `npcs.json`의 배열 항목은 `id` 필드로 구분합니다. 기존 id면 갱신, 새 id면 추가.
 - HP는 항상 `{"cur":숫자,"max":숫자}` 형태. 임시 HP는 합산하지 않고 큰 값 하나만 유지.
-- 아이템은 `pc.json`의 `items` 배열, 각 항목에 고유 `id` 필수(삭제 시 필요).
-- `log.md`는 매 턴이 아니라 **구역 전환·전투 종료·중요 사건** 시에만 한 줄 추가.
+- **아이템의 유일한 출처는 `core.json`의 `pc.items` 배열입니다.** 다른 파일에 아이템 목록을 따로 두지 않습니다(예전에 `feats.json`에 중복 배열이 있었던 적이 있는데 삭제됨 — 재생성하지 마세요). 각 항목에 고유 `id` 필수(삭제 시 필요), 분류는 `cat`(weapon/accessory/consumable/trinket/misc), 착용·충전 상태는 `equipped`/`charge`/`passive`, 전투 수치는 `combat` 필드에 넣습니다(8-3b 절 참고).
+- `log.md`는 Claude Code 자신의 진행 메모용이라 매 턴이 아니라 **구역 전환·전투 종료·중요 사건** 시에만 한 줄 추가. **`state/log.json`은 별도입니다** — 핸드북 "로그" 탭에 사용자에게 그대로 보이므로, 같은 시점에 `{"log":{"t":"세션 N","x":"..."}}` 형태로 함께 갱신합니다(둘 다 갱신하는 걸 잊지 마세요 — 하나는 당신의 메모, 하나는 사용자가 보는 화면입니다).
 
 ### state/world.json 전용 규칙 (대륙 지도 패치)
 
@@ -65,27 +69,35 @@ archive/gm_guidelines_full.md — GM 지침 전체 원본 (이 CLAUDE.md는 그 
 
 ### state/dungeon.json 전용 규칙 (새 던전 진입 시에만 생성)
 
+**핸드북이 실제로 기대하는 형태는 `{"dungeon": {...}}` 래핑입니다** — 아래 객체를 그대로 파일 루트에 쓰지 말고 `dungeon` 키 하나로 감쌉니다.
+
 ```json
 {
-  "name": "던전이름", "here": "현재방id", "note": "메모",
-  "rooms": [ {"id":"고유id","name":"방이름","x":숫자,"y":숫자,"w":숫자,"h":숫자,"state":"done|found|hidden","danger":true,"note":"메모"} ],
-  "doors": [ ["방id1","방id2"] ]
+  "dungeon": {
+    "name": "던전이름", "here": "현재방id", "note": "메모",
+    "rooms": [ {"id":"고유id","name":"방이름","x":숫자,"y":숫자,"w":숫자,"h":숫자,"state":"done|found|hidden","danger":true,"note":"메모"} ],
+    "doors": [ ["방id1","방id2"] ]
+  }
 }
 ```
 - `rooms`는 `id` 기준 병합(기존 갱신/신규 추가), 방끼리 좌표가 겹치지 않게 배치.
-- 던전을 완전히 벗어나면 `state/dungeon.json` 파일 자체를 삭제합니다(`rm state/dungeon.json`).
+- 던전을 완전히 벗어나면 `state/dungeon.json` 파일 자체를 삭제합니다(`rm state/dungeon.json`). 핸드북 v2.20부터 이 파일이 없어도 정상 동작합니다.
 
 ### state/battle.json 전용 규칙 (전투 시작 시에만 생성)
 
+**이것도 `{"battle": {...}}` 래핑입니다.**
+
 ```json
 {
-  "name": "전투이름", "cols": 숫자, "rows": 숫자, "round": 숫자,
-  "terrain": [ {"x":숫자,"y":숫자,"w":숫자,"h":숫자,"type":"tree|water|pit|hazard","label":"이름"} ],
-  "tokens": [ {"id":"고유id","name":"이름","side":"pc|ally|enemy|neutral","x":숫자,"y":숫자,"hp":"현재/최대","down":true,"note":"메모"} ]
+  "battle": {
+    "name": "전투이름", "cols": 숫자, "rows": 숫자, "round": 숫자,
+    "terrain": [ {"x":숫자,"y":숫자,"w":숫자,"h":숫자,"type":"tree|water|pit|hazard","label":"이름"} ],
+    "tokens": [ {"id":"고유id","name":"이름","side":"pc|ally|enemy|neutral","x":숫자,"y":숫자,"hp":"현재/최대","down":true,"note":"메모"} ]
+  }
 }
 ```
 - `tokens`는 매 턴 위치·HP 변화를 **즉시** 반영 (전투 중엔 이 파일만 자주 갱신, 다른 state 파일은 건드리지 않음).
-- 전투가 끝나면 `state/battle.json` 파일 자체를 삭제합니다.
+- 전투가 끝나면 `state/battle.json` 파일 자체를 삭제합니다. 핸드북 v2.20부터 이 파일이 없어도 정상 동작합니다.
 
 ## 저장소 커밋 · 푸시 (v018 신설)
 
@@ -93,7 +105,11 @@ archive/gm_guidelines_full.md — GM 지침 전체 원본 (이 CLAUDE.md는 그 
 
 이렇게 바꾸는 이유는 순전히 응답 속도 때문입니다 — commit·push는 GitHub 서버와의 네트워크 왕복이라 로컬 파일 수정보다 훨씬 느립니다. 매 행동마다 반복하면 지연이 누적됩니다.
 
-**이 저장소가 핸드북(GitHub Pages)과 같은 저장소인 경우**: 커밋에 `state/rev.json`의 `rev` 값 갱신을 반드시 포함시킵니다. 이 파일이 없으면 핸드북 화면이 갱신되지 않습니다. 다만 이 스캐폴드의 `state/*.json` 스키마(예: 이 파일의 `pc.json`, 이 절의 `battle.json` 필드명)와 핸드북이 실제로 기대하는 스키마(`core.json`의 `pc` 객체, `battle.json`의 `{"battle":{...}}` 래핑 등)가 서로 다를 수 있습니다 — 이 부분은 아직 사용자와 함께 대조 확인이 필요한 상태입니다. 확인 전까지는 최소한 이 저장소 자체의 상태 파일 커밋·푸시만 라운드 단위로 정상 수행하고, 핸드북 쪽 파일까지 같이 갱신할지는 매 세션 사용자에게 먼저 확인하세요.
+**이 저장소는 핸드북(GitHub Pages)과 같은 저장소입니다 (v020에서 대조 확인 완료).** 커밋에 `state/rev.json`의 `rev` 값 갱신을 반드시 포함시킵니다. 이 파일이 없으면 핸드북 화면이 갱신되지 않습니다. 스키마 대조 결과와 조치는 다음과 같습니다.
+- `state/pc.json`은 존재하지 않는 죽은 파일입니다 — 실제 PC 데이터는 `state/core.json`의 `pc` 객체 하나뿐입니다.
+- `dungeon.json`/`battle.json`은 위에 고친 대로 `{"dungeon":{...}}`/`{"battle":{...}}` 래핑이 맞습니다.
+- 아이템은 `core.json.pc.items` 하나가 유일한 출처입니다. 예전에 `feats.json`에 있던 중복 `items` 배열은 삭제했습니다 — 재생성하지 마세요.
+- 핸드북은 `dungeon.json`/`battle.json`이 없어도(404) 정상 로딩되도록 이미 수정되었으니, 위 삭제 규칙을 그대로 따라도 안전합니다.
 
 ## 체크포인트 & 소설화 절차
 
@@ -201,4 +217,4 @@ HP는 "현재/최대"로만 표기. 공격 판정은 "주사위+보정치=합계
 - 파티: 베릭스(리더), 이자벨(현재 인격: 베스퍼), 리브 코르사, 레아
 - 위치: 새벽문을 완전히 떠나 동쪽 상단로 진입, 목적지는 카를렌
 - 직전 아크("문지기" 미스터리)는 완전히 종결됨. 새 아크 미정 — 사용자와 조율 필요.
-- 정확한 HP/골드/소지품 수치는 `state/pc.json`, `state/party.json`을 확인하세요 (아직 정확한 값이 채워지지 않았다면 사용자에게 최신 수치를 물어보세요).
+- 정확한 HP/골드/소지품 수치는 `state/core.json`, `state/party.json`을 확인하세요 (아직 정확한 값이 채워지지 않았다면 사용자에게 최신 수치를 물어보세요).
