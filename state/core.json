@@ -1,0 +1,417 @@
+{
+  "checkpoint": "CP-S40-FINAL",
+  "session": 40,
+  "arc": "새벽문 마지막 발걸음 (완결) · 카를렌을 향한 여정 (시작)",
+  "place": "새벽문 근교 상단로",
+  "pc": {
+    "name": "베릭스 나이트블레이드",
+    "race": "티플링",
+    "cls": "워락 (The Fiend) · 배경 차터랜",
+    "level": 8,
+    "ac": 14,
+    "hp": {
+      "cur": 45,
+      "max": 45,
+      "tmp": 0
+    },
+    "slots": {
+      "cur": 2,
+      "max": 2,
+      "lvl": 4
+    },
+    "gold": 3971,
+    "stats": {
+      "STR": 10,
+      "DEX": 14,
+      "CON": 12,
+      "INT": 13,
+      "WIS": 10,
+      "CHA": 22
+    },
+    "look": "Verrix Nightblade, a male tiefling warlock in his early 30s. Messy shoulder-length black wavy hair, curved purple-black horns swept back, pointed elf-like ears, pale lavender-tinted skin, glowing violet eyes, short trimmed goatee, sly confident smirk. Wearing an ornate black-and-gold longcoat over a purple satin shirt, open collar showing chest tattoos, black vest with gold buttons, thick leather belt with chains, ritual dagger with amethyst pommel sheathed at hip, gold rings and bracelets on right hand.",
+    "spells": [
+      {
+        "n": "이드리치 블래스트",
+        "t": "간이주문",
+        "c": "슬롯 소모 없음",
+        "d": "사거리 36 m 원거리 주문 공격. 6레벨에 광선 2발, 각 1d10 역장 피해. Agonizing Blast로 발당 +5(CHA) 추가, Repelling Blast로 명중 시 대상을 3 m 밀어냄."
+      },
+      {
+        "n": "헥스",
+        "t": "4레벨 슬롯",
+        "c": "슬롯 1",
+        "d": "대상 1명을 저주. 내 공격이 명중할 때마다 1d6 사령 피해 추가, 지정한 능력 판정에 불리점. 집중 유지 필요."
+      },
+      {
+        "n": "미스티 스텝",
+        "t": "4레벨 슬롯",
+        "c": "슬롯 1",
+        "d": "보너스 행동. 시야 내 9 m 이내 빈 공간으로 순간이동."
+      },
+      {
+        "n": "서제스천",
+        "t": "4레벨 슬롯",
+        "c": "슬롯 1",
+        "d": "합리적으로 들리는 행동 하나를 대상에게 강제. 지혜 내성 DC 17 실패 시 최대 8시간 지속. 명백히 해로운 지시는 무효. 24회차에 정예 요원에게 동료를 찌르게 만드는 데 사용됨."
+      },
+      {
+        "n": "그레이터 인비저빌리티",
+        "t": "4레벨 슬롯",
+        "c": "슬롯 1",
+        "d": "24회차 7레벨 승급 시 습득. 자신 또는 아군 1명을 투명화. 집중 유지 필요, 1분 지속. 공격하거나 주문을 시전해도 투명이 유지되어 명중에 이점, 상대는 나를 공격할 때 불리점."
+      }
+    ],
+    "feats": [
+      {
+        "n": "Pact of the Blade",
+        "t": "서약",
+        "d": "성수 봉인 단검을 서약 무기로 지정. 소환·해제 가능하며 매력 기준으로 공격."
+      },
+      {
+        "n": "Agonizing Blast",
+        "t": "인보케이션",
+        "d": "이드리치 블래스트 광선마다 매력 수정치(+6) 피해 추가. 8레벨 승급으로 CHA 20→22 반영."
+      },
+      {
+        "n": "Devil's Sight",
+        "t": "인보케이션",
+        "d": "36 m 이내에서 마법 어둠까지 꿰뚫어 봄."
+      },
+      {
+        "n": "Beguiling Influence",
+        "t": "인보케이션",
+        "d": "기만·설득 기술에 숙련. 심문·동료 모집·협상에서 반복 활용됨."
+      },
+      {
+        "n": "Repelling Blast",
+        "t": "인보케이션",
+        "d": "이드리치 블래스트 명중 시 대상을 3 m 밀어냄."
+      },
+      {
+        "n": "Fiendish Vigor",
+        "t": "인보케이션",
+        "d": "슬롯 없이 자신에게 False Life 시전 — 임시 HP 1d4+4. 전투 전 사전 시전 가능."
+      },
+      {
+        "n": "Dark One's Blessing",
+        "t": "클래스 특성",
+        "d": "베릭스가 직접 적을 0 HP로 만들면 임시 HP 14(CHA +6 + 워락 레벨 8) 획득. 중첩되지 않고 높은 값만 유지. 동료가 마무리한 처치에는 발동하지 않는다."
+      },
+      {
+        "n": "운명 감지 · 은빛 혀",
+        "t": "배경 특성",
+        "d": "전조와 속내를 잘 읽음. 설득·기만 판정에 강점."
+      },
+      {
+        "n": "정제된 핵의 잔향",
+        "t": "클래스 특성(변형)",
+        "d": "31·33·34회차에 걸쳐 세 개의 매듭 핵을 흡수하며 강화됨. 무소모 서제스천 1일 1회, 정신계 내성 판정 1일 1회 이점. 세 핵의 공명이 유독 선명했던 이유는 개인 실마리로 남아 있다."
+      },
+      {
+        "id": "feat_pact_blade",
+        "n": "Pact of the Blade",
+        "t": "서약",
+        "d": "37회차, 갈망하는 문지기의 검으로 서약 무기를 재지정했다. 소환·해제 가능하며 매력 기준으로 공격."
+      },
+      {
+        "id": "feat_forest_eater_fragment",
+        "n": "숲을 갉아먹던 것의 파편",
+        "t": "클래스 특성(변형)",
+        "d": "38회차, 핏빛숲 심목에 박혀 있던 검은 씨앗을 직접 흡수했다. 하루 1회 무소모로 야수·짐승형 대상에게 명령(Command 계열 효과)을 걸 수 있으며, 식물·자연 계열 효과에 대한 내성 판정에 이점을 얻는다. 겉으로는 흡수 흔적이 전혀 드러나지 않았다 — 이드라를 포함해 누구도 눈치채지 못했다."
+      }
+    ],
+    "items": [
+      {
+        "id": "item_observers_eye_s24",
+        "n": "\"관찰자의 눈\" 목걸이",
+        "q": 1,
+        "d": "감독관의 유품. 하루 1회, 직접 본 장소나 존재를 1분간 원격으로 볼 수 있다(소리 없음).",
+        "cat": "accessory",
+        "equipped": true,
+        "charge": {
+          "cur": 1,
+          "max": 1,
+          "recharge": "long"
+        }
+      },
+      {
+        "id": "item_pact_dagger",
+        "n": "성수 봉인 단검",
+        "q": 1,
+        "d": "Pact of the Blade 서약 무기. 1d4+2 관통 피해, 악마·언데드 상대 시 추가 1d6 광휘 피해.",
+        "cat": "weapon",
+        "equipped": false,
+        "note_ui": "37회차 이후 서약이 갈망하는 문지기의 검으로 옮겨감 — 설명 문구 최신화 필요, 데이터 중복 가능성 있음",
+        "combat": {
+          "dmgDice": "1d4+2",
+          "vsCondition": {
+            "target": "악마·언데드",
+            "extraDamage": {
+              "dice": "1d6",
+              "type": "광휘"
+            }
+          }
+        }
+      },
+      {
+        "id": "item_vaultkeeper_bracer_s22",
+        "n": "금고지기의 팔가리개",
+        "q": 1,
+        "d": "착용 시 AC +1. 추가 마법 효과 없음.",
+        "cat": "weapon",
+        "equipped": true,
+        "passive": true,
+        "acBonus": 1
+      },
+      {
+        "id": "item_tarocca_cards",
+        "n": "타로카 카드 한 벌",
+        "q": 1,
+        "d": "어머니의 유품이자 계약의 매개. 점술·설득 보조 소품.",
+        "cat": "trinket"
+      },
+      {
+        "id": "item_inferno_ring",
+        "n": "인페르노 인장 반지",
+        "q": 1,
+        "d": "The Fiend와의 계약을 상징하는 반지. '수확 의례'의 표식.",
+        "cat": "accessory",
+        "equipped": true
+      },
+      {
+        "id": "item_seal_brand",
+        "n": "손등의 봉인 낙인",
+        "q": 1,
+        "d": "예언자 재봉인의 대가로 새겨진 영구 표식. 능력치 영향 없음.",
+        "cat": "trinket",
+        "equipped": true,
+        "permanent": true
+      },
+      {
+        "id": "item_silence_charm_s16",
+        "n": "침묵의 부적",
+        "q": 1,
+        "d": "하루 1회, 반경 3 m를 30초간 완전한 침묵 지대로 만든다.",
+        "cat": "accessory",
+        "equipped": true,
+        "charge": {
+          "cur": 1,
+          "max": 1,
+          "recharge": "long"
+        }
+      },
+      {
+        "id": "item_regen_charm_s16",
+        "n": "재생의 부적",
+        "q": 1,
+        "d": "하루 1회, HP가 최대치 절반 이하일 때 자동 발동해 2d6 HP 회복.",
+        "cat": "accessory",
+        "equipped": true,
+        "charge": {
+          "cur": 1,
+          "max": 1,
+          "recharge": "long"
+        },
+        "passive_trigger": true
+      },
+      {
+        "id": "item_torch",
+        "n": "횃불",
+        "q": 1,
+        "d": "반경 6 m를 밝히는 광원.",
+        "cat": "consumable"
+      },
+      {
+        "id": "item_alarm_charm",
+        "n": "경보 부적",
+        "q": 1,
+        "d": "위협적 존재가 9 m 이내로 접근하면 진동으로 경고.",
+        "cat": "accessory",
+        "equipped": true,
+        "passive": true
+      },
+      {
+        "id": "item_caller_necklace_s28",
+        "n": "부름꾼의 힘이 담긴 목걸이",
+        "q": 1,
+        "d": "착용자의 정신을 서서히 길들이는 매개체. 하루 1회, 긴 휴식 필요.",
+        "cat": "accessory",
+        "equipped": false,
+        "charge": {
+          "cur": 1,
+          "max": 1,
+          "recharge": "long"
+        },
+        "note_ui": "위험 아이템 — 상시 착용 아님, 필요 시에만 꺼내 사용"
+      },
+      {
+        "id": "item_deepblue_potion_s29",
+        "n": "짙은 남색 물약",
+        "q": 1,
+        "d": "정제된 각성 물약. 마시면 1시간 동안 공포·매혹 상태에 면역.",
+        "cat": "consumable"
+      },
+      {
+        "id": "item_guardian_shard_s29",
+        "n": "봉인 수호자의 결정 파편",
+        "q": 1,
+        "d": "'흩어진 심장'의 진짜 파편. 베릭스의 삼중 공명과 동일 계통. 완전한 의미는 미해결.",
+        "cat": "trinket"
+      },
+      {
+        "id": "item_stable_orb_s29",
+        "n": "안정된 결정구",
+        "q": 1,
+        "d": "반경 9 m 내에서 정신 지배·매혹 계열 효과에 저항력을 부여하는 정착석.",
+        "cat": "accessory",
+        "equipped": false,
+        "note_ui": "설치형 정착석 — 몸에 착용하는 아이템이 아니라 야영지에 배치. 자동 발동 대상 아님"
+      },
+      {
+        "id": "item_silver_disc",
+        "n": "은제 원반",
+        "q": 1,
+        "d": "결사원 넷의 조각으로 채워졌으나 다섯째 홈은 영구히 비었다. 더 이상 완성될 여지가 없는 유물.",
+        "cat": "trinket"
+      },
+      {
+        "id": "item_cure_potion",
+        "n": "치료 물약",
+        "q": 1,
+        "d": "사용 시 2d4+2 HP 회복.",
+        "cat": "consumable"
+      },
+      {
+        "id": "item_healing_potion",
+        "n": "회복 물약",
+        "q": 6,
+        "d": "사용 시 2d4+2 HP 회복.",
+        "cat": "consumable"
+      },
+      {
+        "id": "item_antidote_potion",
+        "n": "해독 물약",
+        "q": 3,
+        "d": "중독 상태를 즉시 해소.",
+        "cat": "consumable"
+      },
+      {
+        "id": "item_stealth_potion",
+        "n": "은신 물약",
+        "q": 2,
+        "d": "10분간 은신 판정에 이점을 부여.",
+        "cat": "consumable"
+      },
+      {
+        "id": "item_mind_ward_potion",
+        "n": "정신 방어 물약",
+        "q": 2,
+        "d": "1시간 동안 정신 지배·매혹 내성에 이점.",
+        "cat": "consumable"
+      },
+      {
+        "id": "item_warden_blade_s37",
+        "n": "갈망하는 문지기의 검",
+        "q": 1,
+        "d": "37회차, 문지기의 잔재 처치 후 획득. Pact of the Blade 지정 가능(매력 기준 공격). +1 마법 단검, 1d6+매력 참격 피해. 그 턴의 첫 명중 시, 가한 피해의 절반(반올림)만큼 자동으로 자기 회복(최대 HP 초과 불가, 판정 불필요).",
+        "cat": "weapon",
+        "equipped": true,
+        "weaponSlot": "main",
+        "combat": {
+          "atkBonus": 1,
+          "dmgBonus": 1,
+          "dmgDice": "1d6+CHA",
+          "onFirstHitEachTurn": {
+            "effect": "가한 피해의 절반(반올림)만큼 자동 자가회복",
+            "cap": "최대 HP 초과 불가, 판정 불필요"
+          }
+        }
+      },
+      {
+        "id": "item_holy_dagger_pact",
+        "n": "성수 봉인 단검",
+        "q": 1,
+        "d": "팩트 결속에서 해제됨. 1d4+2 관통 피해, 악마·언데드 상대 시 추가 1d6 광휘 피해는 그대로 유지되나 더 이상 서약 무기가 아니다.",
+        "cat": "weapon",
+        "equipped": false,
+        "weaponSlot": "spare",
+        "combat": {
+          "dmgDice": "1d4+2",
+          "vsCondition": {
+            "target": "악마·언데드",
+            "extraDamage": {
+              "dice": "1d6",
+              "type": "광휘"
+            }
+          }
+        }
+      },
+      {
+        "id": "item_bark_charm_s38",
+        "n": "치유의 나무껍질 부적",
+        "q": 1,
+        "d": "38회차, 가시울 마을 촌장에게 사례로 받음. 하루 1회, 2d4 HP를 즉시 회복시킨다.",
+        "cat": "accessory",
+        "equipped": true,
+        "charge": {
+          "cur": 1,
+          "max": 1,
+          "recharge": "long"
+        }
+      },
+      {
+        "id": "item_fey_shrine_clue_s38",
+        "n": "이드라가 알려준 옛 제단의 흔적",
+        "q": 1,
+        "d": "이드라가 숲을 돌보며 전해 들은 이야기 — 새벽문 서편 깊은 곳에 아직 밟아보지 못한 옛 요정 신단이 있다고 한다. 정확한 위치는 불명.",
+        "cat": "trinket"
+      },
+      {
+        "id": "item_habin_map_s39",
+        "n": "낡은 지도 조각",
+        "q": 1,
+        "d": "하빈 일행의 소지품. 신단 주변 지형과 붉은 잉크로 표시된 미확인 지점이 그려져 있다.",
+        "cat": "trinket"
+      },
+      {
+        "id": "item_habin_charm_s39",
+        "n": "정체불명의 소형 부적",
+        "q": 1,
+        "d": "하빈의 소지품에서 발견. 마력 반응이 있으나 정체는 아직 불명.",
+        "cat": "accessory",
+        "equipped": true,
+        "note_ui": "기능 미확인 — 감정 전"
+      },
+      {
+        "id": "item_fey_tear_s39",
+        "n": "요정의 눈물 장신구",
+        "q": 1,
+        "d": "옛 요정 신단 제단에서 회수. 하루 1회, 마르지 않는 이슬 한 방울을 맺혀 공포·매혹 계열 정신 지배 효과 하나를 즉시 해소한다.",
+        "cat": "accessory",
+        "equipped": true,
+        "charge": {
+          "cur": 1,
+          "max": 1,
+          "recharge": "long"
+        }
+      },
+      {
+        "id": "item_fey_pathring_s39",
+        "n": "길잡이의 이슬가지 반지",
+        "q": 1,
+        "d": "신단 감시자의 잔해에서 회수. 하루 1회, 반경 9m 내에서 가장 안전한 경로를 직감적으로 파악해 함정·위험 지형 탐지에 이점을 부여한다.",
+        "cat": "accessory",
+        "equipped": true,
+        "charge": {
+          "cur": 1,
+          "max": 1,
+          "recharge": "long"
+        }
+      }
+    ],
+    "surface": "충동적 행동 · 이기적 이득 추구 · 언변(설득·기만)으로 문제 해결 · 이성에게 관심이 많고 적극적",
+    "hidden": "이 가면 아래에 진짜로 어둡고 위험한 본성이 있다. 충분한 동기(강력한 마법 유물 등)가 주어지면 동료를 배신하거나 죽이거나 영구히 지배할 수 있다. 이 본성은 항상 능숙하게 은폐되어 있으며, NPC는 쉽게 알아채지 못한다.",
+    "goal": "비공개 개인 목표 — 더 큰 힘을 얻어 The Fiend에게 넘긴 자신의 영혼 소유권을 되찾는 것.",
+    "status": "투명화(집중, 최대 1분) · 그레이터 인비저빌리티"
+  }
+}
