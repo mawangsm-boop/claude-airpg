@@ -1,5 +1,5 @@
 {
-  "rev": "S41-008",
-  "updated": "2026-09-09T00:30:00Z",
-  "note": "41회차 본 스토리 시작 — 새 아크 \"카를렌으로 가는 길\" 개시. core.json checkpoint/arc/place 갱신."
+  "rev": "S41-009",
+  "updated": "2026-09-09T01:00:00Z",
+  "note": "베릭스 가짜생명(Fiendish Vigor) 시전 — 임시HP 5 반영. (직전 커밋에서 rev.json 갱신 누락됐던 것을 뒤늦게 반영함)"
 }
