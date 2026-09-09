@@ -1,0 +1,21 @@
+{
+  "battle": {
+    "name": "상단로 협로 매복 (도적)",
+    "cols": 10,
+    "rows": 6,
+    "round": 1,
+    "terrain": [
+      { "x": 0, "y": 0, "w": 2, "h": 6, "type": "hazard", "label": "바위 (좌측 매복 지점)" },
+      { "x": 8, "y": 0, "w": 2, "h": 6, "type": "hazard", "label": "바위 (우측 매복 지점)" }
+    ],
+    "tokens": [
+      { "id": "pc_verrix", "name": "베릭스", "side": "pc", "x": 5, "y": 3, "hp": "45/45", "note": "임시HP 5(가짜생명). 아직 이번 라운드 행동 전." },
+      { "id": "ally_isabel", "name": "이자벨", "side": "ally", "x": 7, "y": 2, "hp": "26/26", "note": "표적C 공격 빗나감(1d20+5=9)" },
+      { "id": "ally_rea", "name": "레아", "side": "ally", "x": 3, "y": 4, "hp": "14/16", "note": "표적A에게 5 피해, 표적A의 반격으로 2 피해 입음" },
+      { "id": "ally_liv", "name": "리브", "side": "ally", "x": 2, "y": 3, "hp": "32/32", "note": "이점 판정으로 표적B 명중, 은신공격 포함 13 피해로 즉사시킴" },
+      { "id": "enemy_bandit_a", "name": "도적 표적A", "side": "enemy", "x": 3, "y": 5, "hp": "6/11" },
+      { "id": "enemy_bandit_b", "name": "도적 표적B", "side": "enemy", "x": 2, "y": 2, "hp": "0/11", "down": true },
+      { "id": "enemy_bandit_c", "name": "도적 표적C (석궁)", "side": "enemy", "x": 8, "y": 2, "hp": "11/11", "note": "베릭스에게 석궁 발사, 빗나감(1d20+3=11)" }
+    ]
+  }
+}
