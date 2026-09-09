@@ -25,9 +25,10 @@
       "old_quarry",
       "feyshrine_rumor",
       "shadowless_plain",
-      "karlen_hint"
+      "karlen_hint",
+      "eastroad_waypost"
     ],
-    "here": "dawngate",
+    "here": "eastroad_waypost",
     "customPlaces": [
       {
         "id": "outpost3",
@@ -133,6 +134,14 @@
         "x": 1050,
         "y": 1350,
         "d": "코르빈의 지도에 끝까지 미표시로 남아있던 지점. 새벽문에서 능선 반대 방향, 반나절 거리. 결정질 지반이 빛을 사방으로 반사해 그림자가 지지 않는다."
+      },
+      {
+        "id": "eastroad_waypost",
+        "n": "동쪽 상단로 길목 주막",
+        "t": "여행자 쉼터",
+        "x": 1480,
+        "y": 1210,
+        "d": "새벽문과 카를렌 사이 상단로에 자리한 작은 주막. 대상인·전령이 오가며 잠시 묵어가는 곳."
       },
       {
         "id": "karlen_hint",

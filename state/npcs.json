@@ -331,6 +331,17 @@
       "tag": "재회 가능 · 동행이력"
     },
     {
+      "id": "seren",
+      "name": "세렌",
+      "role": "여성 · 인간 · 20대 후반 · 여명 결사 소속 조사원",
+      "tag": "초면 · 경계",
+      "tagc": "y",
+      "trait": "결사 본부의 지시로 코르빈의 마지막 행적을 쫓아 파견됐다. 말투가 건조하고 사무적이며, 필요 이상의 정보는 내주지 않는다. 아직 코르빈의 죽음을 모른다.",
+      "knows": "코르빈이 결사 본부와 연락을 끊었다는 사실 · 본부 지시로 그의 행적을 추적 중이라는 것 · 그의 마지막 행선지가 새벽문 인근이었다는 것(A등급, 본부 지시 문서)",
+      "unknown": "코르빈의 죽음 · 그가 쫓던 \"문지기\" 진실 · 베릭스 일행의 정체(D등급)",
+      "look": "Seren, a human female investigator in her late 20s. Straight dark hair tied back tightly, sharp calculating eyes, composed unreadable expression. Wearing a plain traveler's cloak over a fitted dark coat, no visible insignia, a slim ledger and short blade at her belt."
+    },
+    {
       "id": "relic_hunter1",
       "name": "유물 사냥꾼 (생존자 둘)",
       "role": "남성 · 인간 · 유물 사냥꾼 조합 소속",
