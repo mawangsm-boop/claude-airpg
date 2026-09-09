@@ -1,5 +1,5 @@
 {
-  "rev": "S41-010",
-  "updated": "2026-09-09T01:30:00Z",
-  "note": "조우 1(도적 매복) 종료 — battle.json 삭제, core.json 임시HP 14(Dark One's Blessing) 반영."
+  "rev": "S41-011",
+  "updated": "2026-09-09T02:00:00Z",
+  "note": "중간 기착지 도착 — 상단로 길목 주막(world.json), 조사원 세렌 등장(npcs.json)."
 }
