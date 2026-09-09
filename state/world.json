@@ -25,10 +25,9 @@
       "old_quarry",
       "feyshrine_rumor",
       "shadowless_plain",
-      "karlen_hint",
-      "mirrorlake"
+      "karlen_hint"
     ],
-    "here": "mirrorlake",
+    "here": "dawngate",
     "customPlaces": [
       {
         "id": "outpost3",

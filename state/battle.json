@@ -1,19 +1,17 @@
 {
   "battle": {
-    "name": "(전투 없음 — 직전: [테스트] 상태·전투 렌더링 확인용 모의전, 1라운드 전멸 종료)",
+    "name": "모의전 (시스템 점검용)",
     "cols": 8,
     "rows": 6,
+    "round": 4,
     "terrain": [
-      {
-        "x": 0,
-        "y": 0,
-        "w": 8,
-        "h": 6,
-        "type": "structure",
-        "label": "테스트 격자방"
-      }
+      { "x": 0, "y": 0, "w": 8, "h": 6, "type": "structure", "label": "훈련용 격자방" }
     ],
-    "tokens": [],
-    "round": 1
+    "tokens": [
+      { "id": "pc_verrix", "name": "베릭스", "side": "pc", "x": 1, "y": 3, "hp": "45/45", "note": "임시HP 14 (Dark One's Blessing 발동)" },
+      { "id": "ally_isabel", "name": "이자벨", "side": "ally", "x": 2, "y": 4, "hp": "23/26" },
+      { "id": "enemy_a", "name": "표적A", "side": "enemy", "x": 5, "y": 2, "hp": "0/20", "down": true, "note": "4라운드, 베릭스 크리티컬로 처치" },
+      { "id": "enemy_b", "name": "표적B", "side": "enemy", "x": 5, "y": 4, "hp": "1/20", "note": "빈사 상태" }
+    ]
   }
 }

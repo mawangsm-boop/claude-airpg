@@ -1,5 +1,5 @@
 {
-  "rev": "S41-003",
-  "updated": "2026-09-08T13:00:00Z",
-  "note": "정신 방어 부적 리브에게 이전, 동료 무기 3종 등록, 전투 수치 combat 필드 신설"
+  "rev": "S41-TEST-004",
+  "updated": "2026-09-09T00:00:00Z",
+  "note": "41회차 임시 시스템 점검 — 이전 테스트 잔재(log.json TEST 3건, world.json here=mirrorlake) 폐기 후 신규 모의전 4라운드 진행. dungeon.json/battle.json 삭제 시 핸드북 동기화가 깨지는 문제는 아직 미해결 — 사용자 확인 대기 중."
 }
