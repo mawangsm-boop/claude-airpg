@@ -1,5 +1,5 @@
 {
-  "rev": "S41-003",
-  "updated": "2026-09-09T00:05:00Z",
-  "note": "모의전 1라운드 종료 — 표적A·B 전멸, battle.tokens=[]·round=1로 초기화, log.json에 결과 기록"
+  "rev": "S41-004",
+  "updated": "2026-09-09T00:15:00Z",
+  "note": "대륙 지도 테스트 — 거울호(mirrorlake) 발견·이동 반영 (world.json discovered/here)"
 }
