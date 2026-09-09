@@ -1,5 +1,5 @@
 {
-  "rev": "S41-009",
-  "updated": "2026-09-09T01:00:00Z",
-  "note": "베릭스 가짜생명(Fiendish Vigor) 시전 — 임시HP 5 반영. (직전 커밋에서 rev.json 갱신 누락됐던 것을 뒤늦게 반영함)"
+  "rev": "S41-010",
+  "updated": "2026-09-09T01:30:00Z",
+  "note": "조우 1(도적 매복) 종료 — battle.json 삭제, core.json 임시HP 14(Dark One's Blessing) 반영."
 }
