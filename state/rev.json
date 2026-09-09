@@ -1,5 +1,5 @@
 {
-  "rev": "S41-011",
-  "updated": "2026-09-09T02:00:00Z",
-  "note": "중간 기착지 도착 — 상단로 길목 주막(world.json), 조사원 세렌 등장(npcs.json)."
+  "rev": "S41-012",
+  "updated": "2026-09-09T02:15:00Z",
+  "note": "레아 party.json HP 14/16 정정(전투 종료 후 반영 누락됐던 것 수정), look 필드 고정. characters.md 신규 생성."
 }

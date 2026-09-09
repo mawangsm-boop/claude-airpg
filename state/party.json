@@ -117,13 +117,14 @@
       "name": "레아",
       "role": "여성 · 인간 · 20대 후반 · 전 하빈 일행 용병",
       "hp": {
-        "cur": 16,
+        "cur": 14,
         "max": 16
       },
       "tag": "거래로 넘겨짐 · 동행",
       "trait": "강제로 신단 아치를 개방하다 반발에 크게 다쳤다. 죽음의 문턱에서 살아남았다.",
       "knows": "이끼 파수꾼 전투 전 과정, 하빈·용병 사망 직접 목격(A등급)",
       "unknown": "베릭스의 과거 전부(D등급)",
+      "look": "Rea, a human female former mercenary in her late 20s. Tan brown skin, short-cropped dark brown hair, sturdy build, a healing scar across one shoulder from forcing open the fey arch, tired but resolute eyes. Wearing worn leather armor over practical traveling clothes, a porter's backpack slung over one shoulder.",
       "equipment": []
     }
   ]
