@@ -2295,7 +2295,7 @@ function applyPatch(obj){
 
 /* ==================== 렌더 ==================== */
 function renderAll(){ header(); renderChar(); renderParty(); renderDungeon(); renderBattle(); renderWorldMarkers(); renderLog(); $("fullBox").value=JSON.stringify(S,null,1); }
-const HB_VERSION="v2.21";
+const HB_VERSION="v2.22";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -2960,7 +2960,7 @@ function renderWorldMarkers(){
   const fg=$("wFogG"), mk=$("wMk"); if(!fg||!mk) return;
   fg.innerHTML=""; mk.innerHTML="";
   if(wFog){
-    fg.appendChild(el("rect",{x:1350,y:0,width:2700,height:3000,fill:"#0a1322",opacity:".62"}));
+    fg.appendChild(el("rect",{x:1900,y:0,width:2150,height:3000,fill:"#0a1322",opacity:".62"}));
     fg.appendChild(el("rect",{x:0,y:0,width:1350,height:640,fill:"#0a1322",opacity:".55"}));
     fg.appendChild(el("rect",{x:0,y:2200,width:1350,height:800,fill:"#0a1322",opacity:".55"}));
   }
