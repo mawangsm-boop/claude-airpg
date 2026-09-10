@@ -1,5 +1,5 @@
 {
-  "rev": "S42-001",
-  "updated": "2026-09-10T00:30:00Z",
-  "note": "42회차 개시 — 새 아크 \"카를렌, 사라진 자들\" 시작. core.json session/arc/checkpoint 갱신."
+  "rev": "S42-002",
+  "updated": "2026-09-10T02:00:00Z",
+  "note": "world.json customPlaces에 cat/tier 필드 보강(핸드북 분류 안정화), 카를렌 강변 도시 설정 반영."
 }
