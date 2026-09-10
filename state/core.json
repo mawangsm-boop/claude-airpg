@@ -1,7 +1,7 @@
 {
-  "checkpoint": "CP-S41-ARRIVE-KARLEN",
-  "session": 41,
-  "arc": "카를렌으로 가는 길 (완결) — 다음 아크 미정",
+  "checkpoint": "CP-S42-KARLEN-START",
+  "session": 42,
+  "arc": "카를렌, 사라진 자들 (진행 중)",
   "place": "카를렌 성문 앞",
   "pc": {
     "name": "베릭스 나이트블레이드",
