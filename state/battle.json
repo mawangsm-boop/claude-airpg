@@ -1,0 +1,25 @@
+{
+  "battle": {
+    "name": "달빈 상회 창고 — 안쪽 방, 가름과 부하들",
+    "cols": 14,
+    "rows": 10,
+    "round": 1,
+    "terrain": [
+      {"x":3,"y":3,"w":2,"h":1,"type":"hazard","label":"짐더미(엄폐)"},
+      {"x":9,"y":6,"w":2,"h":1,"type":"hazard","label":"기둥·상자(엄폐)"},
+      {"x":11,"y":2,"w":2,"h":2,"type":"hazard","label":"포로들이 묶여 있는 구획(비전투)"}
+    ],
+    "tokens": [
+      {"id":"berix","name":"베릭스","side":"pc","x":4,"y":8,"hp":"45/45","note":"임시HP 14 유지 중"},
+      {"id":"isabel","name":"이자벨","side":"ally","x":5,"y":7,"hp":"19/26"},
+      {"id":"liv","name":"리브","side":"ally","x":5,"y":6,"hp":"21/32","note":"그림자 폭발(하급원D 처치)로 1라운드 은신 이점"},
+      {"id":"rea","name":"레아","side":"ally","x":6,"y":8,"hp":"14/16"},
+      {"id":"garum","name":"가름","side":"enemy","x":7,"y":4,"hp":"58/58","note":"엘리트, 곡도 이도류, 아직 미행동"},
+      {"id":"thug_a","name":"하급원 A","side":"enemy","x":5,"y":4,"hp":"16/16"},
+      {"id":"thug_b","name":"하급원 B","side":"enemy","x":6,"y":3,"hp":"16/16"},
+      {"id":"thug_c","name":"하급원 C","side":"enemy","x":8,"y":3,"hp":"16/16"},
+      {"id":"thug_d","name":"하급원 D(문지기)","side":"enemy","x":5,"y":6,"hp":"0/16","down":true,"note":"리브에게 기습 치명타로 즉사"},
+      {"id":"captives","name":"묶인 포로들","side":"neutral","x":12,"y":3,"hp":"-","note":"전투 능력 없음, 구조 대상"}
+    ]
+  }
+}
