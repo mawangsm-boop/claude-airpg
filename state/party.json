@@ -123,7 +123,20 @@
       "knows": "이끼 파수꾼 전투 전 과정, 하빈·용병 사망 직접 목격(A등급)",
       "unknown": "베릭스의 과거 전부(D등급)",
       "look": "Rea, a human female former mercenary in her late 20s. Tan brown skin, short-cropped dark brown hair, sturdy build, a healing scar across one shoulder from forcing open the fey arch, tired but resolute eyes. Wearing worn leather armor over practical traveling clothes, a porter's backpack slung over one shoulder.",
-      "equipment": []
+      "equipment": [
+        {
+          "slot": "weapon",
+          "item": "낡은 롱소드",
+          "desc": "오래 써서 손에 익은 평범한 군용 검. 마법 효과는 없다.",
+          "equipped": true
+        },
+        {
+          "slot": "body",
+          "item": "스터디드 레더 갑옷",
+          "desc": "곳곳에 금속 징을 덧댄 닳은 가죽 갑옷",
+          "equipped": true
+        }
+      ]
     }
   ]
 }

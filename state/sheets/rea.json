@@ -3,7 +3,7 @@
     "race": "인간",
     "cls": "파이터 (챔피언)",
     "level": 3,
-    "ac": 14,
+    "ac": 13,
     "stats": { "STR": 16, "DEX": 12, "CON": 15, "INT": 10, "WIS": 12, "CHA": 8 },
     "resources": [
       { "id": "res_rea_second_wind", "n": "두 번째 숨", "dice": "1d10+3", "cur": 1, "max": 1, "recharge": "short", "note": "추가 행동으로 사용, 즉시 회복." },
