@@ -1,0 +1,21 @@
+{
+  "battle": {
+    "name": "하류 집하장 — 안쪽 사무실, 기습",
+    "cols": 12,
+    "rows": 8,
+    "round": 1,
+    "terrain": [
+      {"x":8,"y":2,"w":2,"h":1,"type":"hazard","label":"장부·서신이 쌓인 탁자"}
+    ],
+    "tokens": [
+      {"id":"berix","name":"베릭스","side":"pc","x":4,"y":4,"hp":"45/45","note":"임시HP 5 유지 중 · 포로 위장 해제"},
+      {"id":"isabel","name":"이자벨","side":"ally","x":5,"y":4,"hp":"19/26"},
+      {"id":"liv","name":"리브","side":"ally","x":3,"y":5,"hp":"15/32"},
+      {"id":"rea","name":"레아","side":"ally","x":6,"y":5,"hp":"14/16"},
+      {"id":"guard1","name":"경비 1","side":"enemy","x":4,"y":3,"hp":"16/16","note":"기습 상태 — 1라운드 자신의 턴에 행동 불가"},
+      {"id":"guard2","name":"경비 2","side":"enemy","x":5,"y":3,"hp":"16/16","note":"기습 상태 — 1라운드 자신의 턴에 행동 불가"},
+      {"id":"guard3","name":"경비 3","side":"enemy","x":3,"y":4,"hp":"16/16","note":"기습 상태 — 1라운드 자신의 턴에 행동 불가"},
+      {"id":"clerk","name":"장부 담당자","side":"enemy","x":8,"y":3,"hp":"8/8","note":"비전투원 성향, 기습 상태, AC10"}
+    ]
+  }
+}
