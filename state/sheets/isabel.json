@@ -1,0 +1,17 @@
+{
+  "sheet": {
+    "race": "인간",
+    "cls": "로그 (스와시버클러)",
+    "level": 5,
+    "ac": 15,
+    "stats": { "STR": 8, "DEX": 16, "CON": 13, "INT": 10, "WIS": 12, "CHA": 14 },
+    "resources": [
+      { "id": "res_isabel_sneak_attack", "n": "은신 공격", "dice": "3d6", "cur": 1, "max": 1, "recharge": "turn", "note": "턴당 1회. 이점 판정 또는 Rakish Audacity 조건(1대1) 충족 시 발동." }
+    ],
+    "abilities": [
+      { "id": "ab_isabel_cunning_action", "n": "교활한 행동", "t": "추가 행동", "d": "매 턴 추가 행동으로 질주·이탈·은신 중 하나를 선택해 사용할 수 있다." },
+      { "id": "ab_isabel_rakish_audacity", "n": "Rakish Audacity", "t": "패시브", "d": "이니셔티브 판정에 매력 수정치(+2)를 추가한다. 대상 5피트 이내에 다른 생물이 없는 1대1 상황이면, 이점 없이도 은신 공격을 사용할 수 있다." },
+      { "id": "ab_isabel_panache", "n": "Panache", "t": "행동", "d": "9m 이내 생물 하나를 지정해 설득 판정(대상은 통찰로 저항). 성공 시 적대적 대상은 1분간 그녀 외의 다른 목표를 공격하기 꺼리게 되고, 우호적이지 않은 대상은 1분간 우호적으로 대한다." }
+    ]
+  }
+}

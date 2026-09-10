@@ -18,6 +18,7 @@
 ```
 state/core.json    — 회차/아크/위치·베릭스 본인 스탯·소지품(pc.items, 거의 매 턴 필요)
 state/party.json   — 동료 명단/상태/장비(equipment, 전투·대화 장면에서 필요)
+state/sheets/{id}.json — 동료 캐릭터 시트(종족·클래스·레벨·AC·능력치·자원·능력), {"sheet":{...}} 단일 래핑. 해당 동료가 전투·판정에 나설 때만 읽고 갱신(아래 별도 설명).
 state/npcs.json    — 주요 NPC (해당 인물 등장 시에만 필요)
 state/world.json   — 대륙 위치/발견 지점 (이동할 때만 필요)
 state/dungeon.json — 현재 던전, {"dungeon":{...}} 래핑 (던전 안에 있을 때만 존재, 평소엔 없음 — 없어도 핸드북은 정상 동작)
@@ -62,6 +63,28 @@ archive/gm_guidelines_full.md — GM 지침 전체 원본 (이 CLAUDE.md는 그 
 - HP는 항상 `{"cur":숫자,"max":숫자}` 형태. 임시 HP는 합산하지 않고 큰 값 하나만 유지.
 - **아이템의 유일한 출처는 `core.json`의 `pc.items` 배열입니다.** 다른 파일에 아이템 목록을 따로 두지 않습니다(예전에 `feats.json`에 중복 배열이 있었던 적이 있는데 삭제됨 — 재생성하지 마세요). 각 항목에 고유 `id` 필수(삭제 시 필요), 분류는 `cat`(weapon/accessory/consumable/trinket/misc), 착용·충전 상태는 `equipped`/`charge`/`passive`, 전투 수치는 `combat` 필드에 넣습니다(8-3b 절 참고).
 - `log.md`는 Claude Code 자신의 진행 메모용이라 매 턴이 아니라 **구역 전환·전투 종료·중요 사건** 시에만 한 줄 추가. **`state/log.json`은 별도입니다** — 핸드북 "로그" 탭에 사용자에게 그대로 보이므로, 같은 시점에 `{"log":{"t":"세션 N","x":"..."}}` 형태로 함께 갱신합니다(둘 다 갱신하는 걸 잊지 마세요 — 하나는 당신의 메모, 하나는 사용자가 보는 화면입니다).
+
+### state/sheets/{id}.json 전용 규칙 (동료 캐릭터 시트, v024 신설)
+
+핸드북이 기대하는 형태는 `{"sheet": {...}}` 단일 래핑입니다 — 파일 하나당 동료 한 명.
+
+```json
+{
+  "sheet": {
+    "race": "종족", "cls": "클래스(서브클래스)", "level": 숫자, "ac": 숫자,
+    "stats": {"STR":숫자,"DEX":숫자,"CON":숫자,"INT":숫자,"WIS":숫자,"CHA":숫자},
+    "resources": [ {"id":"고유id","n":"이름","dice":"1d6 등(선택)","cur":숫자,"max":숫자,"recharge":"long|short|turn","note":"조건"} ],
+    "abilities": [ {"id":"고유id","n":"이름","t":"행동|추가 행동|반응|패시브","d":"설명"} ]
+  }
+}
+```
+- 현재 `isabel.json`(로그·스와시버클러 5레벨), `liv.json`(로그·어쌔신 3레벨), `rea.json`(파이터·챔피언 3레벨)이 있습니다.
+- `resources`/`abilities`는 core.json.pc의 `items`/`charge`와 같은 원리 — `id` 기준 병합, 소비하면 `cur`을 즉시 갱신합니다.
+- **긴 휴식/짧은 휴식 시 party.json 패치의 `{"rest":"long"/"short"}`와 별개로, 이 파일들의 `resources`도 recharge 규칙에 맞춰 직접 갱신**합니다(핸드북의 자동 리필은 아직 core.json.pc.items에만 연결되어 있음).
+- `party.json`의 `ac`/`stats` 필드는 두지 않습니다 — 이 시트가 유일한 출처입니다(중복 방지).
+- 신규 동료가 합류하면 시트 파일을 새로 만들고, `index.html`의 `REMOTE_SHEET_IDS` 배열에도 그 id를 추가해야 핸드북이 읽어옵니다(파일만 만들고 이 배열에 안 넣으면 화면에 안 보입니다).
+
+**전투·탐험 중 동료 자원 활용 (v024 신설)**: 동료의 턴마다 이 시트의 `resources`/`abilities`를 확인하고, 상황에 맞는 것을 적극적으로 선택해 사용합니다 — 매번 단순 공격으로 때우지 않습니다(예: 이자벨은 1대1 상황이면 Rakish Audacity로 이점 없이 은신 공격, 레아는 위기 시 두 번째 숨으로 자가 회복). 사용한 자원은 그 즉시 해당 시트 파일의 `cur`에 반영합니다. 탐험 중에도 각 동료의 특기(리브: 은신·자물쇠, 레아: 추적·생존, 이자벨: 통찰·설득)를 상황에 맞으면 GM이 먼저 제안합니다.
 
 ### state/world.json 전용 규칙 (대륙 지도 패치)
 

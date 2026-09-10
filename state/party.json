@@ -3,7 +3,7 @@
     {
       "id": "isabel",
       "name": "이자벨 크레인",
-      "role": "여성 · 인간 · 30대 초반 · 듀얼리스트",
+      "role": "여성 · 인간 · 30대 초반 · 로그(스와시버클러) 5레벨",
       "hp": {
         "cur": 26,
         "max": 26
@@ -35,7 +35,6 @@
         25,
         26
       ],
-      "ac": 15,
       "photoThumb": null,
       "photoFull": null,
       "equipment": [
@@ -59,7 +58,7 @@
     {
       "id": "liv",
       "name": "리브 코르사",
-      "role": "여성 · 인간 · 20대 후반 · 전 언약의 사냥개 조직원 · 로그(어쌔신 지망) 2레벨",
+      "role": "여성 · 인간 · 20대 후반 · 전 언약의 사냥개 조직원 · 로그(어쌔신) 3레벨",
       "hp": {
         "cur": 32,
         "max": 32
@@ -73,7 +72,6 @@
       "look": "Liv Corsa, a human female former cult operative in her late 20s. Ash-blonde hair cut short and uneven, a small brand scar near her left temple, wary darting eyes with dark circles beneath. Wearing a stripped-down dark hooded coat with the insignia torn off, worn boots, an empty dagger sheath at her belt.",
       "photoThumb": null,
       "photoFull": null,
-      "ac": 12,
       "equipment": [
         {
           "slot": "weapon",
@@ -115,7 +113,7 @@
     {
       "id": "rea",
       "name": "레아",
-      "role": "여성 · 인간 · 20대 후반 · 전 하빈 일행 용병",
+      "role": "여성 · 인간 · 20대 후반 · 전 하빈 일행 용병 · 파이터(챔피언) 3레벨",
       "hp": {
         "cur": 14,
         "max": 16

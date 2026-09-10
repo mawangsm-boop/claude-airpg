@@ -2120,6 +2120,9 @@ const $=id=>document.getElementById(id);
 const REMOTE_BASE = "./state/";
 const REMOTE_PARTS = ["core","party","npcs","world","threads","log","feats"];
 const REMOTE_OPTIONAL = ["dungeon","battle"]; // 던전 밖·평시엔 파일 자체가 없는 게 정상 — 404를 오류로 취급하지 않는다
+/* v2.21: 동료 캐릭터 시트(스탯·자원·능력) — state/sheets/{id}.json, {"sheet":{...}} 단일 래핑.
+   아직 시트가 없는 동료(신규 합류자 등)는 파일 자체가 없어도 정상 — optional 취급. */
+const REMOTE_SHEET_IDS = ["isabel","liv","rea"];
 const REV_KEY = KEY + "_rev";
 let SYNC_TIMER = null, SYNC_BUSY = false;
 
@@ -2140,11 +2143,16 @@ async function fetchJSON(name, optional){
 async function fetchRemoteState(){
   const required = await Promise.all(REMOTE_PARTS.map(n => fetchJSON(n + ".json")));
   const optional = await Promise.all(REMOTE_OPTIONAL.map(n => fetchJSON(n + ".json", true)));
+  const sheetFiles = await Promise.all(REMOTE_SHEET_IDS.map(id => fetchJSON("sheets/" + id + ".json", true)));
   const merged = Object.assign({}, ...required);
   optional.forEach(o => { if(o) Object.assign(merged, o); });
   // 파일이 없으면(던전 밖·평시) 빈 상태로 채운다 — renderDungeon/renderBattle이 참조할 수 있게
   if(!merged.dungeon) merged.dungeon = {name:"", here:"", note:"", rooms:[], doors:[]};
   if(!merged.battle)  merged.battle  = {name:"", cols:16, rows:12, round:1, terrain:[], tokens:[]};
+  // v2.21: 시트 파일 여러 개를 하나의 sheets 맵으로 합침 — 각 파일이 {"sheet":{...}} 하나씩만 담당하므로
+  // Object.assign처럼 통째로 덮어쓰면 안 되고 id별로 모아야 한다.
+  merged.sheets = {};
+  sheetFiles.forEach((o,i) => { if(o && o.sheet) merged.sheets[REMOTE_SHEET_IDS[i]] = o.sheet; });
   return merged;
 }
 /* force=true 면 rev가 같아도 원격을 강제로 채택한다(“지금 불러오기”). */
@@ -2191,7 +2199,7 @@ function toast(m){ const t=$("toast"); t.textContent=m; t.classList.add("on"); s
    삭제는 remove 지시자로만 수행: {"remove":{"party":["id"],"npcs":["id"],"rooms":["id"],"tokens":["id"]}}
    배열 전체를 의도적으로 갈아끼울 땐 키 뒤에 !를 붙인다: {"party!":[...]}
 ------------------------------- */
-const KEYED=new Set(["party","npcs","rooms","tokens","spells","feats","items","threads","customPlaces"]);
+const KEYED=new Set(["party","npcs","rooms","tokens","spells","feats","items","threads","customPlaces","resources","abilities"]);
 const UNION=new Set(["discovered"]);
 function idOf(o){ return (o&&typeof o==="object")?(o.id!==undefined?"id:"+o.id:(o.n!==undefined?"n:"+o.n:null)):null; }
 function upsertArray(dst,src){
@@ -2287,7 +2295,7 @@ function applyPatch(obj){
 
 /* ==================== 렌더 ==================== */
 function renderAll(){ header(); renderChar(); renderParty(); renderDungeon(); renderBattle(); renderWorldMarkers(); renderLog(); $("fullBox").value=JSON.stringify(S,null,1); }
-const HB_VERSION="v2.20";
+const HB_VERSION="v2.21";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -2444,6 +2452,22 @@ function photoBlock(a){
   return {big:true, html:`<div class="photoBig has" data-photo-id="${a.id}" style="background-image:url('${a.photoThumb}')">
     <button type="button" class="photoSizeBtn" data-size="small" data-photo-id="${a.id}">－ 작게</button></div>`};
 }
+/* v2.21: 동료 캐릭터 시트(state/sheets/{id}.json) 렌더링 — 있으면 스탯·자원·능력을 보여주고, 없으면 빈 문자열(하위호환). */
+function sheetBlock(id){
+  const sh = S.sheets && S.sheets[id];
+  if(!sh) return "";
+  const head = `${sh.race||""}${sh.race&&sh.cls?" · ":""}${sh.cls||""}${sh.level?` ${sh.level}레벨`:""}${sh.ac!==undefined?` · AC ${sh.ac}`:""}`;
+  const statsHtml = sh.stats ? `<div class="stats">${Object.entries(sh.stats).map(([k,v])=>{
+    const m=Math.floor((v-10)/2); return `<div class="stat"><b>${k}</b><i>${v}</i><b>${m>=0?"+":""}${m}</b></div>`;}).join("")}</div>` : "";
+  const resHtml = (sh.resources||[]).map(r=>{
+    const rc = r.recharge ? (RECHARGE_LABEL[r.recharge]||r.recharge) : "";
+    return det(r.n, r.max!==undefined?`${r.cur}/${r.max}`:(rc||""), (r.dice?`<b style="color:var(--gold-s)">${r.dice}</b><br>`:"")+(r.note||"")+(rc?`<div class="note" style="margin-top:4px">${rc} 회복</div>`:""));
+  }).join("");
+  const abHtml = (sh.abilities||[]).map(x=>det(x.n,x.t||"",x.d)).join("");
+  return `${head?`<div class="sec-t">${head}</div>`:""}${statsHtml}
+    ${resHtml?`<div class="sec-t">자원</div>${resHtml}`:""}
+    ${abHtml?`<div class="sec-t">능력</div>${abHtml}`:""}`;
+}
 function personCard(a,opts={}){
   const name=a.name||a.n||"(이름 미등록)";
   const trait=a.trait||a.d||"";
@@ -2467,6 +2491,7 @@ function personCard(a,opts={}){
     <div class="kv"><span>모르는 것</span><span>${a.unknown||"—"}</span></div>
     ${(a.equipment&&a.equipment.length)?`<div class="sec-t">장착품 <span class="itemcat-n">(${a.equipment.length})</span></div>`
       +a.equipment.map(e=>det(e.item,e.slot||"착용",(e.desc||"")+itemStatusHTML(e))).join(""):""}
+    ${sheetBlock(a.id)}
     ${a.look?det("외모 프로필","고정","<span style='font-size:11px;line-height:1.7'>"+a.look+"</span>",a.look):""}</div>`;
 }
 function passFilter(a){

@@ -1,0 +1,16 @@
+{
+  "sheet": {
+    "race": "인간",
+    "cls": "로그 (어쌔신)",
+    "level": 3,
+    "ac": 13,
+    "stats": { "STR": 10, "DEX": 16, "CON": 14, "INT": 12, "WIS": 13, "CHA": 8 },
+    "resources": [
+      { "id": "res_liv_sneak_attack", "n": "은신 공격", "dice": "2d6", "cur": 1, "max": 1, "recharge": "turn", "note": "턴당 1회. 이점 판정 또는 인접 아군 조건 충족 시 발동." }
+    ],
+    "abilities": [
+      { "id": "ab_liv_cunning_action", "n": "교활한 행동", "t": "추가 행동", "d": "매 턴 추가 행동으로 질주·이탈·은신 중 하나를 선택해 사용할 수 있다." },
+      { "id": "ab_liv_assassinate", "n": "암살", "t": "패시브", "d": "아직 이번 전투에서 행동하지 않은 대상에게 공격 판정 이점을 받는다. 기습 상태인 대상에게 명중시키면 자동으로 치명타가 된다." }
+    ]
+  }
+}
