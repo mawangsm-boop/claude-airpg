@@ -1,8 +1,8 @@
 {
-  "checkpoint": "CP-S42-KARLEN-START",
+  "checkpoint": "CP-S42-CP01-REST",
   "session": 42,
-  "arc": "카를렌, 사라진 자들 (진행 중)",
-  "place": "카를렌 성문 앞",
+  "arc": "카를렌, 사라진 자들 (잿빛 손 지부 소탕 완료, 관리인 정체 미해결)",
+  "place": "카를렌 시내, 여관 닻과 등불",
   "pc": {
     "name": "베릭스 나이트블레이드",
     "race": "티플링",

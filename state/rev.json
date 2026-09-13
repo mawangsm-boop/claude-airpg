@@ -1,5 +1,5 @@
 {
-  "rev": "S42-009",
-  "updated": "2026-09-13T00:10:00Z",
-  "note": "세렌에게 사례금 500골드 수령(pc.gold 4471)."
+  "rev": "S42-010",
+  "updated": "2026-09-13T00:20:00Z",
+  "note": "긴 휴식 — 전원 HP 회복, 체크포인트 cp01 생성. core.json checkpoint/arc/place 갱신."
 }
