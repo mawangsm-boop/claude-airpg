@@ -1,5 +1,5 @@
 {
-  "rev": "S42-010",
-  "updated": "2026-09-13T00:20:00Z",
-  "note": "긴 휴식 — 전원 HP 회복, 체크포인트 cp01 생성. core.json checkpoint/arc/place 갱신."
+  "rev": "S42-011",
+  "updated": "2026-09-13T00:40:00Z",
+  "note": "42회차 아크 완결. cp00 최종 통합본 생성, core.json arc/checkpoint 완결 상태로 갱신, CLAUDE.md 배치 개정(조종권 일반화 등 42회차 변경사항 정리)."
 }

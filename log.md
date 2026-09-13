@@ -1,6 +1,7 @@
 
 # 회차 로그
 
+- **S42 아크 완결 + CLAUDE.md 배치 개정**: 사용자가 "시나리오 아예 종료한다"고 확정. cp01을 기반으로 `archive/sessions/_checkpoints/S42/cp00.md` 최종 통합본 생성. gm_notes/S42_scenario.md에 완결 표시. core.json arc/checkpoint를 완결 상태로, log.json에 아크 완결 엔트리 추가. **CLAUDE.md 배치 개정(42회차)** 수행: 상단 요약 인용구를 42회차 기준으로 교체(조종권 일반화·world_geography.md 신설·world.json cat/tier 관행·핸드북 지도 UI 개편·battle.json 좌표 정확도를 이번 개정 내용으로 정리), "조종권" 절의 v024/v025 인라인 서술을 깔끔한 규칙 문장으로 정리(사고 경위는 상단 요약으로 이동), 파일 구조 목록에 archive/world_geography.md 추가, world.json 스키마 예시에 tier 필드 추가, battle.json 절에 근접전 좌표 정확도 문구 추가, 하단 "현재 진행 상황"을 42회차 완결 기준으로 갱신(이전까지 40회차 기준으로 방치돼 있었음). 다음 아크는 미정, 사용자와 조율 필요.
 - **S42 긴 휴식·체크포인트**: 사용자가 "오늘은 여기까지"로 종료 의사 표현 → checkpoint.json next_cp_index 1 소진, `archive/sessions/_checkpoints/S42/cp01.md` 생성(세션 시작부터 이 시점까지 전체 기록, 두 번의 조종권 위반·정정 포함). 긴 휴식으로 party.json 전원 HP 전액 회복(이자벨26/26, 리브32/32, 레아16/16). core.json checkpoint/arc/place 필드 갱신. next_cp_index 2로 증가.
 - **S42 규칙 재정정**: 세렌의 보수 제안 서술 뒤 GM이 베릭스의 반응 대사("넉넉하군")를 임의로 붙인 사고 재발 — 앞서 고친 "전투 중 턴 진행" 규칙이 전투 상황에만 좁게 적용돼, 비전투 대화 장면에서 같은 문제가 다시 터짐. CLAUDE.md "조종권" 절의 해당 규칙을 일반화 — 전투 여부 불문, 베릭스가 뭔가를 하거나 말할 차례면 항상 멈추고 질문. 해당 대사는 취소, 플레이어의 실제 반응 대기 중.
 - **S42 하류 집하장 습격 완료**: 포로 위장(기만20, 성공) → 잠입 → 전원 기습(경비3 전멸, 아군 무상) → 장부 담당자 생포·협박(23, 26)으로 물류 규모·전달 방식(보름 간격 강배, 점조직 운영이라 다음 인수자도 서로 모름)까지 자백. 잿빛 손 물류 장부·미지의 "관리인" 봉인 서신을 core.json.pc.items에 추가(item_grayhand_ledger_s42, item_unknown_seal_letter_s42). 카를렌 귀환, 세렌에게 담당자·증거물 인계 — npcs.json seren 항목에 knows/unknown 갱신(관리인 정체는 C등급 미해결로 명시, 다음 아크 훅). battle.json 삭제(피해 없어 party.json 변동 없음). 아크 클라이맥스 사실상 종료, 마무리 단계 진입.
