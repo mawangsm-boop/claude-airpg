@@ -135,6 +135,8 @@ if (idx) {
     if (!c) return;
     checkHP(rel, c.hp, id);
     checkSheet(rel, c.sheet);
+    if (c.items === undefined) warn(rel, "items 배열이 없습니다 — 맡긴 물건을 기록할 자리가 없습니다");
+    else checkItems(rel, c.items);
     if (!c.sheet) warn(rel, "sheet가 없습니다 — 핸드북에 스탯·자원이 표시되지 않습니다");
     for (const f of ["align", "voice", "code", "drive", "bond"])
       if (!c[f]) warn(rel, `${f}(개성 필드)가 없습니다 — 동료가 전투 유닛으로만 쓰이기 쉽습니다`);

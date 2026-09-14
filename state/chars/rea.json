@@ -36,6 +36,7 @@
         "equipped": true
       }
     ],
+    "items": [],
     "susp": {
       "cur": 0,
       "max": 6,

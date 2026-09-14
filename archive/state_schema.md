@@ -37,11 +37,12 @@ CLAUDE.md의 축약 규칙만으로 판단이 서지 않을 때만 여는 문서
 } }
 ```
 
+- **`equipment`는 지금 몸에 걸친 것, `items`는 들고 있는 것**입니다. 파티 보급품(물약 등)은 평소처럼 베릭스의 `items`에 두되, 누가 무엇을 맡았는지가 중요해지는 순간(파티 분리, 잠입 전 분배, 특정 인물에게 물약을 쥐여줌)에 해당 동료의 `items`로 옮겨 적습니다. 옮기면 베릭스 쪽 수량(`q`)을 반드시 함께 줄입니다 — 같은 물건이 두 곳에 동시에 있으면 안 됩니다.
 - PC(`verrix.json`)는 여기에 더해 `cls`·`level`·`ac`·`stats`·`slots`·`gold`·`spells`·`feats`·`items`·`surface`·`hidden`·`goal`·`status`를 갖습니다. **베릭스의 모든 데이터는 이 파일 하나가 유일한 출처입니다.**
 - `resources`는 소비하는 즉시 `cur`를 갱신합니다. 긴 휴식·짧은 휴식 때 `recharge` 주기에 맞춰 직접 되돌립니다(핸드북 자동 리필은 PC 아이템의 `charge`에만 걸려 있습니다).
 - 동료 턴마다 `resources`/`abilities`를 확인하고 상황에 맞는 것을 골라 씁니다 — 매번 단순 공격으로 때우지 않습니다.
 
-### 아이템 (`items`, PC 전용)
+### 아이템 (`items`) — PC·동료 공통
 
 - `cat`: `weapon`(무기·방어구) / `accessory`(효과가 확인된 착용품) / `consumable`(물약·횃불) / `trinket`(기능 없거나 플롯이 끝난 것) / `misc`. 획득 시점에 지정하고, 애매하면 `accessory`로 넣은 뒤 확인되면 옮깁니다.
 - `equipped`(착용 중), `passive`+`acBonus`(상시 효과), `charge`(`{"cur","max","recharge":"long|short|turn"}`).

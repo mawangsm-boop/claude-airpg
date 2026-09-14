@@ -2367,7 +2367,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.26";
+const HB_VERSION="v2.27";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -2581,6 +2581,7 @@ function personCard(a,opts={}){
     <div class="kv"><span>모르는 것</span><span>${a.unknown||"—"}</span></div>
     ${(a.equipment&&a.equipment.length)?`<div class="sec-t">장착품 <span class="itemcat-n">(${a.equipment.length})</span></div>`
       +a.equipment.map(e=>det(e.item,e.slot||"착용",(e.desc||"")+itemStatusHTML(e))).join(""):""}
+    ${(a.items&&a.items.length)?`<div class="sec-t">소지품 <span class="itemcat-n">(${a.items.length})</span></div>`+renderItems(a.items):""}
     ${sheetBlock(a.id)}
     ${a.look?det("외모 프로필","고정","<span style='font-size:11px;line-height:1.7'>"+a.look+"</span>",a.look):""}</div>`;
 }
