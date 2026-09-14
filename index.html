@@ -2122,7 +2122,7 @@ const $=id=>document.getElementById(id);
    - rev 가 같으면 localStorage(수동 @@PATCH 결과)를 유지한다.
    - fetch 실패(file:// 로 직접 열기 등) 시 내장 SEED/로컬 저장본으로 동작한다. */
 const REMOTE_BASE = "./state/";
-const REMOTE_PARTS = ["core","party","npcs","world","threads","log","feats"];
+const REMOTE_PARTS = ["core","party","npcs","world","threads","log"];  // v2.24: feats.json 제거 — 특성의 단일 출처는 core.json의 pc.feats 하나다
 const REMOTE_OPTIONAL = ["dungeon","battle"]; // 던전 밖·평시엔 파일 자체가 없는 게 정상 — 404를 오류로 취급하지 않는다
 /* v2.21: 동료 캐릭터 시트(스탯·자원·능력) — state/sheets/{id}.json, {"sheet":{...}} 단일 래핑.
    아직 시트가 없는 동료(신규 합류자 등)는 파일 자체가 없어도 정상 — optional 취급. */

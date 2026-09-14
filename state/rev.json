@@ -1,5 +1,5 @@
 {
-  "rev": "S42-011",
-  "updated": "2026-09-13T00:40:00Z",
-  "note": "42회차 아크 완결. cp00 최종 통합본 생성, core.json arc/checkpoint 완결 상태로 갱신, CLAUDE.md 배치 개정(조종권 일반화 등 42회차 변경사항 정리)."
+  "rev": "S42-012",
+  "updated": "2026-09-14T00:00:00Z",
+  "note": "데이터 정리(feats 일원화·중복 아이템 제거·잔여 상태 초기화) + tools/validate.js 신설"
 }
