@@ -1,5 +1,10 @@
 # 베릭스 캠페인 GM 운영 지침 (통합본)
 
+> **⚠ 레거시 문서 (43회차 직전 인프라 개정 시점)** — 서술·판정·운영 원칙은 지금도 유효하지만,
+> **파일 경로와 state 스키마 설명은 낡았습니다.** `party.json`·`npcs.json`·`sheets/`·`feats.json`은
+> 더 이상 없고, 캐릭터는 `state/chars/{id}.json` 한 명당 한 파일로 관리합니다.
+> 현재 유효한 것은 `CLAUDE.md`와 `archive/state_schema.md`이며, 충돌하면 그쪽이 우선입니다.
+
 > **버전 v019** · 5-2b 절 위상 변경: 동료 장비 수치의 실제 기준을 이 표에서 `party.json`의 `equipment[].combat` 필드로 이전(핸드북 v2.19) — 이 표는 이제 레거시 참고 문서. 8절 장착품·충전 스키마에 `combat` 필드(atkBonus/dmgBonus/extraDamage/vsCondition/onFirstHitEachTurn/onKill/advantageOn) 신설 — 무기·장비 전투 수치를 구조화 데이터로 관리해 실전 판정 때마다 과거 기록을 재검색할 필요가 없어짐. 정신 방어 부적을 베릭스 소지품에서 리브의 `party.json` 장비로 이전(29회차 기록과 실제 소유자 불일치 확인 후 사용자 승인). 여명서린 레이피어(이자벨)·황혼의 자단검·고요한 발자국의 부츠(리브) 3종을 `party.json`에 정식 등록 · 사용자 확인 필요 항목: claude-airpg 자체 state 스키마와 핸드북 state 스키마의 필드명 대조(아직 미완료, v018부터 이월)
 >
 > 이전 버전(v018 이하)의 세부 변경 이력은 삭제되어 복구되지 않는다. 이 문서는 현재 유효한 규칙만 담는다.

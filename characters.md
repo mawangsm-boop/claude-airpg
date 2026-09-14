@@ -1,6 +1,6 @@
 # 캐릭터 외모 잠금
 
-장면 묘사·이미지 프롬프트를 만들 때만 참조. 기본 외모는 여기 문구를 그대로 재사용하고, 장비 변화만 델타로 덧붙인다(주얼리·의상 교체 등은 `party.json`의 `equipment` 참고).
+장면 묘사·이미지 프롬프트를 만들 때만 참조. 기본 외모는 여기 문구를 그대로 재사용하고, 장비 변화만 델타로 덧붙인다(주얼리·의상 교체 등은 해당 캐릭터 파일 `state/chars/{id}.json`의 `equipment` 참고).
 
 ## 베릭스 나이트블레이드 (PC)
 Verrix Nightblade, a male tiefling warlock in his early 30s. Messy shoulder-length black wavy hair, curved purple-black horns swept back, pointed elf-like ears, pale lavender-tinted skin, glowing violet eyes, short trimmed goatee, sly confident smirk. Wearing an ornate black-and-gold longcoat over a purple satin shirt, open collar showing chest tattoos, black vest with gold buttons, thick leather belt with chains, ritual dagger with amethyst pommel sheathed at hip, gold rings and bracelets on right hand.
