@@ -107,7 +107,8 @@ state/clocks.json        진행 시계 / state/factions.json 세력 관계
 state/threads.json       실마리(st: open|resolved) / state/log.json 사용자에게 보이는 로그
 state/dungeon.json       던전 안에 있을 때만 존재 / state/battle.json 전투 중에만 존재
 state/checkpoint.json    체크포인트 카운터 / state/rev.json 핸드북 동기화 표식
-tools/dice.js            주사위 / tools/validate.js 상태 검증기
+tools/dice.js            주사위 / tools/validate.js 상태 검증기 / tools/rest.js 휴식 처리 / tools/seed.js 내장본 갱신
+assets/map.jpg           대륙 지도 원본 (핸드북이 배경으로 읽는다)
 logs/rolls.log           굴림 기록 (dice.js가 자동으로 남긴다)
 log.md                   GM 자신의 진행 메모(사용자에게 보이지 않음)
 characters.md            캐릭터 외모 잠금 (이미지 프롬프트 만들 때만)
@@ -134,7 +135,11 @@ node tools/dice.js "1d20+5"          # 단일
 node tools/dice.js "2d6+1d4+3"       # 복합식
 node tools/dice.js "adv:1d20+7"      # 이점 (dis: 불리점)
 node tools/validate.js               # 커밋 전 상태 검증 — 오류가 있으면 커밋하지 않는다
+node tools/rest.js long              # 긴 휴식 (short: 짧은 휴식, --dry: 미리보기)
+node tools/seed.js --check           # 핸드북 내장본이 몇 회차인지 확인 (인자 없이 실행하면 갱신)
 ```
+
+**`rest.js`를 쓰면 휴식 회복을 손으로 되돌리지 않아도 됩니다** — 긴 휴식은 전원 HP·임시HP·슬롯·모든 충전과 자원을, 짧은 휴식은 recharge가 short/turn인 것만 회복하고, `checkpoint.json`의 짧은 휴식 횟수와 `rev.json`까지 함께 갱신하며 체크포인트 생성 시점이 되면 알려줍니다. 동료의 `sheet.resources`(레아 두 번째 숨 등)를 빠뜨리던 실수가 이 도구로 사라집니다.
 
 `dice.js`는 자연 20·1을 표시하고 모든 굴림을 `logs/rolls.log`에 남깁니다. `validate.js`는 중복 id, 깨진 래핑, HP·충전 수치 모순, 인덱스에 없어 화면에서 사라지는 캐릭터 파일, `rev.json` 갱신 누락, `index.html` 구문 오류를 잡습니다.
 

@@ -21,7 +21,11 @@ state/
   checkpoint.json        체크포인트 카운터
 tools/dice.js            주사위 (복합식 · 이점/불리 · 자연 20 표시 · 굴림 로그)
 tools/validate.js        상태 검증기 — 커밋 전에 반드시 한 번
+tools/rest.js            긴 휴식/짧은 휴식 일괄 처리 (HP · 충전 · 자원 · 휴식 횟수 · rev)
+tools/seed.js            index.html 내장 기본 상태(SEED) 갱신
 logs/rolls.log           모든 주사위 굴림 기록
+assets/map.jpg           대륙 지도 (핸드북 배경 — 예전엔 index.html에 base64로 박혀 있었다)
+.claude/hooks/           세션 시작 시 state 검증을 자동 실행하는 훅
 ```
 
 ## 캐릭터는 한 명 = 파일 하나
