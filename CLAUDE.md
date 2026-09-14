@@ -104,7 +104,7 @@ state/chars/{id}.json    동료 (시트·장비·의심도·지식 격리가 한
 state/npcs/{id}.json     재등장하는 주요 NPC / state/npcs/_minor.json 단역 모음
 state/world.json         대륙 위치·발견 지점 (이동할 때만)
 state/clocks.json        진행 시계 / state/factions.json 세력 관계
-state/threads.json       실마리(st: open|resolved) / state/log.json 사용자에게 보이는 로그
+state/threads.json       실마리(st: open|resolved) / state/log.json 사용자에게 보이는 로그(최근 5회차분만 — 더 오래된 것은 archive/log_archive.json)
 state/dungeon.json       던전 안에 있을 때만 존재 / state/battle.json 전투 중에만 존재
 state/checkpoint.json    체크포인트 카운터 / state/rev.json 핸드북 동기화 표식
 tools/dice.js            주사위 / tools/validate.js 상태 검증기 / tools/rest.js 휴식 처리 / tools/seed.js 내장본 갱신
@@ -191,7 +191,17 @@ archive/sessions/{회차}회차_{제목}_베릭스_{날짜}.md           정식 
 - **신설**: 시계(`clocks.json`)·세력(`factions.json`)·의심도(`susp`), 실마리 상태 필드(`st`), 골드 싱크 규칙, 사회 판정에 시계를 거는 규칙.
 - **도구**: `tools/validate.js`(커밋 전 검증), `tools/dice.js` 복합식·이점/불리·자연 20 표시·굴림 로그.
 
+**43회차 직전 인프라 개정 (2차)** — 첫 개정 뒤 다시 훑어 찾은 것들:
+- **핸드북 경량화**: 대륙 지도가 `index.html` 안에 844KB base64로 박혀 있어 본체의 86%를 차지했다. `assets/map.jpg`로 분리해 984KB → 155KB.
+- **도구 추가**: `tools/rest.js`(휴식 일괄 처리 — 동료 자원까지), `tools/seed.js`(로컬 모드용 내장본 갱신), `tools/looks.js`(characters.md 재생성).
+- **세션 시작 훅**: `.claude/hooks/session-start.sh`가 세션이 열릴 때 `validate.js`를 자동 실행하고 현재 회차·위치·짧은 휴식 누적을 알려준다.
+- **NPC 개성**: 주요 NPC 12명에 `voice`·`drive`·`bond` 반영. 표본이 없는 인물은 "미확정"으로 명시하고 재등장 시 채운다. 검증기가 `voice` 누락을 경고한다.
+- **단일 출처 정리**: `characters.md`가 캐릭터 파일의 `look`에서 생성되도록 바꿔 외모 이중 관리를 없앴다. `daria`·`npc_vesperhusk_s36`의 빈 `role`/`trait`을 채우고 `d` 필드를 `trait`으로 통일했다.
+- **아카이브 최신화**: `campaign_summary.md`에 제6부(41~42회차)와 세렌 색인, 42회차 훅 2건을 추가했다(40회차까지만 반영돼 있었다).
+- **로그 분할**: `log.json` 168항목 → 64항목(38~42회차), 나머지는 `archive/log_archive.json`으로. 80항목을 넘으면 검증기가 알린다.
+
 남은 미확인 항목 — 다음 회차에서 실전 검증 필요:
+- `rest.js`·`looks.js`·세션 시작 훅이 실제 진행에서 쓰이는지(도구를 만들어두고 손으로 하던 습관이 남으면 의미가 없음).
 - 시계·의심도를 실제 진행 중에 **꾸준히 채우는지**(만들어두고 방치되면 아무 의미가 없음).
 - 골드 싱크가 실제 아크 설계에 반영되는지.
 - 캐릭터 파일 분리 후 전투 중 갱신이 더 가벼워지는지, 새 동료 합류 절차가 실제로 파일 추가 + 인덱스 한 줄로 끝나는지.

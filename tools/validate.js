@@ -150,7 +150,10 @@ if (idx) {
   (idx.npcs || []).forEach((id) => {
     const rel = `state/npcs/${id}.json`;
     const c = loadChar(rel, id);
-    if (c && !c.name) warn(rel, "name이 비어 있습니다 — 관계 탭에 이름 없이 표시됩니다");
+    if (!c) return;
+    if (!c.name) warn(rel, "name이 비어 있습니다 — 관계 탭에 이름 없이 표시됩니다");
+    if (!c.voice) warn(rel, "voice(말투)가 없습니다 — 대사를 즉석으로 지어내게 됩니다");
+    if (!c.role && !c.trait) warn(rel, "role·trait가 모두 비어 있습니다 — 인물 정보가 사실상 없습니다");
   });
 
   if (idx.npcMinor) {
@@ -198,6 +201,8 @@ if (threadsFile) {
 }
 const logFile = readJSON("state/log.json");
 if (logFile && !Array.isArray(logFile.log)) err("state/log.json", '{"log":[...]} 래핑이 아닙니다');
+else if (logFile && logFile.log.length > 80)
+  warn("state/log.json", `${logFile.log.length}항목입니다 — 오래된 회차를 archive/log_archive.json으로 옮기세요(동기화할 때마다 통째로 내려받습니다)`);
 
 /* ---------- world.json ---------- */
 const indexHtml = fs.existsSync(path.join(ROOT, "index.html")) ? fs.readFileSync(path.join(ROOT, "index.html"), "utf8") : "";
