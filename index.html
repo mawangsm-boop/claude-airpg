@@ -259,6 +259,7 @@ summary>span:first-child>em{font-style:normal;overflow:hidden;text-overflow:elli
   </section>
 
   <section id="s-log">
+    <div class="card"><h2>시계 · 세력 · 의심</h2><div id="tensionBody"></div></div>
     <div class="card"><h2>미해결 실마리</h2><div id="threadBody"></div></div>
     <div class="card"><h2>모험 기록</h2><div id="logBody"></div></div></section>
 
@@ -2123,7 +2124,7 @@ const $=id=>document.getElementById(id);
    - fetch 실패(file:// 로 직접 열기 등) 시 내장 SEED/로컬 저장본으로 동작한다. */
 const REMOTE_BASE = "./state/";
 const REMOTE_PARTS = ["core","party","npcs","world","threads","log"];  // v2.24: feats.json 제거 — 특성의 단일 출처는 core.json의 pc.feats 하나다
-const REMOTE_OPTIONAL = ["dungeon","battle"]; // 던전 밖·평시엔 파일 자체가 없는 게 정상 — 404를 오류로 취급하지 않는다
+const REMOTE_OPTIONAL = ["dungeon","battle","clocks","factions"]; // 던전 밖·평시엔 파일 자체가 없는 게 정상 — 404를 오류로 취급하지 않는다
 /* v2.21: 동료 캐릭터 시트(스탯·자원·능력) — state/sheets/{id}.json, {"sheet":{...}} 단일 래핑.
    아직 시트가 없는 동료(신규 합류자 등)는 파일 자체가 없어도 정상 — optional 취급. */
 const REMOTE_SHEET_IDS = ["isabel","liv","rea"];
@@ -2298,8 +2299,41 @@ function applyPatch(obj){
 }
 
 /* ==================== 렌더 ==================== */
-function renderAll(){ header(); renderChar(); renderParty(); renderDungeon(); renderBattle(); renderWorldMarkers(); renderLog(); $("fullBox").value=JSON.stringify(S,null,1); }
-const HB_VERSION="v2.23";
+function renderAll(){ header(); renderChar(); renderParty(); renderDungeon(); renderBattle(); renderWorldMarkers(); renderLog(); renderTension(); $("fullBox").value=JSON.stringify(S,null,1); }
+/* v2.24: 진행 시계(clocks) · 세력 관계(factions) · 동료 의심도.
+   시계의 vis:"gm"은 GM 전용이라 화면에 내지 않는다. 파일이 없어도(아직 안 만들었어도) 정상 동작한다. */
+function renderTension(){
+  const box=$("tensionBody"); if(!box) return;
+  const pips=(cur,max)=>Array.from({length:max},(_,i)=>
+    `<i style="display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:3px;`
+    +`background:${i<cur?"var(--gold)":"transparent"};border:1px solid var(--line)"></i>`).join("");
+  const clocks=(S.clocks||[]).filter(c=>c.vis!=="gm"&&c.st!=="done");
+  const facs=(S.factions||[]);
+  const susp=(S.party||[]).filter(m=>m.susp);
+  let h="";
+  h+=clocks.length
+    ? clocks.map(c=>`<div class="logitem" style="border-left-color:var(--gold)"><b>${c.n} · ${c.cur}/${c.max}</b>`
+        +`<div style="margin:3px 0 5px">${pips(c.cur,c.max)}</div>${c.note||""}</div>`).join("")
+    : '<div class="note">진행 중인 시계가 없습니다.</div>';
+  if(facs.length){
+    h+='<div class="note" style="margin-top:10px">세력 관계</div>';
+    h+=facs.map(f=>{
+      const dim=f.st==="ended";
+      const sign=f.rep>0?"+"+f.rep:String(f.rep);
+      return `<div class="logitem" style="border-left-color:${dim?"var(--line)":(f.rep<0?"#c9666a":"#7ac68f")};${dim?"opacity:.55;":""}">`
+        +`<b>${f.n} · ${f.stance}${dim?"":" ("+sign+")"}</b>${f.note||""}`
+        +(f.contact&&f.contact!=="—"?`<div class="trait">창구: ${f.contact}</div>`:"")+`</div>`;
+    }).join("");
+  }
+  if(susp.length){
+    h+='<div class="note" style="margin-top:10px">동료 의심도 — 베릭스의 본성을 얼마나 의심하는가</div>';
+    h+=susp.map(m=>`<div class="logitem" style="border-left-color:${m.susp.cur>=m.susp.max*0.5?"#c9666a":"var(--line)"}">`
+      +`<b>${m.name} · ${m.susp.cur}/${m.susp.max}</b><div style="margin:3px 0 5px">${pips(m.susp.cur,m.susp.max)}</div>`
+      +`${m.susp.note||""}</div>`).join("");
+  }
+  box.innerHTML=h;
+}
+const HB_VERSION="v2.24";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -3100,7 +3134,15 @@ $("wHome").onclick=()=>{ $("wSvg").setAttribute("viewBox",W_HOME); renderWorldMa
 
 /* ---------- 로그 ---------- */
 function renderLog(){
-  $("threadBody").innerHTML=(S.threads||[]).map(e=>`<div class="logitem" style="border-left-color:var(--gold)"><b>${e.t}</b>${e.x}</div>`).join("")||'<div class="note">없습니다.</div>';
+  /* v2.24: 실마리에 상태(st: open/resolved)가 생겼다. 미해결을 먼저, 종결분은 흐리게 뒤에 붙인다.
+     st가 없는 옛 항목은 미해결로 취급한다(하위호환). */
+  const _th=(S.threads||[]), _open=_th.filter(e=>e.st!=="resolved"), _done=_th.filter(e=>e.st==="resolved");
+  const _row=(e,done)=>`<div class="logitem" style="border-left-color:${done?"var(--line)":"var(--gold)"};${done?"opacity:.55;":""}">`
+    +`<b>${done?"[종결] ":""}${e.t}</b>${e.x}</div>`;
+  $("threadBody").innerHTML=(
+      (_open.length?_open.map(e=>_row(e,false)).join(""):'<div class="note">미해결 실마리가 없습니다.</div>')
+    + (_done.length?`<div class="note" style="margin-top:10px">종결된 실마리 ${_done.length}건</div>`+_done.map(e=>_row(e,true)).join(""):"")
+  );
   $("logBody").innerHTML=(S.log||[]).map(e=>`<div class="logitem"><b>${e.t}</b>${e.x}</div>`).join("")||'<div class="note">기록이 없습니다.</div>';
 }
 

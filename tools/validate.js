@@ -247,6 +247,60 @@ if (dungeonFile) {
   }
 }
 
+/* ---------- clocks / factions (있을 때만) ---------- */
+const clocksFile = readJSON("state/clocks.json", { required: false });
+if (clocksFile) {
+  const cl = clocksFile.clocks;
+  if (!Array.isArray(cl)) err("state/clocks.json", '{"clocks":[...]} 래핑이 아닙니다');
+  else {
+    checkDupIds("state/clocks.json", cl, "clocks");
+    cl.forEach((c) => {
+      if (typeof c.cur !== "number" || typeof c.max !== "number") err("state/clocks.json", `${c.id}: cur/max가 숫자가 아닙니다`);
+      else if (c.cur > c.max) err("state/clocks.json", `${c.id}: cur(${c.cur})이 max(${c.max})를 넘습니다`);
+      else if (c.cur < 0) err("state/clocks.json", `${c.id}: cur이 음수입니다`);
+      if (c.vis && !["open", "gm"].includes(c.vis)) err("state/clocks.json", `${c.id}: vis는 open/gm 중 하나여야 합니다 (${c.vis})`);
+      if (c.st && !["open", "done"].includes(c.st)) err("state/clocks.json", `${c.id}: st는 open/done 중 하나여야 합니다 (${c.st})`);
+      if (c.cur === c.max && c.st !== "done") warn("state/clocks.json", `${c.id}: 시계가 가득 찼습니다 — 발동 처리 후 st를 done으로 바꾸세요`);
+    });
+  }
+}
+
+const facFile = readJSON("state/factions.json", { required: false });
+if (facFile) {
+  const fa = facFile.factions;
+  if (!Array.isArray(fa)) err("state/factions.json", '{"factions":[...]} 래핑이 아닙니다');
+  else {
+    checkDupIds("state/factions.json", fa, "factions");
+    fa.forEach((f) => {
+      if (typeof f.rep !== "number" || f.rep < -3 || f.rep > 3) err("state/factions.json", `${f.id}: rep는 -3~+3 사이 숫자여야 합니다 (${f.rep})`);
+      if (!f.stance) warn("state/factions.json", `${f.id}: stance가 없습니다`);
+      if (f.st && !["active", "ended"].includes(f.st)) err("state/factions.json", `${f.id}: st는 active/ended 중 하나여야 합니다 (${f.st})`);
+    });
+  }
+}
+
+/* 동료 의심도 */
+if (Array.isArray(party)) {
+  party.forEach((m) => {
+    if (!m.susp) return warn("state/party.json", `${m.id}: susp(의심도)가 없습니다`);
+    if (typeof m.susp.cur !== "number" || typeof m.susp.max !== "number") err("state/party.json", `${m.id}: susp.cur/max가 숫자가 아닙니다`);
+    else if (m.susp.cur > m.susp.max) err("state/party.json", `${m.id}: susp.cur(${m.susp.cur})이 max(${m.susp.max})를 넘습니다`);
+  });
+}
+
+/* ---------- index.html 자바스크립트 구문 검사 ---------- */
+if (indexHtml) {
+  const blocks = [...indexHtml.matchAll(/<script(?![^>]*src=)[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
+  if (!blocks.length) warn("index.html", "<script> 블록을 찾지 못했습니다");
+  blocks.forEach((code, i) => {
+    try {
+      new (require("vm").Script)(code);
+    } catch (e) {
+      err("index.html", `script[${i}] 구문 오류 — ${e.message} (이 상태로 올리면 핸드북이 아예 뜨지 않습니다)`);
+    }
+  });
+}
+
 /* ---------- 핸드북이 필수로 읽는 파일이 실제로 있는가 ---------- */
 const partsMatch = indexHtml.match(/const REMOTE_PARTS\s*=\s*\[([^\]]*)\]/);
 if (partsMatch) {
