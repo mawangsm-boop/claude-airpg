@@ -9,6 +9,16 @@
     },
     "tag": "거래로 넘겨짐 · 동행",
     "trait": "강제로 신단 아치를 개방하다 반발에 크게 다쳤다. 죽음의 문턱에서 살아남았다.",
+    "align": "중립 (잠정 — 기록 근거가 얇다)",
+    "code": {
+      "does": "시키는 대로 한다. 몸 쓰는 일에는 군말이 없다.",
+      "wont": "아직 아무도 완전히 믿지 않는다 — 특히 이자벨(하빈 일행이 처형당하는 광경을 가장 가까이서 지켜본 인물)."
+    },
+    "voice": "짧은 말, 혼잣말이 섞인다. 감정을 드러내지 않으려 애쓴다 — \"…이런 건 처음 봐.\"(39회차) 표본이 적어 잠정이며, 등장이 쌓이면 확정한다.",
+    "drive": "살아남는 것. 하빈 일행이 전부 죽는 것을 눈앞에서 봤다.",
+    "fear": "다음은 자기 차례일 수 있다는 것.",
+    "bond": "거래로 넘겨진 처지. 아직 경계와 체념 사이에 있다.",
+    "spotlight": "추적·생존·야영이 필요한 상황에서 먼저 나선다.",
     "knows": "이끼 파수꾼 전투 전 과정, 하빈·용병 사망 직접 목격(A등급)",
     "unknown": "베릭스의 과거 전부(D등급)",
     "look": "Rea, a human female former mercenary in her late 20s. Tan brown skin, short-cropped dark brown hair, sturdy build, a healing scar across one shoulder from forcing open the fey arch, tired but resolute eyes. Wearing worn leather armor over practical traveling clothes, a porter's backpack slung over one shoulder.",

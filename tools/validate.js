@@ -136,6 +136,9 @@ if (idx) {
     checkHP(rel, c.hp, id);
     checkSheet(rel, c.sheet);
     if (!c.sheet) warn(rel, "sheet가 없습니다 — 핸드북에 스탯·자원이 표시되지 않습니다");
+    for (const f of ["align", "voice", "code", "drive", "bond"])
+      if (!c[f]) warn(rel, `${f}(개성 필드)가 없습니다 — 동료가 전투 유닛으로만 쓰이기 쉽습니다`);
+    if (c.code && (!c.code.does || !c.code.wont)) warn(rel, "code에 does/wont 두 줄이 모두 있어야 판단 기준이 됩니다");
     if (!c.susp) warn(rel, "susp(의심도)가 없습니다");
     else if (typeof c.susp.cur !== "number" || typeof c.susp.max !== "number") err(rel, "susp.cur/max가 숫자가 아닙니다");
     else if (c.susp.cur > c.susp.max) err(rel, `susp.cur(${c.susp.cur})이 max(${c.susp.max})를 넘습니다`);

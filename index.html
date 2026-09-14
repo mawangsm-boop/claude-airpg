@@ -2367,7 +2367,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.25";
+const HB_VERSION="v2.26";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -2540,6 +2540,23 @@ function sheetBlock(id){
     ${resHtml?`<div class="sec-t">자원</div>${resHtml}`:""}
     ${abHtml?`<div class="sec-t">능력</div>${abHtml}`:""}`;
 }
+/* v2.26: 개성 — 성향·행동 강령·말투·동기·두려움·베릭스와의 관계·장면에서의 역할.
+   한 필드라도 있으면 표시하고, 없는 인물(단역 등)은 통째로 생략한다. */
+function personaBlock(a){
+  const rows=[
+    ["성향", a.align],
+    ["한다", a.code&&a.code.does],
+    ["안 한다", a.code&&a.code.wont],
+    ["말투", a.voice],
+    ["바라는 것", a.drive],
+    ["두려운 것", a.fear],
+    ["베릭스와", a.bond],
+    ["장면에서", a.spotlight]
+  ].filter(r=>r[1]);
+  if(!rows.length) return "";
+  return `<div class="sec-t">개성</div>`
+    + rows.map(([k,v])=>`<div class="kv"><span style="white-space:nowrap">${k}</span><span>${v}</span></div>`).join("");
+}
 function personCard(a,opts={}){
   const name=a.name||a.n||"(이름 미등록)";
   const trait=a.trait||a.d||"";
@@ -2558,6 +2575,7 @@ function personCard(a,opts={}){
     <div class="bar"><i class="${r>.6?"hp":"hpmid"}" style="width:${Math.max(0,r*100)}%"></i></div>`:""}
     <div class="trait">${trait}</div>
     ${a.comply?`<div class="note" style="color:var(--violet-s);margin-top:5px">${a.comply}</div>`:""}
+    ${personaBlock(a)}
     <div class="sec-t">지식 격리</div>
     <div class="kv"><span>아는 것</span><span>${a.knows||"—"}</span></div>
     <div class="kv"><span>모르는 것</span><span>${a.unknown||"—"}</span></div>
