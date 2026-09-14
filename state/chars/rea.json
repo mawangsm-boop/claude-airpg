@@ -1,0 +1,76 @@
+{
+  "char": {
+    "id": "rea",
+    "name": "레아",
+    "role": "여성 · 인간 · 20대 후반 · 전 하빈 일행 용병 · 파이터(챔피언) 3레벨",
+    "hp": {
+      "cur": 16,
+      "max": 16
+    },
+    "tag": "거래로 넘겨짐 · 동행",
+    "trait": "강제로 신단 아치를 개방하다 반발에 크게 다쳤다. 죽음의 문턱에서 살아남았다.",
+    "knows": "이끼 파수꾼 전투 전 과정, 하빈·용병 사망 직접 목격(A등급)",
+    "unknown": "베릭스의 과거 전부(D등급)",
+    "look": "Rea, a human female former mercenary in her late 20s. Tan brown skin, short-cropped dark brown hair, sturdy build, a healing scar across one shoulder from forcing open the fey arch, tired but resolute eyes. Wearing worn leather armor over practical traveling clothes, a porter's backpack slung over one shoulder.",
+    "equipment": [
+      {
+        "slot": "weapon",
+        "item": "낡은 롱소드",
+        "desc": "오래 써서 손에 익은 평범한 군용 검. 마법 효과는 없다.",
+        "equipped": true
+      },
+      {
+        "slot": "body",
+        "item": "스터디드 레더 갑옷",
+        "desc": "곳곳에 금속 징을 덧댄 닳은 가죽 갑옷",
+        "equipped": true
+      }
+    ],
+    "susp": {
+      "cur": 0,
+      "max": 6,
+      "note": "베릭스의 과거를 전혀 모른다(D등급). 아직 의심의 계기가 없었다."
+    },
+    "sheet": {
+      "race": "인간",
+      "cls": "파이터 (챔피언)",
+      "level": 3,
+      "ac": 13,
+      "stats": {
+        "STR": 16,
+        "DEX": 12,
+        "CON": 15,
+        "INT": 10,
+        "WIS": 12,
+        "CHA": 8
+      },
+      "resources": [
+        {
+          "id": "res_rea_second_wind",
+          "n": "두 번째 숨",
+          "dice": "1d10+3",
+          "cur": 1,
+          "max": 1,
+          "recharge": "short",
+          "note": "추가 행동으로 사용, 즉시 회복."
+        },
+        {
+          "id": "res_rea_action_surge",
+          "n": "행동 쇄도",
+          "cur": 1,
+          "max": 1,
+          "recharge": "long",
+          "note": "이번 턴에 행동을 하나 더 할 수 있다."
+        }
+      ],
+      "abilities": [
+        {
+          "id": "ab_rea_improved_critical",
+          "n": "치명적 일격 강화",
+          "t": "패시브",
+          "d": "공격 굴림에서 19~20이 나오면 치명타로 취급한다."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "pc": "verrix",
+  "party": [
+    "isabel",
+    "liv",
+    "rea"
+  ],
+  "npcs": [
+    "entity",
+    "irene",
+    "marg",
+    "rosa",
+    "tessa",
+    "vera",
+    "meira",
+    "the_fiend",
+    "npc_vesperhusk_s36",
+    "idra",
+    "daria",
+    "seren"
+  ],
+  "npcMinor": "_minor"
+}

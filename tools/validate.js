@@ -9,6 +9,7 @@
  */
 const fs = require("fs");
 const path = require("path");
+const vm = require("vm");
 const { execSync } = require("child_process");
 
 const ROOT = path.resolve(__dirname, "..");
@@ -63,109 +64,119 @@ function checkHP(rel, hp, who) {
   if (hp.tmp !== undefined && typeof hp.tmp !== "number") err(rel, `${who}: hp.tmp가 숫자가 아닙니다`);
 }
 
-/* ---------- core.json ---------- */
-const ITEM_CATS = new Set(["weapon", "accessory", "consumable", "trinket", "misc"]);
-const core = readJSON("state/core.json");
-if (core) {
-  if (!core.pc) err("state/core.json", "pc 객체가 없습니다 — 핸드북이 로딩을 중단합니다");
-  else {
-    const pc = core.pc;
-    checkHP("state/core.json", pc.hp, "pc");
-    checkDupIds("state/core.json", pc.items, "pc.items");
-    checkDupIds("state/core.json", pc.feats, "pc.feats");
-    checkDupIds("state/core.json", pc.spells, "pc.spells");
-    (pc.items || []).forEach((it) => {
-      if (!it.id) return; // 위 checkDupIds가 이미 경고함
-      if (!it.cat) warn("state/core.json", `아이템 ${it.id}에 cat이 없습니다 — 획득 시점에 지정하는 것이 규칙입니다`);
-      else if (!ITEM_CATS.has(it.cat)) err("state/core.json", `아이템 ${it.id}의 cat이 유효하지 않습니다: ${it.cat}`);
-      if (it.charge) {
-        const c = it.charge;
-        if (typeof c.cur !== "number" || typeof c.max !== "number")
-          err("state/core.json", `아이템 ${it.id}의 charge.cur/max가 숫자가 아닙니다`);
-        else if (c.cur > c.max) err("state/core.json", `아이템 ${it.id}의 charge.cur(${c.cur})이 max(${c.max})를 넘습니다`);
-        if (!["long", "short", "turn"].includes(c.recharge))
-          err("state/core.json", `아이템 ${it.id}의 charge.recharge 값이 유효하지 않습니다: ${c.recharge}`);
-      }
-    });
-    if (pc.slots && typeof pc.slots.cur === "number" && typeof pc.slots.max === "number" && pc.slots.cur > pc.slots.max)
-      err("state/core.json", `슬롯 cur(${pc.slots.cur})이 max(${pc.slots.max})를 넘습니다`);
-  }
-  if (typeof core.session !== "number") warn("state/core.json", "session이 숫자가 아닙니다");
-}
-
-/* ---------- party.json + sheets ---------- */
-const partyFile = readJSON("state/party.json");
-const party = partyFile && partyFile.party;
-if (partyFile && !Array.isArray(party)) err("state/party.json", '{"party":[...]} 래핑이 아닙니다');
-if (Array.isArray(party)) {
-  checkDupIds("state/party.json", party, "party");
-  party.forEach((m) => {
-    checkHP("state/party.json", m.hp, m.id || m.name || "?");
-    if (m.ac !== undefined || m.stats !== undefined)
-      warn("state/party.json", `${m.id}: ac/stats는 state/sheets/${m.id}.json이 유일한 출처입니다 — 중복 필드를 지우세요`);
-    (m.equipment || []).forEach((e, i) => {
-      if (!e.slot) warn("state/party.json", `${m.id}: equipment[${i}]에 slot이 없습니다`);
-    });
+const RECHARGE = ["long", "short", "turn"];
+function checkSheet(rel, sheet) {
+  if (!sheet) return;
+  checkDupIds(rel, sheet.resources, "sheet.resources");
+  checkDupIds(rel, sheet.abilities, "sheet.abilities");
+  (sheet.resources || []).forEach((r) => {
+    if (typeof r.cur !== "number" || typeof r.max !== "number") err(rel, `자원 ${r.id}: cur/max가 숫자가 아닙니다`);
+    else if (r.cur > r.max) err(rel, `자원 ${r.id}: cur(${r.cur})이 max(${r.max})를 넘습니다`);
+    if (!RECHARGE.includes(r.recharge)) err(rel, `자원 ${r.id}: recharge 값이 유효하지 않습니다 (${r.recharge})`);
   });
 }
 
-/* sheets: 핸드북이 읽는 목록(REMOTE_SHEET_IDS)과 실제 파일·파티 명단이 어긋나면 화면에서 조용히 사라진다 */
-const indexHtml = fs.existsSync(path.join(ROOT, "index.html"))
-  ? fs.readFileSync(path.join(ROOT, "index.html"), "utf8")
-  : "";
-const sheetIdsMatch = indexHtml.match(/const REMOTE_SHEET_IDS\s*=\s*\[([^\]]*)\]/);
-const sheetIds = sheetIdsMatch
-  ? [...sheetIdsMatch[1].matchAll(/"([^"]+)"/g)].map((m) => m[1])
-  : null;
-if (!sheetIds) warn("index.html", "REMOTE_SHEET_IDS를 찾지 못해 시트 정합성 검사를 건너뜁니다");
-else {
-  for (const id of sheetIds) {
-    const rel = `state/sheets/${id}.json`;
-    const sh = readJSON(rel);
-    if (sh && !sh.sheet) err(rel, '{"sheet":{...}} 래핑이 아닙니다');
-    if (sh && sh.sheet) {
-      checkDupIds(rel, sh.sheet.resources, "resources");
-      checkDupIds(rel, sh.sheet.abilities, "abilities");
-      (sh.sheet.resources || []).forEach((r) => {
-        if (typeof r.cur !== "number" || typeof r.max !== "number") err(rel, `자원 ${r.id}: cur/max가 숫자가 아닙니다`);
-        else if (r.cur > r.max) err(rel, `자원 ${r.id}: cur(${r.cur})이 max(${r.max})를 넘습니다`);
-        if (!["long", "short", "turn"].includes(r.recharge)) err(rel, `자원 ${r.id}: recharge 값이 유효하지 않습니다: ${r.recharge}`);
-      });
+const ITEM_CATS = new Set(["weapon", "accessory", "consumable", "trinket", "misc"]);
+function checkItems(rel, items) {
+  checkDupIds(rel, items, "items");
+  (items || []).forEach((it) => {
+    if (!it.id) return;
+    if (!it.cat) warn(rel, `아이템 ${it.id}에 cat이 없습니다 — 획득 시점에 지정하는 것이 규칙입니다`);
+    else if (!ITEM_CATS.has(it.cat)) err(rel, `아이템 ${it.id}의 cat이 유효하지 않습니다: ${it.cat}`);
+    if (it.charge) {
+      const c = it.charge;
+      if (typeof c.cur !== "number" || typeof c.max !== "number") err(rel, `아이템 ${it.id}의 charge.cur/max가 숫자가 아닙니다`);
+      else if (c.cur > c.max) err(rel, `아이템 ${it.id}의 charge.cur(${c.cur})이 max(${c.max})를 넘습니다`);
+      if (!RECHARGE.includes(c.recharge)) err(rel, `아이템 ${it.id}의 charge.recharge 값이 유효하지 않습니다: ${c.recharge}`);
     }
-  }
-  if (Array.isArray(party)) {
-    party.forEach((m) => {
-      if (m.id && !sheetIds.includes(m.id))
-        warn("index.html", `동료 ${m.id}의 시트가 REMOTE_SHEET_IDS에 없습니다 — 핸드북에 스탯이 표시되지 않습니다`);
-    });
-  }
-  fs.readdirSync(S("sheets"))
-    .filter((f) => f.endsWith(".json"))
-    .forEach((f) => {
-      const id = f.replace(/\.json$/, "");
-      if (!sheetIds.includes(id)) warn("state/sheets", `${f}은 REMOTE_SHEET_IDS에 없어 읽히지 않습니다`);
-    });
+  });
 }
 
-/* ---------- npcs / threads / log ---------- */
-const npcsFile = readJSON("state/npcs.json");
-if (npcsFile) {
-  const npcs = npcsFile.npcs;
-  if (!Array.isArray(npcs)) err("state/npcs.json", '{"npcs":[...]} 래핑이 아닙니다');
+/* ---------- core.json (세션 헤더) ---------- */
+const core = readJSON("state/core.json");
+if (core) {
+  if (core.pc) err("state/core.json", "pc 객체가 남아 있습니다 — 베릭스의 단일 출처는 state/chars/verrix.json입니다");
+  if (typeof core.session !== "number") warn("state/core.json", "session이 숫자가 아닙니다");
+  for (const k of ["arc", "place", "checkpoint"]) if (!core[k]) warn("state/core.json", `${k}가 비어 있습니다`);
+}
+
+/* ---------- 캐릭터 파일 ---------- */
+const idx = readJSON("state/chars/_index.json");
+if (idx) {
+  const seenIds = new Set();
+  const loadChar = (rel, id) => {
+    const o = readJSON(rel);
+    if (!o) return null;
+    if (!o.char) { err(rel, '{"char":{...}} 래핑이 아닙니다'); return null; }
+    const c = o.char;
+    if (!c.id) err(rel, "char.id가 없습니다");
+    else if (c.id !== id) err(rel, `char.id(${c.id})가 인덱스의 id(${id})와 다릅니다`);
+    if (seenIds.has(id)) err("state/chars/_index.json", `id ${id}가 인덱스에 두 번 있습니다`);
+    seenIds.add(id);
+    return c;
+  };
+
+  if (!idx.pc) err("state/chars/_index.json", "pc가 지정되지 않았습니다");
   else {
-    checkDupIds("state/npcs.json", npcs, "npcs");
-    npcs.forEach((n) => {
-      if (!n.name) warn("state/npcs.json", `${n.id}: name이 비어 있습니다 — 관계 탭에 이름 없이 표시됩니다`);
-    });
-    if (Array.isArray(party)) {
-      const pids = new Set(party.map((m) => m.id));
-      npcs.forEach((n) => {
-        if (pids.has(n.id)) warn("state/npcs.json", `${n.id}는 party.json에도 있습니다 — 관계 탭에 두 번 나옵니다`);
-      });
+    const rel = `state/chars/${idx.pc}.json`;
+    const pc = loadChar(rel, idx.pc);
+    if (pc) {
+      checkHP(rel, pc.hp, "pc");
+      checkItems(rel, pc.items);
+      checkDupIds(rel, pc.feats, "feats");
+      checkDupIds(rel, pc.spells, "spells");
+      if (pc.slots && pc.slots.cur > pc.slots.max) err(rel, `슬롯 cur(${pc.slots.cur})이 max(${pc.slots.max})를 넘습니다`);
     }
+  }
+
+  (idx.party || []).forEach((id) => {
+    const rel = `state/chars/${id}.json`;
+    const c = loadChar(rel, id);
+    if (!c) return;
+    checkHP(rel, c.hp, id);
+    checkSheet(rel, c.sheet);
+    if (!c.sheet) warn(rel, "sheet가 없습니다 — 핸드북에 스탯·자원이 표시되지 않습니다");
+    if (!c.susp) warn(rel, "susp(의심도)가 없습니다");
+    else if (typeof c.susp.cur !== "number" || typeof c.susp.max !== "number") err(rel, "susp.cur/max가 숫자가 아닙니다");
+    else if (c.susp.cur > c.susp.max) err(rel, `susp.cur(${c.susp.cur})이 max(${c.susp.max})를 넘습니다`);
+    (c.equipment || []).forEach((e, i) => { if (!e.slot) warn(rel, `equipment[${i}]에 slot이 없습니다`); });
+  });
+
+  (idx.npcs || []).forEach((id) => {
+    const rel = `state/npcs/${id}.json`;
+    const c = loadChar(rel, id);
+    if (c && !c.name) warn(rel, "name이 비어 있습니다 — 관계 탭에 이름 없이 표시됩니다");
+  });
+
+  if (idx.npcMinor) {
+    const rel = `state/npcs/${idx.npcMinor}.json`;
+    const mf = readJSON(rel);
+    if (mf) {
+      if (!Array.isArray(mf.npcs)) err(rel, '{"npcs":[...]} 래핑이 아닙니다');
+      else {
+        checkDupIds(rel, mf.npcs, "npcs");
+        mf.npcs.forEach((n) => {
+          if (!n.name) warn(rel, `${n.id}: name이 비어 있습니다`);
+          if (seenIds.has(n.id)) err(rel, `${n.id}는 개별 파일로도 있습니다 — 관계 탭에 두 번 나옵니다`);
+        });
+      }
+    }
+  }
+
+  /* 인덱스에 없는 파일은 핸드북이 읽지 않는다 — 조용히 사라지는 것을 막는다 */
+  const listed = new Set([idx.pc, ...(idx.party || [])]);
+  for (const f of fs.existsSync(S("chars")) ? fs.readdirSync(S("chars")) : []) {
+    if (!f.endsWith(".json") || f === "_index.json") continue;
+    if (!listed.has(f.replace(/\.json$/, ""))) warn("state/chars", `${f}은 _index.json에 없어 읽히지 않습니다`);
+  }
+  const listedN = new Set([...(idx.npcs || []), idx.npcMinor]);
+  for (const f of fs.existsSync(S("npcs")) ? fs.readdirSync(S("npcs")) : []) {
+    if (!f.endsWith(".json")) continue;
+    if (!listedN.has(f.replace(/\.json$/, ""))) warn("state/npcs", `${f}은 _index.json에 없어 읽히지 않습니다`);
   }
 }
 
+/* ---------- threads / log ---------- */
 const threadsFile = readJSON("state/threads.json");
 if (threadsFile) {
   const th = threadsFile.threads;
@@ -176,15 +187,15 @@ if (threadsFile) {
       if (!t.id) warn("state/threads.json", `threads[${i}] "${t.t}"에 id가 없습니다`);
       if (t.st && !["open", "resolved"].includes(t.st))
         err("state/threads.json", `${t.id || t.t}: st는 open/resolved 중 하나여야 합니다 (현재 ${t.st})`);
-      if (!t.st) warn("state/threads.json", `${t.id || t.t}: st(open/resolved)가 없습니다`);
+      else if (!t.st) warn("state/threads.json", `${t.id || t.t}: st(open/resolved)가 없습니다`);
     });
   }
 }
-
 const logFile = readJSON("state/log.json");
 if (logFile && !Array.isArray(logFile.log)) err("state/log.json", '{"log":[...]} 래핑이 아닙니다');
 
 /* ---------- world.json ---------- */
+const indexHtml = fs.existsSync(path.join(ROOT, "index.html")) ? fs.readFileSync(path.join(ROOT, "index.html"), "utf8") : "";
 const worldFile = readJSON("state/world.json");
 if (worldFile) {
   const w = worldFile.world;
@@ -231,7 +242,6 @@ if (battleFile) {
     });
   }
 }
-
 const dungeonFile = readJSON("state/dungeon.json", { required: false });
 if (dungeonFile) {
   const dg = dungeonFile.dungeon;
@@ -247,7 +257,7 @@ if (dungeonFile) {
   }
 }
 
-/* ---------- clocks / factions (있을 때만) ---------- */
+/* ---------- clocks / factions ---------- */
 const clocksFile = readJSON("state/clocks.json", { required: false });
 if (clocksFile) {
   const cl = clocksFile.clocks;
@@ -264,7 +274,6 @@ if (clocksFile) {
     });
   }
 }
-
 const facFile = readJSON("state/factions.json", { required: false });
 if (facFile) {
   const fa = facFile.factions;
@@ -279,35 +288,21 @@ if (facFile) {
   }
 }
 
-/* 동료 의심도 */
-if (Array.isArray(party)) {
-  party.forEach((m) => {
-    if (!m.susp) return warn("state/party.json", `${m.id}: susp(의심도)가 없습니다`);
-    if (typeof m.susp.cur !== "number" || typeof m.susp.max !== "number") err("state/party.json", `${m.id}: susp.cur/max가 숫자가 아닙니다`);
-    else if (m.susp.cur > m.susp.max) err("state/party.json", `${m.id}: susp.cur(${m.susp.cur})이 max(${m.susp.max})를 넘습니다`);
-  });
-}
-
-/* ---------- index.html 자바스크립트 구문 검사 ---------- */
+/* ---------- index.html ---------- */
 if (indexHtml) {
   const blocks = [...indexHtml.matchAll(/<script(?![^>]*src=)[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
   if (!blocks.length) warn("index.html", "<script> 블록을 찾지 못했습니다");
   blocks.forEach((code, i) => {
-    try {
-      new (require("vm").Script)(code);
-    } catch (e) {
-      err("index.html", `script[${i}] 구문 오류 — ${e.message} (이 상태로 올리면 핸드북이 아예 뜨지 않습니다)`);
-    }
+    try { new vm.Script(code); }
+    catch (e) { err("index.html", `script[${i}] 구문 오류 — ${e.message} (이 상태로 올리면 핸드북이 아예 뜨지 않습니다)`); }
   });
-}
-
-/* ---------- 핸드북이 필수로 읽는 파일이 실제로 있는가 ---------- */
-const partsMatch = indexHtml.match(/const REMOTE_PARTS\s*=\s*\[([^\]]*)\]/);
-if (partsMatch) {
-  [...partsMatch[1].matchAll(/"([^"]+)"/g)].map((m) => m[1]).forEach((n) => {
-    if (!fs.existsSync(S(n + ".json")))
-      err("index.html", `REMOTE_PARTS의 ${n}.json이 없습니다 — 핸드북이 통째로 "로컬 모드"로 떨어집니다`);
-  });
+  const partsMatch = indexHtml.match(/const REMOTE_PARTS\s*=\s*\[([^\]]*)\]/);
+  if (partsMatch) {
+    [...partsMatch[1].matchAll(/"([^"]+)"/g)].map((m) => m[1]).forEach((n) => {
+      if (!fs.existsSync(S(n + ".json")))
+        err("index.html", `REMOTE_PARTS의 ${n}.json이 없습니다 — 핸드북이 통째로 "로컬 모드"로 떨어집니다`);
+    });
+  }
 }
 
 /* ---------- rev.json 갱신 여부 ---------- */
@@ -317,8 +312,7 @@ try {
     .split("\n").map((l) => l.slice(3).trim()).filter(Boolean);
   if (changed.length && !changed.some((f) => f.endsWith("state/rev.json")))
     err("state/rev.json", `state 파일이 ${changed.length}개 바뀌었는데 rev.json은 그대로입니다 — 핸드북 화면이 갱신되지 않습니다`);
-  if (rev && !/^S\d+-\d+$/.test(String(rev.rev)))
-    warn("state/rev.json", `rev 형식이 S{회차}-{일련번호}가 아닙니다 (${rev.rev})`);
+  if (rev && !/^S\d+-\d+$/.test(String(rev.rev))) warn("state/rev.json", `rev 형식이 S{회차}-{일련번호}가 아닙니다 (${rev.rev})`);
 } catch {
   warn("state/rev.json", "git 상태를 읽지 못해 rev 갱신 검사를 건너뜁니다");
 }

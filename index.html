@@ -2123,11 +2123,15 @@ const $=id=>document.getElementById(id);
    - rev 가 같으면 localStorage(수동 @@PATCH 결과)를 유지한다.
    - fetch 실패(file:// 로 직접 열기 등) 시 내장 SEED/로컬 저장본으로 동작한다. */
 const REMOTE_BASE = "./state/";
-const REMOTE_PARTS = ["core","party","npcs","world","threads","log"];  // v2.24: feats.json 제거 — 특성의 단일 출처는 core.json의 pc.feats 하나다
+const REMOTE_PARTS = ["core","world","threads","log"];  // v2.24: feats.json 제거(특성의 단일 출처는 캐릭터 파일) / v2.25: 캐릭터는 아래 별도 로딩
 const REMOTE_OPTIONAL = ["dungeon","battle","clocks","factions"]; // 던전 밖·평시엔 파일 자체가 없는 게 정상 — 404를 오류로 취급하지 않는다
-/* v2.21: 동료 캐릭터 시트(스탯·자원·능력) — state/sheets/{id}.json, {"sheet":{...}} 단일 래핑.
-   아직 시트가 없는 동료(신규 합류자 등)는 파일 자체가 없어도 정상 — optional 취급. */
-const REMOTE_SHEET_IDS = ["isabel","liv","rea"];
+/* v2.25: 캐릭터 한 명 = 파일 하나.
+     state/chars/_index.json   읽을 캐릭터 목록 (여기가 명단의 유일한 출처 — 코드에 하드코딩하지 않는다)
+     state/chars/{id}.json     PC·동료 — {"char":{... , "sheet":{...}}}
+     state/npcs/{id}.json      재등장하는 주요 NPC — {"char":{...}}
+     state/npcs/_minor.json    단역 모음 — {"npcs":[...]}
+   동료가 합류하면 파일을 만들고 _index.json에 id 한 줄만 추가하면 된다(코드 수정 불필요).
+   개별 파일이 하나 없어도 그 인물만 빠지고 나머지는 그대로 뜬다. */
 const REV_KEY = KEY + "_rev";
 let SYNC_TIMER = null, SYNC_BUSY = false;
 
@@ -2145,19 +2149,48 @@ async function fetchJSON(name, optional){
   }
   return r.json();
 }
+let MISSING_CHARS = [];
+/* 캐릭터 파일을 인덱스대로 읽어 S.pc / S.party / S.sheets / S.npcs 모양으로 되돌린다.
+   인덱스가 없으면 구형 배치(party.json·npcs.json)로 후퇴한다 — 옛 저장본도 계속 열린다. */
+async function fetchChars(merged){
+  const missing = [];
+  const idx = await fetchJSON("chars/_index.json", true);
+  if(!idx){
+    const [p, n] = await Promise.all([fetchJSON("party.json", true), fetchJSON("npcs.json", true)]);
+    if(p) Object.assign(merged, p);
+    if(n) Object.assign(merged, n);
+    return missing;
+  }
+  const one = async rel => {
+    const o = await fetchJSON(rel, true);
+    if(!o || !o.char){ missing.push(rel); return null; }
+    return o.char;
+  };
+  const [pc, party, npcs, minor] = await Promise.all([
+    one("chars/" + idx.pc + ".json"),
+    Promise.all((idx.party || []).map(id => one("chars/" + id + ".json"))),
+    Promise.all((idx.npcs  || []).map(id => one("npcs/"  + id + ".json"))),
+    idx.npcMinor ? fetchJSON("npcs/" + idx.npcMinor + ".json", true) : null
+  ]);
+  if(pc) merged.pc = pc;
+  merged.sheets = merged.sheets || {};
+  merged.party = party.filter(Boolean).map(c => {
+    const { sheet, ...rest } = c;
+    if(sheet) merged.sheets[c.id] = sheet;
+    return rest;
+  });
+  merged.npcs = [...npcs.filter(Boolean), ...((minor && minor.npcs) || [])];
+  return missing;
+}
 async function fetchRemoteState(){
   const required = await Promise.all(REMOTE_PARTS.map(n => fetchJSON(n + ".json")));
   const optional = await Promise.all(REMOTE_OPTIONAL.map(n => fetchJSON(n + ".json", true)));
-  const sheetFiles = await Promise.all(REMOTE_SHEET_IDS.map(id => fetchJSON("sheets/" + id + ".json", true)));
   const merged = Object.assign({}, ...required);
   optional.forEach(o => { if(o) Object.assign(merged, o); });
   // 파일이 없으면(던전 밖·평시) 빈 상태로 채운다 — renderDungeon/renderBattle이 참조할 수 있게
   if(!merged.dungeon) merged.dungeon = {name:"", here:"", note:"", rooms:[], doors:[]};
   if(!merged.battle)  merged.battle  = {name:"", cols:16, rows:12, round:1, terrain:[], tokens:[]};
-  // v2.21: 시트 파일 여러 개를 하나의 sheets 맵으로 합침 — 각 파일이 {"sheet":{...}} 하나씩만 담당하므로
-  // Object.assign처럼 통째로 덮어쓰면 안 되고 id별로 모아야 한다.
-  merged.sheets = {};
-  sheetFiles.forEach((o,i) => { if(o && o.sheet) merged.sheets[REMOTE_SHEET_IDS[i]] = o.sheet; });
+  MISSING_CHARS = await fetchChars(merged);
   return merged;
 }
 /* force=true 면 rev가 같아도 원격을 강제로 채택한다(“지금 불러오기”). */
@@ -2179,7 +2212,8 @@ async function syncRemote(force){
     localStorage.setItem(REV_KEY, rev.rev);
     save(); renderAll();
     syncBadge("갱신됨 · " + rev.rev, "new");
-    if(localRev) toast("원격 상태를 불러왔습니다 (" + rev.rev + ")");
+    if(MISSING_CHARS.length) toast("캐릭터 파일 " + MISSING_CHARS.length + "개를 읽지 못했습니다: " + MISSING_CHARS.join(", "));
+    else if(localRev) toast("원격 상태를 불러왔습니다 (" + rev.rev + ")");
   }catch(e){
     syncBadge("로컬 모드 (원격 없음)", "err");
     console.warn("동기화 실패:", e.message);
@@ -2333,7 +2367,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.24";
+const HB_VERSION="v2.25";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;

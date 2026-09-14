@@ -1,0 +1,101 @@
+{
+  "char": {
+    "id": "liv",
+    "name": "리브 코르사",
+    "role": "여성 · 인간 · 20대 후반 · 전 언약의 사냥개 조직원 · 로그(어쌔신) 3레벨",
+    "hp": {
+      "cur": 32,
+      "max": 32
+    },
+    "tag": "임시 동행 · 사실상 포로",
+    "tagc": "y",
+    "trait": "로그 3레벨로 승급. 로그 아키타입 '어쌔신' 습득 — 아직 행동하지 않은 대상에게 이점, 기습 상태인 대상에게 명중 시 자동 치명타. 변장 도구·독살 도구에 숙련이 추가됐다. 은신 공격 주사위가 1d6→2d6으로 증가했다. Cunning Action 유지. 황혼의 자단검·독 단검·고요한 발자국의 부츠 장비. 이자벨과의 협격 결속(쌍둥이 인장) 완성.",
+    "comply": "지시 순응도: 저항 의사 없음. 전투에서 자신감을 얻은 이후 태도가 한층 적극적으로 변하고 있다.",
+    "knows": "언약의 사냥개 내부 구조와 운영 방식(조직 소멸로 실효성은 사라짐) · 24회차 자신이 직접 겪은 일",
+    "unknown": "베릭스의 과거 전부 · 이자벨의 지배 상태 · 코바·미아·로렌스 건",
+    "look": "Liv Corsa, a human female former cult operative in her late 20s. Ash-blonde hair cut short and uneven, a small brand scar near her left temple, wary darting eyes with dark circles beneath. Wearing a stripped-down dark hooded coat with the insignia torn off, worn boots, an empty dagger sheath at her belt.",
+    "photoThumb": null,
+    "photoFull": null,
+    "equipment": [
+      {
+        "slot": "weapon",
+        "item": "황혼의 자단검",
+        "desc": "자줏빛 칼날, 손잡이 끝에 작은 흑수정",
+        "equipped": true,
+        "combat": {
+          "atkBonus": 1,
+          "dmgBonus": 1,
+          "onKill": {
+            "effect": "1라운드 동안 본인 은신 판정에 이점",
+            "note": "그림자 폭발 — 리브가 직접 0 HP로 만들었을 때만"
+          }
+        }
+      },
+      {
+        "slot": "feet",
+        "item": "고요한 발자국의 부츠",
+        "desc": "발소리가 거의 나지 않는다",
+        "equipped": true,
+        "passive": true,
+        "combat": {
+          "advantageOn": [
+            "은신"
+          ],
+          "note": "조건 없이 항상 이점으로 확정 처리"
+        }
+      },
+      {
+        "slot": "neck",
+        "item": "정신 방어 부적",
+        "desc": "검은 가죽끈에 걸린 낡은 부적",
+        "equipped": true,
+        "passive": true,
+        "note_ui": "정신 지배·매혹 방어 효과는 서술로만 확인되고 구체적 판정 보너스 수치는 미확정 — 실전 판정이 필요해지면 그 자리에서 확인 후 확정"
+      }
+    ],
+    "susp": {
+      "cur": 1,
+      "max": 6,
+      "note": "31회차, 창설자의 핵을 흡수한 이유를 캐물었다가 설득으로 잠잠해졌다. 완전히 지워진 것은 아니다."
+    },
+    "sheet": {
+      "race": "인간",
+      "cls": "로그 (어쌔신)",
+      "level": 3,
+      "ac": 13,
+      "stats": {
+        "STR": 10,
+        "DEX": 16,
+        "CON": 14,
+        "INT": 12,
+        "WIS": 13,
+        "CHA": 8
+      },
+      "resources": [
+        {
+          "id": "res_liv_sneak_attack",
+          "n": "은신 공격",
+          "dice": "2d6",
+          "cur": 1,
+          "max": 1,
+          "recharge": "turn",
+          "note": "턴당 1회. 이점 판정 또는 인접 아군 조건 충족 시 발동."
+        }
+      ],
+      "abilities": [
+        {
+          "id": "ab_liv_cunning_action",
+          "n": "교활한 행동",
+          "t": "추가 행동",
+          "d": "매 턴 추가 행동으로 질주·이탈·은신 중 하나를 선택해 사용할 수 있다."
+        },
+        {
+          "id": "ab_liv_assassinate",
+          "n": "암살",
+          "t": "패시브",
+          "d": "아직 이번 전투에서 행동하지 않은 대상에게 공격 판정 이점을 받는다. 기습 상태인 대상에게 명중시키면 자동으로 치명타가 된다."
+        }
+      ]
+    }
+  }
+}

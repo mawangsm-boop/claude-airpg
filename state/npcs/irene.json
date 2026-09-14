@@ -1,0 +1,13 @@
+{
+  "char": {
+    "id": "irene",
+    "name": "아이린",
+    "role": "여성 · 하프엘프 · 20대 중반 · 음유시인 · 정보상",
+    "tag": "실버포트 잔류",
+    "tagc": "",
+    "trait": "직접 전투 대신 도시 정보망과 퇴로 조율을 맡겠다고 자청했다. 승전 후 베릭스와 밤을 함께 보냈으며, 무언가 말을 꺼내려다 삼켰다 — 내용은 아직 드러나지 않았다. 24회차 이후 실버포트에 남았다.",
+    "knows": "6~9회차 조사 · 베릭스가 로렌스 화제를 회피했다는 사실 · 24회차 지상 상황",
+    "unknown": "로렌스 처단의 실상 · 지하 회당 내부에서 벌어진 일 · 이자벨의 지배 상태 · 25회차 이후 여정",
+    "look": "Irene, a female half-elf bard in her mid-20s. Elegant embroidered clothing, several ornate rings, expressive charismatic face, minimal visible weapons. Holding an expensive lute, confident sociable posture."
+  }
+}

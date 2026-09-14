@@ -1,0 +1,24 @@
+{
+  "char": {
+    "id": "tessa",
+    "name": "테사 밀번",
+    "role": "여성 · 인간 · 20대 후반 · 독립 유물 사냥꾼",
+    "tag": "동행이력",
+    "tagc": "",
+    "status": "동행이력",
+    "gender": "여",
+    "race": "인간",
+    "sessions": [
+      22,
+      23,
+      24,
+      25,
+      26,
+      27
+    ],
+    "trait": "손석궁과 도구띠를 다루는 독립 유물 사냥꾼. 회색돌촌에서 여정의 규모가 점점 커지는 것을 느끼고, 자신에게 맞는 삶(유물 거래)을 찾아 남쪽 옛 상인 거점으로 떠났다. 마지막까지 우호적으로 작별했다.",
+    "knows": "가라앉은 금고 · 잊힌 자들의 신전 · 24회차 가라앉은 회당 습격 · 27회차 회색돌촌 사건 전 과정",
+    "unknown": "베릭스의 과거 전부 · 코바·미아의 죽음 · 이자벨·리브의 상태",
+    "look": "Tessa Milburn, a human female independent relic hunter in her late 20s. Faint freckles scattered across her face, messy brown curly hair tied back loosely, quick sharp eyes with a mischievous glint, confident lopsided grin. Wearing a patched brown leather jacket over practical travel clothes, a wide utility belt hung with lockpicks and small tools, fingerless gloves, scuffed boots suited for climbing and crawling through ruins."
+  }
+}
