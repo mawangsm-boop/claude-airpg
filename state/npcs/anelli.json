@@ -1,0 +1,21 @@
+{
+  "char": {
+    "id": "anelli",
+    "name": "아넬리 소른",
+    "role": "여성 · 인간 · 30대 초반 · 카를렌 구시가 권리증 중개인",
+    "tag": "신규 접촉",
+    "tagc": "",
+    "trait": "몰수·유질된 건물의 등기를 다루며 위병대 서기와 뒷골목 양쪽에 발이 걸쳐 있다. 나루터 쪽 저울패에게 이미 압박을 받고 있어 초반에는 말을 아낀다.",
+    "voice": "존댓말. 사무적으로 조건부터 말하고, 농담을 한 박자 늦게 얹는다 — \"가능합니다. …비싸다는 뜻입니다.\"",
+    "drive": "사무소를 구시가 큰길로 옮기는 것.",
+    "fear": "저울패에게 밉보여 나루터 물건을 못 다루게 되는 것.",
+    "bond": "미확정 — 아크 진행에 따라 채운다.",
+    "code": {
+      "does": "값을 매겨서 말한다. 못 하는 일은 못 한다고 먼저 말한다.",
+      "wont": "자기 이름이 남는 서류에는 거짓을 쓰지 않는다(그래서 뇌물은 남의 이름으로 돌린다)."
+    },
+    "knows": "카를렌 구시가·나루터의 등기와 소유 관계 전부(A등급). 저울패가 자기에게 압박을 넣고 있다는 사실(A등급).",
+    "unknown": "저울패가 밀수 경로를 노린다는 것 · 베릭스 일행의 정체 전부(D등급)",
+    "look": "Anelli Sorn, a human female deed broker in her early 30s. Chestnut hair pinned up loosely with a few strands falling free, keen appraising hazel eyes, a small ink smudge on her fingers. Wearing a fitted olive-green coat over a high-collared cream blouse, a leather document satchel across her shoulder, brass seal-stamp hanging from her belt."
+  }
+}
