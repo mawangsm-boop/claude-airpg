@@ -249,7 +249,24 @@ if (battleFile) {
       if (t.hp !== undefined && !/^\d+\/\d+$/.test(String(t.hp)))
         err("state/battle.json", `${t.id}: hp는 "현재/최대" 형식이어야 합니다 (현재 ${JSON.stringify(t.hp)})`);
       if (!["pc", "ally", "enemy", "neutral"].includes(t.side)) err("state/battle.json", `${t.id}: side 값이 유효하지 않습니다 (${t.side})`);
+      if (t.from) {
+        if (typeof t.from.x !== "number" || typeof t.from.y !== "number") err("state/battle.json", `${t.id}: from 좌표가 숫자가 아닙니다`);
+        else if (t.from.x === t.x && t.from.y === t.y) warn("state/battle.json", `${t.id}: from이 현재 좌표와 같습니다 — 이동하지 않았으면 빼세요`);
+      }
+      if (t.st !== undefined && !Array.isArray(t.st)) err("state/battle.json", `${t.id}: st(상태)는 배열이어야 합니다`);
+      for (const k of ["move", "range"])
+        if (t[k] !== undefined && (typeof t[k] !== "number" || t[k] < 0))
+          err("state/battle.json", `${t.id}: ${k}는 칸 수(0 이상 숫자)여야 합니다`);
     });
+    const tokenIds = new Set((b.tokens || []).map((t) => t.id));
+    if (b.init !== undefined) {
+      if (!Array.isArray(b.init)) err("state/battle.json", "init(이니셔티브)은 토큰 id 배열이어야 합니다");
+      else {
+        b.init.forEach((id) => { if (!tokenIds.has(id)) err("state/battle.json", `init의 "${id}"에 해당하는 토큰이 없습니다`); });
+        (b.tokens || []).forEach((t) => { if (!b.init.includes(t.id)) warn("state/battle.json", `${t.id}가 init 순서에 빠져 있습니다`); });
+      }
+    } else warn("state/battle.json", "init(이니셔티브 순서)이 없습니다 — 화면에 차례가 표시되지 않습니다");
+    if (b.turn !== undefined && !tokenIds.has(b.turn)) err("state/battle.json", `turn "${b.turn}"에 해당하는 토큰이 없습니다`);
   }
 }
 const dungeonFile = readJSON("state/dungeon.json", { required: false });
