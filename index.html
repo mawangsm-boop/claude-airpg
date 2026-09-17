@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>베릭스 핸드북</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b0d13">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="베릭스">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<link rel="icon" href="assets/icons/icon-192.png">
 <style>
 :root{
   --bg:#0b0d13; --panel:#12151f; --panel2:#181c29; --border:#272d3d; --line:#1f2432;
@@ -25,6 +33,25 @@ nav button{flex:1 1 0;min-width:0;padding:7px 2px;font-size:11.5px;font-family:v
 @media (max-width:360px){ nav button{font-size:10.5px;letter-spacing:-.6px;padding:7px 1px} nav{gap:2px;padding:9px 6px} }
 nav button.on{background:rgba(201,164,87,.16);border-color:var(--gold);color:var(--gold-s)}
 nav button:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+/* v2.29: 전투 이니셔티브 바 */
+.initbar{display:flex;gap:4px;overflow-x:auto;margin:6px 0 2px;padding-bottom:3px}
+.initbar span{flex:0 0 auto;font-size:10.5px;padding:3px 7px;border-radius:99px;white-space:nowrap;
+  background:var(--panel2);border:1px solid var(--border);color:var(--muted)}
+.initbar span.now{background:rgba(201,164,87,.2);border-color:var(--gold);color:var(--gold-s);font-weight:bold}
+.initbar span.dead{opacity:.4;text-decoration:line-through}
+/* v2.29: 통합 검색 */
+.searchbar{display:flex;gap:6px;padding:0 8px 9px;background:var(--panel);border-bottom:1px solid var(--border)}
+.searchbar input{flex:1;background:#080a10;color:var(--parch);border:1px solid var(--border);border-radius:7px;
+  padding:7px 9px;font-size:12.5px;font-family:var(--f-body)}
+.searchbar input:focus{outline:none;border-color:var(--gold)}
+.searchbar button{background:var(--panel2);color:var(--muted);border:1px solid var(--border);border-radius:7px;
+  padding:7px 10px;font-size:11.5px;font-family:var(--f-body);cursor:pointer}
+#searchPanel{padding:10px}
+.sr-g{font-size:10px;color:var(--violet);letter-spacing:1.4px;margin:10px 0 5px}
+.sr{background:var(--panel2);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:7px;
+  padding:7px 9px;margin-bottom:5px;cursor:pointer;font-size:12px;line-height:1.55}
+.sr b{color:var(--gold-s);display:block;margin-bottom:2px}
+.sr em{color:var(--parch);font-style:normal;background:rgba(201,164,87,.22);border-radius:2px}
 main{padding:12px}
 section{display:none} section.on{display:block}
 /* 던전·전투·대륙 탭: 페이지 전체 스크롤을 잠그고, 지도 카드는 내용에 맞춰, 정보 카드만 내부 스크롤 */
@@ -181,9 +208,14 @@ summary>span:first-child>em{font-style:normal;overflow:hidden;text-overflow:elli
   <button data-t="data">데이터</button>
   <button data-t="log">로그</button>
 </nav>
+<div class="searchbar">
+  <input id="qBox" type="search" placeholder="인물 · 아이템 · 실마리 · 로그 검색" autocomplete="off">
+  <button type="button" id="qClear">지우기</button>
+</div>
 </div>
 
 <main>
+  <section id="s-search"><div id="searchPanel"></div></section>
   <section id="s-char" class="on"></section>
   <section id="s-party"></section>
 
@@ -221,9 +253,10 @@ summary>span:first-child>em{font-style:normal;overflow:hidden;text-overflow:elli
         <span><i style="background:#c9a457"></i>중립·목표</span>
         <span style="color:var(--gold-s)">1칸 = 1.5 m</span>
       </div>
+      <div id="btInit" class="initbar"></div>
       <div class="wrap" id="btWrap"><svg id="btSvg" viewBox="0 0 1000 700"></svg></div>
     </div>
-    <div class="card"><h2>토큰 정보</h2><div id="btInfo" class="note">토큰을 누르면 상태가 표시됩니다.</div></div>
+    <div class="card"><h2>토큰 정보</h2><div id="btInfo" class="note">토큰을 누르면 상태·사거리가 표시됩니다.</div></div>
   </section>
 
   <section id="s-world">
@@ -2431,7 +2464,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.28";
+const HB_VERSION="v2.29";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -3025,20 +3058,60 @@ function renderBattle(){
       class:"gm","font-size":"15",fill:"#cfd6e4"}); l.textContent=t.label; svg.appendChild(l); }
   });
   const SIDE={pc:"#6ea8e8",ally:"#7ac68f",enemy:"#c9666a",neutral:"#c9a457"};
+  /* v2.29: 선택한 토큰의 이동 범위·사거리를 그리는 층. 토큰보다 아래에 깔린다. */
+  const ovl=el("g",{}); svg.appendChild(ovl);
+  const showReach=t=>{
+    ovl.innerHTML="";
+    const cx=t.x*cell+cell/2, cy=t.y*cell+cell/2;
+    if(t.move) ovl.appendChild(el("circle",{cx,cy,r:t.move*cell,fill:"rgba(110,168,232,.10)",
+      stroke:"#6ea8e8","stroke-width":2,"stroke-dasharray":"6 5"}));
+    if(t.range) ovl.appendChild(el("circle",{cx,cy,r:t.range*cell,fill:"none",
+      stroke:"#c9a457","stroke-width":2,"stroke-dasharray":"2 6",opacity:.8}));
+  };
+  /* v2.29: 직전 좌표(from)가 있으면 이동 흔적을 점선으로 남긴다 —
+     "근접 공격인데 토큰이 멀리 있다" 같은 모순이 화면에서 바로 보이게 하기 위함. */
+  (B.tokens||[]).forEach(t=>{
+    if(!t.from || (t.from.x===t.x && t.from.y===t.y)) return;
+    const fx=t.from.x*cell+cell/2, fy=t.from.y*cell+cell/2, tx=t.x*cell+cell/2, ty=t.y*cell+cell/2;
+    svg.appendChild(el("line",{x1:fx,y1:fy,x2:tx,y2:ty,stroke:SIDE[t.side]||"#8792a8",
+      "stroke-width":2.5,"stroke-dasharray":"7 5",opacity:.65}));
+    svg.appendChild(el("circle",{cx:fx,cy:fy,r:5,fill:"none",stroke:SIDE[t.side]||"#8792a8","stroke-width":2,opacity:.55}));
+  });
   (B.tokens||[]).forEach(t=>{
     const cx=t.x*cell+cell/2, cy=t.y*cell+cell/2;
     const grp=el("g",{style:"cursor:pointer"});
+    if(B.turn && t.id===B.turn)  /* 지금 차례인 토큰을 금색 링으로 표시 */
+      grp.appendChild(el("circle",{cx,cy,r:cell*0.47,fill:"none",stroke:"#e6c98a","stroke-width":3,opacity:.9}));
     grp.appendChild(el("circle",{cx,cy,r:cell*0.36,fill:SIDE[t.side]||"#8792a8",stroke:"#0a0c12","stroke-width":3}));
     if(t.down) grp.appendChild(el("path",{d:`M${cx-16},${cy-16} L${cx+16},${cy+16} M${cx+16},${cy-16} L${cx-16},${cy+16}`,stroke:"#0a0c12","stroke-width":4}));
     if(btNames){ const l=el("text",{x:cx,y:cy-cell*0.45,"text-anchor":"middle",class:"gm","font-size":"14",
       fill:"#e8e2d4",style:"paint-order:stroke;stroke:#0a0c12;stroke-width:5px"}); l.textContent=t.name; grp.appendChild(l); }
+    if(t.st && t.st.length){   /* 집중·출혈·은신 같은 상태를 토큰 아래 한 줄로 */
+      const l=el("text",{x:cx,y:cy+cell*0.62,"text-anchor":"middle",class:"gm","font-size":"11",
+        fill:"#c4a3ec",style:"paint-order:stroke;stroke:#0a0c12;stroke-width:5px"});
+      l.textContent=t.st.join(" · "); grp.appendChild(l);
+    }
     grp.addEventListener("click",()=>{
+      showReach(t);
+      const moved=t.from&&(t.from.x!==t.x||t.from.y!==t.y)?` · 이동 (${t.from.x},${t.from.y})→(${t.x},${t.y})`:"";
       $("btInfo").innerHTML=`<b style="color:var(--gold-s)">${t.name}</b><br>
-        ${({pc:"베릭스",ally:"아군",enemy:"적",neutral:"중립·목표"})[t.side]||t.side} · 칸 (${t.x},${t.y})<br>
-        ${t.hp?`HP ${t.hp}<br>`:""}<span style="color:var(--parch)">${t.note||""}</span>`;
+        ${({pc:"베릭스",ally:"아군",enemy:"적",neutral:"중립·목표"})[t.side]||t.side} · 칸 (${t.x},${t.y})${moved}<br>
+        ${t.hp?`HP ${t.hp}<br>`:""}
+        ${t.st&&t.st.length?`<span style="color:var(--violet-s)">${t.st.join(" · ")}</span><br>`:""}
+        ${t.move?`이동 ${t.move}칸(${(t.move*1.5).toFixed(1)} m)`:""}${t.move&&t.range?" · ":""}${t.range?`사거리 ${t.range}칸(${(t.range*1.5).toFixed(1)} m)`:""}
+        ${(t.move||t.range)?"<br>":""}<span style="color:var(--parch)">${t.note||""}</span>`;
     });
     svg.appendChild(grp);
   });
+  /* 이니셔티브 순서 — init 배열이 있을 때만 */
+  const ib=$("btInit");
+  if(ib){
+    const byId={}; (B.tokens||[]).forEach(t=>byId[t.id]=t);
+    ib.innerHTML=(B.init||[]).map(id=>{
+      const t=byId[id]; if(!t) return "";
+      return `<span class="${B.turn===id?"now":""}${t.down?" dead":""}">${t.name}${t.hp?" "+t.hp:""}</span>`;
+    }).join("");
+  }
   if(!(B.tokens||[]).length){
     const l=el("text",{x:W/2,y:H/2,"text-anchor":"middle",class:"gm","font-size":"20",fill:"#5b6478"});
     l.textContent="전투 패치를 적용하면 배치가 표시됩니다"; svg.appendChild(l);
@@ -3248,6 +3321,92 @@ $("wMeasure").onclick=e=>{wMeasure=!wMeasure;mA=null;e.target.classList.toggle("
 const W_HOME="420 1080 1500 1200";
 $("wFit").onclick=()=>{ $("wSvg").setAttribute("viewBox","0 0 4050 3000"); renderWorldMarkers(); };
 $("wHome").onclick=()=>{ $("wSvg").setAttribute("viewBox",W_HOME); renderWorldMarkers(); };
+
+/* v2.29: PWA — 홈 화면에 앱처럼 설치되고, 신호가 끊겨도 마지막 화면이 뜬다.
+   file://로 열었을 때는 등록하지 않는다(보안 정책상 불가). */
+if("serviceWorker" in navigator && location.protocol.startsWith("http")){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("sw.js").catch(e=>console.warn("서비스 워커 등록 실패:",e.message));
+  });
+}
+
+/* ==================== 통합 검색 (v2.29) ====================
+   인물·아이템·특성·주문·실마리·시계·세력·지점·로그를 한 번에 찾는다. 결과를 누르면
+   해당 탭으로 이동한다. 회차가 쌓일수록 "그 부적 어디서 얻었지"를 찾는 데 드는
+   시간이 길어져서 넣었다. */
+let LAST_TAB="char";
+const qEsc=t=>String(t==null?"":t).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+function searchIndex(){
+  const rows=[];
+  const add=(cat,tab,title,text)=>{ if(text) rows.push({cat,tab,title,text:String(text)}); };
+  const p=S.pc||{};
+  add("캐릭터","char",p.name||"베릭스",[p.cls,p.race,p.surface,p.goal,p.status].filter(Boolean).join(" · "));
+  (p.items||[]).forEach(i=>add("소지품","char",i.n,[i.d,i.note_ui].filter(Boolean).join(" ")));
+  (p.feats||[]).forEach(f=>add("특성","char",f.n,f.d));
+  (p.spells||[]).forEach(x=>add("주문","char",x.n,[x.t,x.c,x.d].filter(Boolean).join(" · ")));
+  const person=(a,cat)=>{
+    add(cat,"party",a.name||a.n,[a.role,a.tag,a.trait,a.voice,a.drive,a.bond,a.knows,a.unknown,a.comply].filter(Boolean).join(" "));
+    (a.equipment||[]).forEach(e=>add("동료 장비","party",`${a.name} — ${e.item}`,[e.slot,e.desc].filter(Boolean).join(" · ")));
+    (a.items||[]).forEach(i=>add("동료 소지품","party",`${a.name} — ${i.n}`,i.d));
+  };
+  (S.party||[]).forEach(a=>person(a,"동료"));
+  (S.npcs||[]).forEach(a=>person(a,"인물"));
+  (S.threads||[]).forEach(t=>add(t.st==="resolved"?"실마리(종결)":"실마리","log",t.t,t.x));
+  (S.clocks||[]).forEach(c=>add("시계","log",`${c.n} ${c.cur}/${c.max}`,c.note));
+  (S.factions||[]).forEach(f=>add("세력","log",`${f.n} · ${f.stance}`,[f.note,f.contact,f.knows,f.unknown].filter(Boolean).join(" ")));
+  (S.log||[]).forEach(e=>add("기록","log",e.t,e.x));
+  const W=(S.world||{});
+  [...(W.customPlaces||[]),...PLACES].forEach(pl=>add("지점","world",pl.n,[pl.t,pl.d].filter(Boolean).join(" · ")));
+  ((S.dungeon||{}).rooms||[]).forEach(r=>add("던전 방","dungeon",r.name,r.note));
+  ((S.battle||{}).tokens||[]).forEach(t=>add("전투 토큰","battle",t.name,t.note));
+  return rows;
+}
+function runSearch(q){
+  const panel=$("searchPanel"), sec=$("s-search");
+  q=(q||"").trim();
+  if(!q){                      /* 검색을 끝내면 보고 있던 탭으로 돌아간다 */
+    sec.classList.remove("on");
+    document.querySelector(`nav button[data-t="${LAST_TAB}"]`).click();
+    return;
+  }
+  if(!sec.classList.contains("on")){
+    const cur=document.querySelector("nav button.on");
+    if(cur) LAST_TAB=cur.dataset.t;
+    document.querySelectorAll("section").forEach(x=>x.classList.remove("on"));
+    document.body.classList.remove("lock");
+    sec.classList.add("on");
+  }
+  const needle=q.toLowerCase();
+  const hits=searchIndex().filter(r=>(r.title+" "+r.text).toLowerCase().includes(needle));
+  if(!hits.length){ panel.innerHTML=`<div class="note">"${qEsc(q)}" — 찾은 것이 없습니다.</div>`; return; }
+  const mark=t=>{
+    const i=String(t).toLowerCase().indexOf(needle);
+    if(i<0) return qEsc(String(t).slice(0,120));
+    const from=Math.max(0,i-40), to=Math.min(String(t).length,i+needle.length+80);
+    return (from>0?"…":"")+qEsc(String(t).slice(from,i))+"<em>"+qEsc(String(t).substr(i,needle.length))+"</em>"
+      +qEsc(String(t).slice(i+needle.length,to))+(to<String(t).length?"…":"");
+  };
+  const byCat={};
+  hits.forEach(h=>{ (byCat[h.cat]=byCat[h.cat]||[]).push(h); });
+  panel.innerHTML=`<div class="note">"${qEsc(q)}" — ${hits.length}건</div>`
+    + Object.keys(byCat).map(cat=>{
+        const list=byCat[cat];
+        return `<div class="sr-g">${qEsc(cat)} (${list.length})</div>`
+          + list.slice(0,8).map(h=>`<div class="sr" data-tab="${h.tab}"><b>${mark(h.title)}</b>${mark(h.text)}</div>`).join("")
+          + (list.length>8?`<div class="note">… 외 ${list.length-8}건</div>`:"");
+      }).join("");
+  window.scrollTo(0,0);
+}
+$("searchPanel").addEventListener("click",e=>{
+  const row=e.target.closest(".sr"); if(!row) return;
+  LAST_TAB=row.dataset.tab;
+  $("qBox").value=""; $("s-search").classList.remove("on");
+  document.querySelector(`nav button[data-t="${row.dataset.tab}"]`).click();
+});
+$("qBox").addEventListener("input",e=>runSearch(e.target.value));
+$("qClear").onclick=()=>{ $("qBox").value=""; runSearch(""); };
+/* 주소에 ?q=검색어 를 붙이면 그 검색 결과로 바로 열린다(즐겨찾기·공유용) */
+(function(){ const q=new URLSearchParams(location.search).get("q"); if(q){ $("qBox").value=q; setTimeout(()=>runSearch(q),0); } })();
 
 /* ---------- 로그 ---------- */
 function renderLog(){
