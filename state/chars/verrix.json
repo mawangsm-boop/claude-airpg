@@ -6,9 +6,9 @@
     "level": 8,
     "ac": 14,
     "hp": {
-      "cur": 45,
+      "cur": 41,
       "max": 45,
-      "tmp": 14
+      "tmp": 0
     },
     "slots": {
       "cur": 1,
