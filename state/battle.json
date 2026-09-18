@@ -3,17 +3,16 @@
     "name": "저울대 앞 — 토르벤과의 충돌",
     "cols": 16,
     "rows": 12,
-    "round": 4,
-    "init": ["liv", "torben", "verrix", "rea"],
+    "round": 5,
+    "init": ["torben", "verrix", "rea"],
     "turn": "verrix",
     "terrain": [
       {"x": 9, "y": 4, "w": 3, "h": 2, "type": "hazard", "label": "저울대·짐더미"}
     ],
     "tokens": [
-      {"id": "verrix", "name": "베릭스", "side": "pc", "x": 8, "y": 7, "hp": "41/45", "move": 6, "range": 24},
-      {"id": "liv", "name": "리브", "side": "pc", "x": 5, "y": 9, "hp": "0/32", "down": true, "note": "사망 — 토르벤에게 은신 크리티컬(26)로 페이즈 전환시킨 직후, 무의식 상태에서 자동 크리티컬 2연타로 사망", "move": 0, "range": 0},
+      {"id": "verrix", "name": "베릭스", "side": "pc", "x": 6, "y": 8, "hp": "9/45", "note": "위험 — 임시HP 없음", "move": 6, "range": 24},
       {"id": "rea", "name": "레아", "side": "pc", "x": 9, "y": 6, "hp": "20/28", "move": 6, "range": 1},
-      {"id": "torben", "name": "토르벤", "side": "enemy", "x": 5, "y": 8, "from": {"x": 8, "y": 6}, "hp": "25/90", "note": "페이즈 전환(HP45 이하) — 다중공격 3회, AC15. 리브를 처치", "move": 6, "range": 2}
+      {"id": "torben", "name": "토르벤", "side": "enemy", "x": 5, "y": 8, "hp": "14/90", "note": "페이즈 전환(HP45 이하) — 다중공격 3회, AC15. 빈사", "move": 6, "range": 2}
     ]
   }
 }
