@@ -3,18 +3,18 @@
     "name": "저울대 앞 — 토르벤과의 충돌",
     "cols": 16,
     "rows": 12,
-    "round": 2,
-    "init": ["liv", "torben", "verrix", "enforcer_c", "rea"],
-    "turn": "verrix",
+    "round": 3,
+    "init": ["liv", "torben", "verrix", "rea"],
+    "turn": "liv",
     "terrain": [
       {"x": 9, "y": 4, "w": 3, "h": 2, "type": "hazard", "label": "저울대·짐더미"}
     ],
     "tokens": [
-      {"id": "verrix", "name": "베릭스", "side": "pc", "x": 7, "y": 6, "hp": "45/45", "note": "임시HP 0 (8 전부 흡수해 소진)", "move": 6, "range": 24},
-      {"id": "liv", "name": "리브", "side": "pc", "x": 5, "y": 9, "hp": "8/32", "from": {"x": 8, "y": 7}, "note": "교활한 행동(이탈)으로 후퇴", "move": 6, "range": 1},
-      {"id": "rea", "name": "레아", "side": "pc", "x": 6, "y": 5, "hp": "20/28", "move": 6, "range": 1},
-      {"id": "torben", "name": "토르벤", "side": "enemy", "x": 8, "y": 6, "hp": "73/90", "note": "베릭스에게 표적 전환", "move": 6, "range": 2},
-      {"id": "enforcer_c", "name": "감시조 C", "side": "enemy", "x": 7, "y": 5, "hp": "7/16", "move": 6, "range": 1}
+      {"id": "verrix", "name": "베릭스", "side": "pc", "x": 7, "y": 6, "hp": "45/45", "note": "Dark One's Blessing — 임시HP 14", "move": 6, "range": 24},
+      {"id": "liv", "name": "리브", "side": "pc", "x": 5, "y": 9, "hp": "8/32", "move": 6, "range": 1},
+      {"id": "rea", "name": "레아", "side": "pc", "x": 9, "y": 6, "from": {"x": 6, "y": 5}, "hp": "20/28", "move": 6, "range": 1},
+      {"id": "torben", "name": "토르벤", "side": "enemy", "x": 10, "y": 6, "from": {"x": 8, "y": 6}, "hp": "64/90", "note": "베릭스에게 표적 전환, 밀려남", "move": 6, "range": 2},
+      {"id": "enforcer_c", "name": "감시조 C", "side": "enemy", "x": 7, "y": 5, "hp": "0/16", "down": true, "note": "베릭스가 직접 처치"}
     ]
   }
 }
