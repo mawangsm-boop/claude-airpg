@@ -1,0 +1,17 @@
+{
+  "char": {
+    "id": "torben",
+    "name": "토르벤",
+    "role": "남성 · 인간 · 40대 · 나루터 하역장 계량 감독 (저울패 사실상 수장)",
+    "tag": "적대",
+    "tagc": "r",
+    "trait": "쇠갈고리 장대를 하역 도구처럼 다루는 인물. 계량권이라는 준합법적 지위를 방패 삼아 뒷돈과 협박으로 나루터를 장악해왔다. 잿빛 손 붕괴로 생긴 공백을 자신의 것으로 만들려는 중.",
+    "voice": "하대, 짧은 말. 사람과 상황을 저울질하듯 잰다 — \"…무게가 안 나가는데.\" 감정을 크게 드러내지 않고 낮게 깔아 말한다.",
+    "drive": "나루터 계량권을 잃지 않는 것. 잿빛 손이 남긴 공백을 자신의 것으로 만드는 것.",
+    "fear": "미확정 — 아직 드러나지 않음",
+    "bond": "미확정",
+    "knows": "나루터 창고를 새로 사들인 자가 나타났다는 것(A등급, 직접 목격 가능). 등기소 서기에게 등기 지연을 지시한 것(A등급, 본인이 직접 지시).",
+    "unknown": "베릭스 일행의 정체 전부(D등급)",
+    "look": "Torben, a human male dock scale-master in his 40s. Broad-shouldered, weathered sun-darkened skin, a thick grey-streaked beard, small hard eyes that seem to measure everything. Wearing a heavy leather apron over rough dockworker's clothes, sleeves rolled to the elbow, a hooked iron loading pole resting on one shoulder like a tool rather than a weapon."
+  }
+}
