@@ -15,10 +15,35 @@ const rj = (p) => JSON.parse(fs.readFileSync(p, "utf8"));
 const check = process.argv.includes("--check");
 
 const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
-const start = html.indexOf("const SEED = {");
-const endMark = "\n};\n";
-const end = html.indexOf(endMark, start);
-if (start < 0 || end < 0) { console.error("index.html에서 SEED 블록을 찾지 못했습니다."); process.exit(1); }
+const start = html.indexOf("const SEED = ");
+if (start < 0) { console.error("index.html에서 SEED 블록을 찾지 못했습니다."); process.exit(1); }
+const objStart = html.indexOf("{", start);
+
+/* SEED는 거대한 JSON 객체라 그 안 문자열 값에 우연히 "};"가 들어갈 수 있다.
+ * (예: 43회차, 실제로 이 정확한 패턴 때문에 뒤쪽 onclick 핸들러의 "};"를 끝으로
+ * 잘못 잡아 렌더링 함수들이 통째로 날아간 사고가 있었다.) 그래서 단순 문자열
+ * 검색 대신 문자열 리터럴을 건너뛰며 중괄호 깊이를 세어 진짜 끝을 찾는다. */
+function findObjectEnd(s, openIdx) {
+  let depth = 0, inStr = false, esc = false;
+  for (let i = openIdx; i < s.length; i++) {
+    const ch = s[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (ch === "\\") esc = true;
+      else if (ch === '"') inStr = false;
+      continue;
+    }
+    if (ch === '"') inStr = true;
+    else if (ch === "{") depth++;
+    else if (ch === "}") { depth--; if (depth === 0) return i; }
+  }
+  return -1;
+}
+const objEnd = findObjectEnd(html, objStart);
+if (objEnd < 0) { console.error("SEED 객체의 끝(중괄호 짝)을 찾지 못했습니다."); process.exit(1); }
+const end = objEnd + 1; // "}" 다음 위치 — 이 뒤에 곧바로 ";"가 온다
+if (html[end] !== ";") { console.error("SEED 객체 뒤에 ';'가 없습니다 — index.html 구조가 예상과 다릅니다."); process.exit(1); }
+const endMark = ";"; // slice 시 이 한 글자만 건너뛰면 된다
 
 if (check) {
   const cur = html.slice(start, end);

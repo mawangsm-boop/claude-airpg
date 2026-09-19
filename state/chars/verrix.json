@@ -2,7 +2,7 @@
   "char": {
     "name": "베릭스 나이트블레이드",
     "race": "티플링",
-    "cls": "워락 (The Fiend) · 배경 차터랜",
+    "cls": "바드 (글램어 대학) · 배경 차터랜",
     "level": 9,
     "ac": 14,
     "hp": {
@@ -10,12 +10,24 @@
       "max": 49,
       "tmp": 0
     },
-    "slots": {
-      "cur": 2,
-      "max": 2,
-      "lvl": 5,
-      "recharge": "short"
-    },
+    "slots": [
+      { "lvl": 1, "cur": 4, "max": 4 },
+      { "lvl": 2, "cur": 3, "max": 3 },
+      { "lvl": 3, "cur": 3, "max": 3 },
+      { "lvl": 4, "cur": 3, "max": 3 },
+      { "lvl": 5, "cur": 1, "max": 1 }
+    ],
+    "resources": [
+      {
+        "id": "res_bardic_inspiration",
+        "n": "Bardic Inspiration",
+        "dice": "d6",
+        "cur": 6,
+        "max": 6,
+        "recharge": "short",
+        "note": "매력 수정치만큼(6회). 보너스 행동으로 60ft 내 대상에게 부여, 1시간 내 사용. Font of Inspiration(5레벨)으로 짧은/긴 휴식 모두 회복."
+      }
+    ],
     "gold": 471,
     "stats": {
       "STR": 10,
@@ -25,105 +37,191 @@
       "WIS": 10,
       "CHA": 22
     },
-    "look": "Verrix Nightblade, a male tiefling warlock in his early 30s. Messy shoulder-length black wavy hair, curved purple-black horns swept back, pointed elf-like ears, pale lavender-tinted skin, glowing violet eyes, short trimmed goatee, sly confident smirk. Wearing an ornate black-and-gold longcoat over a purple satin shirt, open collar showing chest tattoos, black vest with gold buttons, thick leather belt with chains, ritual dagger with amethyst pommel sheathed at hip, gold rings and bracelets on right hand.",
+    "look": "Verrix Nightblade, a male tiefling bard in his early 30s. Messy shoulder-length black wavy hair, curved purple-black horns swept back, pointed elf-like ears, pale lavender-tinted skin, glowing violet eyes, short trimmed goatee, sly confident smirk. Wearing an ornate black-and-gold longcoat over a purple satin shirt, open collar showing chest tattoos, black vest with gold buttons, thick leather belt with chains, ritual dagger with amethyst pommel sheathed at hip, gold rings and bracelets on right hand.",
     "spells": [
       {
-        "id": "spell_eldritch_blast",
-        "n": "이드리치 블래스트",
-        "t": "간이주문",
+        "id": "cantrip_vicious_mockery",
+        "n": "비셔스 모커리",
+        "t": "캔트립",
         "c": "슬롯 소모 없음",
-        "d": "사거리 36 m 원거리 주문 공격. 6레벨에 광선 2발, 각 1d10 역장 피해. Agonizing Blast로 발당 +5(CHA) 추가, Repelling Blast로 명중 시 대상을 3 m 밀어냄."
+        "d": "사거리 60ft. 대상 1명에게 날카로운 조롱을 퍼붓는다. 지혜 내성 실패 시 1d4 정신 피해 + 다음 공격 판정에 불리점."
       },
       {
-        "id": "spell_hex",
-        "n": "헥스",
-        "t": "4레벨 슬롯",
-        "c": "슬롯 1",
-        "d": "대상 1명을 저주. 내 공격이 명중할 때마다 1d6 사령 피해 추가, 지정한 능력 판정에 불리점. 집중 유지 필요."
+        "id": "cantrip_friends",
+        "n": "프렌즈",
+        "t": "캔트립",
+        "c": "슬롯 소모 없음",
+        "d": "1분간 대상 1명에게 매력 판정에 이점을 받는 대신, 끝나면 대상이 속았다는 것을 알아채고 적대적으로 변할 수 있다."
       },
       {
-        "id": "spell_misty_step",
-        "n": "미스티 스텝",
-        "t": "4레벨 슬롯",
+        "id": "cantrip_message",
+        "n": "메시지",
+        "t": "캔트립",
+        "c": "슬롯 소모 없음",
+        "d": "사거리 120ft 내 대상에게 속삭임을 전하고 짧게 답을 들을 수 있다."
+      },
+      {
+        "id": "spell_charm_person_free",
+        "n": "참 퍼슨",
+        "t": "1레벨 (글램어 대학 — 항시 준비)",
         "c": "슬롯 1",
-        "d": "보너스 행동. 시야 내 9 m 이내 빈 공간으로 순간이동."
+        "d": "College of Glamour 3레벨 특성으로 항상 준비되어 있다(일반 준비 목록과 별개). 인간형 1명 매혹 시도, 지혜 내성 실패 시 매혹 상태."
+      },
+      {
+        "id": "spell_mirror_image_free",
+        "n": "미러 이미지",
+        "t": "2레벨 (글램어 대학 — 항시 준비)",
+        "c": "슬롯 1",
+        "d": "College of Glamour 3레벨 특성으로 항상 준비되어 있다. 분신 3개 생성, 공격을 대신 받게 한다."
+      },
+      {
+        "id": "spell_command",
+        "n": "커맨드",
+        "t": "1레벨",
+        "c": "슬롯 1",
+        "d": "대상에게 한 단어 명령을 내려 강제한다. 지혜 내성 실패 시 그대로 따른다."
+      },
+      {
+        "id": "spell_disguise_self",
+        "n": "디스가이즈 셀프",
+        "t": "1레벨",
+        "c": "슬롯 1",
+        "d": "1시간 동안 자신의 외형을 다른 모습으로 바꾼다."
+      },
+      {
+        "id": "spell_healing_word",
+        "n": "힐링 워드",
+        "t": "1레벨",
+        "c": "슬롯 1",
+        "d": "보너스 행동. 사거리 60ft 내 아군 1명 HP 회복(1d4+매력)."
+      },
+      {
+        "id": "spell_comprehend_languages",
+        "n": "컴프리헨드 랭기지",
+        "t": "1레벨",
+        "c": "슬롯 1",
+        "d": "1시간 동안 모든 언어를 듣거나 읽어 이해할 수 있다."
       },
       {
         "id": "spell_suggestion",
         "n": "서제스천",
-        "t": "4레벨 슬롯",
+        "t": "2레벨",
         "c": "슬롯 1",
-        "d": "합리적으로 들리는 행동 하나를 대상에게 강제. 지혜 내성 DC 17 실패 시 최대 8시간 지속. 명백히 해로운 지시는 무효. 24회차에 정예 요원에게 동료를 찌르게 만드는 데 사용됨."
+        "d": "합리적으로 들리는 행동 하나를 대상에게 강제. 지혜 내성 실패 시 최대 8시간 지속. 명백히 해로운 지시는 무효. 24회차에 정예 요원에게 동료를 찌르게 만드는 데 사용됨."
       },
       {
-        "id": "spell_greater_invisibility",
-        "n": "그레이터 인비저빌리티",
-        "t": "4레벨 슬롯",
+        "id": "spell_invisibility",
+        "n": "인비저빌리티",
+        "t": "2레벨",
         "c": "슬롯 1",
-        "d": "24회차 7레벨 승급 시 습득. 자신 또는 아군 1명을 투명화. 집중 유지 필요, 1분 지속. 공격하거나 주문을 시전해도 투명이 유지되어 명중에 이점, 상대는 나를 공격할 때 불리점."
+        "d": "대상 1명을 투명화(집중, 1시간 또는 공격/시전 시 해제)."
       },
       {
-        "id": "spell_planar_binding",
-        "n": "이계체 속박",
-        "t": "5레벨 슬롯",
-        "c": "슬롯 1(2024판 예외 습득) · 시전 1시간 · 사거리 18m · 소모요소: 1000골드 이상 보석(소모됨)",
-        "d": "43회차 9레벨 승급 시 습득(2024판 규칙 예외 적용, 이 주문 하나만). 천상체·정령·요정·악마 중 하나를 표적으로 매력 내성을 강제 — 실패 시 시전자에게 24시간 동안 종속. 더 높은 슬롯으로 시전 시 지속시간이 대폭 늘어난다(6레벨=10일, 7레벨=30일, 8레벨=180일, 9레벨=1년 하루). The Fiend와의 계약을 끊어내려는 개인적 목표와 직결된 주문 — 후원자 자체를 봉인하는 것을 노리고 습득."
+        "id": "spell_enthrall",
+        "n": "엔스롤",
+        "t": "2레벨",
+        "c": "슬롯 1",
+        "d": "1분간 화술로 청중을 사로잡아 주의를 돌린다. 지혜 내성 실패 시 화자 외의 것을 지각하기 어려워진다."
+      },
+      {
+        "id": "spell_hypnotic_pattern",
+        "n": "히프노틱 패턴",
+        "t": "3레벨",
+        "c": "슬롯 1",
+        "d": "범위 내 다수를 매혹된 상태로 무력화(지능 내성, 집중)."
+      },
+      {
+        "id": "spell_major_image",
+        "n": "메이저 이미지",
+        "t": "3레벨",
+        "c": "슬롯 1",
+        "d": "소리·냄새까지 갖춘 정교한 환영을 만든다(집중, 최대 10분)."
+      },
+      {
+        "id": "spell_fear",
+        "n": "피어",
+        "t": "3레벨",
+        "c": "슬롯 1",
+        "d": "원뿔 범위 내 대상들에게 공포를 심어 도주하게 만든다(지혜 내성, 집중)."
+      },
+      {
+        "id": "spell_compulsion",
+        "n": "컴펄전",
+        "t": "4레벨",
+        "c": "슬롯 1",
+        "d": "대상을 지정한 방향으로 강제 이동시킨다(지혜 내성, 집중)."
+      },
+      {
+        "id": "spell_confusion",
+        "n": "컨퓨전",
+        "t": "4레벨",
+        "c": "슬롯 1",
+        "d": "범위 내 대상들의 행동을 무작위로 뒤섞는다(지혜 내성, 집중)."
+      },
+      {
+        "id": "spell_freedom_of_movement",
+        "n": "프리덤 오브 무브먼트",
+        "t": "4레벨",
+        "c": "슬롯 1",
+        "d": "대상 1명이 이동을 방해하는 효과·구속에서 자유로워진다(1시간)."
+      },
+      {
+        "id": "spell_dominate_person",
+        "n": "도미네이트 퍼슨",
+        "t": "5레벨",
+        "c": "슬롯 1",
+        "d": "인간형 1명을 정신 지배해 명령을 내린다(지혜 내성, 집중, 최대 1분)."
       }
     ],
     "feats": [
       {
-        "id": "feat_agonizing_blast",
-        "n": "Agonizing Blast",
-        "t": "인보케이션",
-        "d": "이드리치 블래스트 광선마다 매력 수정치(+6) 피해 추가. 8레벨 승급으로 CHA 20→22 반영."
+        "id": "feat_bardic_inspiration",
+        "n": "Bardic Inspiration",
+        "t": "클래스 특성 (1레벨)",
+        "d": "보너스 행동으로 60ft 내 대상에게 영감 주사위(d6)를 부여. 1시간 내 판정 실패를 성공으로 바꾸는 데 쓸 수 있다. 사용 횟수는 `resources` 참고."
       },
       {
-        "id": "feat_devils_sight",
-        "n": "Devil's Sight",
-        "t": "인보케이션",
-        "d": "36 m 이내에서 마법 어둠까지 꿰뚫어 봄."
+        "id": "feat_jack_of_all_trades",
+        "n": "Jack of All Trades",
+        "t": "클래스 특성 (2레벨)",
+        "d": "숙련 없는 능력 판정·이니셔티브에 숙련 보너스의 절반(반내림)을 더한다."
       },
       {
-        "id": "feat_beguiling_influence",
-        "n": "Beguiling Influence",
-        "t": "인보케이션",
-        "d": "기만·설득 기술에 숙련. 심문·동료 모집·협상에서 반복 활용됨."
+        "id": "feat_expertise",
+        "n": "Expertise",
+        "t": "클래스 특성 (2·9레벨)",
+        "d": "2레벨: 설득·기만에 전문화(숙련 보너스 2배). 9레벨: 통찰·연기(공연)에 전문화 추가."
       },
       {
-        "id": "feat_repelling_blast",
-        "n": "Repelling Blast",
-        "t": "인보케이션",
-        "d": "이드리치 블래스트 명중 시 대상을 3 m 밀어냄."
+        "id": "feat_font_of_inspiration",
+        "n": "Font of Inspiration",
+        "t": "클래스 특성 (5레벨)",
+        "d": "Bardic Inspiration 사용 횟수를 짧은 휴식과 긴 휴식 모두에서 전부 회복한다. 주문 슬롯을 소모해 사용 횟수 1회를 되돌릴 수도 있다."
       },
       {
-        "id": "feat_fiendish_vigor",
-        "n": "Fiendish Vigor",
-        "t": "인보케이션",
-        "d": "슬롯 없이 자신에게 False Life 시전 — 임시 HP 1d4+4. 전투 전 사전 시전 가능."
+        "id": "feat_glamour_beguiling_magic",
+        "n": "매혹의 마법 (Beguiling Magic, 명칭 잠정)",
+        "t": "글램어 대학 특성 (3레벨)",
+        "d": "참 퍼슨·미러 이미지를 항상 준비 상태로 유지한다(별도 슬롯으로 시전). 매혹·환영 계열 주문을 시전한 직후, 근처 대상 하나를 매혹하거나 공포에 빠뜨리려 시도할 수 있다. — 2024 PHB 정확한 명칭·세부는 미확인, 실전에서 확인되는 대로 정정.",
+        "note_ui": "규칙 확인 대기 — 검색 결과 명칭이 출처마다 엇갈림(Beguiling Magic / Enthralling Performance)"
       },
       {
-        "id": "feat_dark_ones_blessing",
-        "n": "Dark One's Blessing",
-        "t": "클래스 특성",
-        "d": "베릭스가 직접 적을 0 HP로 만들면 임시 HP 14(CHA +6 + 워락 레벨 8) 획득. 중첩되지 않고 높은 값만 유지. 동료가 마무리한 처치에는 발동하지 않는다."
+        "id": "feat_glamour_mantle_of_majesty",
+        "n": "위엄의 망토 (Mantle of Majesty)",
+        "t": "글램어 대학 특성 (6레벨)",
+        "d": "1분간 왕족 같은 위엄을 두른다 — 매 턴 보너스 행동으로 커맨드 주문을 시전할 수 있다(내성 불리점). 3레벨 이상 슬롯으로 재사용 가능."
       },
       {
         "id": "feat_fate_sense",
         "n": "운명 감지 · 은빛 혀",
         "t": "배경 특성",
-        "d": "전조와 속내를 잘 읽음. 설득·기만 판정에 강점."
-      },
-      {
-        "id": "feat_pact_blade",
-        "n": "Pact of the Blade",
-        "t": "서약",
-        "d": "37회차, 갈망하는 문지기의 검으로 서약 무기를 재지정했다. 소환·해제 가능하며 매력 기준으로 공격."
+        "d": "전조와 속내를 잘 읽음. 설득·기만·통찰 판정에 강점."
       },
       {
         "id": "feat_scattered_warden_s40",
         "n": "흩어진 문지기의 마지막 조각",
-        "t": "클래스 특성(변형, 40회차 확정)",
-        "d": "창설자의 핵·능선의 매듭 코어·동쪽 갈래 수호자의 핵·숲을 갉아먹던 것의 파편이 마지막 조각과 합쳐지며 완전히 안정됐다. 정제된 핵의 잔향(무소모 서제스천 1일 1회, 정신계 내성 이점)과 숲을 갉아먹던 것의 파편(야수 명령 1일 1회, 자연 계열 내성 이점)이 하나의 안정된 특성으로 통합되어 매일 슬롯 회복 없이 그대로 유지된다. \"문지기는 하나가 아니다\"라는 개인 실마리는 이 순간 완전히 종결되었다 — 더 이상 확장되지 않는다. 파티에는 공개되지 않았다."
+        "t": "클래스와 무관한 고유 특성 (40회차 확정)",
+        "d": "창설자의 핵·능선의 매듭 코어·동쪽 갈래 수호자의 핵·숲을 갉아먹던 것의 파편이 마지막 조각과 합쳐지며 완전히 안정됐다. 정제된 핵의 잔향(무소모 서제스천 1일 1회, 정신계 내성 이점)과 숲을 갉아먹던 것의 파편(야수 명령 1일 1회, 자연 계열 내성 이점)이 하나의 안정된 특성으로 통합되어 매일 슬롯 회복 없이 그대로 유지된다. 후원자에게 빌린 힘이 아니라 직접 삼킨 힘이라 44회차 계약 종결 이후에도 소멸하지 않았다."
       }
     ],
     "items": [
@@ -154,7 +252,7 @@
         "id": "item_tarocca_cards",
         "n": "타로카 카드 한 벌",
         "q": 1,
-        "d": "어머니의 유품. 44회차, 후원자와의 계약이 청산되며 '계약의 매개'로서의 역할은 끝났다 — 이제 순수한 유품이자 점술 소품. 다음 클래스 전환 시 주문 매개로 다시 쓰일 가능성이 있다.",
+        "d": "어머니의 유품. 44회차, 후원자와의 계약이 청산되며 '계약의 매개'로서의 역할은 끝났다. 이제 바드 주문의 매개체(spellcasting focus)로 쓰인다.",
         "cat": "trinket"
       },
       {
@@ -278,14 +376,14 @@
         "id": "item_warden_blade_s37",
         "n": "갈망하는 문지기의 검",
         "q": 1,
-        "d": "37회차, 문지기의 잔재 처치 후 획득. Pact of the Blade 지정 가능(매력 기준 공격). +1 마법 단검, 1d6+매력 참격 피해. 그 턴의 첫 명중 시, 가한 피해의 절반(반올림)만큼 자동으로 자기 회복(최대 HP 초과 불가, 판정 불필요).",
+        "d": "37회차, 문지기의 잔재 처치 후 획득. 44회차, 계약 종결로 Pact of the Blade 지정이 풀려 이제 평범한 +1 마법 단검(민첩 기준 공격)이다. 1d4+민첩+1 관통 피해. 그 턴의 첫 명중 시, 가한 피해의 절반(반올림)만큼 자동으로 자기 회복(최대 HP 초과 불가, 판정 불필요) — 이 성질은 무기 자체에 깃든 것이라 계약과 무관하게 유지된다.",
         "cat": "weapon",
         "equipped": true,
         "weaponSlot": "main",
         "combat": {
           "atkBonus": 1,
           "dmgBonus": 1,
-          "dmgDice": "1d6+CHA",
+          "dmgDice": "1d4+DEX",
           "onFirstHitEachTurn": {
             "effect": "가한 피해의 절반(반올림)만큼 자동 자가회복",
             "cap": "최대 HP 초과 불가, 판정 불필요"
@@ -390,8 +488,9 @@
     ],
     "surface": "충동적 행동 · 이기적 이득 추구 · 언변(설득·기만)으로 문제 해결 · 이성에게 관심이 많고 적극적",
     "hidden": "이 가면 아래에 진짜로 어둡고 위험한 본성이 있다. 충분한 동기(강력한 마법 유물 등)가 주어지면 동료를 배신하거나 죽이거나 영구히 지배할 수 있다. 이 본성은 항상 능숙하게 은폐되어 있으며, NPC는 쉽게 알아채지 못한다.",
-    "goal": "달성 — 44회차, 이계체 속박으로 The Fiend를 영구 봉인하고 영혼 소유권을 되찾았다. 값은 레아의 영혼(닻). 다음 목표는 아직 미정 — 워락의 힘을 잃고 바드로 전환할 예정(사용자와 세부 확정 필요).",
-    "status": "카를렌 체류 · 이상 없음",
-    "id": "verrix"
+    "goal": "비공개 개인 목표 — 44회차에 The Fiend와의 계약을 청산하고 영혼 소유권을 되찾았다(이전 목표 달성). 새 목표는 아직 정해지지 않았다.",
+    "status": "카를렌 체류 · 44회차, 워락에서 바드(글램어 대학)로 완전히 전환. 새벽문으로 홀로 출발 예정",
+    "id": "verrix",
+    "class_note": "44회차, 후원자와의 계약 종결로 워락의 힘이 전부 소멸해 바드로 재구성(홈브루 절차, gm_notes/S44_scenario.md §8 참고). 능력치는 그대로 유지(클래스와 무관). 2024 PHB 기준으로 구성했으나 일부 세부(글램어 대학 3레벨 특성 정확한 명칭, Countercharm류 기능의 정확한 레벨)는 네트워크 제약으로 원문 대조를 완료하지 못해 잠정 상태 — 각 항목의 note_ui에 표시."
   }
 }

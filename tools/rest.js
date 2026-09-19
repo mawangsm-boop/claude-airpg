@@ -50,12 +50,25 @@ const idx = rj(S("chars", "_index.json"));
     if (c.hp.cur < c.hp.max) { changes.push(`${c.name}: HP ${c.hp.cur}→${c.hp.max}`); c.hp.cur = c.hp.max; }
     if (c.hp.tmp) { changes.push(`${c.name}: 임시HP ${c.hp.tmp}→0`); c.hp.tmp = 0; }
   }
-  /* 슬롯 회복 주기: 팩트 매직(워락)은 slots.recharge:"short"로 표시 — 짧은 휴식에도 전부 회복.
-   * 표시가 없으면 기존처럼 긴 휴식에만 회복(순수 슬롯 캐스터 대비 기본값 유지). */
-  if (c.slots && c.slots.cur < c.slots.max && refills(c.slots.recharge || "long")) {
+  /* 슬롯 회복 주기: slots가 단일 객체(팩트 매직처럼 한 레벨만 쓰는 캐스터)면 그 객체의
+   * recharge 표시를 본다("short"면 짧은 휴식에도 회복, 없으면 긴 휴식에만).
+   * slots가 배열(레벨별 표준 주문 슬롯을 쓰는 풀 캐스터)이면 각 항목을 그 항목의
+   * recharge(기본값 "long")에 따라 개별로 회복한다. */
+  if (Array.isArray(c.slots)) {
+    c.slots.forEach((sl) => {
+      if (sl.cur < sl.max && refills(sl.recharge || "long")) {
+        changes.push(`${c.name}: ${sl.lvl}레벨 슬롯 ${sl.cur}→${sl.max}`);
+        sl.cur = sl.max;
+      }
+    });
+  } else if (c.slots && c.slots.cur < c.slots.max && refills(c.slots.recharge || "long")) {
     changes.push(`${c.name}: 슬롯 ${c.slots.cur}→${c.slots.max}`);
     c.slots.cur = c.slots.max;
   }
+  (c.resources || []).forEach((r) => {
+    if (!refills(r.recharge)) return;
+    if (r.cur < r.max) { changes.push(`${c.name}: ${r.n} ${r.cur}→${r.max}`); r.cur = r.max; }
+  });
   restoreCharges(c.items, c.name);
   wj(p, d);
 }
