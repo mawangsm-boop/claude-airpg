@@ -1230,6 +1230,13 @@ const SEED = {
     "look": "Verrix Nightblade, a male tiefling bard in his early 30s. Messy shoulder-length black wavy hair, curved purple-black horns swept back, pointed elf-like ears, pale lavender-tinted skin, glowing violet eyes, short trimmed goatee, sly confident smirk. Wearing an ornate black-and-gold longcoat over a purple satin shirt, open collar showing chest tattoos, black vest with gold buttons, thick leather belt with chains, ritual dagger with amethyst pommel sheathed at hip, gold rings and bracelets on right hand.",
     "spells": [
       {
+        "id": "cantrip_prestidigitation",
+        "n": "프레스티디지테이션",
+        "t": "캔트립",
+        "c": "슬롯 소모 없음",
+        "d": "사거리 10ft. 사소한 마법 효과 하나를 낸다(감각 효과 연출, 작은 불꽃 켜고 끄기, 물건 세척·오염, 무생물 향미·냉온 조절, 임시 표식 새기기 등). 대부분 효과는 최대 1시간 지속."
+      },
+      {
         "id": "cantrip_vicious_mockery",
         "n": "비셔스 모커리",
         "t": "캔트립",
@@ -1237,32 +1244,18 @@ const SEED = {
         "d": "사거리 60ft. 대상 1명에게 날카로운 조롱을 퍼붓는다. 지혜 내성 실패 시 1d4 정신 피해 + 다음 공격 판정에 불리점."
       },
       {
-        "id": "cantrip_friends",
-        "n": "프렌즈",
-        "t": "캔트립",
-        "c": "슬롯 소모 없음",
-        "d": "1분간 대상 1명에게 매력 판정에 이점을 받는 대신, 끝나면 대상이 속았다는 것을 알아채고 적대적으로 변할 수 있다."
-      },
-      {
-        "id": "spell_charm_person",
-        "n": "참 퍼슨",
+        "id": "spell_unseen_servant",
+        "n": "언신 서번트",
         "t": "1레벨",
         "c": "슬롯 1",
-        "d": "인간형 1명 매혹 시도. 지혜 내성 실패 시 매혹 상태(1시간, 또는 해칠 시 즉시 해제)."
+        "d": "1시간 동안 눈에 보이지 않는 힘의 하인을 만든다. 명령에 따라 간단한 작업(옮기기·문 열기·청소 등)을 수행하며, 전투 능력은 없다."
       },
       {
-        "id": "spell_command",
-        "n": "커맨드",
+        "id": "spell_heroism",
+        "n": "히로이즘",
         "t": "1레벨",
         "c": "슬롯 1",
-        "d": "대상에게 한 단어 명령을 내려 강제한다. 지혜 내성 실패 시 그대로 따른다."
-      },
-      {
-        "id": "spell_disguise_self",
-        "n": "디스가이즈 셀프",
-        "t": "1레벨",
-        "c": "슬롯 1",
-        "d": "1시간 동안 자신의 외형을 다른 모습으로 바꾼다."
+        "d": "집중, 최대 1분. 자발적 대상 1명이 공포 상태에 면역이 되고, 매 턴 시작 시 임시 HP(매력 수정치)를 얻는다."
       },
       {
         "id": "spell_healing_word",
@@ -1270,6 +1263,13 @@ const SEED = {
         "t": "1레벨",
         "c": "슬롯 1",
         "d": "보너스 행동. 사거리 60ft 내 아군 1명 HP 회복(1d4+매력)."
+      },
+      {
+        "id": "spell_dissonant_whispers",
+        "n": "디소넌트 위스퍼스",
+        "t": "1레벨",
+        "c": "슬롯 1",
+        "d": "사거리 60ft. 대상에게 불협화음 같은 환청을 심는다. 지혜 내성 실패 시 3d6 정신 피해를 입고 반응행동으로 즉시 최대한 멀리 이동해야 한다(내성 성공 시 피해 절반, 이동 없음)."
       }
     ],
     "feats": [
@@ -2307,7 +2307,7 @@ const SEED = {
       "unknown": "베릭스의 과거 전부(D등급)"
     }
   ],
-  "seedRev": "S44-019"
+  "seedRev": "S44-020"
 };/* ==================== 상태 관리 ==================== */
 const KEY="berix_handbook_v2_17_s40";
 let S = load(), HIST = [];
