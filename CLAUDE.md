@@ -185,6 +185,8 @@ node tools/seed.js --check           # 핸드북 내장본이 몇 회차인지 �
 
 이 저장소는 핸드북(GitHub Pages)과 같은 저장소입니다. 커밋에 `state/rev.json` 갱신이 반드시 포함돼야 화면이 갱신됩니다 — `git status`로 눈으로 확인하는 걸 습관화하고, 그 전에 `node tools/validate.js`를 돌립니다(이 검사도 rev 누락을 잡습니다).
 
+**핸드북(GitHub Pages)은 `main` 브랜치를 그대로 서빙합니다.** 실제 작업은 세션별 브랜치(예: `claude/session-*`)에서 진행하므로, 그 브랜치에만 커밋이 쌓이면 화면은 갱신되지 않습니다. **회차 종료 시점(아래 "체크포인트" 생성 트리거와 동일한 시점 — 긴 휴식, 짧은 휴식 2회 누적, 또는 사용자의 종료 의사 표현)마다**, `node tools/validate.js` 통과를 확인한 뒤 현재 브랜치를 `main`에 반영하고 푸시합니다(`git push origin HEAD:main` — 지금까지는 항상 fast-forward로 충돌 없이 들어갔습니다). main에 다른 브랜치와의 충돌 등 fast-forward가 안 되는 상황이 생기면, 임의로 강제 푸시하지 말고 사용자에게 알리고 지시를 받습니다.
+
 ## 체크포인트 & 소설화
 
 ```
