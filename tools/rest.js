@@ -49,7 +49,12 @@ const idx = rj(S("chars", "_index.json"));
   if (isLong) {
     if (c.hp.cur < c.hp.max) { changes.push(`${c.name}: HP ${c.hp.cur}→${c.hp.max}`); c.hp.cur = c.hp.max; }
     if (c.hp.tmp) { changes.push(`${c.name}: 임시HP ${c.hp.tmp}→0`); c.hp.tmp = 0; }
-    if (c.slots && c.slots.cur < c.slots.max) { changes.push(`${c.name}: 슬롯 ${c.slots.cur}→${c.slots.max}`); c.slots.cur = c.slots.max; }
+  }
+  /* 슬롯 회복 주기: 팩트 매직(워락)은 slots.recharge:"short"로 표시 — 짧은 휴식에도 전부 회복.
+   * 표시가 없으면 기존처럼 긴 휴식에만 회복(순수 슬롯 캐스터 대비 기본값 유지). */
+  if (c.slots && c.slots.cur < c.slots.max && refills(c.slots.recharge || "long")) {
+    changes.push(`${c.name}: 슬롯 ${c.slots.cur}→${c.slots.max}`);
+    c.slots.cur = c.slots.max;
   }
   restoreCharges(c.items, c.name);
   wj(p, d);

@@ -11,9 +11,10 @@
       "tmp": 0
     },
     "slots": {
-      "cur": 0,
+      "cur": 2,
       "max": 2,
-      "lvl": 5
+      "lvl": 5,
+      "recharge": "short"
     },
     "gold": 471,
     "stats": {
