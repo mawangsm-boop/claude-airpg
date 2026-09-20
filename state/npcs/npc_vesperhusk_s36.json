@@ -5,6 +5,8 @@
     "trait": "36회차, 옛 육신(원래도 인격 없이 숨만 붙어 있던 빈 그릇)에 감독의 자동인형에서 회수한 구동핵을 이식해 최소한의 명령 수행체로 재탄생. 새벽문 은신처에 상주하며 물약 조제·부품 제작 등 잡무를 맡는 비전투 하인. 전투 능력 없음.",
     "name": "베스퍼(빈 그릇)",
     "voice": "인격이 없다. 명령을 되묻지 않고 짧게 확인만 한다. 잡담도 감정 표현도 하지 않는다.",
-    "drive": "해당 없음 — 지시받은 잡무(물약 조제·부품 제작)만 수행한다."
+    "drive": "해당 없음 — 지시받은 잡무(물약 조제·부품 제작)만 수행한다.",
+    "look": "A human woman around 20, small and thin-framed. Plain unstyled dark hair tied back loosely, pale skin from years spent indoors, a blank expressionless face with unfocused eyes. Wearing simple worn work clothes suited for a back-alley workshop — a plain long-sleeved tunic and apron, no jewelry or adornment. A faint seam of exposed mechanism visible at the collarbone where the drive core sits beneath the skin.",
+    "note_ui": "look 필드 2026-09-20 신규 등록 — 35회차 확립 단서(작고 여윈, 20세)만 확실하고 머리색 등 세부는 GM이 최소한으로 채운 것. 사용자가 다른 인상을 원하면 언제든 교체."
   }
 }
