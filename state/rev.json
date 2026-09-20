@@ -1,5 +1,5 @@
 {
-  "rev": "S45-006",
-  "updated": "2026-09-20T03:10:00Z",
-  "note": "네리 하윅 정식 합류 — state/chars/neri.json로 승격(임시 npcs 파일 제거), _index.json party 반영. characters.md·index.html 내장본 재생성"
+  "rev": "S45-007",
+  "updated": "2026-09-20T03:25:00Z",
+  "note": "베릭스 숙련 목록 확정(설득·기만·연기·통찰·수사), 은빛 혀 특성을 Silver Tongue 규칙(d20≤9→10, 설득·기만 한정)으로 정확화 — 사용자 직접 지시로 즉시 반영"
 }

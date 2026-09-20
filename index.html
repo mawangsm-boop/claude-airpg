@@ -1243,6 +1243,16 @@ const SEED = {
       "WIS": 10,
       "CHA": 22
     },
+    "skills": {
+      "proficient": [
+        "설득",
+        "기만",
+        "연기",
+        "통찰",
+        "수사"
+      ],
+      "note": "2026-09-20 확정. 그 이전엔 캐릭터 생성 시점 숙련 목록이 아카이브 어디에도 기록되어 있지 않아 매번 판정마다 적용 여부를 확인할 수 없었다 — 서사(설득·기만 중심 언변가, 장부 정리 배경, 카드 퍼포먼스)에 맞춰 사용자 확인 하에 지금 확정. 숙련 보너스 +2(1레벨). 설득·기만은 위 feat_fate_sense(은빛 혀)의 d20 최소 10 보장과 중첩 적용된다."
+    },
     "look": "Verrix Nightblade, a male tiefling bard in his early 30s. Messy shoulder-length black wavy hair, curved purple-black horns swept back, pointed elf-like ears, pale lavender-tinted skin, glowing violet eyes, short trimmed goatee, sly confident smirk. Wearing an ornate black-and-gold longcoat over a purple satin shirt, open collar showing chest tattoos, black vest with gold buttons, thick leather belt with chains, ritual dagger with amethyst pommel sheathed at hip, gold rings and bracelets on right hand.",
     "spells": [
       {
@@ -1297,9 +1307,10 @@ const SEED = {
       },
       {
         "id": "feat_fate_sense",
-        "n": "운명 감지 · 은빛 혀",
-        "t": "배경 특성",
-        "d": "전조와 속내를 잘 읽음. 설득·기만·통찰 판정에 강점."
+        "n": "운명 감지 · 은빛 혀 (Silver Tongue)",
+        "t": "배경 특성 — 사용자 지시로 45회차부터 명시적 규칙 적용",
+        "d": "매력(설득)·매력(기만) 판정에만 적용. d20을 굴려 나온 눈금이 9 이하면 10으로 취급한다(최소 수치 보장, 이점과는 다름). 그 값에 능력 수정치·숙련 보너스를 더해 최종 판정값을 낸다. 통찰은 이 효과에 포함되지 않는다 — 통찰은 별도 숙련으로 처리(아래 `skills` 참고).",
+        "note_ui": "원래 D&D 웅변 대학(College of Eloquence) 바드 3레벨 특성 — 베릭스는 영화 대학(College of Glamour) 예정이라 서브클래스 소속과 무관하게 배경 특성에 이식한 것. 2026-09-20, 사용자 직접 지시로 즉시 반영."
       },
       {
         "id": "feat_scattered_warden_s40",
@@ -2420,7 +2431,7 @@ const SEED = {
       "unknown": "베릭스의 과거 전부(D등급)"
     }
   ],
-  "seedRev": "S45-005"
+  "seedRev": "S45-007"
 };/* ==================== 상태 관리 ==================== */
 const KEY="berix_handbook_v2_17_s40";
 let S = load(), HIST = [];
