@@ -1,0 +1,20 @@
+{
+  "battle": {
+    "name": "여관 마당 — 취객과의 충돌",
+    "cols": 16,
+    "rows": 12,
+    "round": 1,
+    "init": ["neri", "ruffian", "brute", "verrix"],
+    "turn": "verrix",
+    "terrain": [
+      {"x": 8, "y": 4, "w": 3, "h": 3, "type": "hazard", "label": "부서진 짐마차·널브러진 술통더미"}
+    ],
+    "tokens": [
+      {"id": "verrix", "name": "베릭스", "side": "pc", "x": 5, "y": 9, "hp": "49/49", "move": 6, "range": 12},
+      {"id": "neri", "name": "네리", "side": "ally", "x": 6, "y": 9, "hp": "0/17", "down": true, "st": ["의식 없음 — 죽음 내성 대기"], "note": "덩치의 다중공격 2회 명중(9+8)으로 0 HP. 라운드2 자기 턴 시작 시 죽음 내성 굴림 필요.", "move": 6, "range": 30},
+      {"id": "brute", "name": "덩치(취객)", "side": "enemy", "x": 6, "y": 8, "hp": "24/32", "note": "AC14, +5×2회(1d8+3). 네리에게 8 피해(사냥꾼의 표식 포함) 입음", "move": 6, "range": 1},
+      {"id": "ruffian", "name": "뜨내기", "side": "enemy", "x": 9, "y": 5, "hp": "11/11", "note": "AC12, +3(1d6+1). 1라운드는 망설이며 무기만 뽑음 — 아직 공격 안 함", "move": 6, "range": 1},
+      {"id": "driver", "name": "마부", "side": "neutral", "x": 10, "y": 5, "hp": "4/4", "note": "비전투원 — 휘말리면 위험. 전투에 가담하지 않음"}
+    ]
+  }
+}
