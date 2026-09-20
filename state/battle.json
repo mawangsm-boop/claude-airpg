@@ -3,7 +3,7 @@
     "name": "여관 마당 — 취객과의 충돌",
     "cols": 16,
     "rows": 12,
-    "round": 3,
+    "round": 4,
     "init": ["neri", "ruffian", "brute", "verrix"],
     "turn": "verrix",
     "terrain": [
@@ -11,8 +11,8 @@
     ],
     "tokens": [
       {"id": "verrix", "name": "베릭스", "side": "pc", "x": 5, "y": 9, "hp": "34/49", "note": "덩치 다중공격 2회 명중(7+8=15) 피해", "move": 6, "range": 12},
-      {"id": "neri", "name": "네리", "side": "ally", "x": 6, "y": 9, "hp": "7/17", "note": "장궁으로 뜨내기 명중(6피해). 덩치의 다중공격 2회 모두 빗나감(불리점 포함).", "move": 6, "range": 30},
-      {"id": "brute", "name": "덩치(취객)", "side": "enemy", "x": 7, "y": 8, "from": {"x": 11, "y": 4}, "hp": "15/32", "note": "AC14, +5×2회(1d8+3). 네리에게 다중공격 2회 모두 빗나감(11, 7 vs AC15)", "move": 6, "range": 1},
+      {"id": "neri", "name": "네리", "side": "ally", "x": 6, "y": 9, "hp": "0/17", "down": true, "st": ["의식 없음 — 죽음 내성 실패 1"], "note": "숏소드로 덩치 명중(4피해). 덩치의 보복 다중공격 2회 모두 명중(8+5=13)으로 다시 다운.", "move": 6, "range": 30},
+      {"id": "brute", "name": "덩치(취객)", "side": "enemy", "x": 7, "y": 8, "hp": "7/32", "note": "AC14, +5×2회(1d8+3). 네리의 숏소드에 4피해 입음(7/32). 이후 네리에게 다중공격 2회 명중(8+5=13) — 네리 다운", "move": 6, "range": 1},
       {"id": "ruffian", "name": "뜨내기", "side": "enemy", "x": 12, "y": 8, "from": {"x": 8, "y": 6}, "hp": "5/11", "down": false, "note": "AC12, +3(1d6+1). 무기를 버리고 도주 중 — 더 이상 전투 참여 안 함", "move": 6, "range": 1},
       {"id": "driver", "name": "마부", "side": "neutral", "x": 10, "y": 5, "hp": "4/4", "note": "비전투원 — 휘말리면 위험. 전투에 가담하지 않음"}
     ]
