@@ -15,6 +15,9 @@ Isabelle Crane, a human female duelist in her early 30s. Short bob-length black 
 ## 리브 코르사 (동료)
 Liv Corsa, a human female former cult operative in her late 20s. Ash-blonde hair cut short and uneven, a small brand scar near her left temple, wary darting eyes with dark circles beneath. Wearing a stripped-down dark hooded coat with the insignia torn off, worn boots, an empty dagger sheath at her belt.
 
+## 네리 하윅 (동료)
+Neri Hawick, a human female ranger in her mid-20s. Short auburn hair, sun-weathered tan skin, sharp watchful eyes, a faint travel-worn look. Wearing scuffed leather armor under a plain traveler's cloak, a longbow and quiver slung across her back, a half-empty backpack at her feet.
+
 ## 아이린 (NPC)
 Irene, a female half-elf bard in her mid-20s. Elegant embroidered clothing, several ornate rings, expressive charismatic face, minimal visible weapons. Holding an expensive lute, confident sociable posture.
 
@@ -32,6 +35,3 @@ Torben, a human male dock scale-master in his 40s. Broad-shouldered, weathered s
 
 ## 레아 (NPC)
 Rea, a human female former mercenary in her late 20s. Tan brown skin, short-cropped dark brown hair, sturdy build, a healing scar across one shoulder from forcing open the fey arch, tired but resolute eyes. Wearing worn leather armor over practical traveling clothes, a porter's backpack slung over one shoulder.
-
-## 네리 하윅 (NPC)
-Neri Hawick, a human female ranger in her mid-20s. Short auburn hair, sun-weathered tan skin, sharp watchful eyes, a faint travel-worn look. Wearing scuffed leather armor under a plain traveler's cloak, a longbow and quiver slung across her back, a half-empty backpack at her feet.

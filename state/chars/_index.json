@@ -2,7 +2,8 @@
   "pc": "verrix",
   "party": [
     "isabel",
-    "liv"
+    "liv",
+    "neri"
   ],
   "npcs": [
     "entity",
@@ -19,8 +20,7 @@
     "seren",
     "anelli",
     "torben",
-    "rea",
-    "neri"
+    "rea"
   ],
   "npcMinor": "_minor"
 }

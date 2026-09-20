@@ -1,5 +1,5 @@
 {
-  "rev": "S45-005",
-  "updated": "2026-09-20T02:55:00Z",
-  "note": "네리 하윅 신규 등록(state/npcs/neri.json, _index.json 반영) — characters.md·index.html 내장본 재생성"
+  "rev": "S45-006",
+  "updated": "2026-09-20T03:10:00Z",
+  "note": "네리 하윅 정식 합류 — state/chars/neri.json로 승격(임시 npcs 파일 제거), _index.json party 반영. characters.md·index.html 내장본 재생성"
 }
