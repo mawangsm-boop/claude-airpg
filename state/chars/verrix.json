@@ -11,7 +11,7 @@
       "tmp": 0
     },
     "slots": [
-      { "lvl": 1, "cur": 1, "max": 2 }
+      { "lvl": 1, "cur": 0, "max": 2 }
     ],
     "resources": [
       {
