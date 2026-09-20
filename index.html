@@ -408,7 +408,7 @@ const SEED = {
   "checkpoint": "CP-S45-01",
   "session": 45,
   "arc": "열린 길 — 새벽문 원정 (진행 중)",
-  "place": "상단로, 동쪽 상단로 길목 여관 — 이튿날 아침, 출발 준비",
+  "place": "새벽문, 시가지 — 네리와 일시 분리, 저녁",
   "world": {
     "discovered": [
       "silverport",
@@ -581,6 +581,12 @@ const SEED = {
     ]
   },
   "threads": [
+    {
+      "id": "thread_neri_join_s45",
+      "t": "네리, 카를렌行 동행 확정",
+      "x": "45회차, 베릭스가 네리에게 카를렌 동행과 물약 재료 수급 일을 제안 — 네리가 수락했다. 오늘은 각자 볼일(네리는 부모님 방문)을 보고, 모레 아침 새벽문 입구에서 재회하기로 함.",
+      "st": "open"
+    },
     {
       "id": "thread_potion_shop_s45",
       "t": "창고를 물약 공방·상점으로",
@@ -2480,7 +2486,7 @@ const SEED = {
       "unknown": "베릭스의 과거 전부(D등급)"
     }
   ],
-  "seedRev": "S45-023"
+  "seedRev": "S45-024"
 };/* ==================== 상태 관리 ==================== */
 const KEY="berix_handbook_v2_17_s40";
 let S = load(), HIST = [];
