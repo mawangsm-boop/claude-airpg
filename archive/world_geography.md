@@ -61,7 +61,7 @@
 | knotruin1 | 능선의 매듭 유적 | (world.json 참고) | 매듭 코어 처리 완료 |
 
 ## 세션 중 발견된 지점 (world.json customPlaces, 요약)
-새벽문 인근: 출입초소 4곳(outpost1~4), 서쪽 폐갱도(westmine), 새벽문 뒷골목 은신처(vesper_workshop), 폐채석장(old_quarry), 옛 요정 신단 소문(feyshrine_rumor), 그림자 없는 벌판(shadowless_plain), 동쪽 능선 갈래 미확인(knotruin2_hint), 상단로 길목 주막(eastroad_waypost, 1480,1210) — 전부 world.json 원본이 최신 출처이며, 이 표는 요약일 뿐입니다.
+새벽문 인근: 출입초소 4곳(outpost1~4), 서쪽 폐갱도(westmine), 새벽문 뒷골목 은신처(vesper_workshop), 폐채석장(old_quarry), 옛 요정 신단 소문(feyshrine_rumor), 그림자 없는 벌판(shadowless_plain), 동쪽 능선 갈래 미확인(knotruin2_hint), 상단로 길목 여관(eastroad_waypost, 1480,1210) — 전부 world.json 원본이 최신 출처이며, 이 표는 요약일 뿐입니다.
 
 ## 42회차 시점 탐사 경계
 새벽문(1257,1283) → 상단로 → 카를렌(1700,1150)까지 이동 경로가 확인됨. 카를렌 동쪽(거울호·서리이빨 산맥 포함)은 아직 실제로 가본 곳이 아니라 지도상 지형만 알려진 상태 — 본 적 없는 곳을 가본 것처럼 서술하지 않는다.
