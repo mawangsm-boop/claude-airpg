@@ -1,5 +1,5 @@
 {
-  "rev": "S45-004",
-  "updated": "2026-09-20T02:40:00Z",
-  "note": "상단로 길목 지점 명칭 정정(\"주막\"→\"여관\") — world.json·world_geography.md, index.html 내장본 재생성. core.json 위치를 상단로 이동 중으로 갱신"
+  "rev": "S45-005",
+  "updated": "2026-09-20T02:55:00Z",
+  "note": "네리 하윅 신규 등록(state/npcs/neri.json, _index.json 반영) — characters.md·index.html 내장본 재생성"
 }

@@ -32,3 +32,6 @@ Torben, a human male dock scale-master in his 40s. Broad-shouldered, weathered s
 
 ## 레아 (NPC)
 Rea, a human female former mercenary in her late 20s. Tan brown skin, short-cropped dark brown hair, sturdy build, a healing scar across one shoulder from forcing open the fey arch, tired but resolute eyes. Wearing worn leather armor over practical traveling clothes, a porter's backpack slung over one shoulder.
+
+## 네리 하윅 (NPC)
+Neri Hawick, a human female ranger in her mid-20s. Short auburn hair, sun-weathered tan skin, sharp watchful eyes, a faint travel-worn look. Wearing scuffed leather armor under a plain traveler's cloak, a longbow and quiver slung across her back, a half-empty backpack at her feet.
