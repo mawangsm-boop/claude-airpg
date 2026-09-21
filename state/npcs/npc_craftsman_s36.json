@@ -1,0 +1,22 @@
+{
+  "char": {
+    "id": "npc_craftsman_s36",
+    "name": "은둔 세공사",
+    "role": "남성 · 인간 · 70대 · 폐채석장 은거 각인술사",
+    "tag": "폐채석장 거주 · 재회 가능",
+    "tagc": "",
+    "trait": "여명 결사가 눈감아준 이단 각인술사 코르빈(감독)의 옛 스승뻘. 36회차, 코르빈의 최종 자동인형에서 회수한 구동핵을 베릭스 일행에게 넘겨줬다. 처음엔 낯선 방문객을 경계했으나, 코르빈의 진상을 밝혀준 것에 고마워하며 마음을 열었다. 이름은 밝힌 적 없음.",
+    "align": "중립",
+    "voice": "낮고 짧은 말투. 말끝을 흐리다가 핵심만 짚는다 — \"실종된 지 오래됐는데, 최근 능선 쪽에서 그자의 작품이 나온다는 소문을 듣고—\"(36회차)",
+    "drive": "조용히 남은 생을 보내는 것. 코르빈에 대한 오랜 궁금증은 36회차에 풀렸다.",
+    "fear": "코르빈이 만든 것들이 또 사람을 해치는 것 — 제자를 막지 못했다는 죄책감이 남아 있다.",
+    "code": {
+      "does": "아는 것은 숨기지 않고 말한다. 은혜는 갚는다.",
+      "wont": "먼저 나서서 위험한 일에 뛰어들지 않는다 — 이제 그럴 기력도 없다."
+    },
+    "bond": "36회차, 베릭스 일행이 코르빈의 최후를 밝혀준 것에 고마워함. 우호적, 재회 가능.",
+    "knows": "코르빈(감독)이 이단 각인술사였다는 것, 그가 만든 파수병·자동인형의 존재와 대략적 성질(직접 목격·경험, A등급). 36회차 시점, 능선 쪽에서 코르빈의 작품이 나온다는 소문을 들었다는 것(C등급, 출처 불명 소문)",
+    "unknown": "베릭스 일행의 정체 전부(D등급) · 45회차 현재 시점 소문이 더 구체화됐는지는 재확인 필요",
+    "look": "An elderly human man in his 70s, hermit engraver. Deep wrinkles, tired eyes with dark circles beneath from long hours of close work, thinning white hair. Wearing a worn leather work apron over simple homespun clothes, ink and metal-filing stains on his hands and sleeves."
+  }
+}
