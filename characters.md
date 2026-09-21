@@ -30,6 +30,9 @@ Vera Holden, a human female guild branch administrator in her early 30s. Chestnu
 ## 베스퍼(빈 그릇) (NPC)
 A human woman around 20, small and thin-framed. Plain unstyled dark hair tied back loosely, pale skin from years spent indoors, a blank expressionless face with unfocused eyes. Wearing simple worn work clothes suited for a back-alley workshop — a plain long-sleeved tunic and apron, no jewelry or adornment. A faint seam of exposed mechanism visible at the collarbone where the drive core sits beneath the skin.
 
+## 이드라 (NPC)
+Idra, a human female hermit druid in her early 30s. Long dark brown wavy hair, loose and unkempt, falling past her shoulders. Hazel-green eyes with a quiet, guarded look. Pale skin rarely touched by direct sun, a few faint old scars across her hands. Wearing a worn moss-green and brown robe of rough weave over simple leathers, a rope belt hung with small pouches of dried herbs. Holding a gnarled branch staff. Barefoot.
+
 ## 세렌 (NPC)
 Seren, a human female investigator in her late 20s. Straight dark hair tied back tightly, sharp calculating eyes, composed unreadable expression. Wearing a plain traveler's cloak over a fitted dark coat, no visible insignia, a slim ledger and short blade at her belt.
 
@@ -39,8 +42,8 @@ Anelli Sorn, a human female deed broker in her early 30s. Chestnut hair pinned u
 ## 토르벤 (NPC)
 Torben, a human male dock scale-master in his 40s. Broad-shouldered, weathered sun-darkened skin, a thick grey-streaked beard, small hard eyes that seem to measure everything. Wearing a heavy leather apron over rough dockworker's clothes, sleeves rolled to the elbow, a hooked iron loading pole resting on one shoulder like a tool rather than a weapon.
 
-## 레아 (NPC)
-Rea, a human female former mercenary in her late 20s. Tan brown skin, short-cropped dark brown hair, sturdy build, a healing scar across one shoulder from forcing open the fey arch, tired but resolute eyes. Wearing worn leather armor over practical traveling clothes, a porter's backpack slung over one shoulder.
+## 레아(빈 그릇) (NPC)
+Rea, a human female former mercenary in her late 20s. Tan brown skin, short-cropped dark brown hair, sturdy build, a healing scar across one shoulder from forcing open the fey arch. Eyes now unfocused and empty, no trace of the wariness or grief she once carried. Wearing worn leather armor over practical traveling clothes.
 
 ## 은둔 세공사 (NPC)
 An elderly human man in his 70s, hermit engraver. Deep wrinkles, tired eyes with dark circles beneath from long hours of close work, thinning white hair. Wearing a worn leather work apron over simple homespun clothes, ink and metal-filing stains on his hands and sleeves.
