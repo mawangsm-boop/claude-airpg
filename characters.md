@@ -24,6 +24,9 @@ Irene, a female half-elf bard in her mid-20s. Elegant embroidered clothing, seve
 ## 테사 밀번 (NPC)
 Tessa Milburn, a human female independent relic hunter in her late 20s. Faint freckles scattered across her face, messy brown curly hair tied back loosely, quick sharp eyes with a mischievous glint, confident lopsided grin. Wearing a patched brown leather jacket over practical travel clothes, a wide utility belt hung with lockpicks and small tools, fingerless gloves, scuffed boots suited for climbing and crawling through ruins.
 
+## 베라 홀든 (NPC)
+Vera Holden, a human female guild branch administrator in her early 30s. Chestnut brown hair usually pinned up neatly for work, sharp attentive eyes, a composed professional bearing. Wearing a fitted dark blue vest over a cream blouse, sleeves rolled to the elbow, a loupe on a cord around her neck.
+
 ## 베스퍼(빈 그릇) (NPC)
 A human woman around 20, small and thin-framed. Plain unstyled dark hair tied back loosely, pale skin from years spent indoors, a blank expressionless face with unfocused eyes. Wearing simple worn work clothes suited for a back-alley workshop — a plain long-sleeved tunic and apron, no jewelry or adornment. A faint seam of exposed mechanism visible at the collarbone where the drive core sits beneath the skin.
 
