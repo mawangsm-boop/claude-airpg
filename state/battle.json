@@ -3,17 +3,17 @@
     "name": "동쪽 갈래 — 능선의 파수병",
     "cols": 16,
     "rows": 12,
-    "round": 2,
+    "round": 3,
     "init": ["golemB", "sentinel", "golemA", "verrix"],
     "turn": "verrix",
     "terrain": [
       {"x": 6, "y": 3, "w": 4, "h": 3, "type": "hazard", "label": "바위투성이 빈터 — 은폐물"}
     ],
     "tokens": [
-      {"id": "verrix", "name": "베릭스", "side": "pc", "x": 5, "y": 7, "hp": "27/49", "note": "파수병 6피해, 골조A 5피해 — 3면 포위 상태", "move": 6, "range": 12},
-      {"id": "sentinel", "name": "능선의 파수병", "side": "enemy", "x": 4, "y": 7, "from": {"x": 8, "y": 5}, "hp": "32/32", "note": "AC16, +5×2회(1d10+3). 구동핵은 등·어깨 이음매, 첫 추출 시도는 코르빈의 방비로 자동 실패. 베릭스에게 6피해", "move": 6, "range": 1},
-      {"id": "golemA", "name": "순찰 골조A", "side": "enemy", "x": 5, "y": 6, "hp": "15/15", "note": "AC15, +4(1d8+2). 비살상용 구속 장치. 베릭스에게 5피해", "move": 6, "range": 1},
-      {"id": "golemB", "name": "순찰 골조B", "side": "enemy", "x": 6, "y": 7, "hp": "9/15", "note": "AC15, +4(1d8+2). 비살상용 구속 장치", "move": 6, "range": 1}
+      {"id": "verrix", "name": "베릭스", "side": "pc", "x": 5, "y": 7, "hp": "24/49", "note": "파수병 다중공격 2회 명중(15피해)으로 재생의 부적 자동발동(11회복, 충전 소진). 부적 둘 다 소진", "move": 6, "range": 12},
+      {"id": "sentinel", "name": "능선의 파수병", "side": "enemy", "x": 4, "y": 7, "hp": "32/32", "note": "AC16, +5×2회(1d10+3). 구동핵은 등·어깨 이음매, 첫 추출 시도는 코르빈의 방비로 자동 실패", "move": 6, "range": 1},
+      {"id": "golemA", "name": "순찰 골조A", "side": "enemy", "x": 5, "y": 6, "hp": "15/15", "note": "AC15, +4(1d8+2). 비살상용 구속 장치", "move": 6, "range": 1},
+      {"id": "golemB", "name": "순찰 골조B", "side": "enemy", "x": 6, "y": 7, "hp": "2/15", "note": "AC15, +4(1d8+2). 비살상용 구속 장치. 빈사", "move": 6, "range": 1}
     ]
   }
 }
