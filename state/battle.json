@@ -3,15 +3,15 @@
     "name": "동쪽 갈래 — 능선의 파수병",
     "cols": 16,
     "rows": 12,
-    "round": 4,
+    "round": 5,
     "init": ["sentinel", "golemA", "verrix"],
     "turn": "verrix",
     "terrain": [
       {"x": 6, "y": 3, "w": 4, "h": 3, "type": "hazard", "label": "바위투성이 빈터 — 은폐물"}
     ],
     "tokens": [
-      {"id": "verrix", "name": "베릭스", "side": "pc", "x": 5, "y": 7, "hp": "20/49", "note": "파수병에게 7피해 입음. 골조A는 빗나감. 충전형 아이템 소진 상태", "move": 6, "range": 12},
-      {"id": "sentinel", "name": "능선의 파수병", "side": "enemy", "x": 4, "y": 7, "hp": "32/32", "note": "AC16, +5×2회(1d10+3). 구동핵은 등·어깨 이음매, 첫 추출 시도는 코르빈의 방비로 자동 실패", "move": 6, "range": 1},
+      {"id": "verrix", "name": "베릭스", "side": "pc", "x": 6, "y": 7, "hp": "14/49", "note": "파수병 7피해, 골조A 4피해 — 위험 수위. 충전형 아이템·물약 소진, 1레벨 슬롯 1개 남음", "move": 6, "range": 12},
+      {"id": "sentinel", "name": "능선의 파수병", "side": "enemy", "x": 6, "y": 8, "from": {"x": 11, "y": 3}, "hp": "20/32", "note": "AC16, +5×2회(1d10+3). 구동핵은 등·어깨 이음매, 첫 추출 시도는 코르빈의 방비로 자동 실패", "move": 6, "range": 1},
       {"id": "golemA", "name": "순찰 골조A", "side": "enemy", "x": 5, "y": 6, "hp": "15/15", "note": "AC15, +4(1d8+2). 비살상용 구속 장치", "move": 6, "range": 1},
       {"id": "golemB", "name": "순찰 골조B", "side": "enemy", "x": 6, "y": 7, "hp": "0/15", "down": true, "note": "처치됨"}
     ]

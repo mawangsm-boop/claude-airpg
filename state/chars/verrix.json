@@ -13,7 +13,7 @@
     "slots": [
       {
         "lvl": 1,
-        "cur": 2,
+        "cur": 1,
         "max": 2
       }
     ],
@@ -239,7 +239,7 @@
       {
         "id": "item_healing_potion",
         "n": "회복 물약",
-        "q": 6,
+        "q": 5,
         "d": "사용 시 2d4+2 HP 회복.",
         "cat": "consumable"
       },
