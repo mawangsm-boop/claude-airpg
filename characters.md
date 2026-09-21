@@ -33,6 +33,9 @@ A human woman around 20, small and thin-framed. Plain unstyled dark hair tied ba
 ## 이드라 (NPC)
 Idra, a human female hermit druid in her early 30s. Long dark brown wavy hair, loose and unkempt, falling past her shoulders. Hazel-green eyes with a quiet, guarded look. Pale skin rarely touched by direct sun, a few faint old scars across her hands. Wearing a worn moss-green and brown robe of rough weave over simple leathers, a rope belt hung with small pouches of dried herbs. Holding a gnarled branch staff. Barefoot.
 
+## 다리아 (NPC)
+Daria, a human female trapper in her early 30s. Sandy light-brown hair tied back in a loose braid, sun-weathered skin, keen amber eyes, a lean wiry build. Wearing fur-trimmed leather trapper's gear over practical travel clothes, a hunting bow slung across her back, a quiver and skinning knife at her belt.
+
 ## 세렌 (NPC)
 Seren, a human female investigator in her late 20s. Straight dark hair tied back tightly, sharp calculating eyes, composed unreadable expression. Wearing a plain traveler's cloak over a fitted dark coat, no visible insignia, a slim ledger and short blade at her belt.
 
