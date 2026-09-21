@@ -3,16 +3,16 @@
     "name": "동쪽 갈래 — 파수병 재도전",
     "cols": 16,
     "rows": 12,
-    "round": 2,
-    "init": ["golemA", "sentinel", "neri", "verrix"],
+    "round": 3,
+    "init": ["sentinel", "neri", "verrix"],
     "turn": "verrix",
     "terrain": [
       {"x": 6, "y": 3, "w": 4, "h": 3, "type": "hazard", "label": "바위투성이 빈터 — 은폐물"}
     ],
     "tokens": [
-      {"id": "verrix", "name": "베릭스", "side": "pc", "x": 5, "y": 7, "hp": "33/49", "note": "파수병 다중공격 2회 명중(16피해)", "move": 6, "range": 12},
-      {"id": "neri", "name": "네리", "side": "ally", "x": 6, "y": 7, "hp": "14/17", "note": "골조A에게 3피해 입음", "move": 6, "range": 30},
-      {"id": "sentinel", "name": "능선의 파수병", "side": "enemy", "x": 8, "y": 5, "hp": "20/32", "note": "AC16, +5×2회(1d10+3). 구동핵은 등·어깨 이음매", "move": 6, "range": 1},
+      {"id": "verrix", "name": "베릭스", "side": "pc", "x": 5, "y": 7, "hp": "37/49", "note": "파수병 명중(7피해)+자가회복4", "move": 6, "range": 12},
+      {"id": "neri", "name": "네리", "side": "ally", "x": 6, "y": 7, "hp": "1/17", "note": "파수병에게 13피해 — 위험 수위", "move": 6, "range": 30},
+      {"id": "sentinel", "name": "능선의 파수병", "side": "enemy", "x": 8, "y": 5, "hp": "4/32", "note": "AC16, +5×2회(1d10+3). 구동핵은 등·어깨 이음매. 빈사", "move": 6, "range": 1},
       {"id": "golemA", "name": "순찰 골조A", "side": "enemy", "x": 9, "y": 6, "hp": "0/15", "down": true, "note": "처치됨"}
     ]
   }
