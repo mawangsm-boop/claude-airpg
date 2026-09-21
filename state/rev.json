@@ -1,5 +1,5 @@
 {
-  "rev": "S46-025",
-  "updated": "2026-09-21T17:15:00Z",
-  "note": "새 특성 확정 — 심목의 잔재(식물과의 대화 1일 1회, 무소모). verrix.json feats 추가"
+  "rev": "S46-026",
+  "updated": "2026-09-21T17:40:00Z",
+  "note": "이드라 정식 합류 — npcs/에서 chars/로 이동, party 편입. HP 90→38(심목 결속 소멸), susp 1(clock_idra_doubt 이관). thread_idra_recruit_s46 resolved"
 }

@@ -18,6 +18,9 @@ Liv Corsa, a human female former cult operative in her late 20s. Ash-blonde hair
 ## 네리 하윅 (동료)
 Neri Hawick, a human female ranger in her mid-20s. Short auburn hair, sun-weathered tan skin, sharp watchful eyes, a faint travel-worn look. Wearing scuffed leather armor under a plain traveler's cloak, a longbow and quiver slung across her back, a half-empty backpack at her feet.
 
+## 이드라 (동료)
+Idra, a human female hermit druid in her early 30s. Long dark brown wavy hair, loose and unkempt, falling past her shoulders. Hazel-green eyes with a quiet, guarded look. Pale skin rarely touched by direct sun, a few faint old scars across her hands. Wearing a worn moss-green and brown robe of rough weave over simple leathers, a rope belt hung with small pouches of dried herbs. Holding a gnarled branch staff. Barefoot.
+
 ## 아이린 (NPC)
 Irene, a female half-elf bard in her mid-20s. Elegant embroidered clothing, several ornate rings, expressive charismatic face, minimal visible weapons. Holding an expensive lute, confident sociable posture.
 
@@ -29,9 +32,6 @@ Vera Holden, a human female guild branch administrator in her early 30s. Chestnu
 
 ## 베스퍼(빈 그릇) (NPC)
 A human woman around 20, small and thin-framed. Plain unstyled dark hair tied back loosely, pale skin from years spent indoors, a blank expressionless face with unfocused eyes. Wearing simple worn work clothes suited for a back-alley workshop — a plain long-sleeved tunic and apron, no jewelry or adornment. A faint seam of exposed mechanism visible at the collarbone where the drive core sits beneath the skin.
-
-## 이드라 (NPC)
-Idra, a human female hermit druid in her early 30s. Long dark brown wavy hair, loose and unkempt, falling past her shoulders. Hazel-green eyes with a quiet, guarded look. Pale skin rarely touched by direct sun, a few faint old scars across her hands. Wearing a worn moss-green and brown robe of rough weave over simple leathers, a rope belt hung with small pouches of dried herbs. Holding a gnarled branch staff. Barefoot.
 
 ## 다리아 (NPC)
 Daria, a human female trapper in her early 30s. Sandy light-brown hair tied back in a loose braid, sun-weathered skin, keen amber eyes, a lean wiry build. Wearing fur-trimmed leather trapper's gear over practical travel clothes, a hunting bow slung across her back, a quiver and skinning knife at her belt.
