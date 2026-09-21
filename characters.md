@@ -47,3 +47,6 @@ Rea, a human female former mercenary in her late 20s. Tan brown skin, short-crop
 
 ## 은둔 세공사 (NPC)
 An elderly human man in his 70s, hermit engraver. Deep wrinkles, tired eyes with dark circles beneath from long hours of close work, thinning white hair. Wearing a worn leather work apron over simple homespun clothes, ink and metal-filing stains on his hands and sleeves.
+
+## 홀트 (NPC)
+Holt, a human male village chief in his 50s. Weathered sun-browned skin, close-cropped greying hair, a thick trapper's beard, calloused hands. Wearing worn layered furs and leather over practical trapper's clothes, a hatchet at his belt.

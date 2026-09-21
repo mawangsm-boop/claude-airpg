@@ -1,0 +1,21 @@
+{
+  "char": {
+    "id": "holt",
+    "name": "홀트",
+    "role": "남성 · 인간 · 50대 · 가시울 마을 촌장 · 트래퍼",
+    "tag": "재회 · 거래선 후보",
+    "tagc": "",
+    "trait": "38회차, 숲의 오염(변이 멧돼지·곰의 매복) 사건 당시 베릭스 일행에게 사정을 설명하고 사례로 치유의 나무껍질 부적을 건넸다. 그 이후로는 접점이 없었다.",
+    "voice": "반말 섞인 투박한 존댓말. 말을 아끼고 본론부터 말한다 — \"…뭐 필요해서 왔소?\"",
+    "drive": "마을 사람들 먹고사는 것. 숲이 다시 위험해지는 것을 가장 경계한다.",
+    "fear": "38회차 같은 일이 또 벌어지는 것 — 숲이 미치고 사냥꾼이 실종되는 것.",
+    "bond": "38회차, 베릭스 일행이 숲의 오염을 해결해준 은인으로 기억한다. 호의적이나 아직 깊은 신뢰까지는 아니다.",
+    "code": {
+      "does": "값을 정직하게 부른다. 마을에 이득이 되면 낯선 거래도 받아들인다.",
+      "wont": "마을 사람의 안전과 바꾸는 거래는 하지 않는다."
+    },
+    "knows": "가시울 마을과 인접 핏빛숲의 사정(A등급). 38회차 오염 사건의 전말(직접 겪음, A등급). 이드라가 심목을 지키며 상주한다는 것(A등급, 인접해 오래 지내며 알게 됨).",
+    "unknown": "베릭스 일행의 정체·과거 전부(D등급). 이드라와 베릭스의 관계(D등급, 숲에 자주 드나드는 것은 어렴풋이 알 수 있으나 캐묻지 않는다).",
+    "look": "Holt, a human male village chief in his 50s. Weathered sun-browned skin, close-cropped greying hair, a thick trapper's beard, calloused hands. Wearing worn layered furs and leather over practical trapper's clothes, a hatchet at his belt."
+  }
+}
