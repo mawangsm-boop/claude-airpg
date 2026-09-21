@@ -1,5 +1,5 @@
 {
-  "rev": "S45-038",
-  "updated": "2026-09-21T04:05:00Z",
-  "note": "log.json 정리 — 80항목 초과 경고에 따라 39·40·41(TEST) 회차 38건을 archive/log_archive.json으로 이관(81→43항목, 41~45회차만 유지)"
+  "rev": "S45-040",
+  "updated": "2026-09-21T04:15:00Z",
+  "note": "체크포인트 02 생성(긴 휴식 트리거) — checkpoint.json next_cp_index 3, core.json 위치 갱신"
 }
