@@ -1,6 +1,7 @@
 {
   "world": {
     "discovered": [
+      "knotruin2_hint",
       "silverport",
       "ravenport",
       "millbrook",
@@ -28,7 +29,7 @@
       "karlen_hint",
       "eastroad_waypost"
     ],
-    "here": "karlen_hint",
+    "here": "knotruin2_hint",
     "customPlaces": [
       {
         "id": "outpost3",
@@ -86,12 +87,12 @@
       },
       {
         "id": "knotruin2_hint",
-        "n": "동쪽 능선 갈래 (미확인)",
-        "t": "봉인 나침반 반응 지점",
+        "n": "동쪽 갈래",
+        "t": "결사도 손대지 못한 능선 구간",
         "x": 1210,
         "y": 1260,
-        "d": "33회차, 봉인 나침반이 가리킨 방향. 새벽문에서 하루 이상 거리로 추정. 정확한 위치 미확인.",
-        "cat": "waypoint"
+        "d": "33회차, 봉인 나침반이 가리킨 방향으로 추정되던 곳. 45회차, 폐채석장 세공사의 소문(능선에서 코르빈의 작품이 나온다는 것)과 같은 지점으로 확인됐다 — 두 단서가 같은 곳을 가리켰다. 실제로 도착해보니 사슬 없이 선 파수병 1기와 순찰 골조 2기가 지키고 있다(45회차, 아직 교전 전).",
+        "cat": "dungeon"
       },
       {
         "id": "vesper_workshop",
