@@ -5,15 +5,15 @@
     "rows": 12,
     "round": 1,
     "init": ["golemB", "sentinel", "golemA", "verrix"],
-    "turn": "golemB",
+    "turn": "verrix",
     "terrain": [
       {"x": 6, "y": 3, "w": 4, "h": 3, "type": "hazard", "label": "바위투성이 빈터 — 은폐물"}
     ],
     "tokens": [
-      {"id": "verrix", "name": "베릭스", "side": "pc", "x": 5, "y": 7, "hp": "49/49", "note": "기습 공격 명중(5피해, 자가회복분 이미 최대치라 무효)", "move": 6, "range": 12},
-      {"id": "sentinel", "name": "능선의 파수병", "side": "enemy", "x": 8, "y": 5, "hp": "32/32", "st": ["기습당함 — 1라운드 행동 불가"], "note": "AC16, +5×2회(1d10+3). 구동핵은 등·어깨 이음매, 첫 추출 시도는 코르빈의 방비로 자동 실패", "move": 6, "range": 1},
-      {"id": "golemA", "name": "순찰 골조A", "side": "enemy", "x": 9, "y": 6, "hp": "15/15", "note": "AC15, +4(1d8+2). 비살상용 구속 장치", "move": 6, "range": 1},
-      {"id": "golemB", "name": "순찰 골조B", "side": "enemy", "x": 7, "y": 4, "hp": "15/15", "note": "AC15, +4(1d8+2). 비살상용 구속 장치", "move": 6, "range": 1}
+      {"id": "verrix", "name": "베릭스", "side": "pc", "x": 5, "y": 7, "hp": "35/49", "note": "골조 둘에게 각각 9·5 피해 입음", "move": 6, "range": 12},
+      {"id": "sentinel", "name": "능선의 파수병", "side": "enemy", "x": 8, "y": 5, "hp": "32/32", "note": "AC16, +5×2회(1d10+3). 구동핵은 등·어깨 이음매, 첫 추출 시도는 코르빈의 방비로 자동 실패. 기습으로 1라운드 행동 못 함", "move": 6, "range": 1},
+      {"id": "golemA", "name": "순찰 골조A", "side": "enemy", "x": 5, "y": 6, "from": {"x": 9, "y": 6}, "hp": "15/15", "note": "AC15, +4(1d8+2). 비살상용 구속 장치. 베릭스에게 5피해", "move": 6, "range": 1},
+      {"id": "golemB", "name": "순찰 골조B", "side": "enemy", "x": 6, "y": 7, "from": {"x": 7, "y": 4}, "hp": "15/15", "note": "AC15, +4(1d8+2). 비살상용 구속 장치. 베릭스에게 9피해", "move": 6, "range": 1}
     ]
   }
 }
