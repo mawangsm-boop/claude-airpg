@@ -1,5 +1,5 @@
 {
-  "rev": "S45-055",
-  "updated": "2026-09-21T06:35:00Z",
-  "note": "레벨업 1→2(Expertise·Jack of All Trades 원문 대조 완료) + 긴 휴식(rest.js). 체크포인트 03 생성 — checkpoint.json·core.json 갱신. 사용자 종료 의사에 따른 회차 마무리"
+  "rev": "S45-056",
+  "updated": "2026-09-21T06:45:00Z",
+  "note": "2레벨 정정 — 사용자 제공 2024 원문 반영. HP+8(57/57), 슬롯 확정 표기, Jack of All Trades 이니셔티브 제외 명시. 준비 주문 5번째 선택 대기"
 }
