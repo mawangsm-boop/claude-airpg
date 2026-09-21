@@ -1,0 +1,19 @@
+{
+  "battle": {
+    "name": "동쪽 갈래 — 파수병 재도전",
+    "cols": 16,
+    "rows": 12,
+    "round": 1,
+    "init": ["neri", "verrix", "sentinel", "golemA"],
+    "turn": "verrix",
+    "terrain": [
+      {"x": 6, "y": 3, "w": 4, "h": 3, "type": "hazard", "label": "바위투성이 빈터 — 은폐물"}
+    ],
+    "tokens": [
+      {"id": "verrix", "name": "베릭스", "side": "pc", "x": 5, "y": 7, "hp": "49/49", "move": 6, "range": 12},
+      {"id": "neri", "name": "네리", "side": "ally", "x": 6, "y": 7, "hp": "17/17", "move": 6, "range": 30},
+      {"id": "sentinel", "name": "능선의 파수병", "side": "enemy", "x": 8, "y": 5, "hp": "20/32", "note": "AC16, +5×2회(1d10+3). 구동핵은 등·어깨 이음매, 재접근 시도는 두 번째부터 판정 가능", "move": 6, "range": 1},
+      {"id": "golemA", "name": "순찰 골조A", "side": "enemy", "x": 9, "y": 6, "hp": "8/15", "note": "AC15, +4(1d8+2). 비살상용 구속 장치. 네리에게 7피해 입음", "move": 6, "range": 1}
+    ]
+  }
+}
