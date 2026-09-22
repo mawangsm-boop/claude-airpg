@@ -52,6 +52,9 @@ nav button:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
   padding:7px 9px;margin-bottom:5px;cursor:pointer;font-size:12px;line-height:1.55}
 .sr b{color:var(--gold-s);display:block;margin-bottom:2px}
 .sr em{color:var(--parch);font-style:normal;background:rgba(201,164,87,.22);border-radius:2px}
+/* v2.30: 검색 결과 → 인물 카드로 실제 이동했음을 보여주는 하이라이트 */
+@keyframes srflash{0%{box-shadow:0 0 0 3px rgba(201,164,87,.9)}100%{box-shadow:0 0 0 3px rgba(201,164,87,0)}}
+.sr-flash{animation:srflash 1.6s ease-out}
 main{padding:12px}
 section{display:none} section.on{display:block}
 /* 던전·전투·대륙 탭: 페이지 전체 스크롤을 잠그고, 지도 카드는 내용에 맞춰, 정보 카드만 내부 스크롤 */
@@ -2826,7 +2829,7 @@ function personCard(a,opts={}){
   const num=opts.num?`<b style="color:var(--gold-s);margin-right:4px">${opts.num}.</b>`:"";
   const r=a.hp?a.hp.cur/a.hp.max:1;
   const pb=photoBlock(a);
-  return `<div class="card" style="${opts.dim?"opacity:.9":""}"><div class="p-h2wrap"><h2>${num}${name} ${badges}${mv}</h2>${pb.big?"":pb.html}</div>
+  return `<div class="card" ${a.id?`id="pc_${qEsc(a.id)}"`:""} style="${opts.dim?"opacity:.9":""}"><div class="p-h2wrap"><h2>${num}${name} ${badges}${mv}</h2>${pb.big?"":pb.html}</div>
     ${pb.big?pb.html:""}
     ${a.role?`<div class="note">${a.role}</div>`:""}
     ${a.hp?`<div class="barlbl" style="margin-top:8px"><span>HP</span><span>${a.hp.cur}/${a.hp.max}</span></div>
@@ -3499,16 +3502,16 @@ let LAST_TAB="char";
 const qEsc=t=>String(t==null?"":t).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
 function searchIndex(){
   const rows=[];
-  const add=(cat,tab,title,text)=>{ if(text) rows.push({cat,tab,title,text:String(text)}); };
+  const add=(cat,tab,title,text,id)=>{ if(text) rows.push({cat,tab,title,text:String(text),id}); };
   const p=S.pc||{};
   add("캐릭터","char",p.name||"베릭스",[p.cls,p.race,p.surface,p.goal,p.status].filter(Boolean).join(" · "));
   (p.items||[]).forEach(i=>add("소지품","char",i.n,[i.d,i.note_ui].filter(Boolean).join(" ")));
   (p.feats||[]).forEach(f=>add("특성","char",f.n,f.d));
   (p.spells||[]).forEach(x=>add("주문","char",x.n,[x.t,x.c,x.d].filter(Boolean).join(" · ")));
   const person=(a,cat)=>{
-    add(cat,"party",a.name||a.n,[a.role,a.tag,a.trait,a.voice,a.drive,a.bond,a.knows,a.unknown,a.comply].filter(Boolean).join(" "));
-    (a.equipment||[]).forEach(e=>add("동료 장비","party",`${a.name} — ${e.item}`,[e.slot,e.desc].filter(Boolean).join(" · ")));
-    (a.items||[]).forEach(i=>add("동료 소지품","party",`${a.name} — ${i.n}`,i.d));
+    add(cat,"party",a.name||a.n,[a.role,a.tag,a.trait,a.voice,a.drive,a.bond,a.knows,a.unknown,a.comply].filter(Boolean).join(" "),a.id);
+    (a.equipment||[]).forEach(e=>add("동료 장비","party",`${a.name} — ${e.item}`,[e.slot,e.desc].filter(Boolean).join(" · "),a.id));
+    (a.items||[]).forEach(i=>add("동료 소지품","party",`${a.name} — ${i.n}`,i.d,a.id));
   };
   (S.party||[]).forEach(a=>person(a,"동료"));
   (S.npcs||[]).forEach(a=>person(a,"인물"));
@@ -3553,7 +3556,7 @@ function runSearch(q){
     + Object.keys(byCat).map(cat=>{
         const list=byCat[cat];
         return `<div class="sr-g">${qEsc(cat)} (${list.length})</div>`
-          + list.slice(0,8).map(h=>`<div class="sr" data-tab="${h.tab}"><b>${mark(h.title)}</b>${mark(h.text)}</div>`).join("")
+          + list.slice(0,8).map(h=>`<div class="sr" data-tab="${h.tab}" data-id="${h.id?qEsc(h.id):""}"><b>${mark(h.title)}</b>${mark(h.text)}</div>`).join("")
           + (list.length>8?`<div class="note">… 외 ${list.length-8}건</div>`:"");
       }).join("");
   window.scrollTo(0,0);
@@ -3561,8 +3564,19 @@ function runSearch(q){
 $("searchPanel").addEventListener("click",e=>{
   const row=e.target.closest(".sr"); if(!row) return;
   LAST_TAB=row.dataset.tab;
+  const targetId=row.dataset.id;
   $("qBox").value=""; $("s-search").classList.remove("on");
   document.querySelector(`nav button[data-t="${row.dataset.tab}"]`).click();
+  /* v2.30: 인물 검색 결과는 탭 맨 위가 아니라 실제 그 인물 카드로 스크롤·하이라이트한다 */
+  if(targetId){
+    setTimeout(()=>{
+      const el=document.getElementById("pc_"+targetId);
+      if(!el) return;
+      el.scrollIntoView({behavior:"smooth",block:"start"});
+      el.classList.add("sr-flash");
+      setTimeout(()=>el.classList.remove("sr-flash"),1600);
+    },30);
+  }
 });
 $("qBox").addEventListener("input",e=>runSearch(e.target.value));
 $("qClear").onclick=()=>{ $("qBox").value=""; runSearch(""); };
