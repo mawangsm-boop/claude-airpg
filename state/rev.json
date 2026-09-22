@@ -1,5 +1,5 @@
 {
-  "rev": "S47-001",
-  "updated": "2026-09-22T01:00:00Z",
-  "note": "47회차 \"저울과 뒷문\" 개시 — core.json·checkpoint.json 회차 전환, clocks.json에 clock_shop_open·clock_clerk_trust·clock_backroom 신설, npcs/cora.json 신설, threads.json thread_potion_shop_s45 갱신"
+  "rev": "S47-002",
+  "updated": "2026-09-22T01:20:00Z",
+  "note": "47회차 1일차 — 코라 벤 채용 성사(설득 26·23). clock_shop_open·clock_clerk_trust 각 0→1, cora.json 고용 조건·bond 갱신(월 25gp, 선지급 없음)"
 }
