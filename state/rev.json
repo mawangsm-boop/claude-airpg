@@ -1,5 +1,5 @@
 {
-  "rev": "S46-030",
-  "updated": "2026-09-22T00:00:00Z",
-  "note": "world.json bloodwood 갱신 — 46회차 결과(심목 완전 사망) 반영 누락 정정. 47회차 시나리오 재설계(미렌 콜트→코라 벤 접객원 교체) 병행"
+  "rev": "S46-031",
+  "updated": "2026-09-22T00:10:00Z",
+  "note": "state/chars/idra.json 개성 보강 — 결함(flaw)·방어기제(defense) 필드 신설, voice·drive·bond·fear·code.does에 연동 서술 추가"
 }
