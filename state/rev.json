@@ -1,5 +1,5 @@
 {
-  "rev": "S46-033",
-  "updated": "2026-09-22T00:30:00Z",
-  "note": "state/chars/isabel.json·liv.json 개성 보강 — 결함(flaw)·방어기제(defense) 필드 신설, 코라·이드라·네리와 동일 형식으로 통일"
+  "rev": "S47-001",
+  "updated": "2026-09-22T01:00:00Z",
+  "note": "47회차 \"저울과 뒷문\" 개시 — core.json·checkpoint.json 회차 전환, clocks.json에 clock_shop_open·clock_clerk_trust·clock_backroom 신설, npcs/cora.json 신설, threads.json thread_potion_shop_s45 갱신"
 }

@@ -338,11 +338,11 @@
 
 ## 13. 상태 파일 작업 목록 (아크 개시 시)
 
-- [ ] `state/core.json` — session 47, arc "저울과 뒷문", place 갱신
-- [ ] `state/clocks.json` — `clock_shop_open` · `clock_clerk_trust` · `clock_backroom` 신설. `clock_caretaker`는 2/6 그대로 이어받는다
-- [ ] `state/npcs/cora.json` 신설(§4 개성 필드 그대로) + `state/chars/_index.json`의 `npcs` 배열에 등록
-- [ ] `state/threads.json` — `thread_potion_shop_s45`(open)를 이 아크의 본줄기로 승계
-- [ ] `state/checkpoint.json` — session 47, `short_rest_count` 0으로 시작, `next_cp_index` 1
+- [x] `state/core.json` — session 47, arc "저울과 뒷문", place 갱신 (2026-09-22, `rev` S47-001)
+- [x] `state/clocks.json` — `clock_shop_open` · `clock_clerk_trust` · `clock_backroom` 신설. `clock_caretaker`는 2/6 그대로 이어받는다
+- [x] `state/npcs/cora.json` 신설(§4 개성 필드 그대로) + `state/chars/_index.json`의 `npcs` 배열에 등록
+- [x] `state/threads.json` — `thread_potion_shop_s45`(open)를 이 아크의 본줄기로 승계
+- [x] `state/checkpoint.json` — session 47, `short_rest_count` 0으로 시작, `next_cp_index` 1
 - [ ] `state/factions.json` — 약종 조합을 배경 세력으로 추가할지는 **실제로 등장할 때** 판단. 미리 만들지 않는다
 - [x] `state/world.json`의 `bloodwood` 항목 갱신 완료(2026-09-22, `rev` S46-030) — "심목이 죽은 숲"으로
       정정했다. 가시울 마을 다리아와의 약재 거래(`thread_potion_shop_s45`)가 죽은 숲과 인접해 있어 이 아크의
