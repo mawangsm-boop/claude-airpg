@@ -1,5 +1,5 @@
 {
-  "rev": "S46-031",
-  "updated": "2026-09-22T00:10:00Z",
-  "note": "state/chars/idra.json 개성 보강 — 결함(flaw)·방어기제(defense) 필드 신설, voice·drive·bond·fear·code.does에 연동 서술 추가"
+  "rev": "S46-032",
+  "updated": "2026-09-22T00:20:00Z",
+  "note": "state/chars/neri.json 개성 보강 — 결함(flaw)·방어기제(defense) 필드 신설, voice·drive·fear·bond·code.wont에 연동 서술 추가"
 }
