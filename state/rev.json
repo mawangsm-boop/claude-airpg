@@ -1,5 +1,5 @@
 {
-  "rev": "S47-005",
-  "updated": "2026-10-05T10:00:00Z",
-  "note": "47회차 1막 종료 — 네리 채집으로 초도 재료비 절반(골드 46gp), clock_shop_open 5/5 완료. 개점 전날 밤 \"첫 신호\" 쪽지로 clock_caretaker 4/6. 네리 bond 갱신(베릭스와 첫 밤)"
+  "rev": "S47-006",
+  "updated": "2026-10-05T11:00:00Z",
+  "note": "\"저울과 뒷문\" 아크 완결 — C안(정기 주문 수락 + 세렌에게 선별 정보, 기만 18). clock_caretaker 4/6 정지, thread_potion_shop_s45 resolved, 골드 281gp, seren.json bond 갱신, core.json을 거점 확립·다음 아크 조율 중으로 전환"
 }
