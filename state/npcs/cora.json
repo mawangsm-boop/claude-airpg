@@ -24,6 +24,7 @@
     "spotlight": "가게 접객 전반 — 손님 응대, 장부 관리. 봉랍 문양처럼 낯선 것을 발견하면 먼저 캐묻는다.",
     "knows": "물약 상점의 겉 장부(누가 뭘 사갔는지)와 공개된 재고(A등급). 47회차 채용 이후의 가게 사정.",
     "unknown": "베릭스의 과거 전부 · 레아·이드라·이자벨의 진짜 정체 · 뒷문 조제의 존재(발각 전까지, `clock_backroom` 참고)(D등급)",
-    "look": "Cora Venn, a human female shopkeeper's clerk in her early 20s. Sun-freckled tan skin, dark hair tied back in a quick practical knot with loose strands framing her face, bright quick eyes with faint dark circles of overwork beneath. Wearing a plain linen apron over a patched work dress, ink-stained fingers, sleeves rolled up to the elbow."
+    "look": "Cora Venn, a human female shopkeeper's clerk in her early 20s. Sun-freckled tan skin, dark hair tied back in a quick practical knot with loose strands framing her face, bright quick eyes with faint dark circles of overwork beneath. Wearing a plain linen apron over a patched work dress, ink-stained fingers, sleeves rolled up to the elbow.",
+    "at": "상점"
   }
 }

@@ -2766,6 +2766,9 @@ let pf_status="all", pf_gender="all", pf_race="all", pf_session="";
 const RACES=["인간","엘프","드워프","하플링","티플링","하프엘프","오크","기타"];
 const STATUSES=[["all","전체"],["동행","동행"],["동행이력","동행이력"],["적","적"],["기타","기타"]];
 const GENDERS=[["all","전체"],["남","남"],["여","여"],["기타","기타"]];
+/* 인물 파일의 at 필드: "상점"이면 지금 가게에 남아 있는 인물 — 동행 중 목록과 따로 묶어 보여준다. */
+const SHOP_AT="상점";
+const atShop=a=>!!a&&a.at===SHOP_AT;
 function sessTxt(a){
   const s=a.sessions;
   if(!s||!s.length) return "";
@@ -2823,7 +2826,7 @@ function personCard(a,opts={}){
   const trait=a.trait||a.d||"";
   const badges=`<span class="tag ${a.tagc||""}">${a.tag||""}</span>
     ${a.gender?`<span class="tag">${a.gender}</span>`:""}${a.race?`<span class="tag">${a.race}</span>`:""}
-    ${sessTxt(a)?`<span class="tag">${sessTxt(a)}</span>`:""}`;
+    ${sessTxt(a)?`<span class="tag">${sessTxt(a)}</span>`:""}${a.at?`<span class="tag">${a.at} 근무</span>`:""}`;
   const dir=opts.reversed?-1:1; // 배열상 실제 이동 방향(위 화살표 기준)
   const mv=opts.movable?`<button data-move="up" data-scope="${opts.movable}" data-id="${a.id}" data-step="${-dir}" class="tag" style="cursor:pointer">▲</button><button data-move="down" data-scope="${opts.movable}" data-id="${a.id}" data-step="${dir}" class="tag" style="cursor:pointer">▼</button>`:"";
   const num=opts.num?`<b style="color:var(--gold-s);margin-right:4px">${opts.num}.</b>`:"";
@@ -2875,9 +2878,14 @@ function renderParty(){
   }else{
     const partyOrdered=[...(S.party||[])].reverse();
     const npcsOrdered=[...(S.npcs||[])].reverse();
-    const pc=partyOrdered.map((a,i)=>personCard({...a,status:a.status||"동행"},{movable:"party",num:i+1,reversed:true})).join("");
-    const np=npcsOrdered.map((a,i)=>personCard(a,{dim:true,movable:"npcs",num:i+1,reversed:true})).join("");
+    const goers=partyOrdered.filter(a=>!atShop(a));                       // 지금 함께 움직이는 동료
+    const shopAll=[...partyOrdered.filter(atShop),...npcsOrdered.filter(atShop)]; // 가게에 남은 사람(동료 + 관계자)
+    const others=npcsOrdered.filter(a=>!atShop(a));
+    const pc=goers.map((a,i)=>personCard({...a,status:a.status||"동행"},{movable:"party",num:i+1,reversed:true})).join("");
+    const sp=shopAll.map(a=>personCard((S.party||[]).includes(a)?{...a,status:a.status||"동행"}:a,{dim:true})).join("");
+    const np=others.map((a,i)=>personCard(a,{dim:true,movable:"npcs",num:i+1,reversed:true})).join("");
     $("s-party").innerHTML=filterBar+`<div class="sec-t">동행 중 (최근 합류 순)</div>${pc||'<div class="card note">동행자가 없습니다.</div>'}
+      ${sp?`<div class="sec-t">상점 근무 (${shopAll.length}명)</div>${sp}`:""}
       <div class="sec-t">비동행 · 관계자 (최근 접촉 순)</div>${np}`;
   }
 }
@@ -2887,8 +2895,10 @@ $("s-party").addEventListener("click",e=>{
     const scope=mv.dataset.scope==="npcs"?"npcs":"party";
     const arr=S[scope]||[], i=arr.findIndex(a=>a.id===mv.dataset.id);
     const step=parseInt(mv.dataset.step,10)||0;
-    const j=i+step;
-    if(i<0||j<0||j>=arr.length) return;
+    if(i<0||!step) return;
+    let j=i+step;
+    while(j>=0&&j<arr.length&&atShop(arr[j])!==atShop(arr[i])) j+=step; // 화면에서 다른 묶음에 있는 인물은 건너뛴다
+    if(j<0||j>=arr.length) return;
     [arr[i],arr[j]]=[arr[j],arr[i]]; save(); renderParty(); toast("순서를 바꿨습니다.");
     return;
   }
