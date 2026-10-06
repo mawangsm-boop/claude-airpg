@@ -31,4 +31,31 @@ if [ -f "$CORE" ]; then
   ' 2>/dev/null || true
 fi
 
+# 브랜치 동기화 검사 — 진행분이 세션 브랜치에만 남고 main에 반영되지 않는 사고(2026-10-06) 방지.
+# 핸드북과 새 세션은 main을 기준으로 보므로, main보다 최근에 커밋된 브랜치가 있으면 그 진행분이 안 보인다.
+if command -v git >/dev/null 2>&1 && git rev-parse --git-dir >/dev/null 2>&1; then
+  timeout 20 git fetch origin --quiet 2>/dev/null || true
+  if git rev-parse --verify -q origin/main >/dev/null; then
+    MAIN_TS=$(git log -1 --format=%ct origin/main)
+    ALERT=""
+    for B in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin | grep -v -e '^origin/main$' -e '^origin/HEAD$' -e '^origin$'); do
+      AHEAD=$(git rev-list --count origin/main.."$B" 2>/dev/null || echo 0)
+      B_TS=$(git log -1 --format=%ct "$B" 2>/dev/null || echo 0)
+      if [ "$AHEAD" -gt 0 ] && [ "$B_TS" -gt "$MAIN_TS" ]; then
+        ALERT="${ALERT}\n  - ${B#origin/}: main에 없는 커밋 ${AHEAD}개, 마지막 커밋 $(git log -1 --format=%cs "$B")"
+      fi
+    done
+    BEHIND=$(git rev-list --count HEAD..origin/main 2>/dev/null || echo 0)
+    if [ -n "$ALERT" ]; then
+      echo ""
+      echo -e "‼ main보다 최근에 커밋된 브랜치가 있습니다 — 그 진행분이 main(핸드북)과 이 세션에 빠져 있을 수 있습니다:${ALERT}"
+      echo "  진행에 들어가기 전에 내용을 확인하고 main에 반영하세요(사용자 확인 후)."
+    fi
+    if [ "$BEHIND" -gt 0 ]; then
+      echo ""
+      echo "‼ 지금 브랜치가 origin/main보다 ${BEHIND}커밋 뒤처져 있습니다 — 먼저 git merge origin/main 하세요."
+    fi
+  fi
+fi
+
 exit 0

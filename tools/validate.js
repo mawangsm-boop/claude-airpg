@@ -204,6 +204,26 @@ if (logFile && !Array.isArray(logFile.log)) err("state/log.json", '{"log":[...]}
 else if (logFile && logFile.log.length > 80)
   warn("state/log.json", `${logFile.log.length}항목입니다 — 오래된 회차를 archive/log_archive.json으로 옮기세요(동기화할 때마다 통째로 내려받습니다)`);
 
+// 회차 로그 누락 검사 — 46·47회차 진행 기록이 log.json에 한 번도 안 남았던 사고(2026-10-06) 방지.
+// 현재 회차에 로그가 0건이거나, 체크포인트 폴더가 있는 최근 회차에 로그가 없으면 알린다.
+if (logFile && Array.isArray(logFile.log) && core && typeof core.session === "number") {
+  const archived = readJSON("archive/log_archive.json", { required: false });
+  const allLog = logFile.log.concat(archived && Array.isArray(archived.log) ? archived.log : []);
+  const hasLog = (n) => allLog.some((e) => e && e.t === `세션 ${n}`);
+  if (!hasLog(core.session))
+    warn("state/log.json", `현재 회차(세션 ${core.session}) 항목이 0건입니다 — 개시·주요 사건을 로그에 남기세요`);
+  const cpDir = path.join(ROOT, "archive/sessions/_checkpoints");
+  if (fs.existsSync(cpDir)) {
+    fs.readdirSync(cpDir).forEach((d) => {
+      const m = /^S(\d+)$/.exec(d);
+      if (!m) return;
+      const n = Number(m[1]);
+      if (n < core.session - 4 || n === core.session) return; // 최근 5회차만 log.json 대상
+      if (!hasLog(n)) warn("state/log.json", `세션 ${n}은 체크포인트(${d})가 있는데 로그 항목이 0건입니다`);
+    });
+  }
+}
+
 /* ---------- world.json ---------- */
 const indexHtml = fs.existsSync(path.join(ROOT, "index.html")) ? fs.readFileSync(path.join(ROOT, "index.html"), "utf8") : "";
 const worldFile = readJSON("state/world.json");
