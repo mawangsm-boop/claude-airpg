@@ -53,3 +53,9 @@ An elderly human man in his 70s, hermit engraver. Deep wrinkles, tired eyes with
 
 ## 홀트 (NPC)
 Holt, a human male village chief in his 50s. Weathered sun-browned skin, close-cropped greying hair, a thick trapper's beard, calloused hands. Wearing worn layered furs and leather over practical trapper's clothes, a hatchet at his belt.
+
+## 코라 벤 (NPC)
+Cora Venn, a human female shopkeeper's clerk in her early 20s. Sun-freckled tan skin, dark hair tied back in a quick practical knot with loose strands framing her face, bright quick eyes with faint dark circles of overwork beneath. Wearing a plain linen apron over a patched work dress, ink-stained fingers, sleeves rolled up to the elbow.
+
+## 모이라 해스크 (NPC)
+Moira Hasek, a human female river boatwoman in her mid 20s. Sun-tanned skin, broad strong rower's shoulders, short cropped brown hair, lips chapped by river wind, rope marks on her forearms. Wearing a worn linen shirt with the sleeves always rolled up past the elbows.

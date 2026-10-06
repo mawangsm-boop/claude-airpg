@@ -187,6 +187,48 @@
       "trait": "로브 입은 대장의 지시로 신단의 나뭇잎 장신구를 노리고 왔다. 대장은 사망, 둘은 항복했다.",
       "knows": "신단 제단의 유물 목표(A등급)",
       "unknown": "베릭스의 과거 전부(D등급)"
+    },
+    {
+      "id": "bas",
+      "name": "늙은 바스",
+      "role": "남성 · 인간 · 60대 · 갈대목 나루 노인",
+      "tag": "갈대목 주민",
+      "trait": "흰 수염에 지팡이를 짚은 노인. 젊어서 군대에 있었다고 입버릇처럼 말한다. 48회차, 선착장에서 베릭스에게 \"채찍이 어디 있수?\"라고 물었다가 호통을 맞았다.",
+      "voice": "느릿한 반말 섞인 하오체. 옛 군대 얘기를 꺼내길 좋아한다 — \"내가 젊어서 군대 있을 땐 말이야…\"",
+      "knows": "갈대목의 옛 이야기와 마을 사람들(A등급). 철채찍 오스릭의 이름은 들어 봤다고 한다(출처 불명).",
+      "unknown": "베릭스 일행의 정체(D등급).",
+      "look": "Old Bas, a human male village elder in his 60s. White beard, leaning on a gnarled walking stick, wearing a faded, patched old soldier's coat."
+    },
+    {
+      "id": "tom",
+      "name": "톰 밀러",
+      "role": "남성 · 인간 · 10대 후반 · 방앗간집 아들",
+      "tag": "갈대목 주민",
+      "trait": "덩치가 크지만 사람들 맨 뒤에서 어깨를 움츠리고 있었다.",
+      "knows": "갈대목 방앗간 일과 마을 사정(A등급).",
+      "unknown": "베릭스 일행의 정체(D등급).",
+      "look": "Tom Miller, a human male miller's son in his late teens. Very tall and broad-shouldered, flour-dusted shirt, hunched posture."
+    },
+    {
+      "id": "pip_roll",
+      "name": "핍 & 롤",
+      "role": "남성 · 인간 · 10세 안팎 · 쌍둥이 소년",
+      "tag": "갈대목 주민",
+      "trait": "얼굴이 똑같은 쌍둥이. 모이라가 교관을 데려오는 걸 가장 먼저 보고 마을로 달려가 알렸다.",
+      "knows": "갈대목 갈대밭 사잇길과 선착장 일대(A등급).",
+      "unknown": "베릭스 일행의 정체(D등급).",
+      "look": "Pip and Roll, identical human twin boys around ten years old. Barefoot, mud-splashed trousers, mischievous grins."
+    },
+    {
+      "id": "eda",
+      "name": "에다 그린",
+      "role": "여성 · 인간 · 30대 초반 · 과부 사냥꾼",
+      "tag": "갈대목 주민",
+      "trait": "활을 멘 채 사람들과 한 발 떨어져 선착장을 지켜봤다. 모이라가 \"마을 최고 미녀\"라 불렀고, 활 솜씨가 좋지만 말을 걸면 활부터 겨눈다고 한다. 소개는 아직 이뤄지지 않았다.",
+      "voice": "미확정 — 아직 말하지 않았다.",
+      "knows": "갈대목 주변 숲과 사냥터(A등급).",
+      "unknown": "베릭스 일행의 정체(D등급).",
+      "look": "Eda Green, a human female widowed hunter in her early 30s. Black hair braided tightly and pinned up, sharp watchful eyes, weathered dark leather hunting garb, a longbow slung across her back, arms crossed."
     }
   ]
 }
