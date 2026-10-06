@@ -364,6 +364,25 @@ try {
   warn("state/rev.json", "git 상태를 읽지 못해 rev 갱신 검사를 건너뜁니다");
 }
 
+/* ---------- 금지 표현 ---------- */
+// 시간은 "시간·분"으로 쓴다(CLAUDE.md "수치와 전투"). 옛 단위(시진)가 상태·설계 문서에 섞이면 알린다.
+{
+  const scan = (dirRel, exts) => {
+    const dir = path.join(ROOT, dirRel);
+    if (!fs.existsSync(dir)) return;
+    for (const f of fs.readdirSync(dir, { withFileTypes: true })) {
+      const rel = path.join(dirRel, f.name);
+      if (f.isDirectory()) scan(rel, exts);
+      else if (exts.some((e) => f.name.endsWith(e))) {
+        const m = fs.readFileSync(path.join(ROOT, rel), "utf8").match(/시진/g);
+        if (m) warn(rel, `옛 시간 단위("시진") ${m.length}건 — 시간·분으로 고치세요`);
+      }
+    }
+  };
+  scan("state", [".json"]);
+  scan("gm_notes", [".md"]);
+}
+
 /* ---------- 결과 ---------- */
 const out = [];
 if (errors.length) out.push("오류 " + errors.length + "건", ...errors.map((e) => "  ✗ " + e));
