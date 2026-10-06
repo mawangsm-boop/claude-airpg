@@ -1,5 +1,5 @@
 {
-  "rev": "S47-001",
-  "updated": "2026-09-22T01:00:00Z",
-  "note": "47회차 \"저울과 뒷문\" 개시 — core.json·checkpoint.json 회차 전환, clocks.json에 clock_shop_open·clock_clerk_trust·clock_backroom 신설, npcs/cora.json 신설, threads.json thread_potion_shop_s45 갱신"
+  "rev": "S47-007",
+  "updated": "2026-10-06T09:00:00Z",
+  "note": "log.json 누락분 정정 — 46·47회차 항목이 한 번도 기록되지 않았던 것을 발견, 신규 추가(세션 46 4건·세션 47 7건). \"최근 5회차\" 규칙 유지를 위해 세션 41·42를 archive/log_archive.json으로 이관. 이번 patch로 main 브랜치와 작업 브랜치 동기화도 함께 완료(새 세션이 main 기준으로 47회차 진행 기록을 못 찾던 문제)."
 }
