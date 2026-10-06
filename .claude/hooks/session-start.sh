@@ -35,6 +35,10 @@ fi
 # 핸드북과 새 세션은 main을 기준으로 보므로, main보다 최근에 커밋된 브랜치가 있으면 그 진행분이 안 보인다.
 if command -v git >/dev/null 2>&1 && git rev-parse --git-dir >/dev/null 2>&1; then
   timeout 20 git fetch origin --quiet 2>/dev/null || true
+  # 클라우드 세션은 최근 커밋만 받은 얕은 복제본이라 커밋 수 비교가 틀린다(옛 브랜치가 100여 커밋 "앞선" 것처럼 보였음).
+  if [ "$(git rev-parse --is-shallow-repository 2>/dev/null)" = "true" ]; then
+    timeout 60 git fetch --unshallow origin --quiet 2>/dev/null || true
+  fi
   if git rev-parse --verify -q origin/main >/dev/null; then
     MAIN_TS=$(git log -1 --format=%ct origin/main)
     ALERT=""
