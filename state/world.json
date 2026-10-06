@@ -27,9 +27,10 @@
       "feyshrine_rumor",
       "shadowless_plain",
       "karlen_hint",
-      "eastroad_waypost"
+      "eastroad_waypost",
+      "galdaemok"
     ],
-    "here": "karlen_hint",
+    "here": "galdaemok",
     "customPlaces": [
       {
         "id": "outpost3",
@@ -168,6 +169,16 @@
         "d": "41회차, 상단로를 따라 실제로 도착했다. 여명 결사 지부가 이 도시 어딘가에 있는 것으로 확인됐으나 정확한 위치는 아직 파악되지 않았다. 강(거울강) 서안에 자리한 내륙 도시 — 항구는 없고, 강을 낀 나루터·창고 구역이 있다.",
         "cat": "settlement",
         "tier": "city"
+      },
+      {
+        "id": "galdaemok",
+        "n": "갈대목 나루",
+        "t": "강변 나루 마을",
+        "x": 1640,
+        "y": 1105,
+        "d": "거울강 서안, 카를렌에서 강배로 하루 거슬러 오른 곳. 갈대밭에 둘러싸인 가구 마흔 남짓의 작은 나루. 48회차, 모이라 해스크의 부탁으로 처음 찾았다.",
+        "cat": "settlement",
+        "tier": "village"
       }
     ]
   }
