@@ -62,3 +62,6 @@ Moira Hasek, a human female river boatwoman in her mid 20s. Sun-tanned skin, bro
 
 ## 이안 해스크 (NPC)
 Ian Hasek, a human male in his 50s, headman of a reed-lined river village. Gaunt, ill face with deep-set sharp eyes, thin white-streaked beard, hands calloused from years of rowing, propped on a straw-stuffed pillow under a patched wool blanket.
+
+## 오스릭 담 (NPC)
+Osric Dam, a human male instructor-for-hire in his 50s. Gaunt and weathered, grey-streaked stubble, red-veined nose, sharp tired eyes, scarred knuckles. Wearing a faded mercenary instructor's coat with the stripes torn off the shoulders, an empty whip loop hanging at his belt, a half-empty bottle in one hand.

@@ -1,0 +1,24 @@
+{
+  "char": {
+    "id": "osric_dam",
+    "name": "오스릭 담",
+    "role": "남성 · 인간 · 50대 · 전직 용병 교관 · 별명 '철채찍'",
+    "tag": "진짜 오스릭 · 첫 대면",
+    "tagc": "",
+    "trait": "쉰 목소리에 술 냄새가 나는 중년 사내. 허리의 채찍 걸이는 비어 있고 주먹마디는 흉터투성이다. 이안 해스크와 편지를 세 번 주고받고 선금 이십 골드를 받았다. 3일째 아침, 강배로 늦게 갈대목에 도착했다 — 이미 '철채찍 오스릭'이라 불리는 교관이 마을에 있다는 소문을 상류로 오르는 뱃사공들에게 들었다.",
+    "voice": "쉰 목소리, 군대식 하대에 술주정이 섞인다 — \"구호는 짧게. 겁먹은 놈은 긴 말을 못 알아들어.\" 비꼴 때는 느릿해지고 진지해지면 말이 짧아진다.",
+    "drive": "겉 — 약속한 교관 일을 하고 사례를 받는 것. 속 — 아직 정하지 않음.",
+    "fear": "미확정 — 아직 드러나지 않음.",
+    "flaw": "미확정 — 행동으로 드러날 것.",
+    "defense": "비꼼과 술. 속을 묻는 말은 농담으로 받아넘긴다.",
+    "bond": "미확정 — 첫 대면.",
+    "code": {
+      "does": "받은 선금은 돌려주기보다 일로 갚으려 한다. 약속한 날짜에 늦은 이유는 변명하지 않는다.",
+      "wont": "남의 이름을 쓴 자 앞에서 모르는 척하지는 않는다."
+    },
+    "spotlight": "군대식 훈련·대열·구호. 이안과의 편지.",
+    "knows": "이안 해스크와 주고받은 편지 세 통과 선금 이십 골드(A등급). 갈대목의 위치(A등급). 갈대목에서 '철채찍 오스릭 교관'이 민병대를 훈련시키고 있다는 소문(B등급, 상류로 오르는 뱃사공들의 전언).",
+    "unknown": "베릭스 일행의 정체·과거 전부(D등급). 마을의 구체적 사정과 수금일 전의 준비(D등급).",
+    "look": "Osric Dam, a human male instructor-for-hire in his 50s. Gaunt and weathered, grey-streaked stubble, red-veined nose, sharp tired eyes, scarred knuckles. Wearing a faded mercenary instructor's coat with the stripes torn off the shoulders, an empty whip loop hanging at his belt, a half-empty bottle in one hand."
+  }
+}
