@@ -1,0 +1,249 @@
+{
+  "battle": {
+    "name": "갈대목 수금일 방어전",
+    "cols": 20,
+    "rows": 14,
+    "round": 1,
+    "init": [
+      "liv",
+      "verrix",
+      "hagel",
+      "eda",
+      "bow_youth",
+      "militia_front",
+      "militia_left",
+      "militia_right",
+      "spears",
+      "thug_a",
+      "bandit_1",
+      "bandit_2",
+      "bandit_3",
+      "bandit_4",
+      "thug_b"
+    ],
+    "turn": "verrix",
+    "terrain": [
+      {
+        "x": 12,
+        "y": 2,
+        "w": 1,
+        "h": 5,
+        "type": "tree",
+        "label": "목책"
+      },
+      {
+        "x": 12,
+        "y": 8,
+        "w": 1,
+        "h": 5,
+        "type": "tree",
+        "label": "목책"
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "w": 20,
+        "h": 2,
+        "type": "tree",
+        "label": "갈대밭"
+      },
+      {
+        "x": 13,
+        "y": 6,
+        "w": 1,
+        "h": 3,
+        "type": "pit",
+        "label": "문 앞 구덩이"
+      },
+      {
+        "x": 4,
+        "y": 3,
+        "w": 5,
+        "h": 1,
+        "type": "pit",
+        "label": "버드나무 쪽 구덩이"
+      },
+      {
+        "x": 9,
+        "y": 1,
+        "w": 2,
+        "h": 2,
+        "type": "tree",
+        "label": "곡물창고(지붕 위 활)"
+      }
+    ],
+    "tokens": [
+      {
+        "id": "verrix",
+        "name": "베릭스",
+        "side": "pc",
+        "x": 11,
+        "y": 7,
+        "hp": "57/57",
+        "note": "AC 14",
+        "move": 6,
+        "range": 12
+      },
+      {
+        "id": "liv",
+        "name": "리브",
+        "side": "ally",
+        "x": 11,
+        "y": 8,
+        "hp": "32/32",
+        "note": "AC 13, 암살자. 문 옆 매복",
+        "st": [
+          "은신"
+        ],
+        "move": 6,
+        "from": {
+          "x": 10,
+          "y": 9
+        }
+      },
+      {
+        "id": "eda",
+        "name": "에다 그린",
+        "side": "ally",
+        "x": 10,
+        "y": 3,
+        "hp": "16/16",
+        "note": "Scout 계열 임시(SRD 5.1). 궁수조 조장, 첫 화살이 신호",
+        "move": 6,
+        "range": 60
+      },
+      {
+        "id": "bow_youth",
+        "name": "활 청년",
+        "side": "ally",
+        "x": 9,
+        "y": 3,
+        "hp": "4/4",
+        "note": "곡물창고 지붕 위 활. 임시",
+        "move": 0,
+        "range": 40
+      },
+      {
+        "id": "militia_front",
+        "name": "민병 정면(톰·바스·창 다섯)",
+        "side": "ally",
+        "x": 11,
+        "y": 6,
+        "hp": "4/4",
+        "note": "말굽 중앙 — 각자 HP 4(임시, Commoner 계열)"
+      },
+      {
+        "id": "militia_left",
+        "name": "민병 좌날개",
+        "side": "ally",
+        "x": 11,
+        "y": 5,
+        "hp": "4/4",
+        "note": "말굽 좌 — 각자 HP 4(임시)"
+      },
+      {
+        "id": "militia_right",
+        "name": "민병 우날개",
+        "side": "ally",
+        "x": 11,
+        "y": 9,
+        "hp": "4/4",
+        "note": "말굽 우 — 각자 HP 4(임시)"
+      },
+      {
+        "id": "spears",
+        "name": "창 셋(버드나무 쪽)",
+        "side": "ally",
+        "x": 6,
+        "y": 4,
+        "hp": "4/4",
+        "note": "갈대 옆구리 창 셋 — 각자 HP 4(임시)"
+      },
+      {
+        "id": "hagel",
+        "name": "하겔 브란",
+        "side": "enemy",
+        "x": 16,
+        "y": 7,
+        "hp": "65/65",
+        "note": "Bandit Captain 계열(SRD 5.1 임시). AC 15",
+        "st": [
+          "다음 공격 불리(조롱)"
+        ],
+        "move": 6
+      },
+      {
+        "id": "thug_a",
+        "name": "덩치 A",
+        "side": "enemy",
+        "x": 15,
+        "y": 6,
+        "hp": "32/32",
+        "note": "Thug 계열(SRD 5.1 임시). AC 11",
+        "move": 6
+      },
+      {
+        "id": "thug_b",
+        "name": "덩치 B",
+        "side": "enemy",
+        "x": 15,
+        "y": 8,
+        "hp": "32/32",
+        "note": "Thug 계열(SRD 5.1 임시). AC 11",
+        "move": 6
+      },
+      {
+        "id": "bandit_1",
+        "name": "졸개 1",
+        "side": "enemy",
+        "x": 5,
+        "y": 1,
+        "hp": "11/11",
+        "note": "Bandit(SRD 5.1 임시). AC 12",
+        "st": [
+          "상륙"
+        ],
+        "move": 6
+      },
+      {
+        "id": "bandit_2",
+        "name": "졸개 2",
+        "side": "enemy",
+        "x": 6,
+        "y": 1,
+        "hp": "11/11",
+        "note": "Bandit(SRD 5.1 임시). AC 12",
+        "st": [
+          "상륙"
+        ],
+        "move": 6
+      },
+      {
+        "id": "bandit_3",
+        "name": "졸개 3",
+        "side": "enemy",
+        "x": 7,
+        "y": 1,
+        "hp": "11/11",
+        "note": "Bandit(SRD 5.1 임시). AC 12",
+        "st": [
+          "상륙"
+        ],
+        "move": 6
+      },
+      {
+        "id": "bandit_4",
+        "name": "졸개 4",
+        "side": "enemy",
+        "x": 8,
+        "y": 1,
+        "hp": "11/11",
+        "note": "Bandit(SRD 5.1 임시). AC 12",
+        "st": [
+          "상륙"
+        ],
+        "move": 6
+      }
+    ]
+  }
+}
