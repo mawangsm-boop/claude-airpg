@@ -11,13 +11,13 @@
     "fear": "미확정 — 아직 드러나지 않음.",
     "flaw": "미확정 — 행동으로 드러날 것.",
     "defense": "비꼼과 술. 속을 묻는 말은 농담으로 받아넘긴다.",
-    "bond": "미확정 — 첫 대면.",
+    "bond": "3일째 아침, 베릭스가 사람들 앞에서 사칭을 내려놓는 걸 직접 봤다 — 마을이 일을 택하는 걸 보고 \"이름은 이쪽이 쓰고 일은 같이 하지\"로 돌아섰다. 아직 속은 보이지 않는다.",
     "code": {
       "does": "받은 선금은 돌려주기보다 일로 갚으려 한다. 약속한 날짜에 늦은 이유는 변명하지 않는다.",
       "wont": "남의 이름을 쓴 자 앞에서 모르는 척하지는 않는다."
     },
     "spotlight": "군대식 훈련·대열·구호. 이안과의 편지.",
-    "knows": "이안 해스크와 주고받은 편지 세 통과 선금 이십 골드(A등급). 갈대목의 위치(A등급). 갈대목에서 '철채찍 오스릭 교관'이 민병대를 훈련시키고 있다는 소문(B등급, 상류로 오르는 뱃사공들의 전언).",
+    "knows": "이안 해스크와 주고받은 편지 세 통과 선금 이십 골드(A등급). 갈대목의 위치(A등급). 갈대목에서 '철채찍 오스릭 교관'이 민병대를 훈련시키고 있다는 소문(B등급, 상류로 오르는 뱃사공들의 전언). 베릭스가 가짜 오스릭이었다는 것과 마을 사람들이 그래도 그를 택했다는 것(A등급, 직접 목격).",
     "unknown": "베릭스 일행의 정체·과거 전부(D등급). 마을의 구체적 사정과 수금일 전의 준비(D등급).",
     "look": "Osric Dam, a human male instructor-for-hire in his 50s. Gaunt and weathered, grey-streaked stubble, red-veined nose, sharp tired eyes, scarred knuckles. Wearing a faded mercenary instructor's coat with the stripes torn off the shoulders, an empty whip loop hanging at his belt, a half-empty bottle in one hand."
   }
