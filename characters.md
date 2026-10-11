@@ -59,3 +59,6 @@ Cora Venn, a human female shopkeeper's clerk in her early 20s. Sun-freckled tan 
 
 ## 모이라 해스크 (NPC)
 Moira Hasek, a human female river boatwoman in her mid 20s. Sun-tanned skin, broad strong rower's shoulders, short cropped brown hair, lips chapped by river wind, rope marks on her forearms. Wearing a worn linen shirt with the sleeves always rolled up past the elbows.
+
+## 이안 해스크 (NPC)
+Ian Hasek, a human male in his 50s, headman of a reed-lined river village. Gaunt, ill face with deep-set sharp eyes, thin white-streaked beard, hands calloused from years of rowing, propped on a straw-stuffed pillow under a patched wool blanket.
