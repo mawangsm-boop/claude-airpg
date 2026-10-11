@@ -1,5 +1,5 @@
 {
-  "rev": "S48-038",
-  "updated": "2026-10-11T12:34:04Z",
-  "note": "48회차 2일째 밤→3일째 아침 — 긴 휴식, cp02 생성, clock_raid 1→2, 리브 bond·위치·로그."
+  "rev": "S48-039",
+  "updated": "2026-10-11T12:34:16Z",
+  "note": "log.json 80항목 초과 정리 — 세션 43 이하를 archive/log_archive.json으로 이관(최근 5회차 규칙)."
 }
