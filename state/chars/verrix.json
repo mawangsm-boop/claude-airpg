@@ -6,7 +6,7 @@
     "level": 2,
     "ac": 14,
     "hp": {
-      "cur": 57,
+      "cur": 25,
       "max": 57,
       "tmp": 0
     },
@@ -46,7 +46,7 @@
         "note": "feat_scattered_warden_s40. 하루 1회 야수 명령. (이전엔 사용 횟수 추적 항목이 없어 이번에 신설.)"
       }
     ],
-    "gold": 279,
+    "gold": 409,
     "stats": {
       "STR": 10,
       "DEX": 14,
