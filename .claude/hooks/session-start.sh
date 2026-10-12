@@ -3,6 +3,7 @@
 # 이 저장소는 외부 의존성이 없다(node 기본 모듈만 사용) — 설치할 것은 없고, 검증만 한다.
 # 검증에 실패해도 세션은 정상적으로 시작한다(exit 0). 대신 무엇이 깨졌는지 눈에 띄게 알린다.
 set -uo pipefail
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
 cd "${CLAUDE_PROJECT_DIR:-$(dirname "$0")/../..}" || exit 0
 
