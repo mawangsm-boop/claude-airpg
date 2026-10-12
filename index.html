@@ -92,6 +92,21 @@ details .d{padding:9px 10px;font-size:12px;line-height:1.65;color:var(--parch)}
 .tag.y{color:var(--gold-s);background:rgba(201,164,87,.14);border-color:#5b4a24}
 .tag.r{color:var(--blood);background:rgba(201,102,106,.14);border-color:#5b2b2d}
 .sec-t{font-size:10px;color:var(--violet);letter-spacing:1.4px;margin:12px 0 5px;text-transform:uppercase}
+/* v2.31: 파티 카드 → 세부 보기(캐릭터 탭과 같은 형식의 전체 화면 시트) */
+.detailBtn{display:block;width:100%;margin-top:10px;padding:8px;font-size:12px;font-family:var(--f-body);background:var(--panel2);
+  color:var(--gold-s);border:1px solid var(--gold);border-radius:8px;cursor:pointer}
+.pdetail{position:fixed;inset:0;z-index:60;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 12px 40px}
+.pdetail[hidden]{display:none}
+.pdetail-bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:10px;padding:10px 0;margin-bottom:10px;
+  background:var(--bg);border-bottom:1px solid var(--border)}
+.pdetail-bar button{padding:7px 12px;font-size:12px;font-family:var(--f-body);background:var(--panel2);color:var(--parch);
+  border:1px solid var(--border);border-radius:14px;cursor:pointer;flex:0 0 auto}
+.pdetail-bar b{font-family:var(--f-disp);font-weight:400;color:var(--gold-s);letter-spacing:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.skgrid{display:grid;grid-template-columns:1fr 1fr;column-gap:16px}
+.skgrid .kv{font-size:12px}
+.kv.off{opacity:.42}
+.kv.prof span:first-child{color:var(--parch)}
+.kv .star{color:var(--gold-s)}
 .itemcat{margin-bottom:4px}
 .itemcat>summary{list-style:none;cursor:pointer;font-size:10px;color:var(--violet);letter-spacing:1.4px;
   margin:12px 0 5px;text-transform:uppercase;display:flex;align-items:center;gap:6px;user-select:none}
@@ -373,6 +388,7 @@ summary>span:first-child>em{font-style:normal;overflow:hidden;text-overflow:elli
 </main>
 
 <button class="fab" id="fab">패치 붙여넣기</button>
+<div class="pdetail" id="pDetail" hidden></div>
 <div class="toast" id="toast"></div>
 
 <input type="file" id="photoInput" accept="image/*" style="display:none">
@@ -2576,7 +2592,7 @@ function applyPatch(obj){
 }
 
 /* ==================== 렌더 ==================== */
-function renderAll(){ header(); renderChar(); renderParty(); renderDungeon(); renderBattle(); renderWorldMarkers(); renderLog(); renderTension(); $("fullBox").value=JSON.stringify(S,null,1); }
+function renderAll(){ header(); renderChar(); renderParty(); renderDungeon(); renderBattle(); renderWorldMarkers(); renderLog(); renderTension(); if(DETAIL_ID) renderDetail(); $("fullBox").value=JSON.stringify(S,null,1); }
 /* v2.24: 진행 시계(clocks) · 세력 관계(factions) · 동료 의심도.
    시계의 vis:"gm"은 GM 전용이라 화면에 내지 않는다. 파일이 없어도(아직 안 만들었어도) 정상 동작한다. */
 function renderTension(){
@@ -2610,7 +2626,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.29";
+const HB_VERSION="v2.31";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -2649,6 +2665,7 @@ function renderChar(){
     <div class="stats">${Object.entries(p.stats).map(([k,v])=>{
       const m=Math.floor((v-10)/2); return `<div class="stat"><b>${k}</b><i>${v}</i><b>${m>=0?"+":""}${m}</b></div>`;}).join("")}</div>
   </div>
+  ${skillsCard(p)}
   ${renderEquipped(p.items)}
   ${renderResources(p.resources)}
   <div class="card"><h2>주문</h2>${p.spells.map(x=>det(x.n,x.t,`<b style="color:var(--gold-s)">${x.c}</b><br>${x.d}`)).join("")}</div>
@@ -2788,22 +2805,123 @@ function photoBlock(a){
   return {big:true, html:`<div class="photoBig has" data-photo-id="${a.id}" style="background-image:url('${a.photoThumb}')">
     <button type="button" class="photoSizeBtn" data-size="small" data-photo-id="${a.id}">－ 작게</button></div>`};
 }
-/* v2.21: 동료 캐릭터 시트(state/sheets/{id}.json) 렌더링 — 있으면 스탯·자원·능력을 보여주고, 없으면 빈 문자열(하위호환). */
-function sheetBlock(id){
-  const sh = S.sheets && S.sheets[id];
-  if(!sh) return "";
-  const head = `${sh.race||""}${sh.race&&sh.cls?" · ":""}${sh.cls||""}${sh.level?` ${sh.level}레벨`:""}${sh.ac!==undefined?` · AC ${sh.ac}`:""}`;
-  const statsHtml = sh.stats ? `<div class="stats">${Object.entries(sh.stats).map(([k,v])=>{
-    const m=Math.floor((v-10)/2); return `<div class="stat"><b>${k}</b><i>${v}</i><b>${m>=0?"+":""}${m}</b></div>`;}).join("")}</div>` : "";
-  const resHtml = (sh.resources||[]).map(r=>{
-    const rc = r.recharge ? (RECHARGE_LABEL[r.recharge]||r.recharge) : "";
-    return det(r.n, r.max!==undefined?`${r.cur}/${r.max}`:(rc||""), (r.dice?`<b style="color:var(--gold-s)">${r.dice}</b><br>`:"")+(r.note||"")+(rc?`<div class="note" style="margin-top:4px">${rc} 회복</div>`:""));
-  }).join("");
-  const abHtml = (sh.abilities||[]).map(x=>det(x.n,x.t||"",x.d)).join("");
-  return `${head?`<div class="sec-t">${head}</div>`:""}${statsHtml}
-    ${resHtml?`<div class="sec-t">자원</div>${resHtml}`:""}
-    ${abHtml?`<div class="sec-t">능력</div>${abHtml}`:""}`;
+/* v2.31: 시트 공용 조각 — 캐릭터 탭과 파티 세부 보기가 함께 쓴다.
+   기술·내성 수치는 시트에 mods가 있으면 그 값을, 없으면 능력치·숙련 보너스(전문화는 두 배)로 계산한다. */
+const ABIL_KO={STR:"근력",DEX:"민첩",CON:"건강",INT:"지능",WIS:"지혜",CHA:"매력"};
+const SKILLS=[["곡예","DEX"],["동물 조련","WIS"],["비전","INT"],["운동","STR"],["기만","CHA"],["역사","INT"],
+  ["통찰","WIS"],["위협","CHA"],["수사","INT"],["의술","WIS"],["자연","INT"],["지각","WIS"],
+  ["연기","CHA"],["설득","CHA"],["종교","INT"],["손재주","DEX"],["은신","DEX"],["생존","WIS"]];
+const modOf=v=>Math.floor((v-10)/2);
+const sgn=n=>(n>=0?"+":"")+n;
+function profOf(sh){ return sh.profBonus!==undefined?sh.profBonus:(sh.level?2+Math.floor((sh.level-1)/4):0); }
+function statsHTML(stats){
+  if(!stats) return "";
+  return `<div class="stats">${Object.entries(stats).map(([k,v])=>{
+    const m=modOf(v); return `<div class="stat"><b>${k}</b><i>${v}</i><b>${sgn(m)}</b></div>`;}).join("")}</div>`;
 }
+function savesCard(sh){
+  if(!sh||!sh.stats) return "";
+  const sv=sh.saves||{}, prof=new Set(sv.proficient||[]), pb=profOf(sh);
+  const rows=Object.keys(sh.stats).map(k=>{
+    const has=prof.has(k);
+    const m=(sv.mods&&sv.mods[k]!==undefined)?sv.mods[k]:modOf(sh.stats[k])+(has?pb:0);
+    return `<div class="kv ${has?"prof":""}"><span>${has?"● ":""}${ABIL_KO[k]||k}</span><span>${sgn(m)}</span></div>`;
+  }).join("");
+  return `<div class="card"><h2>내성 굴림</h2><div class="skgrid">${rows}</div>
+    <div class="note" style="margin-top:6px">${sh.saves?"● 숙련":"내성 숙련이 아직 기록되지 않아 능력 수정치만 표시합니다."}</div></div>`;
+}
+function skillsCard(sh){
+  if(!sh||!sh.stats) return "";
+  const sk=sh.skills||{}, prof=new Set(sk.proficient||[]), exp=new Set(sk.expertise||[]), pb=profOf(sh);
+  const val=(name,ab)=>(sk.mods&&sk.mods[name]!==undefined)?sk.mods[name]
+    :modOf(sh.stats[ab]||10)+(prof.has(name)?pb*(exp.has(name)?2:1):0);
+  const known=new Set(SKILLS.map(x=>x[0]));
+  const rows=SKILLS.map(([name,ab])=>{
+    const has=prof.has(name);
+    return `<div class="kv ${has?"prof":"off"}"><span>${exp.has(name)?'<span class="star">★</span> ':has?"● ":""}${name} <small style="opacity:.6">${ABIL_KO[ab]}</small></span><span>${sgn(val(name,ab))}</span></div>`;
+  }).join("")+[...prof].filter(n=>!known.has(n)).map(n=>`<div class="kv prof"><span>● ${n}</span><span>${sk.mods&&sk.mods[n]!==undefined?sgn(sk.mods[n]):"—"}</span></div>`).join("");
+  const pp=sk.passivePerception!==undefined?sk.passivePerception:10+val("지각","WIS");
+  const tools=sh.tools&&sh.tools.proficient&&sh.tools.proficient.length?sh.tools.proficient.join(" · "):"";
+  return `<div class="card"><h2>기술</h2>
+    <div class="kv"><span>숙련 보너스</span><span>${sgn(pb)}</span></div>
+    <div class="kv"><span>수동 지각</span><span>${pp}</span></div>
+    ${tools?`<div class="kv"><span>도구</span><span>${tools}</span></div>`:""}
+    ${sh.languages?`<div class="kv"><span>언어</span><span>${sh.languages}</span></div>`:""}
+    <div class="skgrid" style="margin-top:6px">${rows}</div>
+    <div class="note" style="margin-top:6px">● 숙련 · <span class="star">★</span> 전문화(숙련 보너스 두 배)${prof.size?"":" — 기술 숙련이 아직 기록되지 않았습니다."}</div>
+    ${sk.note?det("기술 메모","근거",sk.note):""}</div>`;
+}
+function attacksCard(sh){
+  const list=(sh&&sh.attacks)||[];
+  const wm=(sh&&sh.weaponMastery&&sh.weaponMastery.kinds)||[];
+  if(!list.length&&!wm.length) return "";
+  return `<div class="card"><h2>공격</h2>
+    ${list.map(a=>`<div class="kv"><span>${a.n}</span><span><b style="color:var(--gold-s)">${a.atk}</b> · ${a.dmg}</span></div>${a.note?`<div class="note" style="margin:2px 0 4px">${a.note}</div>`:""}`).join("")}
+    ${wm.length?`<div class="sec-t">무기 숙달</div>`+wm.map(w=>det(`${w.w} — ${w.m}`,"숙달",w.d)).join(""):""}</div>`;
+}
+function spellsCard(sh){
+  const ca=(sh&&sh.cantrips)||[], sp=(sh&&sh.spells)||[];
+  if(!ca.length&&!sp.length) return "";
+  return `<div class="card"><h2>주문</h2>
+    ${ca.map(x=>det(x.n,"소마법",x.d+(x.note_ui?`<div class="note" style="color:var(--blood);margin-top:5px">⚠ ${x.note_ui}</div>`:""))).join("")}
+    ${sp.map(x=>det(x.n,x.t||"",(x.c?`<b style="color:var(--gold-s)">${x.c}</b><br>`:"")+(x.d||"")+(x.note_ui?`<div class="note" style="color:var(--blood);margin-top:5px">⚠ ${x.note_ui}</div>`:""))).join("")}</div>`;
+}
+/* 동료 시트는 파티면 S.sheets[id], 관계자(npcs)면 인물 객체 안의 sheet에 있다. */
+function sheetOf(a){ return (S.sheets&&S.sheets[a.id])||a.sheet||null; }
+let DETAIL_ID=null;
+function openDetail(id){
+  DETAIL_ID=id; renderDetail();
+  const el=$("pDetail"); el.hidden=false; el.scrollTop=0; document.body.style.overflow="hidden";
+  try{ history.pushState({pDetail:id},""); }catch{}
+}
+function closeDetail(fromPop){
+  if(!DETAIL_ID) return;
+  DETAIL_ID=null; $("pDetail").hidden=true; $("pDetail").innerHTML=""; document.body.style.overflow="";
+  if(!fromPop){ try{ if(history.state&&history.state.pDetail) history.back(); }catch{} }
+}
+function renderDetail(){
+  const a=[...(S.party||[]),...(S.npcs||[])].find(x=>x.id===DETAIL_ID);
+  if(!a){ closeDetail(); return; }
+  const sh=sheetOf(a)||{}, h=a.hp, name=a.name||a.n||"(이름 미등록)";
+  const cls=sh.cls?`${sh.race?sh.race+" · ":""}${sh.cls}${sh.level?` ${sh.level}레벨`:""}`:"";
+  const persona=personaBlock(a);
+  $("pDetail").innerHTML=`<div class="pdetail-bar"><button type="button" data-close-detail>← 파티로</button><b>${name}</b></div>
+  <div class="card">
+    <h2>${name} <span class="tag ${a.tagc||""}">${a.tag||""}</span>${a.at?` <span class="tag">${a.at} 근무</span>`:""}</h2>
+    ${a.role?`<div class="note" style="margin-bottom:4px">${a.role}</div>`:""}
+    ${cls?`<div class="kv"><span>종족 · 직업</span><span>${cls}</span></div>`:""}
+    ${sh.ac!==undefined?`<div class="kv"><span>AC</span><span>${sh.ac}</span></div>`:""}
+    ${sh.note_ac?`<div class="note" style="margin:2px 0 4px">${sh.note_ac}</div>`:""}
+    ${sh.initiative!==undefined?`<div class="kv"><span>이니셔티브</span><span>${sgn(sh.initiative)}</span></div>`:""}
+    ${sh.spellSaveDC!==undefined?`<div class="kv"><span>주문 내성 DC · 명중</span><span>${sh.spellSaveDC} · ${sgn(sh.spellAtkBonus||0)}</span></div>`:""}
+    ${h?`<div class="barlbl" style="margin-top:9px"><span>HP</span><span>${h.cur}/${h.max}${h.tmp?` <b style="color:var(--violet-s)">+${h.tmp} 임시</b>`:""}</span></div>
+    <div class="bar"><i class="${hpClass(h.cur,h.max)}" style="width:${Math.max(0,Math.min(100,h.cur/h.max*100))}%"></i></div>`:""}
+    ${sh.note_hp?`<div class="note" style="margin-top:3px">${sh.note_hp}</div>`:""}
+    ${renderSlots(sh.slots)}
+    ${statsHTML(sh.stats)}
+  </div>
+  ${savesCard(sh)}
+  ${skillsCard(sh)}
+  ${attacksCard(sh)}
+  ${(a.equipment&&a.equipment.length)?`<div class="card"><h2>장착품 <span class="itemcat-n">(${a.equipment.length})</span></h2>`
+    +a.equipment.map(e=>det(e.item,e.slot||"착용",(e.desc||"")+itemStatusHTML(e))).join("")+`</div>`:""}
+  ${renderResources(sh.resources)}
+  ${spellsCard(sh)}
+  ${(sh.abilities&&sh.abilities.length)?`<div class="card"><h2>특성</h2>${sh.abilities.map(x=>det(x.n,x.t||"",x.d+(x.note_ui?`<div class="note" style="color:var(--blood);margin-top:5px">⚠ ${x.note_ui}</div>`:""))).join("")}
+    ${sh.futureFeatures?`<div class="note" style="margin-top:6px">이후 레벨: ${sh.futureFeatures}</div>`:""}</div>`:""}
+  <div class="card"><h2>소지품</h2>${(a.items&&a.items.length)?renderItems(a.items):'<div class="note">개인 소지품이 없습니다.</div>'}</div>
+  <div class="card"><h2>성격</h2><div class="note" style="color:var(--parch)">${a.trait||a.d||"—"}</div>
+    ${a.comply?`<div class="trait" style="color:var(--violet-s)">${a.comply}</div>`:""}
+    ${a.susp?`<div class="kv" style="margin-top:6px"><span>의심도</span><span>${a.susp.cur}/${a.susp.max}</span></div>`:""}
+    ${persona}</div>
+  <div class="card"><h2>지식 격리</h2>
+    <div class="kv"><span>아는 것</span><span>${a.knows||"—"}</span></div>
+    <div class="kv"><span>모르는 것</span><span>${a.unknown||"—"}</span></div></div>
+  ${a.look?`<div class="card"><h2>외모 잠금</h2>${det("장면 묘사용 외모 프로필","고정","<span style='font-size:11px;line-height:1.7'>"+a.look+"</span>",a.look)}</div>`:""}`;
+}
+$("pDetail").addEventListener("click",e=>{ if(e.target.closest("[data-close-detail]")) closeDetail(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&DETAIL_ID) closeDetail(); });
+window.addEventListener("popstate",()=>{ if(DETAIL_ID) closeDetail(true); });
 /* v2.26: 개성 — 성향·행동 강령·말투·동기·두려움·베릭스와의 관계·장면에서의 역할.
    한 필드라도 있으면 표시하고, 없는 인물(단역 등)은 통째로 생략한다. */
 function personaBlock(a){
@@ -2839,15 +2957,11 @@ function personCard(a,opts={}){
     <div class="bar"><i class="${r>.6?"hp":"hpmid"}" style="width:${Math.max(0,r*100)}%"></i></div>`:""}
     <div class="trait">${trait}</div>
     ${a.comply?`<div class="note" style="color:var(--violet-s);margin-top:5px">${a.comply}</div>`:""}
-    ${personaBlock(a)}
+    ${a.id?`<button type="button" class="detailBtn" data-detail="${escAttr(a.id)}">세부 보기 — 스탯 · 기술 · 소지품 · 개성</button>`
+    :`${personaBlock(a)}
     <div class="sec-t">지식 격리</div>
     <div class="kv"><span>아는 것</span><span>${a.knows||"—"}</span></div>
-    <div class="kv"><span>모르는 것</span><span>${a.unknown||"—"}</span></div>
-    ${(a.equipment&&a.equipment.length)?`<div class="sec-t">장착품 <span class="itemcat-n">(${a.equipment.length})</span></div>`
-      +a.equipment.map(e=>det(e.item,e.slot||"착용",(e.desc||"")+itemStatusHTML(e))).join(""):""}
-    ${(a.items&&a.items.length)?`<div class="sec-t">소지품 <span class="itemcat-n">(${a.items.length})</span></div>`+renderItems(a.items):""}
-    ${sheetBlock(a.id)}
-    ${a.look?det("외모 프로필","고정","<span style='font-size:11px;line-height:1.7'>"+a.look+"</span>",a.look):""}</div>`;
+    <div class="kv"><span>모르는 것</span><span>${a.unknown||"—"}</span></div>`}</div>`;
 }
 function passFilter(a){
   if(pf_status!=="all"&&(a.status||"")!==pf_status) return false;
@@ -2890,6 +3004,8 @@ function renderParty(){
   }
 }
 $("s-party").addEventListener("click",e=>{
+  const db=e.target.closest("[data-detail]");
+  if(db){ openDetail(db.dataset.detail); return; }
   const mv=e.target.closest("[data-move]");
   if(mv){
     const scope=mv.dataset.scope==="npcs"?"npcs":"party";
