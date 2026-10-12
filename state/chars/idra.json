@@ -218,7 +218,14 @@
           "d": "가시 돋친 덩굴 채찍으로 공격하고 대상을 끌어당긴다."
         }
       ],
-      "futureFeatures": "6레벨 Natural Recovery(서클 주문 1회 무소모 시전 + 짧은 휴식 슬롯 회복, 합 레벨 ≤ 드루이드 레벨 절반 올림, 6레벨+ 슬롯 불가) · 7레벨 Elemental Fury · 10레벨 Nature's Ward(중독 면역 + 지형 저항, 온대=번개) · 14레벨 Nature's Sanctuary · 18레벨 Beast Spells · 20레벨 Archdruid. 온대 서클 주문 추가: 7레벨 Freedom of Movement, 9레벨 Tree Stride. (2026-09-21 사용자 제공 — 레벨업 시 그대로 적용)"
+      "futureFeatures": "6레벨 Natural Recovery(서클 주문 1회 무소모 시전 + 짧은 휴식 슬롯 회복, 합 레벨 ≤ 드루이드 레벨 절반 올림, 6레벨+ 슬롯 불가) · 7레벨 Elemental Fury · 10레벨 Nature's Ward(중독 면역 + 지형 저항, 온대=번개) · 14레벨 Nature's Sanctuary · 18레벨 Beast Spells · 20레벨 Archdruid. 온대 서클 주문 추가: 7레벨 Freedom of Movement, 9레벨 Tree Stride. (2026-09-21 사용자 제공 — 레벨업 시 그대로 적용)",
+      "saves": {
+        "proficient": [
+          "INT",
+          "WIS"
+        ],
+        "note": "2026-10-13 사용자 지시로 기록. 드루이드의 클래스 기본 내성 숙련(2014·2024판 동일). 수치는 핸드북이 능력치·숙련 보너스로 계산한다."
+      }
     },
     "heartwood_bond": {
       "n": "심목 결속",

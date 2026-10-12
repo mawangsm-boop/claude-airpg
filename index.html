@@ -2665,6 +2665,7 @@ function renderChar(){
     <div class="stats">${Object.entries(p.stats).map(([k,v])=>{
       const m=Math.floor((v-10)/2); return `<div class="stat"><b>${k}</b><i>${v}</i><b>${m>=0?"+":""}${m}</b></div>`;}).join("")}</div>
   </div>
+  ${savesCard(p)}
   ${skillsCard(p)}
   ${renderEquipped(p.items)}
   ${renderResources(p.resources)}
