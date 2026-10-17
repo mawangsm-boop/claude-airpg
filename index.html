@@ -92,6 +92,27 @@ details .d{padding:9px 10px;font-size:12px;line-height:1.65;color:var(--parch)}
 .tag.y{color:var(--gold-s);background:rgba(201,164,87,.14);border-color:#5b4a24}
 .tag.r{color:var(--blood);background:rgba(201,102,106,.14);border-color:#5b2b2d}
 .sec-t{font-size:10px;color:var(--violet);letter-spacing:1.4px;margin:12px 0 5px;text-transform:uppercase}
+/* v2.32: 자원 카드 — 항목마다 구분선, 플레이어용 한 줄(sum)만 펼쳐 두고 GM 기록(note)은 접는다 */
+.res{padding:6px 0 8px;border-bottom:1px dashed var(--line)}
+.res:last-child{border-bottom:0;padding-bottom:0}
+.res .bar{margin-bottom:4px}
+.res-sum{color:var(--parch)}
+details.gmlog{background:transparent;border:0;margin:3px 0 0}
+details.gmlog>summary{padding:2px 0;font-size:10.5px;color:var(--muted);justify-content:flex-start}
+details.gmlog>summary::before{content:"▸ ";color:var(--violet-s)}
+details.gmlog[open]>summary{border-bottom:0;color:var(--muted)}
+details.gmlog[open]>summary::before{content:"▾ "}
+details.gmlog .d{padding:3px 0 0;font-size:11px;color:var(--muted)}
+/* v2.32: "쓸 수 있는 것" — 주문·특성·자원·장비·소모품을 행동 종류별로 모은 카드 */
+details.act summary>span:first-child{display:block;min-width:0}
+details.act summary small{display:block;font-size:10.5px;color:var(--muted);line-height:1.45;margin-top:2px;font-style:normal}
+details.act summary .tag{align-self:flex-start;flex:0 0 auto}
+details.act.off{opacity:.42}
+details.actgrp{background:transparent;border:0;margin:0 0 2px}
+details.actgrp>summary{padding:0;margin:12px 0 5px;font-size:10px;color:var(--violet);letter-spacing:1.4px;justify-content:flex-start;gap:6px;align-items:center}
+details.actgrp>summary::before{content:"▸";font-size:9px;color:var(--violet-s);transition:transform .15s}
+details.actgrp[open]>summary{border-bottom:0;color:var(--violet)}
+details.actgrp[open]>summary::before{transform:rotate(90deg)}
 /* v2.31: 파티 카드 → 세부 보기(캐릭터 탭과 같은 형식의 전체 화면 시트) */
 .detailBtn{display:block;width:100%;margin-top:10px;padding:8px;font-size:12px;font-family:var(--f-body);background:var(--panel2);
   color:var(--gold-s);border:1px solid var(--gold);border-radius:8px;cursor:pointer}
@@ -1313,7 +1334,8 @@ const SEED = {
         "cur": 3,
         "max": 6,
         "recharge": "long",
-        "note": "매력 수정치만큼(6회, 수치는 45회차 규칙 판본 대조 전이라 잠정 — 2024판이 숙련 보너스 기준으로 바뀌었을 가능성 있음, 확인되는 대로 정정). 보너스 행동으로 자신 외 18m 내 크리처 1명에게 영감 주사위(d6)를 준다. 그 크리처는 앞으로 1시간 안에 자신의 능력 판정·공격 판정·내성 굴림 중 하나에 주사위를 굴려 결과값을 더할 수 있다(d20을 굴린 뒤, 성패가 정해지기 전까지 사용 여부를 미룰 수 있음). 한 번 굴리면 소모되며, 크리처는 한 번에 하나만 가질 수 있다. 지금은 긴 휴식에만 회복 — 5레벨에 Font of Inspiration을 얻으면 짧은 휴식에도 회복되도록 갱신할 것."
+        "note": "매력 수정치만큼 6회로 잠정(45회차 규칙 판본 대조 전 — 2024판이 숙련 보너스 기준일 수 있음, 확인되는 대로 정정). 지금은 긴 휴식에만 회복 — 5레벨 Font of Inspiration을 얻으면 짧은 휴식에도 회복되도록 갱신.",
+        "sum": "영감의 말·영감의 망토에 공용으로 쓴다"
       },
       {
         "id": "res_core_echo_suggestion",
@@ -1322,7 +1344,10 @@ const SEED = {
         "cur": 1,
         "max": 1,
         "recharge": "long",
-        "note": "feat_scattered_warden_s40. 하루 1회, 슬롯 소모 없이 서제스천. 2일째 오후 에다 그린에게 사용(\"에다, 당신도 내게 훈련 받으시오\") — 집중 중. 구성요소는 이 특성 문구에 없어 요구하지 않았다(43회차까지의 사용 선례와 같음). 2024판 원문은 꿀 한 방울(검색 요약, 원문 대조 전)."
+        "note": "출처: 흩어진 문지기의 마지막 조각(40회차). 구성요소는 이 특성 문구에 없어 요구하지 않는다(43회차까지의 선례). 2024판 서제스천 원문의 재료는 꿀 한 방울(검색 요약, 원문 대조 전). 사용 기록: 48회차 에다 그린, 49회차 펠 마로.",
+        "act": "action",
+        "sum": "슬롯 없이 서제스천 하루 1회 · 지혜 내성 DC 16 · 집중 최대 8시간",
+        "conc": true
       },
       {
         "id": "res_forest_beast_command",
@@ -1331,7 +1356,9 @@ const SEED = {
         "cur": 1,
         "max": 1,
         "recharge": "long",
-        "note": "feat_scattered_warden_s40. 하루 1회 야수 명령. (이전엔 사용 횟수 추적 항목이 없어 이번에 신설.)"
+        "note": "출처: 흩어진 문지기의 마지막 조각(40회차) 중 '숲을 갉아먹던 것의 파편'. 세부 효과는 쓸 때 정한다.",
+        "act": "action",
+        "sum": "슬롯 없이 야수 명령 하루 1회"
       },
       {
         "id": "res_beguiling_magic",
@@ -1340,7 +1367,8 @@ const SEED = {
         "cur": 0,
         "max": 1,
         "recharge": "long",
-        "note": "슬롯 환혹/환영 주문 직후 발동. 영감의 말 1회를 소모해 회복 가능(행동 불필요). 사용자 제공 텍스트 기준."
+        "note": "효과 텍스트는 48회차 사용자 제공본.",
+        "sum": "매혹의 마법 사용 여부 — 영감의 말 1회로 되살릴 수 있다(행동 불필요)"
       },
       {
         "id": "res_heartwood_plants",
@@ -1349,7 +1377,9 @@ const SEED = {
         "cur": 1,
         "max": 1,
         "recharge": "long",
-        "note": "feat_heartwood_remnant_s46. 하루 1회, 슬롯 소모 없이 식물과의 대화. 49회차 2일째 새벽, 조제실 화분들에게 이드라의 밤을 물었다(사용 순간 화분이 크게 기울어 이드라가 봤다). 사용 추적 항목이 없어 이번에 신설."
+        "note": "출처: 심목의 잔재(46회차). 49회차 2일째 새벽 조제실 화분에게 처음 써서 이드라가 화분이 기우는 걸 봤다.",
+        "act": "action",
+        "sum": "슬롯 없이 식물과의 대화 하루 1회 · 쓰면 주변 식물이 크게 기운다"
       }
     ],
     "gold": 339,
@@ -1381,14 +1411,16 @@ const SEED = {
         "n": "요술 (Prestidigitation)",
         "t": "캔트립",
         "c": "슬롯 소모 없음",
-        "d": "사거리 3m. 사소한 마법 효과 하나를 낸다(감각 효과 연출, 작은 불꽃 켜고 끄기, 물건 세척·오염, 무생물 향미·냉온 조절, 임시 표식 새기기 등). 대부분 효과는 최대 1시간 지속."
+        "d": "사거리 3m. 사소한 마법 효과 하나를 낸다(감각 효과 연출, 작은 불꽃 켜고 끄기, 물건 세척·오염, 무생물 향미·냉온 조절, 임시 표식 새기기 등). 대부분 효과는 최대 1시간 지속.",
+        "sum": "3m · 작은 마법 효과(불 켜고 끄기·세척·표식·감각 연출)"
       },
       {
         "id": "cantrip_vicious_mockery",
         "n": "잔혹한 조롱 (Vicious Mockery)",
         "t": "캔트립",
         "c": "슬롯 소모 없음",
-        "d": "사거리 18m. 대상 1명에게 날카로운 조롱을 퍼붓는다. 지혜 내성 실패 시 1d6 정신 피해 + 다음 공격 굴림에 불리점(5레벨 2d6, 11레벨 3d6, 17레벨 4d6). 2024판(웹 검색 요약 기준 정정 — 2014판은 1d4)."
+        "d": "사거리 18m. 대상 1명에게 날카로운 조롱을 퍼붓는다. 지혜 내성 실패 시 1d6 정신 피해 + 다음 공격 굴림에 불리점(5레벨 2d6, 11레벨 3d6, 17레벨 4d6). 2024판(웹 검색 요약 기준 정정 — 2014판은 1d4).",
+        "sum": "18m · 지혜 내성 · 1d6 정신 + 다음 공격 불리점"
       },
       {
         "id": "cantrip_minor_illusion",
@@ -1396,7 +1428,8 @@ const SEED = {
         "t": "캔트립",
         "c": "슬롯 소모 없음 (환영계)",
         "d": "사거리 9m. 소리 또는 1.5m 정육면체 이하의 물체 환영 하나를 1분간 만든다. 조사 행동과 지능(조사) 판정으로 주문 내성 DC를 넘기면 환영임을 안다. 물체 환영은 만지면 통과한다.",
-        "note_ui": "49회차 4레벨 추가 캔트립(사용자 선택). 수치는 GM 기억 — 2024 원문 미대조. 캔트립이라 매혹의 마법은 발동하지 않는다."
+        "note_ui": "49회차 4레벨 추가 캔트립(사용자 선택). 수치는 GM 기억 — 2024 원문 미대조. 캔트립이라 매혹의 마법은 발동하지 않는다.",
+        "sum": "9m · 소리 또는 1.5m 물체 환영 1분 · 조사로 간파"
       },
       {
         "id": "spell_command",
@@ -1404,7 +1437,8 @@ const SEED = {
         "t": "1레벨",
         "c": "슬롯 1",
         "d": "사거리 18m. 시야 내 크리처 1명에게 한 단어 명령. 지혜 내성 실패 시 다음 턴에 그대로 따른다. 접근(다가옴)·투하(들고 있는 것을 떨어뜨림)·도주(가장 빠른 수단으로 멀어짐)·굴복(넘어짐 상태)·정지(이동·행동·추가행동 없음) 중 선택. 상위 슬롯 사용 시 슬롯 레벨당 대상 1명 추가.",
-        "note_ui": "2024판 원문 확인 완료(사용자 검색 결과 대조) — Grovel(굴복) 포함 5개 명령어 2014판과 동일."
+        "note_ui": "2024판 원문 확인 완료(사용자 검색 결과 대조) — Grovel(굴복) 포함 5개 명령어 2014판과 동일.",
+        "sum": "18m · 지혜 내성 · 한 단어 명령(접근·투하·도주·굴복·정지)"
       },
       {
         "id": "spell_sleep",
@@ -1412,49 +1446,60 @@ const SEED = {
         "t": "1레벨",
         "c": "슬롯 1, 집중 최대 1분",
         "d": "사거리 18m, 반경 1.5m(1칸) 구체. 범위 내 크리처 전원이 지혜 내성. 실패 시 무력화(incapacitated) 상태가 되고, 자신의 다음 턴이 끝날 때 다시 내성 — 다시 실패하면 주문 지속시간 동안 의식을 잃는다(재차 성공 시 무력화만 풀림).",
-        "note_ui": "2024판에서 전면 개정됨 — 2014판의 HP 총합 방식(다수 주사위로 HP 풀을 채워 낮은 HP부터 재움)이 폐지되고 지혜 내성 방식으로 교체. 사거리 90ft→60ft(27m→18m), 반경 20ft→5ft(6m→1.5m)로 축소, 집중 주문이 됨. 사용자 검색 결과로 확인, 원문 전체 열람은 못 함."
+        "note_ui": "2024판에서 전면 개정됨 — 2014판의 HP 총합 방식(다수 주사위로 HP 풀을 채워 낮은 HP부터 재움)이 폐지되고 지혜 내성 방식으로 교체. 사거리 90ft→60ft(27m→18m), 반경 20ft→5ft(6m→1.5m)로 축소, 집중 주문이 됨. 사용자 검색 결과로 확인, 원문 전체 열람은 못 함.",
+        "sum": "18m · 1.5m 구 · 지혜 내성 · 무력화 → 다시 실패하면 의식 잃음",
+        "conc": true
       },
       {
         "id": "spell_heroism",
         "n": "영웅심 (Heroism)",
         "t": "1레벨",
         "c": "슬롯 1",
-        "d": "집중, 최대 1분. 자발적 대상 1명이 공포 상태에 면역이 되고, 매 턴 시작 시 임시 HP(매력 수정치)를 얻는다."
+        "d": "집중, 최대 1분. 자발적 대상 1명이 공포 상태에 면역이 되고, 매 턴 시작 시 임시 HP(매력 수정치)를 얻는다.",
+        "sum": "접촉 · 공포 면역 + 매 턴 임시 HP 6",
+        "conc": true
       },
       {
         "id": "spell_healing_word",
         "n": "치유의 언령 (Healing Word)",
         "t": "1레벨",
         "c": "슬롯 1",
-        "d": "보너스 행동. 사거리 18m 내 아군 1명 HP 회복(2d4+매력). 2024판 정정 — 2014판은 1d4(웹 검색, 커뮤니티 전사본 기준, 원문 미확인)."
+        "d": "보너스 행동. 사거리 18m 내 아군 1명 HP 회복(2d4+매력). 2024판 정정 — 2014판은 1d4(웹 검색, 커뮤니티 전사본 기준, 원문 미확인).",
+        "act": "bonus",
+        "sum": "18m · 아군 1명 2d4+6 회복"
       },
       {
         "id": "spell_dissonant_whispers",
         "n": "불협화음의 속삭임 (Dissonant Whispers)",
         "t": "1레벨",
         "c": "슬롯 1",
-        "d": "사거리 18m. 대상에게 불협화음 같은 환청을 심는다. 지혜 내성 실패 시 3d6 정신 피해를 입고 반응행동으로 즉시 최대한 멀리 이동해야 한다(내성 성공 시 피해 절반, 이동 없음)."
+        "d": "사거리 18m. 대상에게 불협화음 같은 환청을 심는다. 지혜 내성 실패 시 3d6 정신 피해를 입고 반응행동으로 즉시 최대한 멀리 이동해야 한다(내성 성공 시 피해 절반, 이동 없음).",
+        "sum": "18m · 지혜 내성 · 3d6 정신 + 반응으로 도망(성공 시 절반)"
       },
       {
         "id": "spell_charm_person",
         "n": "사람 매혹 (Charm Person)",
         "t": "1레벨",
         "c": "슬롯 1 — 항상 준비(Beguiling Magic)",
-        "d": "3레벨 매혹학파 특성으로 항상 준비된 주문. 환혹계. 세부 수치는 2024 원문 대조 전."
+        "d": "3레벨 매혹학파 특성으로 항상 준비된 주문. 환혹계. 세부 수치는 2024 원문 대조 전.",
+        "sum": "인간형 1명 · 지혜 내성(싸우는 중이면 이점) · 매혹 — 세부는 원문 대조 전"
       },
       {
         "id": "spell_mirror_image",
         "n": "거울 분신 (Mirror Image)",
         "t": "2레벨",
         "c": "슬롯 2 — 항상 준비(Beguiling Magic)",
-        "d": "3레벨 매혹학파 특성으로 항상 준비된 주문. 환영계. 세부 수치는 2024 원문 대조 전."
+        "d": "3레벨 매혹학파 특성으로 항상 준비된 주문. 환영계. 세부 수치는 2024 원문 대조 전.",
+        "sum": "분신 셋 · 명중마다 분신 수만큼 d6, 3 이상이면 분신이 대신 맞음"
       },
       {
         "id": "spell_phantasmal_force",
         "n": "환상력 (Phantasmal Force)",
         "t": "2레벨",
         "c": "슬롯 2, 집중 최대 1분, 환영계(매혹의 마법 발동 조건)",
-        "d": "시전 시간 액션, 사거리 18m(60피트), 구성요소 V·S·M(양털 한 줌). 보이는 대상 1명에게 지능 내성(DC 16)을 요구한다. 실패하면 대상만 인식하는 환영(물체·생물·현상, 최대 3m 정육면체, 소리·온도 등 포함)이 생긴다. 대상은 조사(Study) 행동으로 지능(조사) 판정을 해 주문 내성 DC를 넘기면 환영임을 깨닫고 주문이 끝난다. 영향받는 동안 대상은 환영을 진짜로 여기며 모순된 결과도 합리화한다. 환영이 위험한 생물·위험물로 설정되고 대상이 그 영역 안이나 1.5m 안에 있으면 시전자의 매 턴마다 2d8 정신 피해를 줄 수 있다(대상은 환영에 맞는 유형으로 인식). 사용자 제공 텍스트(wikidot 2024 표기 — 원문 직접 대조 전). 판정에 따라 효과가 크게 달라져 DM 합의가 필요한 주문."
+        "d": "시전 시간 액션, 사거리 18m(60피트), 구성요소 V·S·M(양털 한 줌). 보이는 대상 1명에게 지능 내성(DC 16)을 요구한다. 실패하면 대상만 인식하는 환영(물체·생물·현상, 최대 3m 정육면체, 소리·온도 등 포함)이 생긴다. 대상은 조사(Study) 행동으로 지능(조사) 판정을 해 주문 내성 DC를 넘기면 환영임을 깨닫고 주문이 끝난다. 영향받는 동안 대상은 환영을 진짜로 여기며 모순된 결과도 합리화한다. 환영이 위험한 생물·위험물로 설정되고 대상이 그 영역 안이나 1.5m 안에 있으면 시전자의 매 턴마다 2d8 정신 피해를 줄 수 있다(대상은 환영에 맞는 유형으로 인식). 사용자 제공 텍스트(wikidot 2024 표기 — 원문 직접 대조 전). 판정에 따라 효과가 크게 달라져 DM 합의가 필요한 주문.",
+        "sum": "18m · 지능 내성 · 대상만 보는 환영(3m), 위험물이면 2d8 정신",
+        "conc": true
       },
       {
         "id": "spell_crown_of_madness",
@@ -1462,7 +1507,9 @@ const SEED = {
         "t": "2레벨",
         "c": "슬롯 2, 집중 최대 1분, 환혹계(매혹의 마법 발동 조건)",
         "d": "사거리 36m(120피트). 보이는 인간형 하나에게 지혜 내성. 실패 시 매혹되고 머리 위에 뒤틀린 쇠 왕관이 떠오른다. 대상은 자기 턴에 움직이기 전, 시전자가 정신으로 지목한 다른 크리처를 근접 공격해야 한다(지목이 없거나 닿는 대상이 없으면 평소대로 행동). 대상은 자기 턴이 끝날 때마다 내성을 다시 굴려 성공하면 끝난다. 2014판에서는 시전자가 매 턴 행동을 써야 유지됐다 — 2024판에서 이 조건이 바뀌었는지 확인 필요.",
-        "note_ui": "49회차 4레벨 추가 준비 주문(사용자 선택). 수치는 GM 기억 — 2024 원문 미대조, 처음 쓸 때 대조."
+        "note_ui": "49회차 4레벨 추가 준비 주문(사용자 선택). 수치는 GM 기억 — 2024 원문 미대조, 처음 쓸 때 대조.",
+        "sum": "36m · 인간형 · 지혜 내성 · 지목한 상대를 근접 공격하게 함",
+        "conc": true
       }
     ],
     "feats": [
@@ -1470,20 +1517,27 @@ const SEED = {
         "id": "feat_bardic_inspiration",
         "n": "영감의 말 (Bardic Inspiration)",
         "t": "클래스 특성 (1레벨)",
-        "d": "보너스 행동으로 자신 외 18m 내 크리처 1명에게 영감 주사위(d6)를 준다. 대상은 1시간 안에 자신의 능력 판정·공격 판정·내성 굴림 중 하나에 그 주사위를 더할 수 있다(굴린 뒤 결과가 나오기 전까지 사용 여부 결정 가능). 사용하면 소모, 한 번에 하나만 보유. 사용 횟수는 `resources` 참고."
+        "d": "보너스 행동으로 자신 외 18m 내 크리처 1명에게 영감 주사위(d6)를 준다. 대상은 1시간 안에 자신의 능력 판정·공격 판정·내성 굴림 중 하나에 그 주사위를 더할 수 있다(굴린 뒤 결과가 나오기 전까지 사용 여부 결정 가능). 사용하면 소모, 한 번에 하나만 보유. 사용 횟수는 `resources` 참고.",
+        "act": "bonus",
+        "res": "res_bardic_inspiration",
+        "sum": "18m 1명에게 d6 — 1시간 안에 판정·공격·내성 하나에 더함"
       },
       {
         "id": "feat_fate_sense",
         "n": "운명 감지 · 은빛 혀 (Silver Tongue)",
         "t": "배경 특성 — 사용자 지시로 45회차부터 명시적 규칙 적용",
         "d": "매력(설득)·매력(기만) 판정에만 적용. d20을 굴려 나온 눈금이 9 이하면 10으로 취급한다(최소 수치 보장, 이점과는 다름). 그 값에 능력 수정치·숙련 보너스를 더해 최종 판정값을 낸다. 통찰은 이 효과에 포함되지 않는다 — 통찰은 별도 숙련으로 처리(아래 `skills` 참고).",
-        "note_ui": "원래 D&D 웅변 대학(College of Eloquence) 바드 3레벨 특성 — 베릭스는 영화 대학(College of Glamour) 예정이라 서브클래스 소속과 무관하게 배경 특성에 이식한 것. 2026-09-20, 사용자 직접 지시로 즉시 반영."
+        "note_ui": "원래 D&D 웅변 대학(College of Eloquence) 바드 3레벨 특성 — 베릭스는 영화 대학(College of Glamour) 예정이라 서브클래스 소속과 무관하게 배경 특성에 이식한 것. 2026-09-20, 사용자 직접 지시로 즉시 반영.",
+        "act": "passive",
+        "sum": "설득·기만 판정의 d20 눈금 9 이하는 10으로"
       },
       {
         "id": "feat_scattered_warden_s40",
         "n": "흩어진 문지기의 마지막 조각",
         "t": "클래스와 무관한 고유 특성 (40회차 확정)",
-        "d": "창설자의 핵·능선의 매듭 코어·동쪽 갈래 수호자의 핵·숲을 갉아먹던 것의 파편이 마지막 조각과 합쳐지며 완전히 안정됐다. 정제된 핵의 잔향(무소모 서제스천 1일 1회, 정신계 내성 이점)과 숲을 갉아먹던 것의 파편(야수 명령 1일 1회, 자연 계열 내성 이점)이 하나의 안정된 특성으로 통합되어 매일 슬롯 회복 없이 그대로 유지된다. 후원자에게 빌린 힘이 아니라 직접 삼킨 힘이라 44회차 계약 종결 이후에도, 클래스 레벨을 1로 되돌린 이후에도 소멸하지 않았다."
+        "d": "창설자의 핵·능선의 매듭 코어·동쪽 갈래 수호자의 핵·숲을 갉아먹던 것의 파편이 마지막 조각과 합쳐지며 완전히 안정됐다. 정제된 핵의 잔향(무소모 서제스천 1일 1회, 정신계 내성 이점)과 숲을 갉아먹던 것의 파편(야수 명령 1일 1회, 자연 계열 내성 이점)이 하나의 안정된 특성으로 통합되어 매일 슬롯 회복 없이 그대로 유지된다. 후원자에게 빌린 힘이 아니라 직접 삼킨 힘이라 44회차 계약 종결 이후에도, 클래스 레벨을 1로 되돌린 이후에도 소멸하지 않았다.",
+        "act": "passive",
+        "sum": "정신계·자연 계열 내성 이점 (서제스천·야수 명령은 행동 쪽)"
       },
       {
         "id": "feat_expertise_l2",
@@ -1495,7 +1549,9 @@ const SEED = {
         "id": "feat_jack_of_all_trades_l2",
         "n": "팔방미인 (Jack of All Trades)",
         "t": "클래스 특성 (2레벨)",
-        "d": "숙련이 없는 **기술이 붙은** 능력 판정에 숙련 보너스의 절반(반올림 내림, 현재 +1)을 더한다. 2024판은 기술 판정에만 적용 — 이니셔티브 등 기술이 붙지 않는 판정에는 적용되지 않는다."
+        "d": "숙련이 없는 **기술이 붙은** 능력 판정에 숙련 보너스의 절반(반올림 내림, 현재 +1)을 더한다. 2024판은 기술 판정에만 적용 — 이니셔티브 등 기술이 붙지 않는 판정에는 적용되지 않는다.",
+        "act": "passive",
+        "sum": "숙련 없는 기술 판정 +1"
       },
       {
         "id": "feat_heartwood_remnant_s46",
@@ -1509,21 +1565,29 @@ const SEED = {
         "n": "매혹의 마법 (Beguiling Magic)",
         "t": "매혹학파 3레벨",
         "d": "사람 매혹·거울 분신이 항상 준비된다(슬롯 소모는 별도). 슬롯으로 환혹계 또는 환영계 주문을 시전한 직후, 18m(60피트) 안에서 보이는 크리처 1명(주문 대상과 같을 필요 없음)에게 주문 내성 DC(16)의 지혜 내성을 요구한다. 실패하면 1분간 매혹 또는 공포(시전자 선택). 대상은 자기 턴이 끝날 때마다 내성을 다시 굴려 성공하면 종료. 캔트립·슬롯 없는 능력으로는 발동하지 않는다. 한 번 쓰면 긴 휴식 전까지 못 쓰며, 영감의 말 1회를 소모하면(행동 불필요) 회복한다.",
-        "note_ui": "48회차 3레벨 승급. 효과 텍스트는 사용자가 제공(2024 PHB 원문 인용이라 주어졌으나 제3자 정리문 — 직접 원문 대조는 못 함)."
+        "note_ui": "48회차 3레벨 승급. 효과 텍스트는 사용자가 제공(2024 PHB 원문 인용이라 주어졌으나 제3자 정리문 — 직접 원문 대조는 못 함).",
+        "act": "trigger",
+        "res": "res_beguiling_magic",
+        "sum": "환혹·환영 슬롯 주문 직후 · 18m 1명 지혜 내성 DC 16 · 1분 매혹 또는 공포"
       },
       {
         "id": "feat_mantle_inspiration_l3",
         "n": "영감의 망토 (Mantle of Inspiration)",
         "t": "매혹학파 3레벨",
         "d": "보너스 행동으로 영감의 말 1회를 소모하고 영감 주사위를 굴린다. 18m(60피트) 안의 다른 크리처를 매력 수정치(6)명까지(최소 1) 고르면, 각 대상은 굴림 결과의 2배만큼 임시 HP를 얻고 반응으로 기회 공격 없이 자기 속도만큼 이동할 수 있다(자신 제외). 3~4레벨 d6이라 최대 12.",
-        "note_ui": "48회차 3레벨 승급. 효과 텍스트는 사용자가 제공(제3자 정리문 — 원문 직접 대조는 못 함)."
+        "note_ui": "48회차 3레벨 승급. 효과 텍스트는 사용자가 제공(제3자 정리문 — 원문 직접 대조는 못 함).",
+        "act": "bonus",
+        "res": "res_bardic_inspiration",
+        "sum": "영감 1회 · d6×2 임시 HP를 최대 6명 · 기회 공격 없이 이동"
       },
       {
         "id": "feat_war_caster_l4",
         "n": "전투 시전자 (War Caster)",
         "t": "특기 (4레벨)",
         "d": "지능 +1(13→14 — 매력 22는 상한 20을 넘어 올릴 수 없어 GM 권장안 적용, 사용자가 바꾸면 정정). 집중 유지 건강 내성에 이점. 기회 공격 대신 그 대상에게 시전 시간 1행동인 주문을 반응으로 시전. 무기·방패를 든 손으로도 몸짓 요소 수행.",
-        "note_ui": "49회차 4레벨 승급, 사용자 선택. 효과 문구는 GM 기억 기반 — 2024 원문 미대조."
+        "note_ui": "49회차 4레벨 승급, 사용자 선택. 효과 문구는 GM 기억 기반 — 2024 원문 미대조.",
+        "act": "reaction",
+        "sum": "기회 공격 대신 그 대상에게 1행동 주문 · 집중 유지 내성 이점(상시)"
       }
     ],
     "items": [
@@ -1545,7 +1609,9 @@ const SEED = {
           "cur": 1,
           "max": 1,
           "recharge": "long"
-        }
+        },
+        "act": "action",
+        "sum": "본 적 있는 장소·존재를 1분간 원격으로 봄(소리 없음) · 하루 1회"
       },
       {
         "id": "item_vaultkeeper_bracer_s22",
@@ -1555,7 +1621,9 @@ const SEED = {
         "cat": "weapon",
         "equipped": true,
         "passive": true,
-        "acBonus": 1
+        "acBonus": 1,
+        "act": "passive",
+        "sum": "AC +1"
       },
       {
         "id": "item_tarocca_cards",
@@ -1584,7 +1652,9 @@ const SEED = {
           "cur": 1,
           "max": 1,
           "recharge": "long"
-        }
+        },
+        "act": "action",
+        "sum": "반경 3m를 30초간 완전한 침묵 지대로 · 하루 1회"
       },
       {
         "id": "item_regen_charm_s16",
@@ -1598,7 +1668,9 @@ const SEED = {
           "max": 1,
           "recharge": "long"
         },
-        "passive_trigger": true
+        "passive_trigger": true,
+        "act": "trigger",
+        "sum": "HP가 절반 이하가 되면 자동으로 2d6 회복 · 하루 1회"
       },
       {
         "id": "item_torch",
@@ -1614,14 +1686,18 @@ const SEED = {
         "d": "위협적 존재가 9 m 이내로 접근하면 진동으로 경고.",
         "cat": "accessory",
         "equipped": true,
-        "passive": true
+        "passive": true,
+        "act": "passive",
+        "sum": "위협적 존재가 9m 안에 들면 진동으로 경고"
       },
       {
         "id": "item_deepblue_potion_s29",
         "n": "짙은 남색 물약",
         "q": 1,
         "d": "정제된 각성 물약. 마시면 1시간 동안 공포·매혹 상태에 면역.",
-        "cat": "consumable"
+        "cat": "consumable",
+        "act": "bonus",
+        "sum": "1시간 공포·매혹 면역 · 물약 마시기는 보너스 행동(2024, 원문 대조 전)"
       },
       {
         "id": "item_guardian_shard_s29",
@@ -1651,35 +1727,45 @@ const SEED = {
         "n": "치료 물약",
         "q": 1,
         "d": "사용 시 2d4+2 HP 회복.",
-        "cat": "consumable"
+        "cat": "consumable",
+        "act": "bonus",
+        "sum": "2d4+2 회복 · 물약 마시기는 보너스 행동(2024, 원문 대조 전)"
       },
       {
         "id": "item_healing_potion",
         "n": "회복 물약",
         "q": 4,
         "d": "사용 시 2d4+2 HP 회복.",
-        "cat": "consumable"
+        "cat": "consumable",
+        "act": "bonus",
+        "sum": "2d4+2 회복 · 물약 마시기는 보너스 행동(2024, 원문 대조 전)"
       },
       {
         "id": "item_antidote_potion",
         "n": "해독 물약",
         "q": 3,
         "d": "중독 상태를 즉시 해소.",
-        "cat": "consumable"
+        "cat": "consumable",
+        "act": "bonus",
+        "sum": "중독 즉시 해소 · 물약 마시기는 보너스 행동(2024, 원문 대조 전)"
       },
       {
         "id": "item_stealth_potion",
         "n": "은신 물약",
         "q": 2,
         "d": "10분간 은신 판정에 이점을 부여.",
-        "cat": "consumable"
+        "cat": "consumable",
+        "act": "bonus",
+        "sum": "10분 은신 판정 이점 · 물약 마시기는 보너스 행동(2024, 원문 대조 전)"
       },
       {
         "id": "item_mind_ward_potion",
         "n": "정신 방어 물약",
         "q": 2,
         "d": "1시간 동안 정신 지배·매혹 내성에 이점.",
-        "cat": "consumable"
+        "cat": "consumable",
+        "act": "bonus",
+        "sum": "1시간 정신 지배·매혹 내성 이점 · 물약 마시기는 보너스 행동(2024, 원문 대조 전)"
       },
       {
         "id": "item_warden_blade_s37",
@@ -1697,7 +1783,9 @@ const SEED = {
             "effect": "가한 피해의 절반(반올림)만큼 자동 자가회복",
             "cap": "최대 HP 초과 불가, 판정 불필요"
           }
-        }
+        },
+        "act": "action",
+        "sum": "단검 +5 · 1d4+3 관통 · 그 턴 첫 명중 시 피해 절반 회복"
       },
       {
         "id": "item_holy_dagger_pact",
@@ -1716,7 +1804,9 @@ const SEED = {
               "type": "광휘"
             }
           }
-        }
+        },
+        "act": "action",
+        "sum": "예비 단검 · 1d4+2 관통 · 악마·언데드 +1d6 광휘"
       },
       {
         "id": "item_bark_charm_s38",
@@ -1729,7 +1819,9 @@ const SEED = {
           "cur": 1,
           "max": 1,
           "recharge": "long"
-        }
+        },
+        "act": "action",
+        "sum": "2d4 HP 즉시 회복 · 하루 1회"
       },
       {
         "id": "item_fey_shrine_clue_s38",
@@ -1765,7 +1857,9 @@ const SEED = {
           "cur": 1,
           "max": 1,
           "recharge": "long"
-        }
+        },
+        "act": "action",
+        "sum": "공포·매혹 계열 효과 하나를 즉시 해소 · 하루 1회"
       },
       {
         "id": "item_fey_pathring_s39",
@@ -1778,7 +1872,9 @@ const SEED = {
           "cur": 1,
           "max": 1,
           "recharge": "long"
-        }
+        },
+        "act": "action",
+        "sum": "반경 9m 가장 안전한 길 직감 · 함정·위험 지형 탐지 이점 · 하루 1회"
       },
       {
         "id": "item_grayhand_ledger_s42",
@@ -1805,7 +1901,9 @@ const SEED = {
         "combat": {
           "dmgDice": "1d4+DEX",
           "note": "숙련 없음(군용). 2024판 원문 대조 전 — 수치 확정 아님"
-        }
+        },
+        "act": "action",
+        "sum": "채찍 · 1d4 참격 · 간격 3m — 군용 무기라 숙련 여부 원문 확인 필요"
       },
       {
         "id": "item_caretaker_letter_s49",
@@ -1851,7 +1949,9 @@ const SEED = {
           "cur": 1,
           "max": 1,
           "recharge": "turn",
-          "note": "턴당 1회. 이점 판정 또는 Rakish Audacity 조건(1대1) 충족 시 발동."
+          "note": "턴당 1회. 이점 판정 또는 Rakish Audacity 조건(1대1) 충족 시 발동.",
+          "act": "trigger",
+          "sum": "턴당 1회 · 3d6 — 이점이거나 대상 곁에 아군, 또는 1대1(Rakish Audacity)"
         }
       ],
       "abilities": [
@@ -1859,7 +1959,8 @@ const SEED = {
           "id": "ab_isabel_cunning_action",
           "n": "교활한 행동",
           "t": "추가 행동",
-          "d": "매 턴 추가 행동으로 질주·이탈·은신 중 하나를 선택해 사용할 수 있다."
+          "d": "매 턴 추가 행동으로 질주·이탈·은신 중 하나를 선택해 사용할 수 있다.",
+          "sum": "질주·이탈·은신 중 하나"
         },
         {
           "id": "ab_isabel_rakish_audacity",
@@ -1879,19 +1980,23 @@ const SEED = {
           "n": "Fancy Footwork",
           "t": "패시브 (스와시버클러 3레벨)",
           "d": "자기 턴에 어떤 생물에게 근접 공격 판정을 하면(빗나가도), 그 생물은 이번 턴이 끝날 때까지 그녀에게 기회 공격을 할 수 없다. 다른 적에게는 적용되지 않는다.",
-          "note_ui": "스와시버클러는 2024 PHB에 없어 Xanathar 판본을 그대로 쓴다. 2026-10-13 사용자 제공본으로 확인."
+          "note_ui": "스와시버클러는 2024 PHB에 없어 Xanathar 판본을 그대로 쓴다. 2026-10-13 사용자 제공본으로 확인.",
+          "sum": "근접 공격한 상대는 그 턴 기회 공격 불가"
         },
         {
           "id": "ab_isabel_cunning_strike",
           "n": "Cunning Strike",
           "t": "은신 공격 부가 (5레벨)",
-          "d": "은신 공격 피해를 줄 때 주사위를 포기하고 효과를 붙인다. 내성 DC 14(8+DEX 3+숙련 3). 독(1d6, 건강 내성, 실패 시 1분 중독·매 턴 끝 재굴림, 독살 도구 필요) · 넘어뜨리기(1d6, 대형 이하, 민첩 내성 실패 시 넘어짐) · 물러서기(1d6, 공격 직후 속도 절반 이동, 기회 공격 유발 안 함)."
+          "d": "은신 공격 피해를 줄 때 주사위를 포기하고 효과를 붙인다. 내성 DC 14(8+DEX 3+숙련 3). 독(1d6, 건강 내성, 실패 시 1분 중독·매 턴 끝 재굴림, 독살 도구 필요) · 넘어뜨리기(1d6, 대형 이하, 민첩 내성 실패 시 넘어짐) · 물러서기(1d6, 공격 직후 속도 절반 이동, 기회 공격 유발 안 함).",
+          "act": "trigger",
+          "sum": "은신 공격 주사위를 덜고 효과를 붙임 · 내성 DC 14"
         },
         {
           "id": "ab_isabel_uncanny_dodge",
           "n": "Uncanny Dodge",
           "t": "반응 (5레벨)",
-          "d": "보이는 공격자의 공격 판정에 맞으면 반응으로 그 피해를 절반으로(내림)."
+          "d": "보이는 공격자의 공격 판정에 맞으면 반응으로 그 피해를 절반으로(내림).",
+          "sum": "맞은 공격 피해 절반"
         },
         {
           "id": "ab_isabel_thieves_cant",
@@ -1997,7 +2102,9 @@ const SEED = {
           "cur": 1,
           "max": 1,
           "recharge": "turn",
-          "note": "턴당 1회. 이점 판정 또는 인접 아군 조건 충족 시 발동."
+          "note": "턴당 1회. 이점 판정 또는 인접 아군 조건 충족 시 발동.",
+          "act": "trigger",
+          "sum": "턴당 1회 · 2d6 — 이점이거나 대상 곁에 아군"
         }
       ],
       "abilities": [
@@ -2005,14 +2112,16 @@ const SEED = {
           "id": "ab_liv_cunning_action",
           "n": "교활한 행동",
           "t": "추가 행동",
-          "d": "매 턴 추가 행동으로 질주·이탈·은신 중 하나를 선택해 사용할 수 있다."
+          "d": "매 턴 추가 행동으로 질주·이탈·은신 중 하나를 선택해 사용할 수 있다.",
+          "sum": "질주·이탈·은신 중 하나"
         },
         {
           "id": "ab_liv_assassinate",
           "n": "암살",
           "t": "패시브",
           "d": "이니셔티브 판정에 이점. 전투 첫 라운드 동안, 아직 턴을 갖지 않은 생물을 공격할 때 이점. 그 라운드에 은신 공격이 명중하면 대상은 로그 레벨만큼 추가 피해(현재 +3, 무기 피해 유형).",
-          "note_ui": "2024 PHB 개편판(자동 치명타는 2014판). 2026-10-13 사용자 제공본으로 확인."
+          "note_ui": "2024 PHB 개편판(자동 치명타는 2014판). 2026-10-13 사용자 제공본으로 확인.",
+          "sum": "이니셔티브 이점 · 첫 라운드 아직 턴을 안 가진 적에게 이점 · 그 라운드 은신 공격 +3"
         },
         {
           "id": "ab_liv_steady_aim",
@@ -2141,7 +2250,10 @@ const SEED = {
           "n": "사냥꾼의 표식 (Hunter's Mark)",
           "t": "1레벨",
           "c": "슬롯 1, 집중 최대 1시간",
-          "d": "대상 하나를 표식한다. 그 대상에게 무기 공격 명중 시 추가 1d6 피해. 대상을 볼 수 없게 되면 매 턴 자신의 턴에 이동 없이 다시 감지를 시도할 수 있다."
+          "d": "대상 하나를 표식한다. 그 대상에게 무기 공격 명중 시 추가 1d6 피해. 대상을 볼 수 없게 되면 매 턴 자신의 턴에 이동 없이 다시 감지를 시도할 수 있다.",
+          "act": "bonus",
+          "conc": true,
+          "sum": "표식한 대상에게 무기 명중 시 +1d6 · 은총받은 적으로 하루 2회 슬롯 없이"
         }
       ],
       "abilities": [
@@ -2231,7 +2343,8 @@ const SEED = {
           "t": "1레벨",
           "c": "슬롯 1, 집중",
           "d": "지면에서 덩굴과 뿌리가 솟아 범위 내 대상을 붙잡는다. 근력 내성 실패 시 붙잡힘(restrained).",
-          "note_ui": "38회차에 실제로 사용한 것이 서술로 확인된 유일한 주문 — 서사 근거 확정."
+          "note_ui": "38회차에 실제로 사용한 것이 서술로 확인된 유일한 주문 — 서사 근거 확정.",
+          "conc": true
         },
         {
           "id": "spell_idra_cure_wounds",
@@ -2266,14 +2379,16 @@ const SEED = {
           "n": "가시 성장 (Spike Growth)",
           "t": "2레벨",
           "c": "슬롯 1, 집중",
-          "d": "범위 지면을 가시밭으로 만들어 이동에 피해를 준다."
+          "d": "범위 지면을 가시밭으로 만들어 이동에 피해를 준다.",
+          "conc": true
         },
         {
           "id": "spell_idra_moonbeam",
           "n": "월광 (Moonbeam)",
           "t": "2레벨",
           "c": "슬롯 1, 집중",
-          "d": "원통형 달빛을 드리워 범위 내 대상에게 광휘 피해를 준다."
+          "d": "원통형 달빛을 드리워 범위 내 대상에게 광휘 피해를 준다.",
+          "conc": true
         },
         {
           "id": "spell_idra_plant_growth",
@@ -2287,7 +2402,8 @@ const SEED = {
           "n": "낙뢰 소환 (Call Lightning)",
           "t": "3레벨",
           "c": "슬롯 1, 집중",
-          "d": "폭풍 구름을 불러 매 턴 번개를 내리친다."
+          "d": "폭풍 구름을 불러 매 턴 번개를 내리친다.",
+          "conc": true
         }
       ],
       "abilities": [
@@ -2296,7 +2412,10 @@ const SEED = {
           "n": "야수 변신 (Wild Shape)",
           "t": "클래스 특성 (2레벨)",
           "d": "긴 휴식당 2회(6레벨 3회, 17레벨 4회). 짧은 휴식에 1회, 긴 휴식에 전부 회복한다.",
-          "note_ui": "변신 가능한 야수의 CR·이동 방식 제한은 아직 확인하지 않았다 — 실제로 변신하는 시점에 사용자와 정한다."
+          "note_ui": "변신 가능한 야수의 CR·이동 방식 제한은 아직 확인하지 않았다 — 실제로 변신하는 시점에 사용자와 정한다.",
+          "act": "bonus",
+          "res": "res_idra_wild_shape",
+          "sum": "야수로 변신 — 세부(CR·이동)는 쓸 때 원문 대조"
         },
         {
           "id": "ab_idra_wild_companion",
@@ -2323,7 +2442,10 @@ const SEED = {
           "n": "대지의 가호 (Land's Aid)",
           "t": "서브클래스 (3레벨)",
           "d": "매직 액션 + 야수 변신 1회 소모. 18m 내 한 점을 중심으로 반경 3m 구. 선택한 적들은 건강 내성(DC 14), 실패 시 **2d6** 괴사 피해(성공 시 절반). 구 안의 아군 1명은 **2d6** 회복. 10레벨 3d6, 14레벨 4d6으로 증가.",
-          "note_ui": "2026-09-21 사용자 제공 확정. 현재 5레벨이므로 2d6."
+          "note_ui": "2026-09-21 사용자 제공 확정. 현재 5레벨이므로 2d6.",
+          "act": "action",
+          "res": "res_idra_wild_shape",
+          "sum": "야수 변신 1회 · 18m 반경 3m · 적 건강 내성 DC 14, 2d6 괴사 · 아군 1명 2d6 회복"
         }
       ],
       "resources": [
@@ -2333,7 +2455,8 @@ const SEED = {
           "cur": 2,
           "max": 2,
           "recharge": "short",
-          "note": "2레벨에 2회, 6레벨 3회, 17레벨 4회. 짧은 휴식에 1회 회복, 긴 휴식에 전부 회복. 5레벨 Wild Resurgence로 슬롯과 1회를 교환할 수 있다. (2026-09-21 사용자 제공 확정)"
+          "note": "2레벨에 2회, 6레벨 3회, 17레벨 4회. 짧은 휴식에 1회 회복, 긴 휴식에 전부 회복. 5레벨 Wild Resurgence로 슬롯과 1회를 교환할 수 있다. (2026-09-21 사용자 제공 확정)",
+          "sum": "야수 변신·대지의 가호에 공용으로 쓴다"
         }
       ],
       "cantripsKnown": 3,
@@ -2902,7 +3025,7 @@ const SEED = {
       "name": "레아(빈 그릇)",
       "role": "여성 · 인간 · 20대 후반 · 원래 레아의 육신 · 비전투 명령 수행체",
       "hp": {
-        "cur": 23,
+        "cur": 27,
         "max": 28
       },
       "tag": "카를렌 창고 상주 · 비전투 명령 수행체",
@@ -3346,7 +3469,7 @@ const SEED = {
       "look": "Eda Green, a human female widowed hunter in her early 30s. Black hair braided tightly and pinned up, sharp watchful eyes, weathered dark leather hunting garb, a longbow slung across her back, arms crossed."
     }
   ],
-  "seedRev": "S49-042"
+  "seedRev": "S49-044"
 };/* ==================== 상태 관리 ==================== */
 const KEY="berix_handbook_v2_17_s40";
 let S = load(), HIST = [];
@@ -3605,7 +3728,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.31";
+const HB_VERSION="v2.32";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -3623,12 +3746,80 @@ function renderSlots(s){
     <div class="barlbl"><span>주문 슬롯 (${s.lvl}레벨${s.recharge==="short"?" · Pact Magic":""})</span><span>${s.cur}/${s.max}</span></div>
     <div class="bar"><i class="slot" style="width:${s.max?s.cur/s.max*100:0}%"></i></div>`;
 }
+/* v2.32: 항목마다 구분선. sum(플레이어용 한 줄)은 펼쳐 두고, note(근거·회차 기록)는 접어 둔다. */
 function renderResources(list){
   if(!list||!list.length) return "";
-  return `<div class="card"><h2>자원</h2>${list.map(r=>`
-    <div class="barlbl"><span>${r.n}${r.dice?` (${r.dice})`:""}</span><span>${r.cur}/${r.max}</span></div>
+  return `<div class="card"><h2>자원</h2>${list.map(r=>`<div class="res">
+    <div class="barlbl"><span>${r.n}${r.dice?` (${r.dice})`:""}</span><span>${r.cur}/${r.max}${r.recharge?` · ${RECHARGE_LABEL[r.recharge]||r.recharge}`:""}</span></div>
     <div class="bar"><i class="slot" style="width:${r.max?r.cur/r.max*100:0}%"></i></div>
-    ${r.note?`<div class="note" style="margin-top:2px">${r.note}</div>`:""}`).join("")}</div>`;
+    ${r.sum?`<div class="note res-sum">${r.sum}</div>`:""}
+    ${r.note?`<details class="gmlog"><summary>${r.sum?"근거 · 기록":"설명"}</summary><div class="d">${r.note}</div></details>`:""}
+  </div>`).join("")}</div>`;
+}
+/* v2.32: "쓸 수 있는 것" — 주문·특성·자원·장비·소모품에 흩어진 능력을 행동 종류별로 한곳에 모은다.
+   데이터: act(action|bonus|reaction|trigger|passive) · sum(한 줄) · res(횟수를 나눠 쓰는 자원 id) · conc(집중).
+   act가 없으면 주문·공격은 행동으로, 동료 특성은 t의 "추가 행동·반응·패시브" 문구로 짐작한다. */
+const ACT_GROUPS=[["action","행동"],["bonus","보너스 행동"],["reaction","반응"],["trigger","뒤따라 붙는 것 · 자동"],["passive","늘 켜져 있는 것"]];
+const ACT_SET=new Set(ACT_GROUPS.map(g=>g[0]));
+function actOf(x,def){
+  if(x.act) return x.act;
+  const t=String(x.t||"");
+  if(/반응/.test(t)) return "reaction";
+  if(/추가 행동|보너스 행동/.test(t)) return "bonus";
+  if(/패시브|상시/.test(t)) return "passive";
+  return def||null;
+}
+function spellLvl(x){ const t=String(x.t||""); if(/캔트립|소마법/.test(t)) return 0; const m=t.match(/(\d)레벨/); return m?+m[1]:null; }
+function shortOf(x){ if(x.sum) return x.sum; const s=String(x.d||"").replace(/\*\*/g,"").replace(/<[^>]+>/g,""); return s.length>64?s.slice(0,62)+"…":s; }
+function actionEntries(o){
+  const res=new Map((o.resources||[]).map(r=>[r.id,r]));
+  const slots=Array.isArray(o.slots)?o.slots:(o.slots?[o.slots]:[]);
+  const out=[];
+  const useRes=(id)=>{ const r=res.get(id); return r?{cost:`${r.n.replace(/\s*[—(].*$/,"")} ${r.cur}/${r.max}`,ok:r.cur>0}:{cost:"",ok:true}; };
+  for(const x of (o.spells||[])){
+    const act=actOf(x,"action"); if(!ACT_SET.has(act)) continue;
+    const lv=spellLvl(x); let cost="",ok=true;
+    if(x.res){ ({cost,ok}=useRes(x.res)); }
+    else if(lv===0){ cost="캔트립"; }
+    else if(lv){ const left=slots.filter(s=>s.lvl>=lv).reduce((a,s)=>a+(s.cur||0),0); cost=`${lv}레벨 슬롯 · 남은 ${left}`; ok=left>0; }
+    out.push({act,n:x.n,sum:shortOf(x),cost,ok,conc:x.conc!==undefined?x.conc:/집중/.test(String(x.c||"")),
+      body:(x.c?`<b style="color:var(--gold-s)">${x.c}</b><br>`:"")+(x.d||"")+(x.note_ui?`<div class="note" style="color:var(--blood);margin-top:5px">⚠ ${x.note_ui}</div>`:"")});
+  }
+  for(const x of (o.feats||[])){
+    const act=actOf(x,null); if(!act||!ACT_SET.has(act)) continue;
+    const u=x.res?useRes(x.res):{cost:act==="passive"?"상시":"",ok:true};
+    out.push({act,n:x.n,sum:shortOf(x),cost:u.cost,ok:u.ok,conc:!!x.conc,body:x.d+(x.note_ui?`<div class="note" style="color:var(--blood);margin-top:5px">⚠ ${x.note_ui}</div>`:"")});
+  }
+  for(const r of (o.resources||[])){
+    if(!r.act||!ACT_SET.has(r.act)) continue;
+    out.push({act:r.act,n:r.n,sum:shortOf({sum:r.sum,d:r.note}),cost:`${r.cur}/${r.max}`,ok:r.cur>0,conc:!!r.conc,body:r.note||r.sum||""});
+  }
+  for(const a of (o.attacks||[])){
+    out.push({act:"action",n:a.n,sum:a.note?shortOf({d:a.note}):"",cost:`${a.atk} · ${a.dmg}`,ok:true,conc:false,body:a.note||""});
+  }
+  for(const x of (o.items||[])){
+    const act=x.act; if(!act||!ACT_SET.has(act)) continue;
+    let cost="",ok=true;
+    if(x.charge){ cost=`${x.charge.cur}/${x.charge.max}`; ok=x.charge.cur>0; }
+    else if(x.cat==="consumable"){ cost=`x${x.q}`; ok=x.q>0; }
+    else if(act==="passive") cost="상시";
+    out.push({act,n:x.n,sum:shortOf(x),cost,ok,conc:!!x.conc,body:(x.d||"")+itemStatusHTML(x)});
+  }
+  return out;
+}
+function actRow(e){
+  return `<details class="act${e.ok?"":" off"}"><summary><span><em>${e.n}</em>${e.conc?' <span class="tag y">집중</span>':""}${e.sum?`<small>${e.sum}</small>`:""}</span>${e.cost?`<span class="tag">${e.cost}</span>`:""}</summary><div class="d">${e.body||""}</div></details>`;
+}
+function actionsCard(o){
+  const es=actionEntries(o);
+  if(!es.length) return "";
+  const body=ACT_GROUPS.map(([k,label])=>{
+    const g=es.filter(e=>e.act===k).sort((a,b)=>(b.ok?1:0)-(a.ok?1:0));
+    if(!g.length) return "";
+    return `<details class="actgrp"${k==="passive"?"":" open"}><summary>${label} <span class="itemcat-n">(${g.length})</span></summary>`+g.map(actRow).join("")+`</details>`;
+  }).join("");
+  return `<div class="card"><h2>쓸 수 있는 것</h2>${body}
+    <div class="note" style="margin-top:6px">흐린 줄은 지금 남은 횟수나 슬롯이 없는 것 · 줄을 누르면 전체 설명</div></div>`;
 }
 function renderChar(){
   const p=S.pc, h=p.hp;
@@ -3644,6 +3835,7 @@ function renderChar(){
     <div class="stats">${Object.entries(p.stats).map(([k,v])=>{
       const m=Math.floor((v-10)/2); return `<div class="stat"><b>${k}</b><i>${v}</i><b>${m>=0?"+":""}${m}</b></div>`;}).join("")}</div>
   </div>
+  ${actionsCard({spells:p.spells,feats:p.feats,resources:p.resources,items:p.items,slots:p.slots})}
   ${savesCard(p)}
   ${skillsCard(p)}
   ${renderEquipped(p.items)}
@@ -3880,6 +4072,9 @@ function renderDetail(){
     ${renderSlots(sh.slots)}
     ${statsHTML(sh.stats)}
   </div>
+  ${actionsCard({spells:[...(sh.cantrips||[]).map(c=>({...c,t:c.t||"캔트립"})),...(sh.spells||[])],feats:sh.abilities,resources:sh.resources,items:a.items,slots:sh.slots,
+    /* 시트에 공격 항목이 없으면 장착품의 전투 수치(combat)로 대신한다 — 네리 장궁 +7이 여기에만 있었다(49회차). */
+    attacks:(sh.attacks&&sh.attacks.length)?sh.attacks:(a.equipment||[]).filter(e=>e.combat&&e.combat.dmgDice).map(e=>({n:e.item,atk:sgn(e.combat.atkBonus||0),dmg:`${e.combat.dmgDice}${e.combat.dmgBonus?sgn(e.combat.dmgBonus):""}`,note:[e.combat.range,e.combat.note_ui].filter(Boolean).join(" · ")}))})}
   ${savesCard(sh)}
   ${skillsCard(sh)}
   ${attacksCard(sh)}

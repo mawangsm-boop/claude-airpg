@@ -76,6 +76,24 @@ function checkSheet(rel, sheet) {
   });
 }
 
+/* v2.32 "쓸 수 있는 것" 카드용 필드: act(행동 종류) · res(횟수를 나눠 쓰는 자원 id) · sum(한 줄 요약).
+   act 값이 틀리면 카드에서 사라지고, res가 없는 자원을 가리키면 남은 횟수가 비어 보인다. */
+const ACTS = new Set(["action", "bonus", "reaction", "trigger", "passive"]);
+function checkActs(rel, lists, resources, { pc = false } = {}) {
+  const resIds = new Set((resources || []).map((r) => r.id));
+  for (const [label, arr] of Object.entries(lists)) {
+    (arr || []).forEach((x) => {
+      const who = `${label} ${x.id || x.n}`;
+      if (x.act !== undefined && !ACTS.has(x.act)) err(rel, `${who}: act 값이 유효하지 않습니다 (${x.act}) — action|bonus|reaction|trigger|passive`);
+      if (x.res !== undefined && !resIds.has(x.res)) err(rel, `${who}: res(${x.res})가 자원 목록에 없습니다`);
+      if (pc && x.act && !x.sum) warn(rel, `${who}: act는 있는데 sum(한 줄 요약)이 없습니다 — 카드에 설명 앞부분이 잘려 나옵니다`);
+    });
+  }
+  if (pc) (resources || []).forEach((r) => {
+    if (!r.sum) warn(rel, `자원 ${r.id}: sum(플레이어용 한 줄)이 없습니다 — 자원 카드에 GM 기록만 접혀 보입니다`);
+  });
+}
+
 const ITEM_CATS = new Set(["weapon", "accessory", "consumable", "trinket", "misc"]);
 function checkItems(rel, items) {
   checkDupIds(rel, items, "items");
@@ -125,6 +143,7 @@ if (idx) {
       checkItems(rel, pc.items);
       checkDupIds(rel, pc.feats, "feats");
       checkDupIds(rel, pc.spells, "spells");
+      checkActs(rel, { 주문: pc.spells, 특성: pc.feats, 자원: pc.resources, 아이템: pc.items }, pc.resources, { pc: true });
       if (pc.slots && pc.slots.cur > pc.slots.max) err(rel, `슬롯 cur(${pc.slots.cur})이 max(${pc.slots.max})를 넘습니다`);
     }
   }
@@ -135,6 +154,7 @@ if (idx) {
     if (!c) return;
     checkHP(rel, c.hp, id);
     checkSheet(rel, c.sheet);
+    if (c.sheet) checkActs(rel, { 주문: c.sheet.spells, 소마법: c.sheet.cantrips, 특성: c.sheet.abilities, 자원: c.sheet.resources, 아이템: c.items }, c.sheet.resources);
     if (c.items === undefined) warn(rel, "items 배열이 없습니다 — 맡긴 물건을 기록할 자리가 없습니다");
     else checkItems(rel, c.items);
     if (!c.sheet) warn(rel, "sheet가 없습니다 — 핸드북에 스탯·자원이 표시되지 않습니다");
