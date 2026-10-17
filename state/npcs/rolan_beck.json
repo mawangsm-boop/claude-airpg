@@ -2,21 +2,22 @@
   "char": {
     "id": "rolan_beck",
     "name": "롤란 베크",
-    "role": "남성 · 인간 · 30대 후반 · 정체 미상",
-    "tag": "미등장",
+    "role": "남성 · 인간 · 30대 후반 · 관리인 쪽 정리반장",
+    "tag": "사망 (49회차)",
     "tagc": "",
     "trait": "키 크고 어깨가 넓다. 짧게 민 머리, 목에 오래된 밧줄 자국 흉터. 갑옷 위에 하역 인부 겉옷을 걸쳤다.",
     "voice": "반말, 말수가 적다. 일을 끝내기 전엔 협상하지 않는다.",
     "drive": "미확정.",
     "fear": "미확정.",
     "flaw": "미확정.",
-    "bond": "미등장.",
+    "bond": "49회차 2일째 밤, 정리반을 이끌고 물약 상점을 쳤다. \"샌 데는 태운다. 그게 내 일이야.\" 베릭스의 거울 분신에 칼질 다섯 번을 헛되이 쓰고, 불협화음의 속삭임에 쫓겨 문으로 물러나다 이자벨의 레이피어에 쓰러져 죽었다.",
     "code": {
       "does": "맡은 일은 끝낸다.",
       "wont": "일이 끝나기 전엔 흥정하지 않는다."
     },
-    "knows": "미등장.",
+    "knows": "관리인의 '정리' 지시(A). 상세는 시신의 소지품으로만 확인 가능.",
     "unknown": "베릭스 일행의 정체·과거 전부(D등급).",
-    "look": "Rolan Beck, a human male in his late 30s. Tall and broad-shouldered, close-cropped hair, an old rope-burn scar around his neck, wearing a dockworker's coat over armor."
+    "look": "Rolan Beck, a human male in his late 30s. Tall and broad-shouldered, close-cropped hair, an old rope-burn scar around his neck, wearing a dockworker's coat over armor.",
+    "status": "dead"
   }
 }
