@@ -108,6 +108,13 @@ details.act summary>span:first-child{display:block;min-width:0}
 details.act summary small{display:block;font-size:10.5px;color:var(--muted);line-height:1.45;margin-top:2px;font-style:normal}
 details.act summary .tag{align-self:flex-start;flex:0 0 auto}
 details.act.off{opacity:.42}
+/* v2.33: 행동 종류 배지 */
+.abadge{display:inline-block;font-size:9.5px;font-style:normal;padding:0 6px;margin-left:6px;border-radius:4px;border:1px solid;vertical-align:1px;white-space:nowrap;line-height:1.6}
+.a-action{color:var(--gold-s);border-color:#5b4a24;background:rgba(201,164,87,.14)}
+.a-bonus{color:var(--violet-s);border-color:#4a3866;background:rgba(155,107,209,.16)}
+.a-reaction{color:var(--ok);border-color:#2f5b3d;background:rgba(122,198,143,.14)}
+.a-trigger{color:var(--blood);border-color:#5b2b2d;background:rgba(201,102,106,.12)}
+.a-passive{color:var(--muted);border-color:var(--border);background:transparent}
 details.actgrp{background:transparent;border:0;margin:0 0 2px}
 details.actgrp>summary{padding:0;margin:12px 0 5px;font-size:10px;color:var(--violet);letter-spacing:1.4px;justify-content:flex-start;gap:6px;align-items:center}
 details.actgrp>summary::before{content:"▸";font-size:9px;color:var(--violet-s);transition:transform .15s}
@@ -1697,7 +1704,7 @@ const SEED = {
         "d": "정제된 각성 물약. 마시면 1시간 동안 공포·매혹 상태에 면역.",
         "cat": "consumable",
         "act": "bonus",
-        "sum": "1시간 공포·매혹 면역 · 물약 마시기는 보너스 행동(2024, 원문 대조 전)"
+        "sum": "1시간 공포·매혹 면역 · 물약 마시기는 보조 행동(2024, 원문 대조 전)"
       },
       {
         "id": "item_guardian_shard_s29",
@@ -1729,7 +1736,7 @@ const SEED = {
         "d": "사용 시 2d4+2 HP 회복.",
         "cat": "consumable",
         "act": "bonus",
-        "sum": "2d4+2 회복 · 물약 마시기는 보너스 행동(2024, 원문 대조 전)"
+        "sum": "2d4+2 회복 · 물약 마시기는 보조 행동(2024, 원문 대조 전)"
       },
       {
         "id": "item_healing_potion",
@@ -1738,7 +1745,7 @@ const SEED = {
         "d": "사용 시 2d4+2 HP 회복.",
         "cat": "consumable",
         "act": "bonus",
-        "sum": "2d4+2 회복 · 물약 마시기는 보너스 행동(2024, 원문 대조 전)"
+        "sum": "2d4+2 회복 · 물약 마시기는 보조 행동(2024, 원문 대조 전)"
       },
       {
         "id": "item_antidote_potion",
@@ -1747,7 +1754,7 @@ const SEED = {
         "d": "중독 상태를 즉시 해소.",
         "cat": "consumable",
         "act": "bonus",
-        "sum": "중독 즉시 해소 · 물약 마시기는 보너스 행동(2024, 원문 대조 전)"
+        "sum": "중독 즉시 해소 · 물약 마시기는 보조 행동(2024, 원문 대조 전)"
       },
       {
         "id": "item_stealth_potion",
@@ -1756,7 +1763,7 @@ const SEED = {
         "d": "10분간 은신 판정에 이점을 부여.",
         "cat": "consumable",
         "act": "bonus",
-        "sum": "10분 은신 판정 이점 · 물약 마시기는 보너스 행동(2024, 원문 대조 전)"
+        "sum": "10분 은신 판정 이점 · 물약 마시기는 보조 행동(2024, 원문 대조 전)"
       },
       {
         "id": "item_mind_ward_potion",
@@ -1765,7 +1772,7 @@ const SEED = {
         "d": "1시간 동안 정신 지배·매혹 내성에 이점.",
         "cat": "consumable",
         "act": "bonus",
-        "sum": "1시간 정신 지배·매혹 내성 이점 · 물약 마시기는 보너스 행동(2024, 원문 대조 전)"
+        "sum": "1시간 정신 지배·매혹 내성 이점 · 물약 마시기는 보조 행동(2024, 원문 대조 전)"
       },
       {
         "id": "item_warden_blade_s37",
@@ -3469,7 +3476,7 @@ const SEED = {
       "look": "Eda Green, a human female widowed hunter in her early 30s. Black hair braided tightly and pinned up, sharp watchful eyes, weathered dark leather hunting garb, a longbow slung across her back, arms crossed."
     }
   ],
-  "seedRev": "S49-044"
+  "seedRev": "S49-045"
 };/* ==================== 상태 관리 ==================== */
 const KEY="berix_handbook_v2_17_s40";
 let S = load(), HIST = [];
@@ -3728,7 +3735,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.32";
+const HB_VERSION="v2.33";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -3759,16 +3766,19 @@ function renderResources(list){
 /* v2.32: "쓸 수 있는 것" — 주문·특성·자원·장비·소모품에 흩어진 능력을 행동 종류별로 한곳에 모은다.
    데이터: act(action|bonus|reaction|trigger|passive) · sum(한 줄) · res(횟수를 나눠 쓰는 자원 id) · conc(집중).
    act가 없으면 주문·공격은 행동으로, 동료 특성은 t의 "추가 행동·반응·패시브" 문구로 짐작한다. */
-const ACT_GROUPS=[["action","행동"],["bonus","보너스 행동"],["reaction","반응"],["trigger","뒤따라 붙는 것 · 자동"],["passive","늘 켜져 있는 것"]];
+const ACT_GROUPS=[["action","행동"],["bonus","보조 행동"],["reaction","반응"],["trigger","뒤따라 붙는 것 · 자동"],["passive","늘 켜져 있는 것"]];
 const ACT_SET=new Set(ACT_GROUPS.map(g=>g[0]));
 function actOf(x,def){
   if(x.act) return x.act;
   const t=String(x.t||"");
   if(/반응/.test(t)) return "reaction";
-  if(/추가 행동|보너스 행동/.test(t)) return "bonus";
+  if(/추가 행동|보너스 행동|보조 행동/.test(t)) return "bonus";
   if(/패시브|상시/.test(t)) return "passive";
   return def||null;
 }
+/* v2.33: 모든 줄에 행동 종류 배지 — 카드 묶음 제목이 화면 밖으로 밀려나도 줄만 보고 알 수 있게 */
+const ACT_SHORT={action:"행동",bonus:"보조 행동",reaction:"반응",trigger:"자동",passive:"상시"};
+function actBadge(act){ return act&&ACT_SHORT[act]?`<span class="abadge a-${act}">${ACT_SHORT[act]}</span>`:""; }
 function spellLvl(x){ const t=String(x.t||""); if(/캔트립|소마법/.test(t)) return 0; const m=t.match(/(\d)레벨/); return m?+m[1]:null; }
 function shortOf(x){ if(x.sum) return x.sum; const s=String(x.d||"").replace(/\*\*/g,"").replace(/<[^>]+>/g,""); return s.length>64?s.slice(0,62)+"…":s; }
 function actionEntries(o){
@@ -3808,7 +3818,7 @@ function actionEntries(o){
   return out;
 }
 function actRow(e){
-  return `<details class="act${e.ok?"":" off"}"><summary><span><em>${e.n}</em>${e.conc?' <span class="tag y">집중</span>':""}${e.sum?`<small>${e.sum}</small>`:""}</span>${e.cost?`<span class="tag">${e.cost}</span>`:""}</summary><div class="d">${e.body||""}</div></details>`;
+  return `<details class="act${e.ok?"":" off"}"><summary><span><em>${e.n}</em>${actBadge(e.act)}${e.conc?' <span class="tag y">집중</span>':""}${e.sum?`<small>${e.sum}</small>`:""}</span>${e.cost?`<span class="tag">${e.cost}</span>`:""}</summary><div class="d">${e.body||""}</div></details>`;
 }
 function actionsCard(o){
   const es=actionEntries(o);
@@ -3840,8 +3850,8 @@ function renderChar(){
   ${skillsCard(p)}
   ${renderEquipped(p.items)}
   ${renderResources(p.resources)}
-  <div class="card"><h2>주문</h2>${p.spells.map(x=>det(x.n,x.t,`<b style="color:var(--gold-s)">${x.c}</b><br>${x.d}`)).join("")}</div>
-  <div class="card"><h2>특성</h2>${p.feats.map(x=>det(x.n,x.t,x.d)).join("")}</div>
+  <div class="card"><h2>주문</h2>${p.spells.map(x=>det(x.n,x.t,`<b style="color:var(--gold-s)">${x.c}</b><br>${x.d}`,undefined,actBadge(actOf(x,"action")))).join("")}</div>
+  <div class="card"><h2>특성</h2>${p.feats.map(x=>det(x.n,x.t,x.d,undefined,actBadge(actOf(x,null)))).join("")}</div>
   <div class="card"><h2>소지품</h2>${renderItems(p.items)}</div>
   <div class="card"><h2>성격</h2><div class="note" style="color:var(--parch)">${p.surface}</div>
     <div class="trait" style="color:var(--blood)">${p.hidden}</div>
@@ -3891,7 +3901,7 @@ function renderItems(items){
     const list=items.filter(x=>(x.cat||"misc")===key);
     if(!list.length) return "";
     return `<details class="itemcat" open><summary>${label} <span class="itemcat-n">(${list.length})</span></summary>`
-      +list.map(x=>det(x.n,"x"+x.q,x.d+itemStatusHTML(x))).join("")+`</details>`;
+      +list.map(x=>det(x.n,"x"+x.q,x.d+itemStatusHTML(x),undefined,actBadge(x.act))).join("")+`</details>`;
   }).join("");
 }
 /* v2.18: 지금 착용 중인 장비만 모아 보여주는 요약 카드. 부적·목걸이가 쌓일수록
@@ -3900,10 +3910,10 @@ function renderEquipped(items){
   const eq=(items||[]).filter(x=>x.equipped);
   if(!eq.length) return "";
   return `<div class="card"><h2>장착품 <span class="itemcat-n">(${eq.length})</span></h2>`
-    +eq.map(x=>det(x.n,x.permanent?"영구":x.passive?"상시":(x.charge?`${x.charge.cur}/${x.charge.max}`:"장착"),x.d+itemStatusHTML(x))).join("")
+    +eq.map(x=>det(x.n,x.permanent?"영구":x.passive?"상시":(x.charge?`${x.charge.cur}/${x.charge.max}`:"장착"),x.d+itemStatusHTML(x),undefined,actBadge(x.act))).join("")
     +`</div>`;
 }
-function det(name,tag,body,copyVal){ const cv=(copyVal!==undefined&&copyVal!==null)?copyVal:name; return `<details><summary><span><em>${name}</em><button type="button" class="copybtn" data-copy="${escAttr(cv)}" data-copy-label="${escAttr(name)}">복사</button></span><span class="tag">${tag}</span></summary><div class="d">${body}</div></details>`; }
+function det(name,tag,body,copyVal,badge){ const cv=(copyVal!==undefined&&copyVal!==null)?copyVal:name; return `<details><summary><span><em>${name}</em>${badge||""}<button type="button" class="copybtn" data-copy="${escAttr(cv)}" data-copy-label="${escAttr(name)}">복사</button></span><span class="tag">${tag}</span></summary><div class="d">${body}</div></details>`; }
 function escAttr(s){ return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 /* 클립보드: content:// 등 비보안 컨텍스트에서 navigator.clipboard가 막히므로 3단계 폴백 */
 function legacyCopy(t){
@@ -4035,8 +4045,8 @@ function spellsCard(sh){
   const ca=(sh&&sh.cantrips)||[], sp=(sh&&sh.spells)||[];
   if(!ca.length&&!sp.length) return "";
   return `<div class="card"><h2>주문</h2>
-    ${ca.map(x=>det(x.n,"소마법",x.d+(x.note_ui?`<div class="note" style="color:var(--blood);margin-top:5px">⚠ ${x.note_ui}</div>`:""))).join("")}
-    ${sp.map(x=>det(x.n,x.t||"",(x.c?`<b style="color:var(--gold-s)">${x.c}</b><br>`:"")+(x.d||"")+(x.note_ui?`<div class="note" style="color:var(--blood);margin-top:5px">⚠ ${x.note_ui}</div>`:""))).join("")}</div>`;
+    ${ca.map(x=>det(x.n,"소마법",x.d+(x.note_ui?`<div class="note" style="color:var(--blood);margin-top:5px">⚠ ${x.note_ui}</div>`:""),undefined,actBadge(actOf(x,"action")))).join("")}
+    ${sp.map(x=>det(x.n,x.t||"",(x.c?`<b style="color:var(--gold-s)">${x.c}</b><br>`:"")+(x.d||"")+(x.note_ui?`<div class="note" style="color:var(--blood);margin-top:5px">⚠ ${x.note_ui}</div>`:""),undefined,actBadge(actOf(x,"action")))).join("")}</div>`;
 }
 /* 동료 시트는 파티면 S.sheets[id], 관계자(npcs)면 인물 객체 안의 sheet에 있다. */
 function sheetOf(a){ return (S.sheets&&S.sheets[a.id])||a.sheet||null; }
@@ -4082,7 +4092,7 @@ function renderDetail(){
     +a.equipment.map(e=>det(e.item,e.slot||"착용",(e.desc||"")+itemStatusHTML(e))).join("")+`</div>`:""}
   ${renderResources(sh.resources)}
   ${spellsCard(sh)}
-  ${(sh.abilities&&sh.abilities.length)?`<div class="card"><h2>특성</h2>${sh.abilities.map(x=>det(x.n,x.t||"",x.d+(x.note_ui?`<div class="note" style="color:var(--blood);margin-top:5px">⚠ ${x.note_ui}</div>`:""))).join("")}
+  ${(sh.abilities&&sh.abilities.length)?`<div class="card"><h2>특성</h2>${sh.abilities.map(x=>det(x.n,x.t||"",x.d+(x.note_ui?`<div class="note" style="color:var(--blood);margin-top:5px">⚠ ${x.note_ui}</div>`:""),undefined,actBadge(actOf(x,null)))).join("")}
     ${sh.futureFeatures?`<div class="note" style="margin-top:6px">이후 레벨: ${sh.futureFeatures}</div>`:""}</div>`:""}
   <div class="card"><h2>소지품</h2>${(a.items&&a.items.length)?renderItems(a.items):'<div class="note">개인 소지품이 없습니다.</div>'}</div>
   <div class="card"><h2>성격</h2><div class="note" style="color:var(--parch)">${a.trait||a.d||"—"}</div>
