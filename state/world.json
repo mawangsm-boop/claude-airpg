@@ -30,9 +30,10 @@
       "eastroad_waypost",
       "galdaemok",
       "mirrorlake",
-      "beodeulmok"
+      "beodeulmok",
+      "blackford"
     ],
-    "here": "beodeulmok",
+    "here": "blackford",
     "customPlaces": [
       {
         "id": "outpost3",
@@ -189,6 +190,15 @@
         "x": 1700,
         "y": 895,
         "d": "키를 넘는 갈대밭과 진흙 물길, 버려진 고기잡이 움막 셋, 작은 나무 선창. 50회차, 셈꾼 일행이 숨어 기다리던 곳.",
+        "cat": "waypoint"
+      },
+      {
+        "id": "blackford",
+        "n": "검은 여울",
+        "t": "거울호 북쪽 기슭 · 셈배 정박 창고",
+        "x": 1745,
+        "y": 775,
+        "d": "검은 바위가 물가로 무너져 내린 후미. 관리인의 셈배가 겨울마다 묶여 있던 돌담 창고가 있다. 50회차, 이네스가 알려 줬다.",
         "cat": "waypoint"
       }
     ]
