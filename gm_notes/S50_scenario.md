@@ -336,7 +336,7 @@
 ## 13. 상태 파일 작업 목록 (아크 개시 시)
 
 - `core.json`: session 50, arc "셈배"(가제 — 사용자가 이름을 붙이면 바꾼다), place "카를렌 나루터, 물약 상점 — 1일째 아침(출발 준비)".
-- `world.json`: `here`가 `galdaemok`로 남아 있다(48회차 값) → `karlen_hint`로 바로잡는다. 버들목은 도착할 때 `customPlaces`에 추가(cat terrain/waypoint, 거울호 남쪽 기슭 — 좌표 1520,1110 부근, 그 전에 `archive/world_geography.md` 거울호 위치 대조).
+- `world.json`: `here`가 `galdaemok`로 남아 있다(48회차 값) → `karlen_hint`로 바로잡는다. 버들목은 도착할 때 `customPlaces`에 추가(cat terrain/waypoint, 거울호 남쪽 기슭 — 좌표 1700,895 부근. 50회차에 지도 그림과 대조해 거울호 좌표를 1500,1080 → 1720,835로 바로잡았다).
 - `log.json`: 50회차 "개시" 항목.
 - 전원 동행 → 이자벨·리브·네리·이드라 파일에 `at` 없음 확인. 코라·레아는 `"at": "상점"` 유지.
 - `npcs/`: 이네스·브람은 **등장할 때** 파일을 만든다(그전엔 이 문서에만). 인덱스 등록.
