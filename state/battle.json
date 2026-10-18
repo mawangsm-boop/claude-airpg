@@ -1,0 +1,34 @@
+{
+  "battle": {
+    "name": "검은 여울 창고",
+    "cols": 16,
+    "rows": 12,
+    "round": 1,
+    "init": ["verrix", "isabel", "neri", "liv", "idra", "esc1", "esc2", "roof1", "roof2", "rower1", "rower2", "roof3"],
+    "turn": "verrix",
+    "terrain": [
+      {"x": 0, "y": 0, "w": 16, "h": 3, "type": "water", "label": "후미(검은 여울)"},
+      {"x": 3, "y": 3, "w": 10, "h": 7, "type": "hazard", "label": "돌담 창고 — 북쪽 큰 문(8,3), 남쪽 쪽문(8,9)"},
+      {"x": 4, "y": 4, "w": 1, "h": 1, "type": "hazard", "label": "화덕 — 장부를 말리는 중"},
+      {"x": 7, "y": 6, "w": 2, "h": 1, "type": "hazard", "label": "금고"},
+      {"x": 11, "y": 7, "w": 1, "h": 2, "type": "hazard", "label": "거적 밑 시신 둘"},
+      {"x": 6, "y": 1, "w": 5, "h": 2, "type": "hazard", "label": "선창·셈배"},
+      {"x": 0, "y": 10, "w": 16, "h": 2, "type": "tree", "label": "침엽수 숲"}
+    ],
+    "tokens": [
+      {"id": "verrix", "name": "베릭스", "side": "pc", "x": 8, "y": 10, "hp": "71/71", "st": ["쪽문 밖", "은신"], "move": 6, "range": 12},
+      {"id": "isabel", "name": "이자벨", "side": "ally", "x": 7, "y": 10, "hp": "26/26", "st": ["쪽문 밖", "은신"], "move": 6},
+      {"id": "liv", "name": "리브", "side": "ally", "x": 9, "y": 10, "hp": "32/32", "st": ["쪽문 밖", "은신", "이네스를 붙듦"], "move": 6},
+      {"id": "neri", "name": "네리", "side": "ally", "x": 6, "y": 11, "hp": "17/17", "st": ["숲 가장자리", "은신"], "move": 6, "range": 100},
+      {"id": "idra", "name": "이드라", "side": "ally", "x": 10, "y": 11, "hp": "38/38", "st": ["숲 가장자리", "은신"], "move": 6, "range": 24},
+      {"id": "ines", "name": "이네스", "side": "neutral", "x": 9, "y": 11, "hp": "4/4", "st": ["묶임"]},
+      {"id": "esc1", "name": "반지 낀 덩치", "side": "enemy", "x": 7, "y": 5, "hp": "23/32", "st": ["인장 반지", "모두와 싸움"]},
+      {"id": "esc2", "name": "팔짱 낀 사내", "side": "enemy", "x": 8, "y": 5, "hp": "32/32", "st": ["덩치와 싸움"]},
+      {"id": "roof1", "name": "쇠뇌수 1", "side": "enemy", "x": 6, "y": 5, "hp": "11/11", "st": ["궤짝 옆", "덩치에게 맞을 뻔"]},
+      {"id": "roof2", "name": "쇠뇌수 2", "side": "enemy", "x": 5, "y": 7, "hp": "11/11", "st": ["쇠뇌 집어 듦"]},
+      {"id": "rower1", "name": "노잡이 1", "side": "enemy", "x": 6, "y": 4, "hp": "32/32", "st": ["덩치와 싸움"]},
+      {"id": "rower2", "name": "노잡이 2", "side": "enemy", "x": 5, "y": 4, "hp": "32/32", "st": ["화덕 옆", "머뭇거림"]},
+      {"id": "roof3", "name": "선창 망꾼", "side": "enemy", "x": 8, "y": 3, "hp": "11/11", "st": ["큰 문으로 뛰어듦"]}
+    ]
+  }
+}
