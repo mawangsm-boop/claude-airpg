@@ -13,7 +13,7 @@
     "slots": [
       {
         "lvl": 1,
-        "cur": 4,
+        "cur": 3,
         "max": 4
       },
       {
@@ -60,7 +60,7 @@
         "id": "res_beguiling_magic",
         "n": "매혹의 마법 (Beguiling Magic)",
         "dice": "",
-        "cur": 1,
+        "cur": 0,
         "max": 1,
         "recharge": "long",
         "note": "효과 텍스트는 48회차 사용자 제공본.",
