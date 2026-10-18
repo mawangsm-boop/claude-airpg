@@ -65,3 +65,12 @@ Ian Hasek, a human male in his 50s, headman of a reed-lined river village. Gaunt
 
 ## 오스릭 담 (NPC)
 Osric Dam, a human male instructor-for-hire in his 50s. Gaunt and weathered, grey-streaked stubble, red-veined nose, sharp tired eyes, scarred knuckles. Wearing a faded mercenary instructor's coat with the stripes torn off the shoulders, an empty whip loop hanging at his belt, a half-empty bottle in one hand.
+
+## 펠 마로 (NPC)
+Fel Maro, a human male courier in his 40s. Thin build, neatly combed ash-grey hair, black clerk's sleeve guards, missing ring finger on his left hand, carrying a ledger and a small brass scale.
+
+## 롤란 베크 (NPC)
+Rolan Beck, a human male in his late 30s. Tall and broad-shouldered, close-cropped hair, an old rope-burn scar around his neck, wearing a dockworker's coat over armor.
+
+## 이네스 칼로 (NPC)
+Ines Calo, a human female ledger-keeper in her late 20s. Black hair tied tightly at the nape, a long slender neck, grey eyes, a pen callus on her right middle finger. Wearing a deep-blue travel cloak over a fitted dark vest, a leather cord wrapped around her wrist.

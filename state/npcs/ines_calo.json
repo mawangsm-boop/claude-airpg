@@ -1,0 +1,25 @@
+{
+  "char": {
+    "id": "ines_calo",
+    "name": "이네스 칼로",
+    "role": "여성 · 인간 · 20대 후반 · 관리인 쪽 셈꾼",
+    "hp": {
+      "cur": 1,
+      "max": 4
+    },
+    "tag": "50회차 첫 대면 · 사로잡힘",
+    "tagc": "",
+    "trait": "관리인의 장부를 실제로 쓰는 사람. 상단로 길목 여관 동쪽 방에서 롤란의 보고를 기다리다 49회차 습격 생존자 셋을 데리고 버들목으로 갔다. 50회차 3일째, 버들목 전투에서 베릭스의 야수 명령을 받은 개에게 물려 쓰러졌다가 살아났다. 베릭스의 사람 매혹에 걸렸다(한 시간).",
+    "voice": "해요체. 말이 짧고 계산이 먼저 나온다. 겁날수록 더 차분해진다 — \"그래서, 제 값은 얼마로 보시는데요?\"",
+    "code": {
+      "does": "값을 매기고, 셈이 맞는 쪽을 고른다.",
+      "wont": "장부를 물에 적시거나 함부로 다루게 두지 않는다."
+    },
+    "drive": "겉 — 맡은 셈을 탈 없이 넘기는 것. 속 — 미확정(행동으로 드러날 것).",
+    "fear": "미확정 — 행동으로 드러날 것.",
+    "bond": "50회차 3일째, 버들목에서 베릭스 일행에게 사로잡혔다. 베릭스가 \"닥치고 있으시오\"라고 하자 그대로 입을 다물었다.",
+    "knows": "(GM 문서 §3-3 참고 — 진행하며 드러난 것만 여기에 적는다)",
+    "unknown": "베릭스 일행의 정체 전부(D등급).",
+    "look": "Ines Calo, a human female ledger-keeper in her late 20s. Black hair tied tightly at the nape, a long slender neck, grey eyes, a pen callus on her right middle finger. Wearing a deep-blue travel cloak over a fitted dark vest, a leather cord wrapped around her wrist."
+  }
+}
