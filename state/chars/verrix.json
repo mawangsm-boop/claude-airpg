@@ -18,7 +18,7 @@
       },
       {
         "lvl": 2,
-        "cur": 1,
+        "cur": 0,
         "max": 3
       }
     ],
@@ -27,7 +27,7 @@
         "id": "res_bardic_inspiration",
         "n": "영감의 말 (Bardic Inspiration)",
         "dice": "d6",
-        "cur": 2,
+        "cur": 1,
         "max": 6,
         "recharge": "long",
         "note": "매력 수정치만큼 6회로 잠정(45회차 규칙 판본 대조 전 — 2024판이 숙련 보너스 기준일 수 있음, 확인되는 대로 정정). 지금은 긴 휴식에만 회복 — 5레벨 Font of Inspiration을 얻으면 짧은 휴식에도 회복되도록 갱신.",
