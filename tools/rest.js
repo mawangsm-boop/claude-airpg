@@ -69,6 +69,11 @@ const idx = rj(S("chars", "_index.json"));
     if (!refills(r.recharge)) return;
     if (r.cur < r.max) { changes.push(`${c.name}: ${r.n} ${r.cur}→${r.max}`); r.cur = r.max; }
   });
+  /* 생명 주사위(50회차 신설): 2024판은 긴 휴식에 전부 회복. */
+  if (isLong && c.hitDice && c.hitDice.cur < c.hitDice.max) {
+    changes.push(`${c.name}: 생명 주사위 ${c.hitDice.cur}→${c.hitDice.max}`);
+    c.hitDice.cur = c.hitDice.max;
+  }
   restoreCharges(c.items, c.name);
   wj(p, d);
 }
@@ -84,6 +89,13 @@ const idx = rj(S("chars", "_index.json"));
   ((c.sheet && c.sheet.resources) || []).forEach((r) => {
     if (!refills(r.recharge)) return;
     if (r.cur < r.max) { changes.push(`${c.name}: ${r.n} ${r.cur}→${r.max}`); r.cur = r.max; }
+  });
+  /* 동료 주문 슬롯(sheet.slots) — 50회차, 이드라 슬롯이 긴 휴식에 안 돌아온 일로 추가. */
+  ((c.sheet && Array.isArray(c.sheet.slots) && c.sheet.slots) || []).forEach((sl) => {
+    if (sl.cur < sl.max && refills(sl.recharge || "long")) {
+      changes.push(`${c.name}: ${sl.lvl}레벨 슬롯 ${sl.cur}→${sl.max}`);
+      sl.cur = sl.max;
+    }
   });
   wj(p, d);
 });

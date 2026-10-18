@@ -6,19 +6,19 @@
     "level": 4,
     "ac": 14,
     "hp": {
-      "cur": 49,
+      "cur": 71,
       "max": 71,
       "tmp": 0
     },
     "slots": [
       {
         "lvl": 1,
-        "cur": 0,
+        "cur": 4,
         "max": 4
       },
       {
         "lvl": 2,
-        "cur": 0,
+        "cur": 3,
         "max": 3
       }
     ],
@@ -27,7 +27,7 @@
         "id": "res_bardic_inspiration",
         "n": "영감의 말 (Bardic Inspiration)",
         "dice": "d6",
-        "cur": 0,
+        "cur": 6,
         "max": 6,
         "recharge": "long",
         "note": "매력 수정치만큼 6회로 잠정(45회차 규칙 판본 대조 전 — 2024판이 숙련 보너스 기준일 수 있음, 확인되는 대로 정정). 지금은 긴 휴식에만 회복 — 5레벨 Font of Inspiration을 얻으면 짧은 휴식에도 회복되도록 갱신.",
@@ -37,7 +37,7 @@
         "id": "res_core_echo_suggestion",
         "n": "정제된 핵의 잔향 — 서제스천 (무소모)",
         "dice": "",
-        "cur": 0,
+        "cur": 1,
         "max": 1,
         "recharge": "long",
         "note": "출처: 흩어진 문지기의 마지막 조각(40회차). 구성요소는 이 특성 문구에 없어 요구하지 않는다(43회차까지의 선례). 2024판 서제스천 원문의 재료는 꿀 한 방울(검색 요약, 원문 대조 전). 사용 기록: 48회차 에다 그린, 49회차 펠 마로. 50회차 셈배 마중 배의 노잡이에게 썼으나 내성 성공(19).",
@@ -49,7 +49,7 @@
         "id": "res_forest_beast_command",
         "n": "숲을 갉아먹던 것의 파편 — 야수 명령",
         "dice": "",
-        "cur": 0,
+        "cur": 1,
         "max": 1,
         "recharge": "long",
         "note": "출처: 흩어진 문지기의 마지막 조각(40회차) 중 '숲을 갉아먹던 것의 파편'. 세부 효과는 쓸 때 정한다. 50회차 버들목에서 처음 사용 — GM 판정: 짐승 하나에게 짧은 명령 하나, 지혜 내성 DC 16, 실패하면 그 짐승의 다음 차례에 따른다(사거리는 시야 안, 18m로 둠).",
@@ -60,7 +60,7 @@
         "id": "res_beguiling_magic",
         "n": "매혹의 마법 (Beguiling Magic)",
         "dice": "",
-        "cur": 0,
+        "cur": 1,
         "max": 1,
         "recharge": "long",
         "note": "효과 텍스트는 48회차 사용자 제공본.",
@@ -70,7 +70,7 @@
         "id": "res_heartwood_plants",
         "n": "심목의 잔재 — 식물과의 대화 (무소모)",
         "dice": "",
-        "cur": 0,
+        "cur": 1,
         "max": 1,
         "recharge": "long",
         "note": "출처: 심목의 잔재(46회차). 49회차 2일째 새벽 조제실 화분에게 처음 써서 이드라가 화분이 기우는 걸 봤다. 50회차 3일째 한낮 버들목 갈대밭에 썼다 — 갈대가 크게 누워 움막 쪽 일꾼 하나가 나와 살폈다.",
@@ -302,7 +302,7 @@
         "cat": "accessory",
         "equipped": true,
         "charge": {
-          "cur": 0,
+          "cur": 1,
           "max": 1,
           "recharge": "long"
         },
@@ -565,7 +565,7 @@
         "cat": "accessory",
         "equipped": true,
         "charge": {
-          "cur": 0,
+          "cur": 1,
           "max": 1,
           "recharge": "long"
         },
@@ -631,7 +631,7 @@
     },
     "hitDice": {
       "die": "d8",
-      "cur": 2,
+      "cur": 4,
       "max": 4,
       "note": "50회차 신설 — 생명 주사위 잔량(49회차 강평 ③)."
     },
