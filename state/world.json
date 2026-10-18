@@ -28,9 +28,10 @@
       "shadowless_plain",
       "karlen_hint",
       "eastroad_waypost",
-      "galdaemok"
+      "galdaemok",
+      "mirrorlake"
     ],
-    "here": "eastroad_waypost",
+    "here": "beodeulmok",
     "customPlaces": [
       {
         "id": "outpost3",
@@ -179,6 +180,15 @@
         "d": "거울강 서안, 카를렌에서 강배로 하루 거슬러 오른 곳. 갈대밭에 둘러싸인 가구 마흔 남짓의 작은 나루. 48회차, 모이라 해스크의 부탁으로 처음 찾았다. 48회차 7일째, 수금일 방어전 뒤 마을이 베릭스에게 나루 아래 강변 땅(해스크 할멈이 받았던 작은 터)과 나룻배 무상 이용권, 갈대밭 약초의 정기 납품을 약속했다. 교관 자리는 오스릭 담이 맡는다.",
         "cat": "settlement",
         "tier": "village"
+      },
+      {
+        "id": "beodeulmok",
+        "n": "버들목",
+        "t": "거울호 남쪽 기슭 갈대 선창",
+        "x": 1700,
+        "y": 895,
+        "d": "키를 넘는 갈대밭과 진흙 물길, 버려진 고기잡이 움막 셋, 작은 나무 선창. 50회차, 셈꾼 일행이 숨어 기다리던 곳.",
+        "cat": "waypoint"
       }
     ]
   }
