@@ -3,34 +3,295 @@
     "name": "버들목 움막",
     "cols": 20,
     "rows": 16,
-    "round": 1,
-    "init": ["idra", "bandit1", "bandit2", "bandit3", "neri", "isabel", "ines", "verrix", "dog1", "dog2", "liv", "tough1", "tough2", "tough3", "captain"],
+    "round": 2,
+    "init": [
+      "idra",
+      "bandit1",
+      "bandit2",
+      "bandit3",
+      "liv",
+      "neri",
+      "isabel",
+      "ines",
+      "verrix",
+      "dog1",
+      "dog2",
+      "tough1",
+      "tough2",
+      "tough3",
+      "captain"
+    ],
     "turn": "verrix",
     "terrain": [
-      {"x": 0, "y": 0, "w": 20, "h": 5, "type": "water", "label": "거울호"},
-      {"x": 3, "y": 1, "w": 1, "h": 4, "type": "hazard", "label": "나무 선창(끝에 등 기둥)"},
-      {"x": 2, "y": 1, "w": 1, "h": 1, "type": "hazard", "label": "작은 배"},
-      {"x": 2, "y": 6, "w": 3, "h": 3, "type": "hazard", "label": "움막 A(문: 북쪽)"},
-      {"x": 8, "y": 6, "w": 3, "h": 3, "type": "hazard", "label": "움막 B — 연기(문: 남쪽 9,9)"},
-      {"x": 14, "y": 6, "w": 3, "h": 3, "type": "hazard", "label": "움막 C(문: 남쪽 15,9)"},
-      {"x": 0, "y": 11, "w": 20, "h": 5, "type": "tree", "label": "갈대밭(심하게 가려짐)"}
+      {
+        "x": 0,
+        "y": 0,
+        "w": 20,
+        "h": 5,
+        "type": "water",
+        "label": "거울호"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "w": 1,
+        "h": 4,
+        "type": "hazard",
+        "label": "나무 선창(끝에 등 기둥)"
+      },
+      {
+        "x": 2,
+        "y": 1,
+        "w": 1,
+        "h": 1,
+        "type": "hazard",
+        "label": "작은 배"
+      },
+      {
+        "x": 2,
+        "y": 6,
+        "w": 3,
+        "h": 3,
+        "type": "hazard",
+        "label": "움막 A(문: 북쪽)"
+      },
+      {
+        "x": 8,
+        "y": 6,
+        "w": 3,
+        "h": 3,
+        "type": "hazard",
+        "label": "움막 B — 연기(문: 남쪽 9,9)"
+      },
+      {
+        "x": 14,
+        "y": 6,
+        "w": 3,
+        "h": 3,
+        "type": "hazard",
+        "label": "움막 C(문: 남쪽 15,9)"
+      },
+      {
+        "x": 0,
+        "y": 11,
+        "w": 20,
+        "h": 5,
+        "type": "tree",
+        "label": "갈대밭(심하게 가려짐)"
+      },
+      {
+        "x": 13,
+        "y": 9,
+        "w": 4,
+        "h": 4,
+        "type": "hazard",
+        "label": "뿌리 속박(어려운 지형)"
+      }
     ],
     "tokens": [
-      {"id": "verrix", "name": "베릭스", "side": "pc", "x": 11, "y": 12, "hp": "71/71", "st": ["은신(갈대)"], "move": 6, "range": 24, "note": "하급 환영(소리) 6,12 — 1분"},
-      {"id": "isabel", "name": "이자벨", "side": "ally", "x": 8, "y": 10, "hp": "26/26", "st": ["은신", "준비: 문을 나서는 적 공격"], "move": 6},
-      {"id": "liv", "name": "리브", "side": "ally", "x": 10, "y": 10, "hp": "32/32", "st": ["은신"], "move": 6},
-      {"id": "idra", "name": "이드라", "side": "ally", "x": 15, "y": 12, "hp": "22/38", "st": ["드러남"], "move": 6, "range": 6},
-      {"id": "neri", "name": "네리", "side": "ally", "x": 12, "y": 14, "hp": "17/17", "st": ["은신(갈대)"], "move": 6, "range": 100},
-      {"id": "bandit1", "name": "뭍 일꾼 1(지붕)", "side": "enemy", "x": 15, "y": 10, "hp": "0/11", "down": true, "from": {"x": 15, "y": 7}, "note": "가시 채찍에 지붕에서 끌려 내려옴 → 네리 화살에 사망"},
-      {"id": "bandit2", "name": "뭍 일꾼 2", "side": "enemy", "x": 14, "y": 10, "hp": "11/11", "from": {"x": 15, "y": 7}, "range": 16},
-      {"id": "bandit3", "name": "뭍 일꾼 3", "side": "enemy", "x": 16, "y": 10, "hp": "11/11", "from": {"x": 15, "y": 7}, "range": 16},
-      {"id": "dog1", "name": "마스티프 1", "side": "enemy", "x": 6, "y": 11, "hp": "5/5", "from": {"x": 9, "y": 7}, "move": 8},
-      {"id": "dog2", "name": "마스티프 2", "side": "enemy", "x": 7, "y": 11, "hp": "5/5", "from": {"x": 15, "y": 7}, "move": 8},
-      {"id": "tough1", "name": "불량배 1(다리 끎)", "side": "enemy", "x": 9, "y": 7, "hp": "32/32", "note": "49회차 생존자"},
-      {"id": "tough2", "name": "불량배 2", "side": "enemy", "x": 8, "y": 7, "hp": "32/32", "note": "49회차 생존자"},
-      {"id": "tough3", "name": "불량배 3", "side": "enemy", "x": 10, "y": 7, "hp": "32/32", "note": "49회차 생존자(무릎 꿇었던 자)"},
-      {"id": "captain", "name": "뭍 일꾼 우두머리", "side": "enemy", "x": 4, "y": 7, "hp": "52/52"},
-      {"id": "ines", "name": "장부 든 여자", "side": "neutral", "x": 3, "y": 5, "hp": "4/4", "from": {"x": 3, "y": 7}, "st": ["장부 꾸러미"], "note": "선창 끝 배로 — 1/3라운드"}
+      {
+        "id": "verrix",
+        "name": "베릭스",
+        "side": "pc",
+        "x": 11,
+        "y": 12,
+        "hp": "71/71",
+        "st": [
+          "은신(갈대)"
+        ],
+        "move": 6,
+        "range": 24,
+        "note": "하급 환영(소리) — 1분. 야수 명령 사용. 영감의 망토(임시 HP 10 ×4)"
+      },
+      {
+        "id": "isabel",
+        "name": "이자벨",
+        "side": "ally",
+        "x": 8,
+        "y": 10,
+        "hp": "26/26",
+        "st": [
+          "임시 HP 10"
+        ],
+        "move": 6,
+        "note": "1R 준비 공격으로 불량배 1, 2R 불량배 2 처치"
+      },
+      {
+        "id": "liv",
+        "name": "리브",
+        "side": "ally",
+        "x": 10,
+        "y": 10,
+        "hp": "32/32",
+        "st": [
+          "임시 HP 10"
+        ],
+        "move": 6,
+        "note": "우선권 19(암살 이점 — 사후 정정)"
+      },
+      {
+        "id": "idra",
+        "name": "이드라",
+        "side": "ally",
+        "x": 13,
+        "y": 14,
+        "hp": "22/38",
+        "st": [
+          "집중: 뿌리 속박",
+          "임시 HP 8"
+        ],
+        "move": 6,
+        "range": 6,
+        "from": {
+          "x": 15,
+          "y": 12
+        },
+        "note": "망토 반응으로 갈대 깊이 이동"
+      },
+      {
+        "id": "neri",
+        "name": "네리",
+        "side": "ally",
+        "x": 12,
+        "y": 14,
+        "hp": "17/17",
+        "st": [
+          "갈대",
+          "임시 HP 10"
+        ],
+        "move": 6,
+        "range": 100
+      },
+      {
+        "id": "bandit1",
+        "name": "뭍 일꾼 1(지붕)",
+        "side": "enemy",
+        "x": 15,
+        "y": 10,
+        "hp": "0/11",
+        "down": true,
+        "from": {
+          "x": 15,
+          "y": 7
+        },
+        "note": "가시 채찍에 지붕에서 끌려 내려옴 → 네리 화살에 사망"
+      },
+      {
+        "id": "bandit2",
+        "name": "뭍 일꾼 2",
+        "side": "enemy",
+        "x": 14,
+        "y": 10,
+        "hp": "5/11",
+        "range": 16
+      },
+      {
+        "id": "bandit3",
+        "name": "뭍 일꾼 3",
+        "side": "enemy",
+        "x": 16,
+        "y": 10,
+        "hp": "11/11",
+        "range": 16,
+        "st": [
+          "속박(뿌리 속박)"
+        ]
+      },
+      {
+        "id": "dog1",
+        "name": "마스티프 1",
+        "side": "enemy",
+        "x": 4,
+        "y": 5,
+        "hp": "0/5",
+        "move": 8,
+        "from": {
+          "x": 6,
+          "y": 11
+        },
+        "down": true,
+        "note": "야수 명령 — 여자를 물고 우두머리 칼에 죽음"
+      },
+      {
+        "id": "dog2",
+        "name": "마스티프 2",
+        "side": "enemy",
+        "x": 10,
+        "y": 12,
+        "hp": "5/5",
+        "move": 8,
+        "from": {
+          "x": 7,
+          "y": 11
+        },
+        "note": "베릭스 옆"
+      },
+      {
+        "id": "tough1",
+        "name": "불량배 1(다리 끎)",
+        "side": "enemy",
+        "x": 9,
+        "y": 10,
+        "hp": "0/32",
+        "note": "문을 나서다 이자벨·리브 준비 공격에 사망",
+        "down": true
+      },
+      {
+        "id": "tough2",
+        "name": "불량배 2",
+        "side": "enemy",
+        "x": 9,
+        "y": 9,
+        "hp": "0/32",
+        "note": "리브 10, 이자벨 25로 사망",
+        "down": true
+      },
+      {
+        "id": "tough3",
+        "name": "불량배 3",
+        "side": "enemy",
+        "x": 6,
+        "y": 5,
+        "hp": "32/32",
+        "note": "움막 B 뒷벽을 뚫고 물가로 도망",
+        "from": {
+          "x": 10,
+          "y": 7
+        },
+        "st": [
+          "도주 중"
+        ]
+      },
+      {
+        "id": "captain",
+        "name": "뭍 일꾼 우두머리",
+        "side": "enemy",
+        "x": 2,
+        "y": 5,
+        "hp": "52/52",
+        "from": {
+          "x": 4,
+          "y": 7
+        },
+        "st": [
+          "장부 꾸러미"
+        ],
+        "note": "개를 베고 꾸러미를 주웠다"
+      },
+      {
+        "id": "ines",
+        "name": "장부 든 여자",
+        "side": "neutral",
+        "x": 3,
+        "y": 5,
+        "hp": "0/4",
+        "st": [
+          "쓰러짐",
+          "죽음 내성 실패 1"
+        ],
+        "note": "개에게 물려 의식 잃음. 꾸러미는 우두머리가 가져감",
+        "down": true
+      }
     ]
   }
 }
