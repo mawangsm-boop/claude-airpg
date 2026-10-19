@@ -181,9 +181,14 @@ node tools/validate.js               # 커밋 전 상태 검증 — 오류가 �
 node tools/rest.js long              # 긴 휴식 (short: 짧은 휴식, --dry: 미리보기)
 node tools/seed.js --check           # 핸드북 내장본이 몇 회차인지 확인 (인자 없이 실행하면 갱신)
 node tools/record.js start [회차]     # 회차 대화 원본 녹화 시작 (stop: 종료, status: 확인)
+node tools/battle.js board            # 전투판 점검 — 판 크기·판 밖·겹침·물 위 토큰
+node tools/battle.js attack A B 24 96 # 공격 점검 — 거리·장거리/근접 적 불리점·협공·쌍둥이 인장 (근접이면 사거리 생략)
+node tools/battle.js spell A B "주문"  # 캐릭터 파일의 사거리로 닿는지 · fit A 9 대상들 · move A x y · cube/sphere/near
 ```
 
 **`rest.js`를 쓰면 휴식 회복을 손으로 되돌리지 않아도 됩니다** — 긴 휴식은 전원 HP·임시HP·슬롯·모든 충전과 자원을, 짧은 휴식은 recharge가 short/turn인 것만 회복하고, `checkpoint.json`의 짧은 휴식 횟수와 `rev.json`까지 함께 갱신하며 체크포인트 생성 시점이 되면 알려줍니다. 동료의 `sheet.resources`(레아 두 번째 숨 등)를 빠뜨리던 실수가 이 도구로 사라집니다.
+
+**`battle.js`로 계산하고 서술합니다** — 거리·사거리·범위에 누가 드는지·기회 공격 후보를 머리로 셈하지 않습니다(51회차에 장거리 불리점 누락·최면 무늬 범위 과장·서제스천 사거리 착오가 모두 이 셈에서 났습니다). 전투판을 만들거나 옮긴 뒤엔 `board`를 한 번 돌립니다. 파일은 바꾸지 않는 계산 전용입니다.
 
 `dice.js`는 자연 20·1을 표시하고 모든 굴림을 `logs/rolls.log`에 남깁니다. `validate.js`는 중복 id, 깨진 래핑, HP·충전 수치 모순, 인덱스에 없어 화면에서 사라지는 캐릭터 파일, `rev.json` 갱신 누락, `index.html` 구문 오류를 잡습니다.
 
