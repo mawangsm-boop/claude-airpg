@@ -10,10 +10,10 @@
 Verrix Nightblade, a male tiefling bard in his early 30s. Messy shoulder-length black wavy hair, curved purple-black horns swept back, pointed elf-like ears, pale lavender-tinted skin, glowing violet eyes, short trimmed goatee, sly confident smirk. Wearing an ornate black-and-gold longcoat over a purple satin shirt, open collar showing chest tattoos, black vest with gold buttons, thick leather belt with chains, ritual dagger with amethyst pommel sheathed at hip, gold rings and bracelets on right hand.
 
 ## 이자벨 크레인 (동료)
-Isabelle Crane, a human female duelist in her early 30s. Short bob-length black hair, an old faint scar near her left eye, sharp confident expression with a hint of guardedness. Wearing a black leather coat with silver-accented belt, practical duelist's attire underneath, a rapier or dagger at her hip.
+Isabelle Crane, a human female duelist in her early 30s. Short bob-length black hair, an old faint scar near her left eye, sharp confident expression with a hint of guardedness. Wearing a black leather halter-neck top with silver-accented bracelets and a thin black long coat worn open over fitted dark leather trousers, a silver-studded belt, tall dark riding boots, a rapier at her hip.
 
 ## 리브 코르사 (동료)
-Liv Corsa, a human female former cult operative in her late 20s. Ash-blonde hair cut short and uneven, a small brand scar near her left temple, wary darting eyes with dark circles beneath. Wearing a stripped-down dark hooded coat with the insignia torn off, worn boots, an empty dagger sheath at her belt.
+Liv Corsa, a human female former cult operative in her late 20s. Ash-blonde hair cut short and neatly trimmed, a small brand scar near her left temple, bright alert eyes with only faint dark circles beneath and a small genuine smile. Wearing a deep burgundy leather corset-style cropped vest laced at the front and ending below the ribs, leaving her shoulders, collarbone and midriff bare, a thin deep-violet cord around her neck, fingerless black leather gloves, a short dark hooded mantle draped over one shoulder with the hood down, low-slung slim black leather trousers slit up the sides to the hip, soft-soled thigh-high boots, two daggers strapped at her thighs.
 
 ## 네리 하윅 (동료)
 Neri Hawick, a human female ranger in her mid-20s. Short auburn hair, sun-weathered tan skin, sharp watchful eyes, a faint travel-worn look. Wearing scuffed leather armor under a plain traveler's cloak, a longbow and quiver slung across her back, a half-empty backpack at her feet.
