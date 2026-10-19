@@ -19,7 +19,7 @@ Liv Corsa, a human female former cult operative in her late 20s. Ash-blonde hair
 Neri Hawick, a human female ranger in her mid-20s. Short auburn hair, sun-weathered tan skin, sharp watchful eyes, a faint travel-worn look. Wearing scuffed leather armor under a plain traveler's cloak, a longbow and quiver slung across her back, a half-empty backpack at her feet.
 
 ## 이드라 (동료)
-Idra, a human female hermit druid in her early 30s. Long dark brown wavy hair, loose and unkempt, falling past her shoulders. Hazel-green eyes with a quiet, guarded look. Pale skin rarely touched by direct sun, a few faint old scars across her hands. Wearing a worn moss-green and brown robe of rough weave over simple leathers, a rope belt hung with small pouches of dried herbs. Holding a gnarled branch staff. Barefoot.
+Idra, a human female druid-apothecary in her early 30s. Long dark brown wavy hair braided and pinned up for work with loose strands at the temples, hazel-green eyes with a quiet, guarded look, pale skin rarely touched by direct sun, a few faint old scars across her hands and forearms. Wearing a sleeveless undyed linen and moss-green wool dress under a sturdy leather apothecary's apron lined with small herb pouches, a rope belt, a small silver leaf-shaped brooch pinned at the collar, soft hide shoes when outdoors and barefoot in the shop.
 
 ## 아이린 (NPC)
 Irene, a female half-elf bard in her mid-20s. Elegant embroidered clothing, several ornate rings, expressive charismatic face, minimal visible weapons. Holding an expensive lute, confident sociable posture.
