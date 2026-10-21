@@ -324,6 +324,25 @@ if (dungeonFile) {
   }
 }
 
+/* ---------- base (거점 단면도, v2.36) ---------- */
+const baseFile = readJSON("state/base.json", { required: false });
+if (baseFile) {
+  const bs = baseFile.base;
+  if (!bs) err("state/base.json", '{"base":{...}} 래핑이 아닙니다');
+  else {
+    checkDupIds("state/base.json", bs.rooms, "rooms");
+    const ids = new Set([...(bs.rooms || []).map((r) => r.id), ...(bs.outside || []).map((o) => o.id)]);
+    const fs2 = require("fs"), path2 = require("path");
+    for (const dir of ["state/chars", "state/npcs"]) {
+      for (const f of fs2.readdirSync(dir).filter((n) => n.endsWith(".json") && !n.startsWith("_"))) {
+        const o = readJSON(path2.join(dir, f), { required: false });
+        const c = o && o.char;
+        if (c && c.room !== undefined && !ids.has(c.room)) warn(path2.join(dir, f), `room "${c.room}"이 state/base.json에 없습니다 — 거점 탭에 표시되지 않습니다`);
+      }
+    }
+  }
+}
+
 /* ---------- clocks / factions ---------- */
 const clocksFile = readJSON("state/clocks.json", { required: false });
 if (clocksFile) {

@@ -56,7 +56,7 @@ if (check) {
 
 /* 핸드북 로더(fetchRemoteState)와 같은 모양으로 조립한다 */
 const merged = Object.assign({}, rj(S("core.json")), rj(S("world.json")), rj(S("threads.json")), rj(S("log.json")));
-for (const opt of ["clocks", "factions"]) {
+for (const opt of ["clocks", "factions", "base"]) {
   const p = S(opt + ".json");
   if (fs.existsSync(p)) Object.assign(merged, rj(p));
 }

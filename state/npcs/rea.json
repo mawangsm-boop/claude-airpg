@@ -56,6 +56,7 @@
         "equipped": true
       }
     ],
-    "room": "1층 앞방 — 잠들지 않고 늘 지킨다(빈 그릇)"
+    "room": "front",
+    "roomNote": "잠들지 않고 늘 지킨다"
   }
 }

@@ -1,0 +1,96 @@
+{
+  "base": {
+    "name": "카를렌 나루터 물약 상점",
+    "note": "길(왼쪽)에서 거울강(오른쪽)으로 자른 단면. 1층은 가게 일, 2층은 잠자리. 뒷문 나무 계단이 물가로 내려가고, 셈배(물새)가 거기 묶여 있다.",
+    "rooms": [
+      {
+        "id": "r_verrix",
+        "floor": 2,
+        "x": 0,
+        "w": 150,
+        "label": "베릭스 방",
+        "sub": "길 쪽 · 지붕 창",
+        "kind": "sleep"
+      },
+      {
+        "id": "r_isabel",
+        "floor": 2,
+        "x": 150,
+        "w": 110,
+        "label": "이자벨 방",
+        "sub": "",
+        "kind": "sleep"
+      },
+      {
+        "id": "r_idra",
+        "floor": 2,
+        "x": 260,
+        "w": 80,
+        "label": "이드라 방",
+        "sub": "",
+        "kind": "sleep"
+      },
+      {
+        "id": "r_livneri",
+        "floor": 2,
+        "x": 340,
+        "w": 90,
+        "label": "리브·네리 방",
+        "sub": "함께 씀",
+        "kind": "sleep"
+      },
+      {
+        "id": "front",
+        "floor": 1,
+        "x": 0,
+        "w": 150,
+        "label": "앞방",
+        "sub": "진열대 · 계산대 · 정문",
+        "kind": "work"
+      },
+      {
+        "id": "stairs",
+        "floor": 1,
+        "x": 150,
+        "w": 30,
+        "label": "",
+        "sub": "계단",
+        "kind": "stairs"
+      },
+      {
+        "id": "lab",
+        "floor": 1,
+        "x": 180,
+        "w": 80,
+        "label": "조제실",
+        "sub": "증류기 · 창가 화분",
+        "kind": "work"
+      },
+      {
+        "id": "ines",
+        "floor": 1,
+        "x": 260,
+        "w": 60,
+        "label": "작은 방",
+        "sub": "",
+        "kind": "held"
+      },
+      {
+        "id": "back",
+        "floor": 1,
+        "x": 320,
+        "w": 110,
+        "label": "뒷방",
+        "sub": "작업대 · 겉: 약재 창고",
+        "kind": "work"
+      }
+    ],
+    "outside": [
+      {
+        "id": "commute",
+        "label": "가게 밖"
+      }
+    ],
+    "boat": "셈배(물새)"
+  }
+}

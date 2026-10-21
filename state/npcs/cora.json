@@ -27,6 +27,7 @@
     "look": "Cora Venn, a human female shopkeeper's clerk in her early 20s. Sun-freckled tan skin, dark hair tied back in a quick practical knot with loose strands framing her face, bright quick eyes with faint dark circles of overwork beneath. Wearing a plain linen apron over a patched work dress, ink-stained fingers, sleeves rolled up to the elbow.",
     "at": "상점",
     "items": [],
-    "room": "가게에서 자지 않음 — 동생 둘과 나루터 셋방에서 출퇴근"
+    "room": "commute",
+    "roomNote": "동생 둘과 나루터 셋방에서 출퇴근"
   }
 }

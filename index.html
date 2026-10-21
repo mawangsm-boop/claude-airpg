@@ -257,7 +257,8 @@ summary>span:first-child>em{font-style:normal;overflow:hidden;text-overflow:elli
 <nav>
   <button data-t="char" class="on">캐릭터</button>
   <button data-t="party">파티</button>
-  <button data-t="dungeon">던전</button>
+  <button data-t="base">거점</button>
+  <button data-t="dungeon" id="navDungeon" hidden>던전</button>
   <button data-t="battle">전투</button>
   <button data-t="world">대륙</button>
   <button data-t="dice">주사위</button>
@@ -274,6 +275,20 @@ summary>span:first-child>em{font-style:normal;overflow:hidden;text-overflow:elli
   <section id="s-search"><div id="searchPanel"></div></section>
   <section id="s-char" class="on"></section>
   <section id="s-party"></section>
+
+  <section id="s-base">
+    <div class="card">
+      <h2 id="bsName">거점</h2>
+      <div class="legend">
+        <span><i style="background:#3d2f5c"></i>잠자리</span>
+        <span><i style="background:#1f3a2c"></i>가게 일</span>
+        <span><i style="background:#4a2426"></i>갇힌 사람</span>
+      </div>
+      <div class="wrap" id="bsWrap" style="aspect-ratio:2/1"><svg id="bsSvg" viewBox="0 0 600 300"></svg></div>
+      <div class="note" id="bsNote" style="margin-top:8px"></div>
+    </div>
+    <div class="card"><h2>누가 어디에</h2><div id="bsInfo" class="note"></div></div>
+  </section>
 
   <section id="s-dungeon">
     <div class="card">
@@ -3825,7 +3840,7 @@ const $=id=>document.getElementById(id);
    - fetch 실패(file:// 로 직접 열기 등) 시 내장 SEED/로컬 저장본으로 동작한다. */
 const REMOTE_BASE = "./state/";
 const REMOTE_PARTS = ["core","world","threads","log"];  // v2.24: feats.json 제거(특성의 단일 출처는 캐릭터 파일) / v2.25: 캐릭터는 아래 별도 로딩
-const REMOTE_OPTIONAL = ["dungeon","battle","clocks","factions"]; // 던전 밖·평시엔 파일 자체가 없는 게 정상 — 404를 오류로 취급하지 않는다
+const REMOTE_OPTIONAL = ["dungeon","battle","clocks","factions","base"]; // 던전 밖·평시엔 파일 자체가 없는 게 정상 — 404를 오류로 취급하지 않는다
 /* v2.25: 캐릭터 한 명 = 파일 하나.
      state/chars/_index.json   읽을 캐릭터 목록 (여기가 명단의 유일한 출처 — 코드에 하드코딩하지 않는다)
      state/chars/{id}.json     PC·동료 — {"char":{... , "sheet":{...}}}
@@ -4035,7 +4050,7 @@ function applyPatch(obj){
 }
 
 /* ==================== 렌더 ==================== */
-function renderAll(){ header(); renderChar(); renderParty(); renderDungeon(); renderBattle(); renderWorldMarkers(); renderLog(); renderTension(); if(DETAIL_ID) renderDetail(); $("fullBox").value=JSON.stringify(S,null,1); }
+function renderAll(){ header(); renderChar(); renderParty(); renderBase(); renderDungeon(); renderBattle(); renderWorldMarkers(); renderLog(); renderTension(); if(DETAIL_ID) renderDetail(); $("fullBox").value=JSON.stringify(S,null,1); }
 /* v2.24: 진행 시계(clocks) · 세력 관계(factions) · 동료 의심도.
    시계의 vis:"gm"은 GM 전용이라 화면에 내지 않는다. 파일이 없어도(아직 안 만들었어도) 정상 동작한다. */
 function renderTension(){
@@ -4069,7 +4084,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.35";
+const HB_VERSION="v2.36";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -4764,6 +4779,49 @@ $("cropSave").onclick=()=>{
   }catch(err){ toast("저장 공간이 부족합니다. 다른 사진으로 시도해 주세요"); }
   $("cropBg").classList.remove("on"); cropState=null;
 };
+
+/* ---------- 거점 (가게 단면도) — v2.36: 던전 탭 자리를 대신한다. state/base.json의 방 배치 + 인물 파일의 room 필드로 그린다.
+   던전 안에 있을 때(dungeon.json에 방이 있을 때)만 던전 탭 버튼이 다시 나타난다. ---------- */
+const BASE_FILL={sleep:"#3d2f5c",work:"#1f3a2c",held:"#4a2426",stairs:"#232838"};
+const BASE_STROKE={sleep:"#9b6bd1",work:"#7ac68f",held:"#c9666a",stairs:"#5b6478"};
+function basePeople(){
+  const all=[S.pc,...(S.party||[]),...(S.npcs||[])].filter(a=>a&&a.room);
+  const by={}; all.forEach(a=>{(by[a.room]=by[a.room]||[]).push(a);}); return by;
+}
+function renderBase(){
+  const navD=$("navDungeon"); if(navD) navD.hidden=!((S.dungeon&&S.dungeon.rooms||[]).length);
+  const B=S.base, svg=$("bsSvg"); if(!svg) return; svg.innerHTML="";
+  if(!B||!(B.rooms||[]).length){ $("bsName").textContent="거점"; $("bsNote").textContent="거점 배치가 아직 없습니다(state/base.json)."; $("bsInfo").textContent=""; return; }
+  $("bsName").textContent=B.name||"거점"; $("bsNote").textContent=B.note||"";
+  const by=basePeople(), X0=60, FY={2:60,1:150}, FH=90;
+  const W=Math.max(...B.rooms.map(r=>r.x+r.w));
+  svg.appendChild(el("rect",{x:0,y:0,width:600,height:300,fill:"#0a0c12"}));
+  svg.appendChild(el("path",{d:`M${X0-6} 60 L${X0+W/2} 22 L${X0+W+6} 60`,fill:"none",stroke:"#5b6478","stroke-width":1.2}));
+  const txt=(x,y,t,o={})=>{const e=el("text",Object.assign({x,y,"text-anchor":"middle","font-size":11,fill:"#e8e2d4","font-family":"Pretendard,'Apple SD Gothic Neo',sans-serif"},o));e.textContent=t;svg.appendChild(e);return e;};
+  B.rooms.forEach(r=>{
+    const x=X0+r.x, y=FY[r.floor]||150, k=r.kind||"work";
+    svg.appendChild(el("rect",{x,y,width:r.w,height:FH,fill:BASE_FILL[k]||BASE_FILL.work,stroke:BASE_STROKE[k]||BASE_STROKE.work,"stroke-width":0.8}));
+    const cx=x+r.w/2; let ty=y+18;
+    if(k==="stairs"){ svg.appendChild(el("path",{d:`M${x+4} ${y+FH-4} L${x+r.w-4} ${y+6}`,stroke:"#8792a8","stroke-width":1,"stroke-dasharray":"3 3",fill:"none"})); txt(cx,y+FH+14,r.sub||"계단",{fill:"#8792a8","font-size":10}); return; }
+    if(r.label){ txt(cx,ty,r.label,{"font-size":12,"font-weight":"bold",fill:BASE_STROKE[k]}); ty+=15; }
+    if(r.sub){ txt(cx,ty,r.sub,{"font-size":9.5,fill:"#8792a8"}); ty+=15; }
+    (by[r.id]||[]).forEach(a=>{ txt(cx,ty,(a.name||"").replace(/\(.*?\)/g,"").trim().split(" ")[0],{"font-size":11,fill:"#e6c98a"}); ty+=13; });
+  });
+  svg.appendChild(el("line",{x1:0,y1:240,x2:X0,y2:240,stroke:"#5b6478","stroke-width":1}));
+  svg.appendChild(el("line",{x1:X0,y1:240,x2:X0+W,y2:240,stroke:"#8792a8","stroke-width":1.5}));
+  txt(30,258,"길",{fill:"#8792a8","font-size":10});
+  const ex=X0+W; svg.appendChild(el("path",{d:`M${ex} 240 L${ex+10} 240 L${ex+14} 248 L${ex+22} 248 L${ex+26} 256 L${ex+34} 256 L${ex+38} 266`,fill:"none",stroke:"#8792a8","stroke-width":1}));
+  txt(ex+16,232,"뒷문",{fill:"#8792a8","font-size":10});
+  svg.appendChild(el("rect",{x:ex+36,y:266,width:600-(ex+36),height:34,fill:"#122238"}));
+  if(B.boat){ svg.appendChild(el("rect",{x:ex+50,y:252,width:60,height:16,rx:4,fill:"#232838",stroke:"#8792a8","stroke-width":0.6})); txt(ex+80,264,B.boat,{"font-size":9.5,fill:"#e8e2d4"}); }
+  txt(ex+80,292,"거울강",{fill:"#8792a8","font-size":10});
+  const rows=B.rooms.filter(r=>r.kind!=="stairs").map(r=>{
+    const ppl=(by[r.id]||[]); if(!ppl.length) return "";
+    return `<div style="margin:3px 0"><b style="color:var(--gold-s)">${escAttr(r.label)}</b> — ${ppl.map(a=>escAttr(a.name)+(a.roomNote?` <span style="color:var(--muted)">(${escAttr(a.roomNote)})</span>`:"")).join(", ")}</div>`;
+  });
+  (B.outside||[]).forEach(o=>{ const ppl=by[o.id]||[]; if(ppl.length) rows.push(`<div style="margin:3px 0"><b style="color:var(--muted)">${escAttr(o.label)}</b> — ${ppl.map(a=>escAttr(a.name)+(a.roomNote?` <span style="color:var(--muted)">(${escAttr(a.roomNote)})</span>`:"")).join(", ")}</div>`); });
+  $("bsInfo").innerHTML=rows.filter(Boolean).join("")||"자리가 적힌 인물이 없습니다.";
+}
 
 /* ---------- 던전 (평면도) ---------- */
 const SVGNS="http://www.w3.org/2000/svg";
