@@ -82,7 +82,17 @@ function stripSystem(s) {
   return s.replace(/<system-reminder>[\s\S]*?<\/system-reminder>/g, "").trim();
 }
 
-function render(entries) {
+// 사용자가 고치라고 지시한 GM 서술의 낱말 — transcripts/S{회차}/fixes.json, [["바꿀 말", "고친 말"], ...].
+// 원문은 대화 파일에서 매번 다시 만들어지므로 손으로 고치면 덮어써진다. GM 쪽 글에만 적용한다.
+function loadFixes(outDir) {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(outDir, "fixes.json"), "utf8"));
+  } catch {
+    return [];
+  }
+}
+
+function render(entries, fixes = []) {
   // 연속된 같은 화자의 조각을 한 덩어리로 묶는다.
   const out = [];
   let last = null;
@@ -120,7 +130,9 @@ function render(entries) {
       for (const b of c) {
         if (b.type === "text" && b.text.trim()) {
           if (last !== "gm") out.push(`\n## GM\n`);
-          out.push(`\n${b.text.trim()}\n`);
+          let text = b.text.trim();
+          for (const [from, to] of fixes) text = text.split(from).join(to);
+          out.push(`\n${text}\n`);
           last = "gm";
         } else if (b.type === "tool_use" && b.name === "Bash") {
           const cmd = (b.input && b.input.command) || "";
@@ -184,9 +196,9 @@ function hook() {
     const picked = entries.filter(inRange);
     if (!picked.some((e) => e.type === "user" && typeof e.message.content === "string")) continue;
 
-    const body = render(picked);
     const day = localStamp(picked[0].timestamp).slice(0, 10);
     const outDir = path.join(DIR, `S${session}`);
+    const body = render(picked, loadFixes(outDir));
     fs.mkdirSync(outDir, { recursive: true });
     const file = path.join(outDir, `${day}_${sid}.md`);
     const head =
