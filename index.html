@@ -284,7 +284,7 @@ summary>span:first-child>em{font-style:normal;overflow:hidden;text-overflow:elli
         <span><i style="background:#1f3a2c"></i>가게 일</span>
         <span><i style="background:#4a2426"></i>갇힌 사람</span>
       </div>
-      <div class="wrap" id="bsWrap" style="aspect-ratio:2/1"><svg id="bsSvg" viewBox="0 0 600 300"></svg></div>
+      <div class="wrap" id="bsWrap" style="aspect-ratio:7/4"><svg id="bsSvg" viewBox="0 0 700 400"></svg></div>
       <div class="note" id="bsNote" style="margin-top:8px"></div>
     </div>
     <div class="card"><h2>누가 어디에</h2><div id="bsInfo" class="note"></div></div>
@@ -4084,7 +4084,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.36";
+const HB_VERSION="v2.37";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -4793,28 +4793,63 @@ function renderBase(){
   const B=S.base, svg=$("bsSvg"); if(!svg) return; svg.innerHTML="";
   if(!B||!(B.rooms||[]).length){ $("bsName").textContent="거점"; $("bsNote").textContent="거점 배치가 아직 없습니다(state/base.json)."; $("bsInfo").textContent=""; return; }
   $("bsName").textContent=B.name||"거점"; $("bsNote").textContent=B.note||"";
-  const by=basePeople(), X0=60, FY={2:60,1:150}, FH=90;
-  const W=Math.max(...B.rooms.map(r=>r.x+r.w));
-  svg.appendChild(el("rect",{x:0,y:0,width:600,height:300,fill:"#0a0c12"}));
-  svg.appendChild(el("path",{d:`M${X0-6} 60 L${X0+W/2} 22 L${X0+W+6} 60`,fill:"none",stroke:"#5b6478","stroke-width":1.2}));
-  const txt=(x,y,t,o={})=>{const e=el("text",Object.assign({x,y,"text-anchor":"middle","font-size":11,fill:"#e8e2d4","font-family":"Pretendard,'Apple SD Gothic Neo',sans-serif"},o));e.textContent=t;svg.appendChild(e);return e;};
-  B.rooms.forEach(r=>{
-    const x=X0+r.x, y=FY[r.floor]||150, k=r.kind||"work";
-    svg.appendChild(el("rect",{x,y,width:r.w,height:FH,fill:BASE_FILL[k]||BASE_FILL.work,stroke:BASE_STROKE[k]||BASE_STROKE.work,"stroke-width":0.8}));
-    const cx=x+r.w/2; let ty=y+18;
-    if(k==="stairs"){ svg.appendChild(el("path",{d:`M${x+4} ${y+FH-4} L${x+r.w-4} ${y+6}`,stroke:"#8792a8","stroke-width":1,"stroke-dasharray":"3 3",fill:"none"})); txt(cx,y+FH+14,r.sub||"계단",{fill:"#8792a8","font-size":10}); return; }
-    if(r.label){ txt(cx,ty,r.label,{"font-size":12,"font-weight":"bold",fill:BASE_STROKE[k]}); ty+=15; }
-    if(r.sub){ txt(cx,ty,r.sub,{"font-size":9.5,fill:"#8792a8"}); ty+=15; }
-    (by[r.id]||[]).forEach(a=>{ txt(cx,ty,(a.name||"").replace(/\(.*?\)/g,"").trim().split(" ")[0],{"font-size":11,fill:"#e6c98a"}); ty+=13; });
+  /* v2.37: 사선(캐비닛) 투영 — 앞벽을 잘라 낸 인형의 집처럼 두 층을 들여다본다. 깊이는 오른쪽 위로 물러난다. */
+  const by=basePeople(), W=Math.max(...B.rooms.map(r=>r.x+r.w)), D=B.depth||150, H=B.floorH||84;
+  const KX=0.55, KY=0.4, X0=46, Y0=360;
+  const P=(x,y,z)=>[X0+x+z*KX, Y0-y-z*KY];
+  const pts=a=>a.map(q=>P(...q).map(v=>v.toFixed(1)).join(",")).join(" ");
+  const poly=(a,o)=>svg.appendChild(el("polygon",Object.assign({points:pts(a)},o)));
+  const txt=(xy,t,o={})=>{const e=el("text",Object.assign({x:xy[0].toFixed(1),y:xy[1].toFixed(1),"text-anchor":"middle","font-size":11,fill:"#e8e2d4","font-family":"Pretendard,'Apple SD Gothic Neo',sans-serif"},o));e.textContent=t;svg.appendChild(e);return e;};
+  const vbW=X0+W+8+170+(D+30)*KX+8, vbH=Y0+30;
+  const top=Math.max(0,Y0-(2*H+46+D*KY)-14), vh=vbH-top;
+  svg.setAttribute("viewBox",`0 ${top.toFixed(0)} ${vbW.toFixed(0)} ${vh.toFixed(0)}`);
+  const wrap=$("bsWrap"); if(wrap) wrap.style.aspectRatio=`${vbW.toFixed(0)}/${vh.toFixed(0)}`;
+  svg.appendChild(el("rect",{x:0,y:top,width:vbW,height:vh,fill:"#0a0c12"}));
+  const FLOOR={sleep:"#2c2442",work:"#1a2e24",held:"#3a1f22",stairs:"#1c2030"};
+  const BACK ={sleep:"#3d2f5c",work:"#24402f",held:"#4a2426",stairs:"#232838"};
+  const SIDE ={sleep:"#33284d",work:"#1f3729",held:"#412124",stairs:"#202434"};
+  /* 땅과 강 */
+  poly([[-40,0,-10],[W,0,-10],[W,0,D+30],[-40,0,D+30]],{fill:"#11141c"});
+  const rx=W+8; poly([[rx+40,-8,-10],[rx+170,-8,-10],[rx+170,-8,D+30],[rx+40,-8,D+30]],{fill:"#122238"});
+  txt(P(-22,0,-4),"길",{fill:"#8792a8","font-size":10});
+  txt(P(rx+120,-8,-4),"거울강",{fill:"#8792a8","font-size":10});
+  /* 층을 아래에서 위로 */
+  [1,2].forEach(f=>{
+    const yb=f===1?0:H, rooms=B.rooms.filter(r=>r.floor===f).sort((a,b)=>a.x-b.x);
+    if(f===2) poly([[0,H-5,0],[W,H-5,0],[W,H,0],[0,H,0]],{fill:"#3a4257"});
+    rooms.forEach(r=>{
+      const k=r.kind||"work", x=r.x, w=r.w;
+      poly([[x,yb,0],[x+w,yb,0],[x+w,yb,D],[x,yb,D]],{fill:FLOOR[k],stroke:"#0a0c12","stroke-width":0.6});
+      poly([[x,yb,D],[x+w,yb,D],[x+w,yb+H,D],[x,yb+H,D]],{fill:BACK[k],stroke:"#0a0c12","stroke-width":0.6});
+      poly([[x,yb,0],[x,yb,D],[x,yb+H,D],[x,yb+H,0]],{fill:SIDE[k],stroke:"#5b6478","stroke-width":0.5,"fill-opacity":0.5});
+      if(k==="stairs"){
+        for(let i=0;i<7;i++){ const t=i/7, t2=(i+1)/7;
+          poly([[x+1,yb+H*t,D*(0.15+0.7*t)],[x+w-1,yb+H*t,D*(0.15+0.7*t)],[x+w-1,yb+H*t2,D*(0.15+0.7*t)],[x+1,yb+H*t2,D*(0.15+0.7*t)]],{fill:"#3a4257",stroke:"#0a0c12","stroke-width":0.4}); }
+        txt(P(x+w/2,0,-6),r.sub||"계단",{fill:"#8792a8","font-size":9.5});
+        return;
+      }
+    });
+    /* 글자는 벽을 다 그린 뒤에 — 바닥 위에 눕혀 적는다(위층 바닥에 가리지 않게) */
+    rooms.filter(r=>r.kind!=="stairs").forEach(r=>{
+      const k=r.kind||"work", cx=r.x+r.w/2;
+      const ppl=by[r.id]||[], lines=1+ppl.length, [ax,ay]=P(cx,yb,D*0.5);
+      let y0=ay-(lines-1)*6.5+4;
+      if(r.label){ txt([ax,y0],r.label,{"font-size":11.5,"font-weight":"bold",fill:BASE_STROKE[k]}); y0+=13; }
+      ppl.forEach(a=>{ txt([ax,y0],(a.name||"").replace(/\(.*?\)/g,"").trim().split(" ")[0],{"font-size":11,fill:"#e6c98a"}); y0+=13; });
+    });
+    /* 오른쪽 바깥벽(옆면) */
+    poly([[W,yb,0],[W,yb,D],[W,yb+H,D],[W,yb+H,0]],{fill:"#262b3a","fill-opacity":0.22,stroke:"#5b6478","stroke-width":0.6});
   });
-  svg.appendChild(el("line",{x1:0,y1:240,x2:X0,y2:240,stroke:"#5b6478","stroke-width":1}));
-  svg.appendChild(el("line",{x1:X0,y1:240,x2:X0+W,y2:240,stroke:"#8792a8","stroke-width":1.5}));
-  txt(30,258,"길",{fill:"#8792a8","font-size":10});
-  const ex=X0+W; svg.appendChild(el("path",{d:`M${ex} 240 L${ex+10} 240 L${ex+14} 248 L${ex+22} 248 L${ex+26} 256 L${ex+34} 256 L${ex+38} 266`,fill:"none",stroke:"#8792a8","stroke-width":1}));
-  txt(ex+16,232,"뒷문",{fill:"#8792a8","font-size":10});
-  svg.appendChild(el("rect",{x:ex+36,y:266,width:600-(ex+36),height:34,fill:"#122238"}));
-  if(B.boat){ svg.appendChild(el("rect",{x:ex+50,y:252,width:60,height:16,rx:4,fill:"#232838",stroke:"#8792a8","stroke-width":0.6})); txt(ex+80,264,B.boat,{"font-size":9.5,fill:"#e8e2d4"}); }
-  txt(ex+80,292,"거울강",{fill:"#8792a8","font-size":10});
+  /* 지붕: 뒤쪽 경사면과 오른쪽 박공 */
+  const RH=46;
+  poly([[0,2*H,D],[W,2*H,D],[W,2*H+RH,D/2],[0,2*H+RH,D/2]],{fill:"#1b1f2b",stroke:"#5b6478","stroke-width":0.6});
+  poly([[W,2*H,0],[W,2*H,D],[W,2*H+RH,D/2]],{fill:"#2a2f40","fill-opacity":0.5,stroke:"#5b6478","stroke-width":0.6});
+  /* 뒷문과 나무 계단, 셈배 */
+  poly([[W,0,D*0.55],[W,0,D*0.75],[W,H*0.7,D*0.75],[W,H*0.7,D*0.55]],{fill:"#3a2c1c",stroke:"#8a6a3a","stroke-width":0.6});
+  for(let i=0;i<4;i++) poly([[W+i*10,-2*i,D*0.55],[W+(i+1)*10,-2*i,D*0.55],[W+(i+1)*10,-2*i,D*0.75],[W+i*10,-2*i,D*0.75]],{fill:"#5a4426",stroke:"#2a1f12","stroke-width":0.4});
+  txt(P(W+18,H*0.7+6,D*0.65),"뒷문",{fill:"#8792a8","font-size":9.5});
+  if(B.boat){ poly([[rx+62,-8,D*0.4],[rx+140,-8,D*0.4],[rx+148,-2,D*0.62],[rx+140,-8,D*0.84],[rx+62,-8,D*0.84],[rx+56,-2,D*0.62]],{fill:"#3b3326",stroke:"#8a6a3a","stroke-width":0.6});
+    txt(P(rx+100,0,D*0.62),B.boat,{"font-size":9.5,fill:"#e8e2d4"}); }
   const rows=B.rooms.filter(r=>r.kind!=="stairs").map(r=>{
     const ppl=(by[r.id]||[]); if(!ppl.length) return "";
     return `<div style="margin:3px 0"><b style="color:var(--gold-s)">${escAttr(r.label)}</b> — ${ppl.map(a=>escAttr(a.name)+(a.roomNote?` <span style="color:var(--muted)">(${escAttr(a.roomNote)})</span>`:"")).join(", ")}</div>`;
