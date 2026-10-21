@@ -1,0 +1,248 @@
+{
+  "battle": {
+    "name": "첫 번째 좁은 목 — 숲길 매복",
+    "cols": 26,
+    "rows": 18,
+    "round": 1,
+    "init": [
+      "egil",
+      "guard2",
+      "guard3",
+      "guard4",
+      "isabel",
+      "verrix",
+      "liv",
+      "scout1",
+      "scout2",
+      "tough1",
+      "bandit1",
+      "bandit2",
+      "bandit3",
+      "creek1",
+      "creek2",
+      "creek3"
+    ],
+    "turn": "verrix",
+    "terrain": [
+      {
+        "x": 0,
+        "y": 15,
+        "w": 26,
+        "h": 2,
+        "type": "water",
+        "label": "개울"
+      },
+      {
+        "x": 13,
+        "y": 13,
+        "w": 7,
+        "h": 2,
+        "type": "tree",
+        "label": "개울가 덤불"
+      },
+      {
+        "x": 16,
+        "y": 9,
+        "w": 1,
+        "h": 4,
+        "type": "hazard",
+        "label": "쓰러진 나무(어려운 지형)"
+      },
+      {
+        "x": 11,
+        "y": 6,
+        "w": 8,
+        "h": 3,
+        "type": "tree",
+        "label": "바위 비탈(길 쪽 반 엄폐)"
+      },
+      {
+        "x": 14,
+        "y": 4,
+        "w": 3,
+        "h": 1,
+        "type": "tree",
+        "label": "큰 바위"
+      }
+    ],
+    "tokens": [
+      {
+        "id": "verrix",
+        "name": "베릭스",
+        "side": "pc",
+        "x": 10,
+        "y": 1,
+        "hp": "89/89",
+        "move": 6,
+        "range": 24
+      },
+      {
+        "id": "isabel",
+        "name": "이자벨",
+        "side": "ally",
+        "x": 12,
+        "y": 5,
+        "from": {
+          "x": 12,
+          "y": 2
+        },
+        "hp": "29/29",
+        "move": 6,
+        "note": "s1에 Vex — 다음 공격 이점"
+      },
+      {
+        "id": "liv",
+        "name": "리브",
+        "side": "ally",
+        "x": 14,
+        "y": 1,
+        "hp": "36/36",
+        "move": 6
+      },
+      {
+        "id": "egil",
+        "name": "에길",
+        "side": "ally",
+        "x": 9,
+        "y": 11,
+        "from": {
+          "x": 3,
+          "y": 11
+        },
+        "hp": "11/11",
+        "move": 6,
+        "note": "Guard AC 16"
+      },
+      {
+        "id": "guard2",
+        "name": "호위2",
+        "side": "ally",
+        "x": 9,
+        "y": 10,
+        "from": {
+          "x": 3,
+          "y": 10
+        },
+        "hp": "11/11",
+        "move": 6
+      },
+      {
+        "id": "guard3",
+        "name": "호위3",
+        "side": "ally",
+        "x": 8,
+        "y": 11,
+        "from": {
+          "x": 2,
+          "y": 11
+        },
+        "hp": "11/11",
+        "move": 6
+      },
+      {
+        "id": "guard4",
+        "name": "호위4",
+        "side": "ally",
+        "x": 8,
+        "y": 10,
+        "from": {
+          "x": 2,
+          "y": 10
+        },
+        "hp": "11/11",
+        "move": 6
+      },
+      {
+        "id": "scout1",
+        "name": "척후1(장궁)",
+        "side": "enemy",
+        "x": 12,
+        "y": 6,
+        "hp": "1/16",
+        "move": 6,
+        "range": 100,
+        "note": "AC 13"
+      },
+      {
+        "id": "scout2",
+        "name": "척후2(장궁)",
+        "side": "enemy",
+        "x": 17,
+        "y": 6,
+        "hp": "16/16",
+        "move": 6,
+        "range": 100,
+        "note": "AC 13"
+      },
+      {
+        "id": "tough1",
+        "name": "매복 조장(덩치)",
+        "side": "enemy",
+        "x": 15,
+        "y": 3,
+        "hp": "32/32",
+        "move": 6,
+        "range": 66,
+        "note": "AC 12 · 무리 전술"
+      },
+      {
+        "id": "bandit1",
+        "name": "산적1(쇠뇌)",
+        "side": "enemy",
+        "x": 13,
+        "y": 7,
+        "hp": "11/11",
+        "move": 6,
+        "range": 53,
+        "note": "AC 12"
+      },
+      {
+        "id": "bandit2",
+        "name": "산적2(쇠뇌)",
+        "side": "enemy",
+        "x": 15,
+        "y": 7,
+        "hp": "11/11",
+        "move": 6,
+        "range": 53
+      },
+      {
+        "id": "bandit3",
+        "name": "산적3(쇠뇌)",
+        "side": "enemy",
+        "x": 16,
+        "y": 8,
+        "hp": "11/11",
+        "move": 6,
+        "range": 53
+      },
+      {
+        "id": "creek1",
+        "name": "개울가 산적1",
+        "side": "enemy",
+        "x": 14,
+        "y": 13,
+        "hp": "11/11",
+        "move": 6
+      },
+      {
+        "id": "creek2",
+        "name": "개울가 산적2",
+        "side": "enemy",
+        "x": 16,
+        "y": 13,
+        "hp": "11/11",
+        "move": 6
+      },
+      {
+        "id": "creek3",
+        "name": "개울가 산적3",
+        "side": "enemy",
+        "x": 18,
+        "y": 14,
+        "hp": "11/11",
+        "move": 6
+      }
+    ]
+  }
+}
