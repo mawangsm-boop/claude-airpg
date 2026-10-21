@@ -74,3 +74,15 @@ Rolan Beck, a human male in his late 30s. Tall and broad-shouldered, close-cropp
 
 ## 이네스 칼로 (NPC)
 Ines Calo, a human female ledger-keeper in her late 20s. Black hair tied tightly at the nape, a long slender neck, grey eyes, a pen callus on her right middle finger. Wearing a deep-blue travel cloak over a fitted dark vest, a leather cord wrapped around her wrist.
+
+## 마렌 소어 (NPC)
+Maren Sor, a human female deputy customs inspector in her early 30s. Short cropped auburn hair, freckles across the bridge of her nose, a faint scar splitting her left eyebrow, quick sharp grey-brown eyes. Wearing a grey inspection-office official's uniform tailored closer to her body, ink-stained cuffs, a pouch of inspection stamps at her belt.
+
+## 오도 렘 (NPC)
+Odo Rem, a human male weighing-house deputy overseer in his late 50s. Small and stooped, thin wisps of grey hair, perpetually bloodshot eyes, grain dust under his fingernails. Wearing a brown weighing-house apron over a worn wool waistcoat, a heavy ring of keys at his belt.
+
+## 브로크 하운 (NPC)
+Brok Haun, a human male gang enforcer in his mid-30s. Tall and broad-shouldered, close-shaved head, the outer rim of his left ear missing from an old wound. Wearing battered scale armor, a heavy greatsword strapped across his back.
+
+## 솔베이 아른 (NPC)
+Solvei Arn, a human female caravan mistress around thirty. Sun-browned face, dark brown hair braided and coiled at the nape of her neck, quick appraising eyes, a worn merchant-house signet ring on her left hand. Wearing a dust-colored riding coat over a dark green wool vest and linen shirt, sturdy riding trousers, knee-high boots, a ledger satchel slung at her hip.

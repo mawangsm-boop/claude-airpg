@@ -1,0 +1,33 @@
+{
+  "char": {
+    "id": "solvei_arn",
+    "name": "솔베이 아른",
+    "role": "여성 · 인간 · 서른 안팎 · 아른 상회 상단주(카를렌 동문 밖 마차 객주)",
+    "hp": {
+      "cur": 11,
+      "max": 11
+    },
+    "tag": "53회차 · 상단주",
+    "tagc": "",
+    "trait": "지난겨울 죽은 아버지 고르덴에게서 빚과 '동쪽 길'을 물려받았다. 지난가을 아버지가 보낸 정찰 상단이 동쪽 고개에서 돌아오지 않았다. 동쪽 소금샘 장터까지 첫 상단을 직접 끌고 가려 한다. 외모: 햇볕에 그을린 얼굴, 짙은 갈색 머리를 땋아 목 뒤로 감아올림, 왼손에 낡은 상단 반지.",
+    "voice": "존댓말이되 장사꾼의 반말이 섞인다. 짧고 계산이 빠르다. 숫자를 말할 때 손가락을 접는다. — \"그건 손해예요. 손해는 안 해.\"",
+    "code": {
+      "does": "약속한 몫은 끝까지 지킨다. 짐꾼·호위를 이름으로 부른다.",
+      "wont": "짐꾼을 버리고 짐만 챙기지 않는다. 남의 상회를 밟고 서지는 않는다."
+    },
+    "drive": "동쪽 소금샘까지 가는 첫 길을 자기 이름으로 열어 상회를 살린다.",
+    "fear": "아버지처럼 길 위에서 사람을 잃는 것. 상회가 숙부 손에 넘어가는 것.",
+    "bond": "53회차 12일째 오전, 물약 상점에 호위를 겸한 동행을 청하러 왔다 — 첫 만남.",
+    "knows": [
+      "첫 정찰 상단(지난가을)이 동쪽 고개에서 돌아오지 않았다(A — 상회 일).",
+      "고개에 통행세 받는 무리가 있다는 소문(C — 확인 안 됨).",
+      "숙부 오스턴이 동쪽 길에 반대해 왔다(A).",
+      "물약 상점 주인이 갈대섬 뱃길을 정리했다는 나루터 소문(B — 나루 상인들)."
+    ],
+    "unknown": [
+      "숙부 오스턴이 고개 늑대단에 돈을 대고 있다는 것.",
+      "베릭스의 본성."
+    ],
+    "look": "Solvei Arn, a human female caravan mistress around thirty. Sun-browned face, dark brown hair braided and coiled at the nape of her neck, quick appraising eyes, a worn merchant-house signet ring on her left hand. Wearing a dust-colored riding coat over a dark green wool vest and linen shirt, sturdy riding trousers, knee-high boots, a ledger satchel slung at her hip."
+  }
+}

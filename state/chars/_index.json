@@ -32,7 +32,8 @@
     "ines_calo",
     "maren_sor",
     "odo_rem",
-    "brok_haun"
+    "brok_haun",
+    "solvei_arn"
   ],
   "npcMinor": "_minor"
 }
