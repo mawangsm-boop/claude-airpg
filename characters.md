@@ -92,3 +92,9 @@ Nok, a half-elf male scout captain around forty. Grey-streaked dark hair tied ba
 
 ## 페트로 (NPC)
 Petro, a human male mercenary sergeant in his early forties. Thick unkempt beard, heavy shoulders, a broken nose, small calculating eyes. Wearing studded leather armor with iron scales sewn over the shoulders, a scimitar belt, a light crossbow slung on his back.
+
+## 하르트 볼 (NPC)
+Hart Vol, a human male mercenary captain in his fifties. Close-cropped grey hair, a weathered heavy-jawed face, an old ragged scar where his left ear should be. Wearing heavy splint armor over a padded coat, a greatsword, a heavy iron key on a chain around his neck.
+
+## 세바 린드 (NPC)
+Seva Lind, a human female swordswoman in her mid-thirties. Brown hair pulled back tight in a knot, a lean sharp-boned face, cool heavy-lidded eyes and a faint sardonic smile. Wearing a long dark wool coat over a close-fitting black studded leather inner armor that covers the torso snugly, dark trousers, tall boots, a slender straight-bladed sword.

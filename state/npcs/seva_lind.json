@@ -1,0 +1,31 @@
+{
+  "char": {
+    "id": "seva_lind",
+    "name": "세바 린드",
+    "role": "여성 · 인간 · 서른 중반 · 고개 늑대단 부단장, 검객",
+    "hp": {
+      "cur": 39,
+      "max": 52
+    },
+    "tag": "53회차 · 부단장",
+    "tagc": "",
+    "trait": "하르트보다 칼을 잘 쓴다. 상단 앞에서는 귀부인 차림 아래 징 박은 가죽 속갑옷을 입고 무방비한 척한다. 작년 가을 녹이 마부 아이를 늑대에게 던지려 하자 칼을 뽑았고, 그 아이를 직접 묻었다. 일이 끝나면 남쪽으로 돌아가 도장을 차리겠다고 한다.",
+    "voice": "느리고 나긋한 말투 아래 날이 서 있다. 비꼬기를 좋아한다. — \"이 늙은이를 위해 죽어 줄 이유는 없으니까.\"",
+    "code": {
+      "does": "이긴 상대에게 예를 갖춘다. 계약이 끝나면 미련 없이 떠난다.",
+      "wont": "아이와 짐꾼은 베지 않는다."
+    },
+    "drive": "남쪽에 자기 검술 도장을 연다.",
+    "fear": "하르트처럼 늙어서도 남의 길목을 지키는 것.",
+    "bond": "53회차 5일째 해 진 뒤, 망루 아래층에서 이자벨과 칼을 맞댔다. 하르트가 항복하자 칼끝을 내리고 자기 몫과 길을 요구했다.",
+    "knows": [
+      "금고에 자기 몫이 있다는 것(B — 하르트의 말).",
+      "하르트가 '아래 장사꾼'에게 돈을 받는다는 것(B)."
+    ],
+    "unknown": [
+      "하르트가 부하들 몫을 떼먹고 있다는 것.",
+      "전령을 보내는 자의 이름."
+    ],
+    "look": "Seva Lind, a human female swordswoman in her mid-thirties. Brown hair pulled back tight in a knot, a lean sharp-boned face, cool heavy-lidded eyes and a faint sardonic smile. Wearing a long dark wool coat over a close-fitting black studded leather inner armor that covers the torso snugly, dark trousers, tall boots, a slender straight-bladed sword."
+  }
+}
