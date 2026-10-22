@@ -18,7 +18,7 @@
       },
       {
         "lvl": 2,
-        "cur": 2,
+        "cur": 1,
         "max": 3
       },
       {
@@ -86,7 +86,7 @@
         "id": "res_mantle_of_majesty",
         "n": "위엄의 망토 (Mantle of Majesty)",
         "dice": "",
-        "cur": 1,
+        "cur": 0,
         "max": 1,
         "recharge": "long",
         "sum": "보조 행동 · 1분 · 보조 행동마다 슬롯 없이 명령 · 매혹된 대상은 자동 실패 · 3레벨 슬롯으로 되살림",
