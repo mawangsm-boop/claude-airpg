@@ -35,9 +35,10 @@
       "reedisle",
       "saltspring_rumor",
       "nogan",
-      "wolfden_fold"
+      "wolfden_fold",
+      "firstcaravan_gorge"
     ],
-    "here": "wolfden_fold",
+    "here": "firstcaravan_gorge",
     "customPlaces": [
       {
         "id": "outpost3",
@@ -244,6 +245,16 @@
         "d": "노간 동쪽 옛 소금길에서 북쪽 능선으로 걸어서 한 시간 남짓, 협곡 닿기 전. 옛 양치기들이 쓰던 돌담 양 우리가 무너진 자리에 고개 늑대단 척후대장 녹이 늑대를 키운다. 53회차 4일째 한낮, 포로 궁수의 안내로 찾아갔다.",
         "cat": "waypoint",
         "danger": 2
+      },
+      {
+        "id": "firstcaravan_gorge",
+        "n": "협곡 길 — 첫 상단의 자리",
+        "t": "옛 소금길이 협곡 가장자리를 따라가는 곳",
+        "x": 1810,
+        "y": 1124,
+        "d": "노간에서 숲길로 하루. 옛 소금길이 깊은 협곡의 가장자리를 따라 이어진다. 작년 가을 아른 상회의 정찰 상단이 고개 늑대단에게 몰살당하고 마차가 이 아래로 밀려 떨어졌다. 53회차 4일째 해 질 녘에 닿았다.",
+        "cat": "waypoint",
+        "danger": 1
       }
     ]
   }
