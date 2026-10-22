@@ -36,9 +36,10 @@
       "saltspring_rumor",
       "nogan",
       "wolfden_fold",
-      "firstcaravan_gorge"
+      "firstcaravan_gorge",
+      "ropebridge_post"
     ],
-    "here": "firstcaravan_gorge",
+    "here": "ropebridge_post",
     "customPlaces": [
       {
         "id": "outpost3",
@@ -255,6 +256,16 @@
         "d": "노간에서 숲길로 하루. 옛 소금길이 깊은 협곡의 가장자리를 따라 이어진다. 작년 가을 아른 상회의 정찰 상단이 고개 늑대단에게 몰살당하고 마차가 이 아래로 밀려 떨어졌다. 53회차 4일째 해 질 녘에 닿았다.",
         "cat": "waypoint",
         "danger": 1
+      },
+      {
+        "id": "ropebridge_post",
+        "n": "줄다리 초소",
+        "t": "고개 늑대단 아래 초소",
+        "x": 1815,
+        "y": 1120,
+        "d": "협곡이 좁아지는 곳에 걸린 줄다리 하나, 건너편 다리목 방책·나무 망루(봉화)·움막. 협곡을 건널 수 있는 유일한 곳. 53회차 5일째 오전, 봉화가 오른 뒤 베릭스 일행이 초소를 쳤다.",
+        "cat": "waypoint",
+        "danger": 2
       }
     ]
   }
