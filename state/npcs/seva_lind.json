@@ -17,7 +17,7 @@
     },
     "drive": "남쪽 대신 갈대목 나루 강변(베릭스의 땅)에 자기 검술 도장을 연다.",
     "fear": "하르트처럼 늙어서도 남의 길목을 지키는 것.",
-    "bond": "53회차 5일째 해 진 뒤, 망루 아래층에서 이자벨과 칼을 맞댔다. 하르트가 항복하자 칼끝을 내리고 자기 몫과 길을 요구했다. 베릭스가 하르트를 그녀 손으로 끝내라고 하자 '항복한 늙은이 목 따는 건 내 칼 할 일이 아니야'라고 거절하면서도, 베릭스가 하는 건 막지 않겠다고 했다. 금고 앞에서 베릭스가 얀의 신변과 그녀의 속갑옷을 바꾸자고 하자(설득 30), 웃으며 받아들였다. 그날 밤 하르트의 이층 방에서 베릭스와 밤을 보냈다(그녀의 선택 — '당신이 내 손에 들어온 거지'). 뒤에 베릭스가 100골드를 줬다. 베릭스가 일을 같이 하자고 제안했다. 마당에서 베릭스가 갈대목 나루 강변의 그의 땅에 도장을 차리고, 대신 거칠고 질 나쁜 일을 거들어 달라고 제안했다. 세바는 조건을 걸고 받아들였다 — 얀을 데려간다, 아이와 짐꾼에게 칼을 대는 일은 안 한다, 땅은 직접 보고 정한다.",
+    "bond": "53회차 5일째 해 진 뒤, 망루 아래층에서 이자벨과 칼을 맞댔다. 하르트가 항복하자 칼끝을 내리고 자기 몫과 길을 요구했다. 베릭스가 하르트를 그녀 손으로 끝내라고 하자 '항복한 늙은이 목 따는 건 내 칼 할 일이 아니야'라고 거절하면서도, 베릭스가 하는 건 막지 않겠다고 했다. 금고 앞에서 베릭스가 얀의 신변과 그녀의 속갑옷을 바꾸자고 하자(설득 30), 웃으며 받아들였다. 그날 밤 하르트의 이층 방에서 베릭스와 밤을 보냈다(그녀의 선택 — '당신이 내 손에 들어온 거지'). 뒤에 베릭스가 100골드를 줬다. 베릭스가 일을 같이 하자고 제안했다. 마당에서 베릭스가 갈대목 나루 강변의 그의 땅에 도장을 차리고, 대신 거칠고 질 나쁜 일을 거들어 달라고 제안했다. 세바는 조건을 걸고 받아들였다 — 얀을 데려간다, 아이와 짐꾼에게 칼을 대는 일은 안 한다, 땅은 직접 보고 정한다. 6일째 새벽, 얀을 데리고 서쪽으로 떠났다. '카를렌에서 보자. 살아서.'",
     "knows": [
       "금고에 자기 몫이 있다는 것(B — 하르트의 말).",
       "하르트가 '아래 장사꾼'에게 돈을 받는다는 것(B)."
@@ -26,6 +26,7 @@
       "하르트가 부하들 몫을 떼먹고 있다는 것.",
       "전령을 보내는 자의 이름."
     ],
-    "look": "Seva Lind, a human female swordswoman in her mid-thirties. Brown hair pulled back tight in a knot, a lean sharp-boned face, cool heavy-lidded eyes and a faint sardonic smile. Wearing a long dark wool coat over a close-fitting black studded leather inner armor that covers the torso snugly, dark trousers, tall boots, a slender straight-bladed sword."
+    "look": "Seva Lind, a human female swordswoman in her mid-thirties. Brown hair pulled back tight in a knot, a lean sharp-boned face, cool heavy-lidded eyes and a faint sardonic smile. Wearing a long dark wool coat over a close-fitting black studded leather inner armor that covers the torso snugly, dark trousers, tall boots, a slender straight-bladed sword.",
+    "at": "갈대목으로 가는 길"
   }
 }
