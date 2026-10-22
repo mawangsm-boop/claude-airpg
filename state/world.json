@@ -37,9 +37,10 @@
       "nogan",
       "wolfden_fold",
       "firstcaravan_gorge",
-      "ropebridge_post"
+      "ropebridge_post",
+      "crowneck_fort"
     ],
-    "here": "ropebridge_post",
+    "here": "crowneck_fort",
     "customPlaces": [
       {
         "id": "outpost3",
@@ -266,6 +267,16 @@
         "d": "협곡이 좁아지는 곳에 걸린 줄다리 하나, 건너편 다리목 방책·나무 망루(봉화)·움막. 협곡을 건널 수 있는 유일한 곳. 53회차 5일째 오전, 봉화가 오른 뒤 베릭스 일행이 초소를 쳤다.",
         "cat": "waypoint",
         "danger": 2
+      },
+      {
+        "id": "crowneck_fort",
+        "n": "까마귀목 고개 요새",
+        "t": "옛 영주의 통행 요새 · 고개 늑대단 본거지",
+        "x": 1830,
+        "y": 1115,
+        "d": "줄다리 초소에서 동쪽 비탈로 반나절. 고갯마루 안부에 선 옛 통행 요새 — 바깥 성벽(사람 키 두 배 반)과 통나무 정문, 마당, 안쪽 두 층 망루. 뒤는 낭떠러지. 까마귀가 늘 성벽 위를 돈다고 툰이 '까마귀목'이라 불렀다. 지난여름부터 고개 늑대단이 차지했다. 53회차 5일째 해 질 녘, 서남쪽 둔덕에서 처음 봤다.",
+        "cat": "dungeon",
+        "danger": 3
       }
     ]
   }
