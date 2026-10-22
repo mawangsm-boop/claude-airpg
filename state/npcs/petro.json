@@ -1,0 +1,33 @@
+{
+  "char": {
+    "id": "petro",
+    "name": "페트로",
+    "role": "남성 · 인간 · 마흔 남짓 · 고개 늑대단 줄다리 초소장",
+    "hp": {
+      "cur": 52,
+      "max": 52
+    },
+    "tag": "53회차 · 포로",
+    "tagc": "",
+    "trait": "남부 전쟁에서 계약이 끊긴 용병. 줄다리 초소를 맡았다. 5일째 오전 광기의 왕관에 씌어 제 부하를 벴고, 최면 무늬에 빠진 채 묶였다. 요새 구조·정문 신호(뿔나팔 세 번)·달마다 올라오는 카를렌 전령의 얼굴을 안다.",
+    "voice": "반말. 겁보다 흥정이 먼저 나온다. 값을 매기듯 말하고 입꼬리를 비튼다. — \"살려 주면 반 나누지.\"",
+    "code": {
+      "does": "자기 목숨값을 먼저 계산한다.",
+      "wont": "이길 수 없는 쪽 편에 서서 죽지 않는다."
+    },
+    "drive": "살아남아 금고 몫을 챙기는 것.",
+    "fear": "하르트에게 배신자로 찍히는 것.",
+    "bond": "53회차 5일째 오전, 베릭스에게 포로로 잡혀 '살아야 하는 이유'를 댔다.",
+    "knows": [
+      "요새 구조와 하르트의 방·금고 위치(A).",
+      "봉화가 오르면 문을 닫고 성벽에 쇠뇌를 세운다는 약속(A).",
+      "뿔나팔 세 번 = 통행세 상단 신호(A).",
+      "달마다 카를렌에서 오는 전령의 얼굴(A, 이름은 모름)."
+    ],
+    "unknown": [
+      "전령을 보내는 자의 이름.",
+      "금고를 여는 법(하르트만 앎)."
+    ],
+    "look": "Petro, a human male mercenary sergeant in his early forties. Thick unkempt beard, heavy shoulders, a broken nose, small calculating eyes. Wearing studded leather armor with iron scales sewn over the shoulders, a scimitar belt, a light crossbow slung on his back."
+  }
+}

@@ -89,3 +89,6 @@ Solvei Arn, a human female caravan mistress around thirty. Sun-browned face, dar
 
 ## 녹 (NPC)
 Nok, a half-elf male scout captain around forty. Grey-streaked dark hair tied back, a lean weathered face with sharp pale eyes and pointed ears, a bone whistle on a leather cord at his throat. Wearing dark studded leather armor, a short dark hooded mantle draped over one shoulder with the hood down, a shortsword in hand, a longbow and quiver hanging on the hut wall behind him.
+
+## 페트로 (NPC)
+Petro, a human male mercenary sergeant in his early forties. Thick unkempt beard, heavy shoulders, a broken nose, small calculating eyes. Wearing studded leather armor with iron scales sewn over the shoulders, a scimitar belt, a light crossbow slung on his back.
