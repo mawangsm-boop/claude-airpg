@@ -34,9 +34,10 @@
       "blackford",
       "reedisle",
       "saltspring_rumor",
-      "nogan"
+      "nogan",
+      "wolfden_fold"
     ],
-    "here": "nogan",
+    "here": "wolfden_fold",
     "customPlaces": [
       {
         "id": "outpost3",
@@ -233,6 +234,16 @@
         "d": "카를렌 나루터에서 거울강을 건너 동쪽 상단로로 사흘. 밀밭과 양 우리가 끝나는 구릉 끝자락의 가구 서른 남짓한 마을. 동쪽으로는 숲 덮인 구릉 산지가 시작된다. 53회차 3일째 저녁, 아른 상단과 함께 처음 묵었다.",
         "cat": "settlement",
         "tier": "village"
+      },
+      {
+        "id": "wolfden_fold",
+        "n": "녹의 양 우리 터",
+        "t": "무너진 돌 양 우리 · 늑대 우리",
+        "x": 1800,
+        "y": 1118,
+        "d": "노간 동쪽 옛 소금길에서 북쪽 능선으로 걸어서 한 시간 남짓, 협곡 닿기 전. 옛 양치기들이 쓰던 돌담 양 우리가 무너진 자리에 고개 늑대단 척후대장 녹이 늑대를 키운다. 53회차 4일째 한낮, 포로 궁수의 안내로 찾아갔다.",
+        "cat": "waypoint",
+        "danger": 2
       }
     ]
   }
