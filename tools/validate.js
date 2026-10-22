@@ -305,7 +305,8 @@ if (battleFile) {
         b.init.forEach((id) => { if (!tokenIds.has(id)) err("state/battle.json", `init의 "${id}"에 해당하는 토큰이 없습니다`); });
         (b.tokens || []).forEach((t) => { if (!b.init.includes(t.id)) warn("state/battle.json", `${t.id}가 init 순서에 빠져 있습니다`); });
       }
-    } else warn("state/battle.json", "init(이니셔티브 순서)이 없습니다 — 화면에 차례가 표시되지 않습니다");
+    } else if (b.round !== 0) warn("state/battle.json", "init(이니셔티브 순서)이 없습니다 — 화면에 차례가 표시되지 않습니다");
+    // round 0 = 전투 준비(배치만 그린 판, 53회차 사용자 지시) — 우선권을 굴리기 전이라 init·turn을 비워 둔다.
     if (b.turn !== undefined && !tokenIds.has(b.turn)) err("state/battle.json", `turn "${b.turn}"에 해당하는 토큰이 없습니다`);
   }
 }
