@@ -86,3 +86,6 @@ Brok Haun, a human male gang enforcer in his mid-30s. Tall and broad-shouldered,
 
 ## 솔베이 아른 (NPC)
 Solvei Arn, a human female caravan mistress around thirty. Sun-browned face, dark brown hair braided and coiled at the nape of her neck, quick appraising eyes, a worn merchant-house signet ring on her left hand. Wearing a dust-colored riding coat over a dark green wool vest and linen shirt, sturdy riding trousers, knee-high boots, a ledger satchel slung at her hip.
+
+## 녹 (NPC)
+Nok, a half-elf male scout captain around forty. Grey-streaked dark hair tied back, a lean weathered face with sharp pale eyes and pointed ears, a bone whistle on a leather cord at his throat. Wearing dark studded leather armor, a short dark hooded mantle draped over one shoulder with the hood down, a shortsword in hand, a longbow and quiver hanging on the hut wall behind him.

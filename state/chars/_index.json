@@ -33,7 +33,8 @@
     "maren_sor",
     "odo_rem",
     "brok_haun",
-    "solvei_arn"
+    "solvei_arn",
+    "nok"
   ],
   "npcMinor": "_minor"
 }
