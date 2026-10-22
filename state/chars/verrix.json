@@ -6,24 +6,24 @@
     "level": 6,
     "ac": 14,
     "hp": {
-      "cur": 21,
+      "cur": 89,
       "max": 89,
       "tmp": 0
     },
     "slots": [
       {
         "lvl": 1,
-        "cur": 0,
+        "cur": 4,
         "max": 4
       },
       {
         "lvl": 2,
-        "cur": 1,
+        "cur": 3,
         "max": 3
       },
       {
         "lvl": 3,
-        "cur": 1,
+        "cur": 3,
         "max": 3
       }
     ],
@@ -32,7 +32,7 @@
         "id": "res_bardic_inspiration",
         "n": "영감의 말 (Bardic Inspiration)",
         "dice": "d8",
-        "cur": 3,
+        "cur": 6,
         "max": 6,
         "recharge": "short",
         "note": "2024판: 매력 수정치(6)만큼. 5레벨 영감의 샘 — 짧은 휴식·긴 휴식에 모두 회복, 주문 슬롯 하나를 써서(행동 불필요) 1회 되살릴 수 있다. 50회차 갱신.",
@@ -54,7 +54,7 @@
         "id": "res_forest_beast_command",
         "n": "숲을 갉아먹던 것의 파편 — 야수 명령",
         "dice": "",
-        "cur": 0,
+        "cur": 1,
         "max": 1,
         "recharge": "long",
         "note": "출처: 흩어진 문지기의 마지막 조각(40회차) 중 '숲을 갉아먹던 것의 파편'. 세부 효과는 쓸 때 정한다. 50회차 버들목에서 처음 사용 — GM 판정: 짐승 하나에게 짧은 명령 하나, 지혜 내성 DC 16, 실패하면 그 짐승의 다음 차례에 따른다(사거리는 시야 안, 18m로 둠).",
@@ -65,7 +65,7 @@
         "id": "res_beguiling_magic",
         "n": "매혹의 마법 (Beguiling Magic)",
         "dice": "",
-        "cur": 0,
+        "cur": 1,
         "max": 1,
         "recharge": "long",
         "note": "효과 텍스트는 48회차 사용자 제공본.",
@@ -86,7 +86,7 @@
         "id": "res_mantle_of_majesty",
         "n": "위엄의 망토 (Mantle of Majesty)",
         "dice": "",
-        "cur": 0,
+        "cur": 1,
         "max": 1,
         "recharge": "long",
         "sum": "보조 행동 · 1분 · 보조 행동마다 슬롯 없이 명령 · 매혹된 대상은 자동 실패 · 3레벨 슬롯으로 되살림",
@@ -439,7 +439,7 @@
         "cat": "accessory",
         "equipped": true,
         "charge": {
-          "cur": 0,
+          "cur": 1,
           "max": 1,
           "recharge": "long"
         },
