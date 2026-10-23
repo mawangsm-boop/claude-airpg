@@ -32,6 +32,8 @@
       "전령을 보내는 자의 이름.",
       "금고를 여는 법(하르트만 앎)."
     ],
-    "look": "Petro, a human male mercenary sergeant in his early forties. Thick unkempt beard, heavy shoulders, a broken nose, small calculating eyes. Wearing studded leather armor with iron scales sewn over the shoulders, a scimitar belt, a light crossbow slung on his back."
+    "look": "Petro, a human male mercenary sergeant in his early forties. Thick unkempt beard, heavy shoulders, a broken nose, small calculating eyes. Wearing studded leather armor with iron scales sewn over the shoulders, a scimitar belt, a light crossbow slung on his back.",
+    "stance": "경계",
+    "stanceWhy": "포로에서 위협(26)에 눌려 복종한 것이라 힘이 약해지면 이득을 노릴 수 있다 — 아직 신뢰의 근거는 없다."
   }
 }

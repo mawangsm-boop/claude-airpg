@@ -404,6 +404,31 @@ try {
   warn("state/rev.json", "git 상태를 읽지 못해 rev 갱신 검사를 건너뜁니다");
 }
 
+/* ---------- 이번 회차 새 NPC의 태도(stance) ---------- */
+// 53회차 강평: 이득을 본 NPC가 증거 없이 의심·압박하는 서술이 되풀이됐다. 이번 회차에 만든 인물(tag가 "{회차}회차"로 시작, 사망 제외)은
+// 만들 때 stance(호의·중립·경계·적대)를 정하고, 경계·적대면 stanceWhy에 구체적 사건(거짓말·모욕·위험·목격)을 적어야 한다.
+{
+  const sess = core && core.session;
+  const STANCES = ["호의", "중립", "경계", "적대"];
+  const check = (rel, n) => {
+    const m = String(n.tag || "").match(/^(\d+)회차/);
+    if (!m || Number(m[1]) !== sess || /사망/.test(n.tag)) return;
+    if (!STANCES.includes(n.stance)) return err(rel, `${n.id || n.name}: stance(호의·중립·경계·적대)가 없습니다 — 새 인물은 만들 때 태도를 정합니다`);
+    if ((n.stance === "경계" || n.stance === "적대") && String(n.stanceWhy || "").trim().length < 8)
+      err(rel, `${n.id || n.name}: stance가 ${n.stance}인데 stanceWhy(구체적 사건)가 없습니다 — 증거 없는 의심·적대는 쓰지 않습니다`);
+  };
+  const dirN = path.join(ROOT, "state", "npcs");
+  if (fs.existsSync(dirN))
+    for (const f of fs.readdirSync(dirN).filter((x) => x.endsWith(".json"))) {
+      try {
+        const j = JSON.parse(fs.readFileSync(path.join(dirN, f), "utf8"));
+        const rel = `state/npcs/${f}`;
+        if (Array.isArray(j.npcs)) j.npcs.forEach((n) => check(rel, n));
+        else if (j.char) check(rel, j.char);
+      } catch {}
+    }
+}
+
 /* ---------- 금지 표현 ---------- */
 // 시간은 "시간·분"으로 쓴다(CLAUDE.md "수치와 전투"). 옛 단위(시진)가 상태·설계 문서에 섞이면 알린다.
 {
