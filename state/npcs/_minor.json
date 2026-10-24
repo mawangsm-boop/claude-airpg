@@ -360,6 +360,18 @@
       "look": "Sei, a young human female herb gatherer in her early twenties. Small and wiry, sun-tanned skin, dark hair in a single thick braid down her back, bright careful eyes, salt-chapped hands. Wearing a patched undyed wool tunic and a sleeveless sheepskin vest, sturdy short boots, a woven basket on her back, a small cloth pouch at her belt.",
       "at": "카를렌 나루터 여관(임시)",
       "stance": "호의"
+    },
+    {
+      "id": "rake_s54",
+      "name": "레이크",
+      "role": "남성 · 인간 · 쉰 남짓 · 나루터 무두장이(집을 내놓음)",
+      "tag": "54회차 · 매물 주인",
+      "tagc": "",
+      "trait": "관절이 굳은 손으로 칼질을 못 하게 돼 무두질을 접고 강 건너 처남네 양 우리로 간다. 가게 바로 아래 물가 집을 180골드에 내놓았다. 냄새가 벽에 뱄다는 것을 먼저 말한다.",
+      "voice": "느리고 퉁명한 반말. 거짓말은 못 하는 투 — \"냄새? 맡아 보쇼. 한 달 걸려도 안 빠지니까.\"",
+      "stance": "중립",
+      "knows": "자기 집의 흠(냄새·작은 지하실·물가 뒷문)과 값(A등급, 본인 집).",
+      "unknown": "베릭스 일행의 정체(D등급)."
     }
   ]
 }
