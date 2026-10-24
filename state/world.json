@@ -38,9 +38,10 @@
       "wolfden_fold",
       "firstcaravan_gorge",
       "ropebridge_post",
-      "crowneck_fort"
+      "crowneck_fort",
+      "mulpure_ford"
     ],
-    "here": "karlen_hint",
+    "here": "mulpure_ford",
     "customPlaces": [
       {
         "id": "outpost3",
@@ -197,6 +198,15 @@
         "x": 1700,
         "y": 895,
         "d": "키를 넘는 갈대밭과 진흙 물길, 버려진 고기잡이 움막 셋, 작은 나무 선창. 50회차, 셈꾼 일행이 숨어 기다리던 곳.",
+        "cat": "waypoint"
+      },
+      {
+        "id": "mulpure_ford",
+        "n": "물푸레 여울",
+        "t": "거울강 서안 나무 선창",
+        "x": 1713,
+        "y": 1128,
+        "d": "카를렌에서 거울강을 거슬러 반나절, 강굽이 안쪽 얕은 곳. 물푸레나무 몇 그루 아래 나무 선창과 선창지기의 오두막이 있다. 밤 물길이 얕아 배들이 여기서 묵는다. 54회차 1일째 해 질 녘, 갈대목으로 가는 길에 처음 닿았다.",
         "cat": "waypoint"
       },
       {
