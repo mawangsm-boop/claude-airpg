@@ -400,6 +400,54 @@
       "stance": "중립",
       "knows": "오늘 동트기 전 칼 찬 사내 열댓이 말을 몰고 둑길로 올라간 것, 갈고리 손 단 사내가 동쪽에서 온 여자 검객과 젊은 놈을 봤느냐고 물은 것(A등급, 직접 봄).",
       "unknown": "베릭스 일행의 정체(D등급)."
+    },
+    {
+      "id": "bain_haro_s54",
+      "name": "베인 하로",
+      "role": "남성 · 인간 · 마흔 남짓 · 사람 사냥꾼, 칼잡이 패 우두머리('갈고리')",
+      "tag": "54회차 · 적 · 도주",
+      "tagc": "r",
+      "hp": {
+        "cur": 38,
+        "max": 66
+      },
+      "trait": "카를렌 동문 밖 마차 여관에서 빚 받기·사람 찾기·입 막기를 해 온 자. 왼손 장갑 끝에 쇠갈고리(손가락 셋을 잃음). 열셋을 이끌고 세바를 노렸다. 54회차 2일째 한밤 야영지 싸움에서 베릭스 일행에게 패해 말을 잃고 옆구리에 볼트를 맞은 채 숲으로 달아났다.",
+      "voice": "낮고 느긋한 반말. 사냥 이야기처럼 말한다 — \"짐승은 불 앞에선 다 한쪽으로 뛰어. 사람도 그래.\"",
+      "stance": "적대",
+      "stanceWhy": "오스턴에게 돈을 받고 세바를 죽이러 왔고, 야영지에서 베릭스를 쏘아 맞혔다.",
+      "look": "Bain Haro, a lean tall human man in his forties, sun-weathered lined face, short gray beard, oiled hunter's leathers under a mud-colored cloak, a steel hook fitted to his left glove, longbow on his back."
+    },
+    {
+      "id": "marta_coil_s54",
+      "name": "마르타 코일",
+      "role": "여성 · 인간 · 서른 남짓 · 용병, 베인의 부두목",
+      "tag": "54회차 · 항복",
+      "tagc": "",
+      "hp": {
+        "cur": 4,
+        "max": 52
+      },
+      "trait": "남쪽 전쟁에서 떠밀려 온 용병. 베인과 오 년째 일했다. 강변 땅 습격을 이끌었고 야영지 싸움에서 4 HP까지 몰렸다. 베인이 먼저 달아나자 베릭스의 항복 권유에 응했다 — 조건은 자기 사람(덩치 그로)을 살리는 것.",
+      "voice": "빠르고 거친 반말, 욕이 섞인다. 진지해지면 오히려 말이 줄어든다.",
+      "stance": "경계",
+      "stanceWhy": "강변 땅 습격에 가담해 세바와 얀을 베었고, 야영지에서 베릭스와 칼을 맞댄 뒤 패해 항복했다.",
+      "knows": "의뢰인은 '카를렌 상회 영감, 접시 둘 달린 저울 인장 반지에 글자 둘을 덧새긴 것'(A, 베인 뒤에서 봄). 이름은 모른다. 일 값(B, 베인의 말).",
+      "look": "Marta Coil, a stocky muscular human woman around thirty, short-cropped reddish-brown hair, a once-broken nose, iron-reinforced leather vest, two short blades."
+    },
+    {
+      "id": "gro_s54",
+      "name": "그로",
+      "role": "남성 · 인간 · 서른 줄 · 칼잡이 패 덩치(항복)",
+      "tag": "54회차 · 항복",
+      "tagc": "",
+      "hp": {
+        "cur": 29,
+        "max": 32
+      },
+      "trait": "마르타가 데리고 다니던 덩치. 야영지 싸움 끝에 마르타의 말 한 마디에 쇠뇌를 내려놓았다.",
+      "voice": "말이 거의 없다. 마르타의 말만 듣는다.",
+      "stance": "경계",
+      "stanceWhy": "칼잡이 패로 야영지에서 베릭스와 이자벨을 쐈고, 패한 뒤 항복했다."
     }
   ]
 }
