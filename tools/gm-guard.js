@@ -44,14 +44,48 @@ function strip(text) {
     .join("\n");
 }
 
-function check(raw) {
+// 전투 서술 형식 — 53회차 3라운드 예문(CLAUDE.md "수치와 전투")처럼: 행동마다 서술 문단 → 인용(>) 블록에 수치.
+// 54회차에 굵은 제목+수치 나열식으로 무너져 사용자가 지적했다("두 번에 한 번꼴로 이야기하는 게 지겹다").
+const ROLL = /vs AC|d20\[|\d+d\d+\[/;
+function combatCheck(text) {
+  const out = [];
+  const lines = text.split("\n");
+  const bare = lines.filter((l) => ROLL.test(l) && !l.trim().startsWith(">"));
+  if (bare.length) out.push(`수치 줄이 인용(>) 블록 밖에 있음 — "${bare[0].trim().slice(0, 40)}…" 수치는 서술 문단 아래 > 블록에만`);
+  const noTarget = lines.filter((l) => l.trim().startsWith(">") && /vs AC/.test(l) && !/→[^:]*:/.test(l));
+  if (noTarget.length) out.push(`공격 줄에 '공격자 → 대상:'이 없음 — "${noTarget[0].trim().slice(0, 40)}…"`);
+  const heads = lines.filter((l) => /^\s*\*\*[^*\n]{1,40}\.\*\*/.test(l));
+  if (heads.length) out.push(`행동마다 굵은 제목을 붙였음 — "${heads[0].trim().slice(0, 30)}" 제목 없이 서술 문단으로 시작한다(라운드 제목만 허용)`);
+  // 인용 블록마다 바로 앞 서술 문단이 두 문장 이상인지
+  for (let i = 0; i < lines.length; i++) {
+    if (!lines[i].trim().startsWith(">") || (i > 0 && lines[i - 1].trim().startsWith(">"))) continue;
+    if (!ROLL.test(lines.slice(i, i + 6).join("\n"))) continue;
+    let j = i - 1;
+    while (j >= 0 && !lines[j].trim()) j--;
+    const para = [];
+    while (j >= 0 && lines[j].trim() && !lines[j].trim().startsWith(">")) para.unshift(lines[j--]);
+    const sentences = (para.join(" ").match(/(다|요|오|까|군|네)[.!?]/g) || []).length;
+    if (sentences < 2) {
+      out.push(`수치 블록 앞 서술이 ${sentences}문장 — 누가 누구에게 무엇을 했고 어떻게 보였는지 두세 문장 이상 쓴다`);
+      break;
+    }
+  }
+  const coord = lines.find((l) => /\(\d+,\s?\d+\)/.test(l) && !/^\s*([-*>]|\d+\.)/.test(l) && !l.includes("|"));
+  if (coord) out.push(`서술 문단에 좌표 — "${coord.trim().slice(0, 30)}…" 좌표는 '현재 상황' 목록에만`);
+  return out;
+}
+
+function check(raw, opts = {}) {
   const text = strip(raw);
   const out = [];
+  if (opts.combat || ROLL.test(text)) out.push(...combatCheck(text));
   for (const [re, why] of HARD) {
     const m = text.match(re);
     if (m) out.push(`「${m[0]}」 — ${why}`);
   }
   const prose = text.split("\n").filter((l) => !l.trim().startsWith(">")).join("\n");
+  const gridSpeech = prose.match(/["“][^"”\n]*(?:\d+|[한두세네다섯여섯일곱여덟아홉열스물])\s?칸[^"”\n]*["”]/);
+  if (gridSpeech) out.push(`대사에 격자 단위 '칸' — "${gridSpeech[0].slice(0, 30)}…" 인물은 걸음·미터·몇 걸음 거리로 말한다(칸은 현재 상황 목록에만)`);
   const t = prose.match(TURN_NO);
   if (t) out.push(`대사·서술에 회차 번호 — "${t[0].slice(0, 40)}…" 사건·날짜로 바꾼다`);
   const hits = SOFT.filter((w) => prose.includes(w));
@@ -99,14 +133,17 @@ if (cmd === "remind") {
       "②이득 본·우호적인 NPC에게 증거 없는 의심·압박·협박을 시키지 않는다. 의심은 구체적 증거가 있을 때만, 한 번 짚고 넘어간다. 새 NPC는 파일에 stance(호의·중립·경계·적대)와 경계·적대의 근거(stanceWhy)를 적는다.\n" +
       "③베릭스의 말·행동·이동을 대신 쓰지 않는다(준비하라고 했으면 준비까지만).\n" +
       "④싸움이 예고되면 정찰 직후 round 0 전투판을 그리고, 베릭스 차례마다 main에 푸시한다.\n" +
-      "⑤물건 값은 2024 PHB 표 기준 실버부터. ⑧탐지·길 안내·정찰 능력은 확정된 사실만 — 쓰는 순간 새 위험·장애물을 만들지 않는다(없으면 「위험 없음」, 의도에 맞는 안전한 길). ⑥계약·조건은 앞서 읽어 준 문장을 그대로 인용해 대조한다. ⑦포로·단역 목록을 장면마다 갱신한다."
+      "⑤물건 값은 2024 PHB 표 기준 실버부터. ⑧탐지·길 안내·정찰 능력은 확정된 사실만 — 쓰는 순간 새 위험·장애물을 만들지 않는다(없으면 「위험 없음」, 의도에 맞는 안전한 길). ⑥계약·조건은 앞서 읽어 준 문장을 그대로 인용해 대조한다. ⑦포로·단역 목록을 장면마다 갱신한다." +
+      (fs.existsSync(path.join(ROOT, "state", "battle.json"))
+        ? "\n⑨전투 중 — CLAUDE.md '전투 서술 예문'대로: 라운드 제목만 두고, 행동마다 굵은 제목 없이 서술 문단(누가 누구에게·어떻게·보이는 결과, 두세 문장 이상) → 바로 아래 > 인용 블록에 '공격자 → 대상: 합계 vs AC — 명중(보정 설명)' / '피해: 주사위[값]+보정 = 합 → 대상 현재/최대'. 좌표는 서술에 넣지 않고 '현재 상황' 목록에만."
+        : "")
   );
 } else if (cmd === "lint") {
   const info = stdin();
   if (!recording() || info.stop_hook_active || !info.transcript_path) process.exit(0);
   let problems = [];
   try {
-    problems = check(lastAssistantText(info.transcript_path));
+    problems = check(lastAssistantText(info.transcript_path), { combat: fs.existsSync(path.join(ROOT, "state", "battle.json")) });
   } catch {
     process.exit(0);
   }
@@ -121,7 +158,8 @@ if (cmd === "remind") {
     })
   );
 } else if (cmd === "test") {
-  const r = check(process.argv.slice(3).join(" "));
+  const arg = process.argv.slice(3).join(" ");
+  const r = check(arg === "-" ? fs.readFileSync(0, "utf8") : arg);
   console.log(r.length ? r.join("\n") : "통과");
 } else {
   console.log("사용법: node tools/gm-guard.js remind | lint | test \"문장\"");
