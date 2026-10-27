@@ -1,0 +1,127 @@
+{
+ "battle": {
+  "name": "하역장 선창 — 오스턴 도주",
+  "cols": 20,
+  "rows": 12,
+  "round": 1,
+  "init": [
+   "liv",
+   "isabel",
+   "guard",
+   "rower_old",
+   "verrix",
+   "ostan",
+   "rower_young"
+  ],
+  "turn": "liv",
+  "terrain": [
+   {
+    "x": 0,
+    "y": 10,
+    "w": 20,
+    "h": 2,
+    "type": "water",
+    "label": "거울강"
+   },
+   {
+    "x": 2,
+    "y": 4,
+    "w": 3,
+    "h": 4,
+    "type": "tree",
+    "label": "소금통 더미"
+   },
+   {
+    "x": 16,
+    "y": 3,
+    "w": 3,
+    "h": 3,
+    "type": "tree",
+    "label": "계량소 저울대"
+   }
+  ],
+  "tokens": [
+   {
+    "id": "verrix",
+    "name": "베릭스",
+    "side": "pc",
+    "x": 3,
+    "y": 8,
+    "hp": "73/89",
+    "st": [
+     "집중:광기의 왕관"
+    ],
+    "move": 6,
+    "range": 24
+   },
+   {
+    "id": "isabel",
+    "name": "이자벨",
+    "side": "pc",
+    "x": 4,
+    "y": 8,
+    "hp": "29/29",
+    "st": [
+     "은신"
+    ],
+    "move": 6
+   },
+   {
+    "id": "liv",
+    "name": "리브",
+    "side": "pc",
+    "x": 3,
+    "y": 6,
+    "hp": "44/44",
+    "st": [
+     "은신"
+    ],
+    "move": 6
+   },
+   {
+    "id": "ostan",
+    "name": "오스턴",
+    "side": "enemy",
+    "x": 9,
+    "y": 8,
+    "hp": "11/11",
+    "st": [],
+    "note": "귀족급 상인(GM 결정)",
+    "move": 6
+   },
+   {
+    "id": "guard",
+    "name": "동관 문지기",
+    "side": "enemy",
+    "x": 10,
+    "y": 8,
+    "hp": "11/11",
+    "st": [
+     "매혹"
+    ],
+    "note": "Guard, 광기의 왕관",
+    "move": 6
+   },
+   {
+    "id": "rower_young",
+    "name": "젊은 노꾼",
+    "side": "enemy",
+    "x": 11,
+    "y": 9,
+    "hp": "4/4",
+    "st": [],
+    "move": 6
+   },
+   {
+    "id": "rower_old",
+    "name": "늙은 노꾼",
+    "side": "enemy",
+    "x": 12,
+    "y": 9,
+    "hp": "4/4",
+    "st": [],
+    "move": 6
+   }
+  ]
+ }
+}
