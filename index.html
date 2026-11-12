@@ -75,11 +75,14 @@ body.lock main>section.on>.card:first-child>*{flex:0 0 auto}
 body.lock main>section.on>.card:first-child>h2{margin-bottom:6px}
 body.lock main>section.on>.card:first-child>.wrap{flex:1 1 auto;min-height:150px;height:auto!important;aspect-ratio:auto!important}
 body.lock main>section.on>.card:last-child{flex:0 0 auto;height:clamp(96px,19vh,180px);margin-bottom:0;padding:8px 11px;
-  display:flex;flex-direction:column;overflow:hidden;transition:height .18s}
-body.lock.infobig main>section.on>.card:last-child{height:46vh}
+  display:flex;flex-direction:column;overflow:hidden}
+/* v2.41: 정보 창을 키우면 지도가 눌려 틀이 깨졌다 — 반대로 정보 창을 제목 한 줄로 접어 지도를 넓힌다 */
+body.lock.infomin main>section.on>.card:last-child{height:34px;padding-top:6px;padding-bottom:6px}
+body.lock.infomin main>section.on>.card:last-child>.note{display:none}
+body.lock main>section.on>.card:first-child{overflow:hidden}
 body.lock main>section.on>.card:last-child>h2{flex:0 0 auto;margin-bottom:4px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
-body.lock main>section.on>.card:last-child>h2::after{content:"▴ 펼치기";font-family:var(--f-body);font-size:10.5px;color:var(--muted);letter-spacing:0}
-body.lock.infobig main>section.on>.card:last-child>h2::after{content:"▾ 접기"}
+body.lock main>section.on>.card:last-child>h2::after{content:"▾ 접고 지도 넓히기";font-family:var(--f-body);font-size:10.5px;color:var(--muted);letter-spacing:0}
+body.lock.infomin main>section.on>.card:last-child>h2::after{content:"▴ 정보 펼치기"}
 body.lock main>section.on>.card:last-child>.note{flex:1 1 auto;overflow-y:auto;min-height:0;-webkit-overflow-scrolling:touch}
 body.lock .tools{flex-wrap:nowrap;overflow-x:auto;margin-bottom:6px;scrollbar-width:none}
 body.lock .tools::-webkit-scrollbar,body.lock .legend::-webkit-scrollbar{display:none}
@@ -212,7 +215,8 @@ textarea{width:100%;height:130px;background:#080a10;color:#9fb3cc;border:1px sol
   body.lock main>section.on>.card{margin-bottom:0}
   body.lock main>section.on>.card:first-child{flex:1 1 auto;min-width:0;display:flex;flex-direction:column}
   body.lock main>section.on>.card:first-child>.wrap{flex:1 1 auto;height:auto!important;min-height:220px}
-  body.lock main>section.on>.card:last-child,body.lock.infobig main>section.on>.card:last-child{flex:0 0 300px;max-width:34%;height:auto}
+  body.lock main>section.on>.card:last-child,body.lock.infomin main>section.on>.card:last-child{flex:0 0 300px;max-width:34%;height:auto;padding:8px 11px}
+  body.lock.infomin main>section.on>.card:last-child>.note{display:block}
   body.lock main>section.on>.card:last-child>h2{cursor:default}
   body.lock main>section.on>.card:last-child>h2::after{content:none}
   body.lock.mapmax main>section.on>.card:last-child{border-top:0;border-right:0}
@@ -5525,7 +5529,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.40";
+const HB_VERSION="v2.41";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -6980,7 +6984,7 @@ document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
   document.querySelectorAll("section").forEach(x=>x.classList.remove("on"));
   b.classList.add("on"); $("s-"+b.dataset.t).classList.add("on"); window.scrollTo(0,0);
   document.body.classList.toggle("lock",!!LOCK_TABS[b.dataset.t]);
-  document.body.classList.remove("infobig"); setMapMax(false,true);
+  setMapMax(false,true);
   if(LOCK_TABS[b.dataset.t]) requestAnimationFrame(()=>{
     if(b.dataset.t==="dungeon") fitWrapHeight("dgWrap",dgVB.w/dgVB.h);
     else if(b.dataset.t==="battle") fitWrapHeight("btWrap",(S.battle.cols*60+60)/(S.battle.rows*60+60));
@@ -7002,8 +7006,10 @@ document.addEventListener("click",e=>{
   if(e.target.closest("[data-mapmax]")){ setMapMax(!document.body.classList.contains("mapmax")); return; }
   /* 정보 창 제목을 누르면 높이를 키웠다 줄인다 */
   const h2=e.target.closest("body.lock main>section.on>.card:last-child>h2");
-  if(h2) document.body.classList.toggle("infobig");
+  if(h2){ document.body.classList.toggle("infomin"); if($("s-world").classList.contains("on")) setTimeout(renderWorldMarkers,60); }
 });
+/* 접어 둔 채 토큰·표식·방을 누르면 정보 창을 다시 연다 — 눌렀는데 아무것도 안 보이는 일을 막는다 */
+["btInfo","wInfo","dgInfo"].forEach(id=>{ const n=$(id); if(n&&window.MutationObserver) new MutationObserver(()=>document.body.classList.remove("infomin")).observe(n,{childList:true,characterData:true,subtree:true}); });
 window.addEventListener("popstate",()=>{ if(document.body.classList.contains("mapmax")) setMapMax(false,true); });
 let _rsT=null;
 window.addEventListener("resize",()=>{ clearTimeout(_rsT); _rsT=setTimeout(()=>{ if($("s-world").classList.contains("on")) renderWorldMarkers(); },150); });
