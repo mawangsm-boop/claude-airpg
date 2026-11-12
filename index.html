@@ -102,7 +102,7 @@ body.lock.mapmax main>section.on>.card:first-child>.wrap{border-radius:0;border-
 /* v2.42: 지역 지도(카를렌 근교 · 시내) */
 #s-world[data-view="world"] .r-only,#s-world[data-view="world"] #rWrap,
 #s-world:not([data-view="world"]) .w-only,#s-world:not([data-view="world"]) #wWrap{display:none!important}
-#rWrap{background:#e4d6b0;min-height:130px}
+#rWrap{background:#0a0c12;min-height:130px}
 #rSvg text{font-family:var(--f-body);font-size:var(--rfs,30px);font-weight:700;fill:#2e2619;paint-order:stroke;stroke:#f3ead0;
   stroke-width:calc(var(--rfs,30px)*.24);stroke-linejoin:round;pointer-events:none}
 #rSvg text.rgs{font-size:calc(var(--rfs,30px)*.8);font-weight:500;fill:#5d4f38}
@@ -5558,7 +5558,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.42";
+const HB_VERSION="v2.43";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -7017,7 +7017,7 @@ document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
   if(LOCK_TABS[b.dataset.t]) requestAnimationFrame(()=>{
     if(b.dataset.t==="dungeon") fitWrapHeight("dgWrap",dgVB.w/dgVB.h);
     else if(b.dataset.t==="battle") fitWrapHeight("btWrap",(S.battle.cols*60+60)/(S.battle.rows*60+60));
-    else if(b.dataset.t==="world"){ fitWrapHeight("wWrap",4050/3000); renderWorldMarkers(); rgFit(); }
+    else if(b.dataset.t==="world"){ fitWrapHeight("wWrap",4050/3000); renderWorldMarkers(); rgHome(); rgFit(); }
   });
 });
 
@@ -7191,6 +7191,23 @@ const RG_HINT={
   near:"표식을 누르면 설명이 나옵니다. 눈금 한 칸(25 km)이 걸어서 하루 길입니다. 강은 북쪽 거울호에서 남쪽으로 흐릅니다 — 거슬러 오르면 북쪽, 내려가면 남쪽.",
   city:"건물을 누르면 설명이 나옵니다. <b style=\"color:var(--gold-s)\">★ 물약 가게에서 걸어서</b> — 검인소·하역장 약 5분 · 아른 상회 동관 약 10분 · 동문 약 15분 · 시청·시장 광장 약 15분 · 동문 밖 마차 여관 약 20분 · 구시가·신전 약 35분 · 서문 약 45분."
 };
+/* v2.43: 그림 바탕 — 위 도면(글자 뺀 것)을 본으로 그려 받은 삽화(assets/karlen_*.jpg, 1536×1024)를 같은 좌표에 깐다.
+   표식·이름·누르는 자리는 그대로 위에 얹으므로 위치는 도면 그대로다. 그림을 못 읽으면 도면으로 보인다. */
+const RG_IMG={near:{src:"./assets/karlen_near.jpg",x:0,y:-67,w:2300,h:1533,cy:765,minH:1060},
+              city:{src:"./assets/karlen_city.jpg",x:20,y:16,w:1480,h:987,cy:492,minH:690}};
+const RG_ART={near:false,city:false};
+Object.keys(RG_IMG).forEach(k=>{ const im=new Image(); im.onload=()=>{ RG_ART[k]=true; if(wView===k) renderRegion(); }; im.src=RG_IMG[k].src; });
+function rgArt(svg,k){ if(!RG_ART[k]) return false; const I=RG_IMG[k];
+  svg.appendChild(el("rect",{x:-3000,y:-3000,width:9000,height:8000,fill:"#0a0c12"}));
+  svg.appendChild(el("image",{x:I.x,y:I.y,width:I.w,height:I.h,preserveAspectRatio:"none",href:I.src})); return true; }
+/* 처음 보여 줄 범위 — 창이 그림보다 넓적하면 위아래를 잘라 창을 꽉 채우고(표식이 다 들어오는 한도까지), 좁으면 그림 전체를 보인다 */
+function rgHome(){
+  if(wView==="world") return;
+  const I=RG_IMG[wView], wr=$("rWrap"), A=wr.clientWidth&&wr.clientHeight?wr.clientWidth/wr.clientHeight:1.5;
+  let vb=[I.x,I.y,I.w,I.h];
+  if(A>I.w/I.h){ const hh=Math.max(I.minH,I.w/A); const y=Math.max(I.y,Math.min(I.y+I.h-hh,I.cy-hh/2)); vb=[I.x,y,I.w,hh]; }
+  $("rSvg").setAttribute("viewBox",vb.map(v=>Math.round(v)).join(" "));
+}
 function rgRand(seed){ let s=seed>>>0; return ()=>{ s=(Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; }; }
 /* 점들을 부드럽게 잇는 곡선(Catmull-Rom → 베지어) */
 function rgCurve(pts){
@@ -7282,6 +7299,7 @@ function drawNear(svg){
   road([[1797,1128.2],[1799,1123],[1800,1118]],3.5,"3 8");                                               // 양 우리로 오르는 능선길
   road([[1703.5,1149],[1705.5,1140],[1712.5,1128],[1719,1117],[1727.6,1105.5]],3.5,"3 8","#7a6a45");      // 서안 둑길
   const br=NP(1813.6,1120.8); svg.appendChild(el("path",{d:`M${br[0]-14},${br[1]+5} L${br[0]+16},${br[1]-7}`,stroke:"#e9dcb8","stroke-width":4}));
+  const art=rgArt(svg,"near");
   /* 지형·길 이름 */
   rgText(svg,...NP(1741,1084),"거 울 강","rgs rgw","start",0.9,0.3);
   rgText(svg,...NP(1741,1084),"↑ 거울호 · 버들목","rgs rgw","start",0.9,1.6);
@@ -7291,13 +7309,13 @@ function drawNear(svg){
   rgText(svg,...NP(1793,1130),"옛 소금길","rgs rgr","middle",0,1.5,-19);
   rgText(svg,...NP(1721,1128),"강배로 거슬러 하루","rgs","start",0.6,0.3);
   rgText(svg,...NP(1709,1175),"셈배로 반나절","rgs","start",0.9,0.3);
-  rgText(svg,...NP(1745,1163),"밀밭 · 양 우리","rgs","middle");
-  rgText(svg,...NP(1798,1160),"숲 덮인 구릉","rgs","middle");
+  if(!art){ rgText(svg,...NP(1745,1163),"밀밭 · 양 우리","rgs","middle");
+  rgText(svg,...NP(1798,1160),"숲 덮인 구릉","rgs","middle"); }
   rgText(svg,...NP(1812,1093),"협곡","rgs","end",-0.7,0.3);
   rgText(svg,...NP(1840,1098),"까마귀목 고개","rgs","start",0.6,0);
   rgText(svg,...NP(1862,1108),"소금 분지","rgs","middle");
   /* 축척 · 방위 */
-  const bx=70, by=1330;
+  const bx=70, by=1262;
   svg.appendChild(el("path",{d:`M${bx},${by-9} v18 M${bx},${by} h250 M${bx+250},${by-9} v18`,stroke:ink,"stroke-width":4,fill:"none"}));
   rgText(svg,bx+125,by,"25 km · 걸어서 하루","rgs","middle",0,-0.6);
   svg.appendChild(el("path",{d:"M95,150 l-16,44 l16,-11 l16,11 z",fill:ink}));
@@ -7319,7 +7337,9 @@ function drawNear(svg){
     if(here){ const pu=el("circle",{cx:x,cy:y,r:26,fill:"none",stroke:"#c9a457","stroke-width":5,opacity:.8});
       pu.appendChild(el("animate",{attributeName:"r",values:"20;40;20",dur:"2.6s",repeatCount:"indefinite"}));
       pu.appendChild(el("animate",{attributeName:"opacity",values:".8;.1;.8",dur:"2.6s",repeatCount:"indefinite"})); g.appendChild(pu); }
-    if(p.kind==="city"){   /* 성벽 안 동서 3.9km × 남북 2km — 축척 그대로면 점 하나라 조금 키워 그린다 */
+    if(art&&(p.kind==="city"||p.kind==="fort")){   /* 그림에 성과 요새가 그려져 있다 — 누르는 자리만 */
+      g.appendChild(el("rect",{x:x-(p.kind==="city"?90:50),y:y-(p.kind==="city"?100:75),width:p.kind==="city"?150:100,height:p.kind==="city"?140:100,fill:"transparent"}));
+    }else if(p.kind==="city"){   /* 성벽 안 동서 3.9km × 남북 2km — 축척 그대로면 점 하나라 조금 키워 그린다 */
       g.appendChild(el("rect",{x:x-4,y:y-17,width:56,height:34,rx:5,fill:"#ead9b3",stroke:"#6b5b45","stroke-width":5}));
       g.appendChild(el("path",{d:`M${x+6},${y-8} h12 v8 h-12z M${x+26},${y-9} h14 v9 h-14z M${x+8},${y+5} h18 v7 h-18z M${x+32},${y+4} h10 v8 h-10z`,fill:"#b79d62"}));
     }else if(p.kind==="fort"){
@@ -7389,6 +7409,7 @@ function drawCity(svg){
   d=""; [[1221,273],[1221,309],[51,463],[51,499],[1221,410]].forEach(([x,y])=>d+=`M${x},${y} h18 v18 h-18z`);
   for(let x=200;x<1150;x+=190) d+=`M${x},172 h16 v16 h-16z M${x},792 h16 v16 h-16z`;
   svg.appendChild(el("path",{d,fill:"#6b5b45"}));
+  const art=rgArt(svg,"city");
   /* 구역 이름 */
   rgText(svg,340,238,"구 시 가","rgt"); rgText(svg,740,610,"중 앙","rgt"); rgText(svg,1075,215,"강변 지구","rgt","middle",0,0.2);
   rgText(svg,1440,430,"거 울 강","rgs rgw","middle",0,0,90);
@@ -7406,13 +7427,14 @@ function drawCity(svg){
   spot(1195,265,70,70,"동문","end",-1.3,-0.9,"강 쪽 문. 문 안쪽에 위병 초소가 있고, 문 밖 짐수레 길이 도선장까지 간다. 가게에서 걸어서 약 15분.");
   spot(1200,395,60,48,"동쪽 망루","end",-1.4,1.2,"구시가에서 이어지는 성벽 위 동쪽 망루. 아침 순찰이 지나가면 반 시간쯤 빈다.");
   const fg=spot(1340,268,64,64,"도선장","middle",0,2.2,"카를렌 나루. 여기서 거울강을 건너면 동쪽 상단로 — 노간까지 걸어서 사흘, 그 너머 옛 소금길로 소금샘.");
-  fg.insertBefore(el("circle",{cx:1372,cy:300,r:10,fill:"#fbf3dc",stroke:"#2c5f7c","stroke-width":4}),fg.firstChild);
+  if(!art) fg.insertBefore(el("circle",{cx:1372,cy:300,r:10,fill:"#fbf3dc",stroke:"#2c5f7c","stroke-width":4}),fg.firstChild);
   rgText(svg,1372,300,"강 건너 동쪽 상단로 →","rgs rgw","middle",0,4.3);
   /* 건물 */
   CITY_FEATS.forEach(([x,y,w,h,name,kind,pos,desc])=>{
     const [fill,stroke]=CITY_COL[kind];
     const g=rgPickable(svg,()=>`<b style="color:var(--gold-s)">${name}</b><br><span style="color:var(--parch)">${desc}</span>`);
-    g.appendChild(el("rect",{x,y,width:w,height:h,rx:kind==="plaza"?8:2,fill,stroke,"stroke-width":kind==="shop"?5:3,"stroke-dasharray":kind==="plaza"?"7 5":""}));
+    if(!art) g.appendChild(el("rect",{x,y,width:w,height:h,rx:kind==="plaza"?8:2,fill,stroke,"stroke-width":kind==="shop"?5:3,"stroke-dasharray":kind==="plaza"?"7 5":""}));
+    else if(kind==="shop"||kind==="own") g.appendChild(el("rect",{x:x-3,y:y-2,width:w+6,height:h+4,rx:4,fill:"none",stroke:kind==="shop"?"#ffe08a":"#f3cfc0","stroke-width":kind==="shop"?5:3,opacity:.95}));
     g.appendChild(el("rect",{x:x-10,y:y-10,width:w+20,height:h+20,fill:"transparent"}));
     const cx=x+w/2, cy=y+h/2, cls=kind==="shop"?"rgl rgshop":"rgl";
     if(pos==="in") rgText(g,cx,cy,name,cls,"middle",0,0.36);
@@ -7442,11 +7464,11 @@ function setWorldView(v){
   wView=v; $("s-world").dataset.view=v; $("wTitle").textContent=v==="near"?"카를렌 근교":v==="city"?"카를렌 시내":"아스텔란 대륙";
   document.querySelectorAll("[data-wview]").forEach(b=>b.classList.toggle("on",b.dataset.wview===v));
   if(v==="world"){ $("wInfo").innerHTML="표식을 누르면 좌표와 거리가 표시됩니다. 대륙은 동서 4,050 km · 남북 3,000 km입니다."; requestAnimationFrame(renderWorldMarkers); }
-  else{ $("rSvg").setAttribute("viewBox",RG_VB[v].join(" ")); renderRegion(); $("wInfo").innerHTML=RG_HINT[v]; requestAnimationFrame(rgFit); }
+  else{ rgHome(); renderRegion(); $("wInfo").innerHTML=RG_HINT[v]; requestAnimationFrame(rgFit); }
   try{ localStorage.setItem("berix_wview",v); }catch{}
 }
 document.querySelectorAll("[data-wview]").forEach(b=>b.onclick=()=>setWorldView(b.dataset.wview));
-$("rFit").onclick=()=>{ $("rSvg").setAttribute("viewBox",RG_VB[wView].join(" ")); rgFit(); };
+$("rFit").onclick=()=>{ rgHome(); rgFit(); };
 window.addEventListener("resize",()=>setTimeout(rgFit,160));
 
 /* ---------- 시작 ---------- */
