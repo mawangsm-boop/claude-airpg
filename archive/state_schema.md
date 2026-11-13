@@ -149,3 +149,8 @@ CLAUDE.md의 축약 규칙만으로 판단이 서지 않을 때만 여는 문서
 - 전투판 2.5D(v2.48) — `battle.json`에 넣을 수 있는 선택 필드. 없어도 그려진다(없으면 label 낱말로 모양을 짐작한다: 탑·방앗간·집·창고=건물, 성벽·돌담=벽, '허리 높이'·울타리=낮은 벽, 짐·상자·수레=짐 더미, 나무·숲=나무, 둔덕·언덕·단=올라설 수 있는 높은 땅).
   - terrain 항목: `kind` `"building|wall|lowwall|crate|rock|high|tree|water|pit|hazard|mark"`(짐작이 틀릴 때 직접 지정), `elev` 높이(칸 단위 숫자, 예: 낮은 벽 0.5·벽 2·탑 3). `high`만 토큰이 올라선다. 토큰이 들어가 있는 building·wall은 지붕을 걷고 낮은 벽으로 그린다.
   - token 항목: `elev` 서 있는 높이(이층 창가면 1.5 등 — 공중에 띄워 그리고 바닥까지 점선), `img` 캐릭터 그림 주소(있으면 말 대신 그 그림을 발 기준으로 세운다 — 세로로 긴 투명 PNG, 2:3).
+- 전투판 2.5D 높낮이·층·캐릭터(v2.49) — 모두 선택 필드. 높이 단위는 칸(1 = 1.5 m), 0.5 단위로 써도 된다.
+  - 판: `ground` 기본 바닥 재질(`grass|dirt|stone|sand|snow|wood`), `heights` 칸마다 높이 표(`[[행0…],[행1…]]`, 없어도 된다).
+  - terrain: `kind:"high"`+`elev`(올라설 수 있는 높은 땅·절벽·단, `surf`로 재질), `kind:"stairs"`+`elev`(계단 한 칸씩 높이를 달리 준다), `kind:"bridge"`+`elev`(아래가 비는 널다리), `kind:"water"`(+`elev`면 높은 곳의 물), `kind:"building"`+`floors`(층수).
+  - token: `floor`(건물 안 층, 2면 이층 바닥 위에 선다. 없으면 note의 '이층'으로 짐작), `elev`(임의 높이), `face`(`n|e|s|w` 보는 방향, 없으면 가장 가까운 맞은편), `sprite`(그림 이름), `look:{hair,skin,cloth}`(그림이 없는 인형의 빛깔).
+  - 캐릭터 그림표는 `assets/sprites/*.png`와 index.html `BT_SHEETS`. 지금 있는 그림: verrix·isabel·liv·neri·idra·nadin(토큰 id로 자동), bandit·crossbow·brute·officer·clerk·archer(이름·메모 낱말로 자동, 또는 `sprite`로 지정).
