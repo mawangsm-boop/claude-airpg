@@ -5558,7 +5558,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.43";
+const HB_VERSION="v2.44";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -6347,6 +6347,41 @@ function basePeople(){
   const all=[S.pc,...(S.party||[]),...(S.npcs||[])].filter(a=>a&&a.room);
   const by={}; all.forEach(a=>{(by[a.room]=by[a.room]||[]).push(a);}); return by;
 }
+/* v2.44: 거점 삽화 — 단면 도면을 본으로 그려 받은 그림(assets/base_shop.jpg, 1536×1024) 위에 방 이름과 사람을 얹는다.
+   그림은 도면과 투영이 달라, 방마다 그림 속 자리를 따로 적어 둔다. base.json에 여기 없는 방이 생기면(증축·이사) 도면으로 돌아간다. */
+const BASE_ART={src:"./assets/base_shop.jpg",ok:false,vb:[0,120,1536,810],
+  rooms:{r_verrix:[262,415],r_isabel:[640,415],r_idra:[852,415],r_livneri:[1062,415],hall2:[800,527],
+         front:[272,700],lab:[640,672],ines:[852,690],back:[1105,700],hall1:[690,770]},
+  marks:[[150,640,"정문"],[1012,640,"뒷문"],[478,640,"계단"],[62,850,"길"],[1400,900,"거울강"]], boat:[1305,715]};
+(function(){ const im=new Image(); im.onload=()=>{ BASE_ART.ok=true; if(typeof S!=="undefined"&&S&&S.base) renderBase(); }; im.src=BASE_ART.src; })();
+function baseInfoRows(B,by){
+  const rows=B.rooms.filter(r=>r.kind!=="stairs"&&r.kind!=="hall").map(r=>{
+    const ppl=(by[r.id]||[]); if(!ppl.length) return "";
+    return `<div style="margin:3px 0"><b style="color:var(--gold-s)">${escAttr(r.label)}</b> — ${ppl.map(a=>escAttr(a.name)+(a.roomNote?` <span style="color:var(--muted)">(${escAttr(a.roomNote)})</span>`:"")).join(", ")}</div>`;
+  });
+  (B.outside||[]).forEach(o=>{ const ppl=by[o.id]||[]; if(ppl.length) rows.push(`<div style="margin:3px 0"><b style="color:var(--muted)">${escAttr(o.label)}</b> — ${ppl.map(a=>escAttr(a.name)+(a.roomNote?` <span style="color:var(--muted)">(${escAttr(a.roomNote)})</span>`:"")).join(", ")}</div>`); });
+  $("bsInfo").innerHTML=rows.filter(Boolean).join("")||"자리가 적힌 인물이 없습니다.";
+}
+function renderBaseArt(B,svg,by){
+  const A=BASE_ART, vb=A.vb;
+  svg.setAttribute("viewBox",vb.join(" "));
+  const wrap=$("bsWrap"); if(wrap) wrap.style.aspectRatio=`${vb[2]}/${vb[3]}`;
+  svg.appendChild(el("rect",{x:0,y:0,width:1536,height:1024,fill:"#0a0c12"}));
+  svg.appendChild(el("image",{x:0,y:0,width:1536,height:1024,href:A.src}));
+  const txt=(x,y,t,size,fill,bold)=>{ const e=el("text",{x,y,"text-anchor":"middle",fill});
+    e.setAttribute("style",`font:${bold?700:500} ${size}px Pretendard,'Apple SD Gothic Neo',sans-serif;paint-order:stroke;stroke:#0a0c12;stroke-width:${Math.round(size*0.28)}px;stroke-linejoin:round`);
+    e.textContent=t; svg.appendChild(e); };
+  A.marks.forEach(([x,y,t])=>txt(x,y,t,21,"#e6c98a"));
+  if(B.boat) txt(A.boat[0],A.boat[1],B.boat,22,"#e8e2d4");
+  B.rooms.forEach(r=>{
+    const [x,y]=A.rooms[r.id];
+    if(r.kind==="hall"){ txt(x,y,r.label||"복도",20,"#c3cad8"); return; }
+    const ppl=by[r.id]||[]; let y0=y-ppl.length*15;
+    txt(x,y0,r.label,27,({sleep:"#d9c2f5",work:"#a8e6b8",held:"#f0a3a6"})[r.kind]||"#e8e2d4",true); y0+=31;
+    ppl.forEach(a=>{ txt(x,y0,(a.name||"").replace(/\(.*?\)/g,"").trim().split(" ")[0],25,"#ffe6a8"); y0+=29; });
+  });
+  baseInfoRows(B,by);
+}
 function renderBase(){
   const navD=$("navDungeon"); if(navD) navD.hidden=!((S.dungeon&&S.dungeon.rooms||[]).length);
   const B=S.base, svg=$("bsSvg"); if(!svg) return; svg.innerHTML="";
@@ -6355,6 +6390,7 @@ function renderBase(){
   /* v2.38: 사선(캐비닛) 투영 컷어웨이 — 앞벽을 걷어 내고 안쪽 벽은 허리 높이에서 자른다.
      방(바닥 면적)·벽(문틈)·계단·바깥문은 state/base.json에서 읽는다. x=길→강, z=앞→뒤, y=높이. */
   const by=basePeople();
+  if(BASE_ART.ok&&B.rooms.every(r=>BASE_ART.rooms[r.id])){ renderBaseArt(B,svg,by); return; }
   const W=B.width||Math.max(...B.rooms.map(r=>r.x+r.w)), D=B.depth||150, H=B.floorH||90, CUT=H*0.22;
   B.rooms.forEach(r=>{ if(r.z==null) r.z=0; if(r.d==null) r.d=D; }); /* 옛 배치(z·d 없음)도 깨지지 않게 */
   const KX=0.55, KY=0.4, X0=50, Y0=380;
@@ -6436,12 +6472,7 @@ function renderBase(){
   poly([[W,2*H,0],[W,2*H,D],[W,2*H+RH,D/2]],{fill:"#2a2f40","fill-opacity":0.5,stroke:"#5b6478","stroke-width":0.6});
   if(B.boat){ poly([[rx+62,-8,D*0.05],[rx+140,-8,D*0.05],[rx+148,-2,D*0.2],[rx+140,-8,D*0.35],[rx+62,-8,D*0.35],[rx+56,-2,D*0.2]],{fill:"#3b3326",stroke:"#8a6a3a","stroke-width":0.6});
     txt(P(rx+100,0,D*0.2),B.boat,{"font-size":9.5,fill:"#e8e2d4"}); }
-  const rows=B.rooms.filter(r=>r.kind!=="stairs"&&r.kind!=="hall").map(r=>{
-    const ppl=(by[r.id]||[]); if(!ppl.length) return "";
-    return `<div style="margin:3px 0"><b style="color:var(--gold-s)">${escAttr(r.label)}</b> — ${ppl.map(a=>escAttr(a.name)+(a.roomNote?` <span style="color:var(--muted)">(${escAttr(a.roomNote)})</span>`:"")).join(", ")}</div>`;
-  });
-  (B.outside||[]).forEach(o=>{ const ppl=by[o.id]||[]; if(ppl.length) rows.push(`<div style="margin:3px 0"><b style="color:var(--muted)">${escAttr(o.label)}</b> — ${ppl.map(a=>escAttr(a.name)+(a.roomNote?` <span style="color:var(--muted)">(${escAttr(a.roomNote)})</span>`:"")).join(", ")}</div>`); });
-  $("bsInfo").innerHTML=rows.filter(Boolean).join("")||"자리가 적힌 인물이 없습니다.";
+  baseInfoRows(B,by);
 }
 
 /* ---------- 던전 (평면도) ---------- */
@@ -7194,7 +7225,7 @@ const RG_HINT={
 /* v2.43: 그림 바탕 — 위 도면(글자 뺀 것)을 본으로 그려 받은 삽화(assets/karlen_*.jpg, 1536×1024)를 같은 좌표에 깐다.
    표식·이름·누르는 자리는 그대로 위에 얹으므로 위치는 도면 그대로다. 그림을 못 읽으면 도면으로 보인다. */
 const RG_IMG={near:{src:"./assets/karlen_near.jpg",x:0,y:-67,w:2300,h:1533,cy:765,minH:1060},
-              city:{src:"./assets/karlen_city.jpg",x:20,y:16,w:1480,h:987,cy:492,minH:690}};
+              city:{src:"./assets/karlen_city2.jpg",x:20,y:16,w:1480,h:987,cy:492,minH:690}};
 const RG_ART={near:false,city:false};
 Object.keys(RG_IMG).forEach(k=>{ const im=new Image(); im.onload=()=>{ RG_ART[k]=true; if(wView===k) renderRegion(); }; im.src=RG_IMG[k].src; });
 function rgArt(svg,k){ if(!RG_ART[k]) return false; const I=RG_IMG[k];
@@ -7377,41 +7408,46 @@ const CITY_FEATS=[
 ];
 const CITY_COL={old:["#d9c9a6","#8a7a5a"],civic:["#ddd3bf","#6b5b45"],plaza:["#f0e6c8","#b79d62"],inn:["#e9c7a0","#8a6a45"],ware:["#cfc6b0","#7d7260"],
   arn:["#bcd3f0","#2f5aa0"],herb:["#d3e6c2","#4f7a3a"],own:["#f3cfc0","#a5483a"],shop:["#ffc9c2","#b30000"]};
+/* v2.44: 성벽 윤곽 — 약도는 네모 상자였지만 실제 성벽은 땅 모양을 따라 꺾인다. 문·선창 자리와 전체 크기(동서 3.9km·남북 2km 안팎)는 그대로. */
+const CITY_WALL=[[95,235],[190,185],[330,165],[480,178],[640,160],[800,172],[960,150],[1110,165],[1200,205],[1232,270],[1232,330],[1238,420],[1230,520],[1230,725],[1236,770],[1195,812],[1080,828],[900,815],[740,835],[560,820],[400,838],[240,822],[120,790],[62,700],[48,600],[60,510],[60,470],[52,380],[66,290]];
+function cityInside(x,y){ let c=false; const P=CITY_WALL;
+  for(let i=0,j=P.length-1;i<P.length;j=i++){ const [xi,yi]=P[i],[xj,yj]=P[j]; if((yi>y)!==(yj>y)&&x<(xj-xi)*(y-yi)/(yj-yi)+xi) c=!c; } return c; }
 function drawCity(svg){
-  const R=rgRand(77), ink="#3d3326";
+  const R=rgRand(77), ink="#3d3326", wallD="M"+CITY_WALL.map(p=>p.join(",")).join(" L")+" Z";
   svg.appendChild(el("rect",{x:-3000,y:-3000,width:9000,height:8000,fill:"#dccf9f"}));
   /* 성 밖 밭 */
   let d="";
-  for(let i=0;i<260;i++){ const x=-500+R()*1840, y=-250+R()*1500; if(x>35&&x<1255&&y>155&&y<825) continue;
+  for(let i=0;i<260;i++){ const x=-500+R()*1840, y=-250+R()*1500; if(cityInside(x,y)||cityInside(x+25,y)||cityInside(x-25,y)||cityInside(x,y+25)||cityInside(x,y-25)) continue;
     for(let k=0;k<3;k++) d+=`M${(x+k*8).toFixed(0)},${y.toFixed(0)} l14,9`; }
   svg.appendChild(el("path",{d,fill:"none",stroke:"#b59a55","stroke-width":1.6,opacity:.55}));
   /* 거울강과 선창 */
   svg.appendChild(el("path",{d:"M1378,-600 C1350,-200 1392,60 1370,150 C1340,300 1400,480 1360,640 S1395,780 1375,870 C1350,1050 1400,1300 1380,1700 L2600,1700 L2600,-600 Z",fill:"#9cc3da",stroke:"#5f8ba6","stroke-width":5}));
-  svg.appendChild(el("rect",{x:60,y:180,width:1170,height:620,rx:30,fill:"#ead9b3"}));
+  svg.appendChild(el("path",{d:wallD,fill:"#ead9b3"}));
   svg.appendChild(el("rect",{x:1090,y:520,width:150,height:205,fill:"#9cc3da",stroke:"#5f8ba6","stroke-width":3}));
   svg.appendChild(el("rect",{x:1226,y:600,width:150,height:48,fill:"#9cc3da"}));
   /* 구시가 언덕 */
-  [[230,150],[190,118],[150,86],[108,56]].forEach(([rx,ry],i)=>svg.appendChild(el("ellipse",{cx:340,cy:330,rx,ry,fill:i?"none":"#e3d0a0",stroke:"#b79d62","stroke-width":2,"stroke-dasharray":"7 7",opacity:.9})));
+  [[225,128],[186,102],[148,76],[108,52]].forEach(([rx,ry],i)=>svg.appendChild(el("ellipse",{cx:340,cy:335,rx,ry,fill:i?"none":"#e3d0a0",stroke:"#b79d62","stroke-width":2,"stroke-dasharray":"7 7",opacity:.9})));
   /* 집들 — 빈터를 메우는 지붕 */
   const busy=(x,y)=>CITY_FEATS.some(f=>x>f[0]-34&&x<f[0]+f[2]+12&&y>f[1]-40&&y<f[1]+f[3]+34)
+    ||!cityInside(x-8,y-8)||!cityInside(x+36,y+28)||!cityInside(x+36,y-8)||!cityInside(x-8,y+28)
     ||(x>1060&&y>505)||Math.abs(y-490)<24&&x<1010||Math.abs(x-1000)<24&&y>470||Math.abs((y-490)+(x-1000)*0.826)<30&&x>980;
   d="";
-  for(let i=0;i<900;i++){ const x=85+R()*1110, y=205+R()*565; if(busy(x,y)) continue; const w=13+R()*15, h=10+R()*10; d+=`M${x.toFixed(0)},${y.toFixed(0)} h${w.toFixed(0)} v${h.toFixed(0)} h${(-w).toFixed(0)}z`; }
+  for(let i=0;i<1150;i++){ const x=50+R()*1180, y=155+R()*680; if(busy(x,y)) continue; const w=13+R()*15, h=10+R()*10; d+=`M${x.toFixed(0)},${y.toFixed(0)} h${w.toFixed(0)} v${h.toFixed(0)} h${(-w).toFixed(0)}z`; }
   svg.appendChild(el("path",{d,fill:"#c9b384",stroke:"#a8915f","stroke-width":1,opacity:.75}));
   /* 길 */
   const st=(dd,w)=>svg.appendChild(el("path",{d:dd,fill:"none",stroke:"#fbf3dc","stroke-width":w,"stroke-linecap":"round","stroke-linejoin":"round"}));
-  st("M-600,560 L60,490 L1000,490 L1230,300 L1372,300",15); st("M1000,490 L1000,770",15);
+  st("M-600,560 L60,490 L1000,490 L1232,300 L1372,300",15); st("M1000,490 L1000,770",15);
   st("M345,490 L345,392 M500,490 L500,352 M770,490 L770,560 L870,570 M205,354 L345,440 M1000,560 L1030,560 M930,490 L985,476 M1012,380 L1112,380 L1150,366 M1000,700 L1090,750 M535,490 L535,520",8);
   /* 성벽 · 망루 · 성문 */
-  svg.appendChild(el("rect",{x:60,y:180,width:1170,height:620,rx:30,fill:"none",stroke:"#6b5b45","stroke-width":11}));
+  svg.appendChild(el("path",{d:wallD,fill:"none",stroke:"#6b5b45","stroke-width":11,"stroke-linejoin":"round"}));
   svg.appendChild(el("rect",{x:1222,y:522,width:16,height:201,fill:"#9cc3da"}));      /* 선창이 강으로 열리는 자리 */
-  svg.appendChild(el("rect",{x:1222,y:284,width:16,height:32,fill:"#fbf3dc"})); svg.appendChild(el("rect",{x:52,y:474,width:16,height:32,fill:"#fbf3dc"}));
-  d=""; [[1221,273],[1221,309],[51,463],[51,499],[1221,410]].forEach(([x,y])=>d+=`M${x},${y} h18 v18 h-18z`);
-  for(let x=200;x<1150;x+=190) d+=`M${x},172 h16 v16 h-16z M${x},792 h16 v16 h-16z`;
+  svg.appendChild(el("rect",{x:1224,y:284,width:16,height:32,fill:"#fbf3dc"})); svg.appendChild(el("rect",{x:52,y:474,width:16,height:32,fill:"#fbf3dc"}));
+  d=""; [[1223,273],[1223,309],[51,463],[51,499]].forEach(([x,y])=>d+=`M${x},${y} h18 v18 h-18z`);
+  CITY_WALL.forEach(([x,y],i)=>{ if([9,10,12,13,25,26].includes(i)) return; d+=`M${x-10},${y-10} h20 v20 h-20z`; });
   svg.appendChild(el("path",{d,fill:"#6b5b45"}));
   const art=rgArt(svg,"city");
   /* 구역 이름 */
-  rgText(svg,340,238,"구 시 가","rgt"); rgText(svg,740,610,"중 앙","rgt"); rgText(svg,1075,215,"강변 지구","rgt","middle",0,0.2);
+  rgText(svg,340,250,"구 시 가","rgt"); rgText(svg,740,610,"중 앙","rgt"); rgText(svg,1075,215,"강변 지구","rgt","middle",0,0.2);
   rgText(svg,1440,430,"거 울 강","rgs rgw","middle",0,0,90);
   rgText(svg,1305,624,"나루터 선창","rgs rgw","middle",0,0.36);
   rgText(svg,1062,318,"상인 거리","rgs","middle",0,-0.4);
@@ -7425,7 +7461,7 @@ function drawCity(svg){
     g.appendChild(el("rect",{x,y,width:w,height:h,fill:"transparent"})); rgText(g,x+w/2,y+h/2,name,"rgl",anchor,dx,dy); return g; };
   spot(20,455,70,70,"서문","middle",0,-1.9,"새벽문 방면 상단로로 나가는 문. 가게에서 걸어서 약 45분.");
   spot(1195,265,70,70,"동문","end",-1.3,-0.9,"강 쪽 문. 문 안쪽에 위병 초소가 있고, 문 밖 짐수레 길이 도선장까지 간다. 가게에서 걸어서 약 15분.");
-  spot(1200,395,60,48,"동쪽 망루","end",-1.4,1.2,"구시가에서 이어지는 성벽 위 동쪽 망루. 아침 순찰이 지나가면 반 시간쯤 빈다.");
+  spot(1205,395,60,48,"동쪽 망루","end",-1.4,1.2,"구시가에서 이어지는 성벽 위 동쪽 망루. 아침 순찰이 지나가면 반 시간쯤 빈다.");
   const fg=spot(1340,268,64,64,"도선장","middle",0,2.2,"카를렌 나루. 여기서 거울강을 건너면 동쪽 상단로 — 노간까지 걸어서 사흘, 그 너머 옛 소금길로 소금샘.");
   if(!art) fg.insertBefore(el("circle",{cx:1372,cy:300,r:10,fill:"#fbf3dc",stroke:"#2c5f7c","stroke-width":4}),fg.firstChild);
   rgText(svg,1372,300,"강 건너 동쪽 상단로 →","rgs rgw","middle",0,4.3);
