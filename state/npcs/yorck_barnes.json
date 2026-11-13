@@ -1,0 +1,22 @@
+{
+  "char": {
+    "id": "yorck_barnes",
+    "name": "요르크 반스",
+    "role": "남성 · 인간 · 사십 대 중반 · 추포단 우두머리, 전직 실버포트 항만 경비대 부관",
+    "tag": "56회차 · 추포단 우두머리",
+    "tagc": "",
+    "trait": "항만조합 일을 받아 사람을 잡아 오는 패의 우두머리. 실버포트 항만조합의 추포장을 받아 여섯 주째 아이린을 쫓아왔다. 넓은 어깨, 짧게 깎은 잿빛 머리, 왼쪽 귀 윗부분이 잘려 나갔다. 조합 문장이 찍힌 낡은 가죽 조끼.",
+    "voice": "낮고 느린 존댓말, 규정을 읊듯 말한다 — \"절차대로 합시다.\" 화가 나도 목소리를 올리지 않는다.",
+    "code": {
+      "does": "종이가 있으면 끝까지 간다, 부하의 삯은 제 주머니에서라도 준다",
+      "wont": "종이 없는 일은 안 한다, 아이는 안 건드린다"
+    },
+    "drive": "잔금 삼백 골드(선금 백은 받았다).",
+    "fear": "빈손으로 돌아가는 것 — 여섯 주 삯을 부하에게 물어 줘야 한다.",
+    "knows": "추포장의 내용(A), 표적이 '카를렌의 베릭스 물약 가게'를 찾아간다는 것(B — 길가 여관 주인들), 티플링 불쟁이가 붙어 있다는 것(A — 탄 다리). 베릭스가 누구인지는 모른다(이름과 가게뿐).",
+    "unknown": "'R'이 누구인지, 장부가 무슨 장부인지, 아이린이 장부를 갖고 있지 않다는 것, 선발대가 무너졌다는 것(D)",
+    "look": "Yorck Barnes, a human man in his mid-forties. Broad shoulders, close-cropped iron-grey hair, the top of his left ear cut away, weathered square face. Wearing a worn leather vest stamped with a harbor guild crest over a plain shirt, a scimitar at his hip, a light crossbow slung on his back.",
+    "stance": "적대",
+    "stanceWhy": "실버포트 항만조합 추포장을 들고 여섯 주째 아이린을 쫓아 카를렌 서쪽 상단로까지 왔다(아이린·나딘이 직접 봄, 미라의 증언, 3일째 해 질 녘 방앗간에 나타남)."
+  }
+}
