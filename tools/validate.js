@@ -332,7 +332,7 @@ if (baseFile) {
   if (!bs) err("state/base.json", '{"base":{...}} 래핑이 아닙니다');
   else {
     checkDupIds("state/base.json", bs.rooms, "rooms");
-    const ids = new Set([...(bs.rooms || []).map((r) => r.id), ...(bs.outside || []).map((o) => o.id)]);
+    const ids = new Set([...(bs.rooms || []).map((r) => r.id), ...(bs.outside || []).map((o) => o.id), ...(bs.annexes || []).flatMap((x) => (x.rooms || []).map((r) => r.id))]);
     const fs2 = require("fs"), path2 = require("path");
     for (const dir of ["state/chars", "state/npcs"]) {
       for (const f of fs2.readdirSync(dir).filter((n) => n.endsWith(".json") && !n.startsWith("_"))) {

@@ -240,6 +240,90 @@
         "z2": 35,
         "label": "뒷문"
       }
+    ],
+    "annexes": [
+      {
+        "id": "annex",
+        "name": "물가 별채",
+        "short": "물가 별채",
+        "note": "가게 바로 남쪽 옆집(옛 무두장이 레이크의 집 — 55회차에 가게 이름으로 샀다). 단층 12평, 지하실 3평. 칸막이로 길 쪽 앞방과 물가 쪽 침실을 나눴고 앞방에 아궁이를 새로 놓았다. 지하실은 앞방 바닥 뚜껑문 아래. 가게와 함께 뒷문이 물가(말뚝 있는 낮은 둑)로 나는 둘뿐인 집이다. 베릭스의 개인실로 쓰기로 했다.",
+        "rooms": [
+          {
+            "id": "ax_front",
+            "floor": 1,
+            "label": "앞방",
+            "kind": "work"
+          },
+          {
+            "id": "ax_bed",
+            "floor": 1,
+            "label": "침실",
+            "kind": "sleep"
+          },
+          {
+            "id": "ax_cellar",
+            "floor": 0,
+            "label": "지하실",
+            "kind": "work"
+          }
+        ]
+      },
+      {
+        "id": "wetoar",
+        "name": "젖은 노",
+        "short": "젖은 노",
+        "note": "가게 북쪽 샛골목 건너의 문 닫은 선술집(55회차에 가게 이름으로 샀다). 1층 20평 — 술청과 주방(주방은 달개지붕 단층). 2층 15평 — 복도와 방 넷. 지하 술 창고 12평 — 통 서른 자리, 바 뒤 돌계단으로 내려간다. 강 쪽은 석축 둑 벽이라 뒷문이 없다. 식구들의 숙소로 쓰기로 했다.",
+        "rooms": [
+          {
+            "id": "wo_r1",
+            "floor": 2,
+            "label": "방 1",
+            "kind": "sleep"
+          },
+          {
+            "id": "wo_r2",
+            "floor": 2,
+            "label": "방 2",
+            "kind": "sleep"
+          },
+          {
+            "id": "wo_r3",
+            "floor": 2,
+            "label": "방 3",
+            "kind": "sleep"
+          },
+          {
+            "id": "wo_r4",
+            "floor": 2,
+            "label": "방 4",
+            "kind": "sleep"
+          },
+          {
+            "id": "wo_hall",
+            "floor": 2,
+            "label": "복도",
+            "kind": "hall"
+          },
+          {
+            "id": "wo_tap",
+            "floor": 1,
+            "label": "술청",
+            "kind": "work"
+          },
+          {
+            "id": "wo_kitchen",
+            "floor": 1,
+            "label": "주방",
+            "kind": "work"
+          },
+          {
+            "id": "wo_cellar",
+            "floor": 0,
+            "label": "술 창고",
+            "kind": "work"
+          }
+        ]
+      }
     ]
   }
 }

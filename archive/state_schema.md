@@ -144,3 +144,5 @@ CLAUDE.md의 축약 규칙만으로 판단이 서지 않을 때만 여는 문서
 ```
 
 실마리가 해소되면 지우지 말고 `st`를 `resolved`로 바꿉니다 — 핸드북이 종결분을 따로 묶어 보여줍니다.
+
+- `state/base.json`의 `annexes`(v2.46): 가게에 딸린 다른 건물들 `[{id,name,short,note,rooms:[{id,floor(0=지하),label,kind}]}]`. 방 id는 전체에서 유일해야 하고, 인물 파일의 `room`에 적으면 거점 탭의 그 건물 그림에 이름이 뜬다. 그림 속 자리는 index.html `BASE_ARTS`에 적는다(방을 더하면 그림과 자리도 함께).

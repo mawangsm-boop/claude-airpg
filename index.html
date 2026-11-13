@@ -360,6 +360,7 @@ summary>span:first-child>em{font-style:normal;overflow:hidden;text-overflow:elli
   <section id="s-base">
     <div class="card">
       <h2 id="bsName">거점</h2>
+      <div class="tools" id="bsTabs"></div>
       <div class="legend">
         <span><i style="background:#3d2f5c"></i>잠자리</span>
         <span><i style="background:#1f3a2c"></i>가게 일</span>
@@ -5558,7 +5559,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.45";
+const HB_VERSION="v2.46";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -6349,21 +6350,37 @@ function basePeople(){
 }
 /* v2.44: 거점 삽화 — 단면 도면을 본으로 그려 받은 그림(assets/base_shop.jpg, 1536×1024) 위에 방 이름과 사람을 얹는다.
    그림은 도면과 투영이 달라, 방마다 그림 속 자리를 따로 적어 둔다. base.json에 여기 없는 방이 생기면(증축·이사) 도면으로 돌아간다. */
-const BASE_ART={src:"./assets/base_shop2.jpg",ok:false,vb:[0,120,1536,810],
-  rooms:{r_verrix:[262,415],r_isabel:[640,415],r_idra:[852,415],r_livneri:[1062,415],hall2:[800,527],
-         front:[272,700],lab:[640,672],ines:[852,690],back:[1105,700],hall1:[690,770]},
-  marks:[[150,640,"정문"],[1012,640,"뒷문"],[478,640,"계단"],[62,850,"길"],[1400,900,"거울강"]], boat:[1305,715]};
-(function(){ const im=new Image(); im.onload=()=>{ BASE_ART.ok=true; if(typeof S!=="undefined"&&S&&S.base) renderBase(); }; im.src=BASE_ART.src; })();
+const BASE_ARTS={
+  shop:{src:"./assets/base_shop2.jpg",ok:false,vb:[0,120,1536,810],
+    rooms:{r_verrix:[262,415],r_isabel:[640,415],r_idra:[852,415],r_livneri:[1062,415],hall2:[800,527],
+           front:[272,700],lab:[640,672],ines:[852,690],back:[1105,700],hall1:[690,770]},
+    marks:[[150,640,"정문"],[1012,640,"뒷문"],[478,640,"계단"],[62,850,"길"],[1400,900,"거울강"]], boat:[1305,715]},
+  /* v2.46: 가게에 딸린 두 집 — 방 구성은 state/base.json의 annexes, 그림 속 자리는 여기 */
+  annex:{src:"./assets/base_annex.jpg",ok:false,vb:[0,120,1536,840],
+    rooms:{ax_front:[430,600],ax_bed:[900,610],ax_cellar:[385,880]},
+    marks:[[195,440,"정문"],[1228,420,"뒷문"],[395,430,"아궁이"],[62,720,"길"],[1400,900,"거울강"],[1300,640,"물가 말뚝"]]},
+  wetoar:{src:"./assets/base_wetoar.jpg",ok:false,vb:[0,60,1536,960],
+    rooms:{wo_r1:[285,262],wo_r2:[498,262],wo_r3:[712,262],wo_r4:[925,262],wo_hall:[800,408],
+           wo_tap:[560,600],wo_kitchen:[1215,560],wo_cellar:[560,790]},
+    marks:[[190,500,"정문"],[965,540,"계단"],[930,880,"돌계단"],[1190,800,"석축 둑 벽 — 문 없음"],[60,720,"길"],[1380,950,"거울강"]]}
+};
+const BASE_ART=BASE_ARTS.shop;
+let bsView="shop";
+Object.keys(BASE_ARTS).forEach(k=>{ const im=new Image(); im.onload=()=>{ BASE_ARTS[k].ok=true; try{ if(S&&S.base&&bsView===k) renderBase(); }catch{} }; im.src=BASE_ARTS[k].src; });
+function baseBuildings(B){ return [{id:"shop",name:B.name||"거점",short:"물약 가게",note:B.note,rooms:B.rooms||[],boat:B.boat},...(B.annexes||[])]; }
 function baseInfoRows(B,by){
-  const rows=B.rooms.filter(r=>r.kind!=="stairs"&&r.kind!=="hall").map(r=>{
-    const ppl=(by[r.id]||[]); if(!ppl.length) return "";
-    return `<div style="margin:3px 0"><b style="color:var(--gold-s)">${escAttr(r.label)}</b> — ${ppl.map(a=>escAttr(a.name)+(a.roomNote?` <span style="color:var(--muted)">(${escAttr(a.roomNote)})</span>`:"")).join(", ")}</div>`;
+  const who=ppl=>ppl.map(a=>escAttr(a.name)+(a.roomNote?` <span style="color:var(--muted)">(${escAttr(a.roomNote)})</span>`:"")).join(", ");
+  const blds=baseBuildings(B), multi=blds.length>1, out=[];
+  blds.forEach(bd=>{
+    const rows=bd.rooms.filter(r=>r.kind!=="stairs"&&r.kind!=="hall").map(r=>{ const ppl=by[r.id]||[]; return ppl.length?`<div style="margin:3px 0"><b style="color:var(--gold-s)">${escAttr(r.label)}</b> — ${who(ppl)}</div>`:""; }).filter(Boolean);
+    if(multi) out.push(`<div class="sec-t" style="margin-top:8px">${escAttr(bd.short||bd.name)}</div>`+(rows.join("")||'<div style="margin:3px 0">아직 자리를 잡은 사람이 없습니다.</div>'));
+    else out.push(rows.join(""));
   });
-  (B.outside||[]).forEach(o=>{ const ppl=by[o.id]||[]; if(ppl.length) rows.push(`<div style="margin:3px 0"><b style="color:var(--muted)">${escAttr(o.label)}</b> — ${ppl.map(a=>escAttr(a.name)+(a.roomNote?` <span style="color:var(--muted)">(${escAttr(a.roomNote)})</span>`:"")).join(", ")}</div>`); });
-  $("bsInfo").innerHTML=rows.filter(Boolean).join("")||"자리가 적힌 인물이 없습니다.";
+  (B.outside||[]).forEach(o=>{ const ppl=by[o.id]||[]; if(ppl.length) out.push(`<div style="margin:6px 0 3px"><b style="color:var(--muted)">${escAttr(o.label)}</b> — ${who(ppl)}</div>`); });
+  $("bsInfo").innerHTML=out.filter(Boolean).join("")||"자리가 적힌 인물이 없습니다.";
 }
-function renderBaseArt(B,svg,by){
-  const A=BASE_ART, vb=A.vb;
+function renderBaseArt(B,svg,by,A){
+  const vb=A.vb;
   svg.setAttribute("viewBox",vb.join(" "));
   const wrap=$("bsWrap"); if(wrap) wrap.style.aspectRatio=`${vb[2]}/${vb[3]}`;
   svg.appendChild(el("rect",{x:0,y:0,width:1536,height:1024,fill:"#0a0c12"}));
@@ -6377,20 +6394,34 @@ function renderBaseArt(B,svg,by){
     const [x,y]=A.rooms[r.id];
     if(r.kind==="hall"){ txt(x,y,r.label||"복도",20,"#c3cad8"); return; }
     const ppl=by[r.id]||[]; let y0=y-ppl.length*15;
+    if(r.floor===2&&B.id==="wetoar"){ txt(x,y0,r.label,23,"#d9c2f5",true); y0+=27; ppl.forEach(a=>{ txt(x,y0,(a.name||"").replace(/\(.*?\)/g,"").trim().split(" ")[0],22,"#ffe6a8"); y0+=25; }); return; }
     txt(x,y0,r.label,27,({sleep:"#d9c2f5",work:"#a8e6b8",held:"#f0a3a6"})[r.kind]||"#e8e2d4",true); y0+=31;
     ppl.forEach(a=>{ txt(x,y0,(a.name||"").replace(/\(.*?\)/g,"").trim().split(" ")[0],25,"#ffe6a8"); y0+=29; });
   });
-  baseInfoRows(B,by);
+  baseInfoRows(S.base,by);
 }
 function renderBase(){
   const navD=$("navDungeon"); if(navD) navD.hidden=!((S.dungeon&&S.dungeon.rooms||[]).length);
   const B=S.base, svg=$("bsSvg"); if(!svg) return; svg.innerHTML="";
   if(!B||!(B.rooms||[]).length){ $("bsName").textContent="거점"; $("bsNote").textContent="거점 배치가 아직 없습니다(state/base.json)."; $("bsInfo").textContent=""; return; }
-  $("bsName").textContent=B.name||"거점"; $("bsNote").textContent=B.note||"";
+  /* v2.46: 건물 고르기 — 가게와 딸린 집들 */
+  const blds=baseBuildings(B); if(!blds.some(x=>x.id===bsView)) bsView="shop";
+  const cur=blds.find(x=>x.id===bsView);
+  const tabs=$("bsTabs"); if(tabs){ tabs.style.display=blds.length>1?"":"none";
+    tabs.innerHTML=blds.map(x=>`<button data-bsview="${escAttr(x.id)}" class="${x.id===bsView?"on":""}">${escAttr(x.short||x.name)}</button>`).join(""); }
+  $("bsName").textContent=cur.name||"거점"; $("bsNote").textContent=cur.note||"";
+  if(bsView!=="shop"){
+    const A=BASE_ARTS[bsView], by=basePeople();
+    if(A&&A.ok&&cur.rooms.every(r=>A.rooms[r.id])) renderBaseArt(cur,svg,by,A);
+    else{ svg.setAttribute("viewBox","0 0 700 300"); const wrap=$("bsWrap"); if(wrap) wrap.style.aspectRatio="7/3";
+      cur.rooms.forEach((r,i)=>{ const t=el("text",{x:30,y:40+i*30,fill:"#e8e2d4","font-size":16}); t.textContent=`${r.floor===0?"지하":r.floor+"층"} · ${r.label}${(by[r.id]||[]).length?" — "+by[r.id].map(a=>a.name).join(", "):""}`; svg.appendChild(t); });
+      baseInfoRows(B,by); }
+    return;
+  }
   /* v2.38: 사선(캐비닛) 투영 컷어웨이 — 앞벽을 걷어 내고 안쪽 벽은 허리 높이에서 자른다.
      방(바닥 면적)·벽(문틈)·계단·바깥문은 state/base.json에서 읽는다. x=길→강, z=앞→뒤, y=높이. */
   const by=basePeople();
-  if(BASE_ART.ok&&B.rooms.every(r=>BASE_ART.rooms[r.id])){ renderBaseArt(B,svg,by); return; }
+  if(BASE_ART.ok&&B.rooms.every(r=>BASE_ART.rooms[r.id])){ renderBaseArt(cur,svg,by,BASE_ART); return; }
   const W=B.width||Math.max(...B.rooms.map(r=>r.x+r.w)), D=B.depth||150, H=B.floorH||90, CUT=H*0.22;
   B.rooms.forEach(r=>{ if(r.z==null) r.z=0; if(r.d==null) r.d=D; }); /* 옛 배치(z·d 없음)도 깨지지 않게 */
   const KX=0.55, KY=0.4, X0=50, Y0=380;
@@ -6474,6 +6505,8 @@ function renderBase(){
     txt(P(rx+100,0,D*0.2),B.boat,{"font-size":9.5,fill:"#e8e2d4"}); }
   baseInfoRows(B,by);
 }
+
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-bsview]"); if(b){ bsView=b.dataset.bsview; renderBase(); } });
 
 /* ---------- 던전 (평면도) ---------- */
 const SVGNS="http://www.w3.org/2000/svg";
@@ -7399,9 +7432,9 @@ const CITY_FEATS=[
   [1066,322,92,38,"아른 상회 동관","arn","below","상인 거리의 아른 상회 본채. 가게에서 걸어서 약 10분."],
   [940,448,90,28,"쓴뿌리 약재상","herb","above","동문 안 시장 골목의 늙은 약재상."],
   [1085,470,100,30,"검인소","civic","in","시청 소속 세관 겸 도량형·상업 검수 관청 — 강배 짐 검인과 통행세, 상점 영업 검인. 바로 옆에 위병 둘이 지키는 나루터 초소(유치장)가 있다."],
-  [1030,526,50,26,"젖은 노","own","right","가게 북쪽 샛골목 건너의 선술집 겸 여관(1층 스무 평, 2층 방 넷). 강 쪽은 석축 둑 벽이라 뒷문이 없다."],
+  [1030,526,50,26,"젖은 노","own","right","가게 북쪽 샛골목 건너의 문 닫은 선술집 — 가게 소유. 1층 스무 평(술청·주방), 2층 열다섯 평(방 넷), 지하 술 창고 열두 평. 강 쪽은 석축 둑 벽이라 뒷문이 없다. 안 구조는 거점 탭에."],
   [1030,562,50,34,"★ 물약 가게","shop","right","베릭스의 거점. 1·2층 각 열다섯 평, 지하 다섯 평. 뒷문이 물가의 낮은 둑(말뚝)으로 나 있어 셈배를 맨다."],
-  [1030,600,50,24,"레이크의 집","own","right","가게 남쪽 옆집. 가게와 함께 물가로 뒷문이 나는 둘뿐인 집이다."],
+  [1030,600,50,24,"물가 별채","own","right","가게 남쪽 옆집(옛 무두장이 레이크의 집) — 가게 소유. 단층 열두 평에 앞방·침실, 지하실 세 평. 가게와 함께 물가로 뒷문이 나는 둘뿐인 집이다. 안 구조는 거점 탭에."],
   [1030,656,50,36,"염장 창고","ware","right","옛 염장 창고(지상 통창고 스물다섯 평, 지하 염장고). 강 쪽이 둑 벽이라 봄이면 바닥에 물이 스민다. 짐수레 문은 큰길 쪽."],
   [1090,735,140,32,"하역장 · 계량소","civic","left","선창 남쪽의 하역장과 저울대. 대낮에 토르벤과 싸운 곳이다."],
   [1250,215,110,55,"아른 마차 여관","arn","above","동문 밖 짐수레 길 북쪽. 서쪽 별채와 동쪽 마방. 가게에서 걸어서 약 20분."]
