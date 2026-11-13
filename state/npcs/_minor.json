@@ -125,17 +125,6 @@
       "look": "Brenna, a female dwarf paladin in her 40s. Sturdy build, white hair braided and pinned up, one old burn scar across her face, stern disciplined expression. Flawless polished full plate with an unfamiliar noble house crest on the shield."
     },
     {
-      "id": "nadin",
-      "name": "나딘",
-      "role": "여성 · 티플링 · 소서러 · 20대",
-      "tag": "실버포트 잔류",
-      "tagc": "",
-      "trait": "화염계 주문 위주. 24회차 전투에서 화염구로 경비병과 봉인 수호자를 견제했다. 보수보다 흥미를 우선한다. 24회차 이후 실버포트에 남았다.",
-      "knows": "18~21회차 사건 · 24회차 가라앉은 회당 습격 전 과정",
-      "unknown": "코바·미아 사망의 진실 · 로렌스 건 · 이자벨의 지배 상태 · 25회차 이후 여정",
-      "look": "Nadin, a female tiefling sorcerer in her 20s. Red skin, small curved horns, mischievous sharp eyes, faint arcane energy around her hands. Light minimal gear, small burn marks."
-    },
-    {
       "id": "silia",
       "name": "실리아",
       "role": "여성 · 엘프 · 몽크 · 나이 불명",
