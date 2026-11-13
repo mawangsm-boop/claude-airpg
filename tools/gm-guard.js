@@ -108,7 +108,9 @@ function weaponCheck(prose) {
   for (const p of partyWeapons()) {
     for (const [fam, re] of WEAPON_FAMILY) {
       if (p.gear.includes(fam) || (fam === "활" && /장궁|단궁|활/.test(p.gear))) continue;
-      const s = sentences.find((x) => x.includes(p.name) && re.test(x) && !/["“]/.test(x));
+      // 그 동료가 주어로 나오고(리브는·리브가·리브도…) 그 뒤에 무기가 오는 문장만 — 맞는 쪽(베릭스의·베릭스에게)은 빼고
+      const subj = new RegExp(p.name + "(?:이|가|은|는|도)\\s[^.!?]*?" + re.source);
+      const s = sentences.find((x) => subj.test(x) && !/["“]/.test(x));
       if (s) { out.push(`${p.name}에게 장착하지 않은 무기(${fam}) — "${s.trim().slice(0, 40)}…" 캐릭터 파일의 equipped·attacks를 확인한다`); break; }
     }
   }
