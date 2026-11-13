@@ -154,4 +154,4 @@ CLAUDE.md의 축약 규칙만으로 판단이 서지 않을 때만 여는 문서
   - terrain: `kind:"high"`+`elev`(올라설 수 있는 높은 땅·절벽·단, `surf`로 재질), `kind:"stairs"`+`elev`(계단 한 칸씩 높이를 달리 준다), `kind:"bridge"`+`elev`(아래가 비는 널다리), `kind:"water"`(+`elev`면 높은 곳의 물), `kind:"building"`+`floors`(층수).
   - token: `floor`(건물 안 층, 2면 이층 바닥 위에 선다. 없으면 note의 '이층'으로 짐작), `elev`(임의 높이), `face`(`n|e|s|w` 보는 방향, 없으면 가장 가까운 맞은편), `sprite`(그림 이름), `look:{hair,skin,cloth}`(그림이 없는 인형의 빛깔).
   - 캐릭터 그림표는 `assets/sprites/*.png`와 index.html `BT_SHEETS`. 지금 있는 그림: verrix·isabel·liv·neri·idra·nadin(토큰 id로 자동), bandit·crossbow·brute·officer·clerk·archer(이름·메모 낱말로 자동, 또는 `sprite`로 지정).
-- 전투판 v2.50: 캐릭터 그림은 네 방향(`f` 왼쪽 아래·`fr` 오른쪽 아래·`b` 오른쪽 위·`bl` 왼쪽 위). 파티 여섯은 네 장 모두, 적·단역 여섯은 세 장(왼쪽 위만 뒷모습을 뒤집음). battle.json이 없거나 토큰이 없으면 전투 탭은 `at`이 없는(=동행 중인) 파티를 빈 들판에 세워 보인다.
+- 전투판 v2.50: 캐릭터 그림은 네 방향(`f` 왼쪽 아래·`fr` 오른쪽 아래·`b` 오른쪽 위·`bl` 왼쪽 위). 파티·적 열둘 모두 네 장 따로(v2.52에서 손 위치를 못 박아 다시 받음 — party_c·foes_c). battle.json이 없거나 토큰이 없으면 전투 탭은 `at`이 없는(=동행 중인) 파티를 빈 들판에 세워 보인다.
