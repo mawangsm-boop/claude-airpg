@@ -1,7 +1,7 @@
 {
   "char": {
     "id": "mira_kel",
-    "name": "방앗간의 길잡이",
+    "name": "미라 켈",
     "role": "여성 · 하프엘프 · 서른 안팎 · 추적꾼, 추포단의 길잡이",
     "tag": "56회차 · 방앗간 꼭대기의 궁수",
     "tagc": "",
@@ -17,7 +17,6 @@
     "unknown": "베릭스 일행의 정체와 힘(D), 아이린이 실제로 장부를 갖고 있지 않다는 것(D)",
     "look": "Mira Kel, a female half-elf tracker around thirty. Lean, wiry build, sun-browned weathered face, faintly pointed ears, long black hair in a single tight braid down her back, narrow watchful eyes. A dry grass stalk between her lips. Wearing a faded grass-green hooded cloak over a scuffed leather jerkin, bracers, a quiver at her hip, carrying a tall longbow.",
     "stance": "적대",
-    "stanceWhy": "추포단의 길잡이로 아이린을 붙잡아 실버포트로 데려가려고 방앗간에서 서문을 살피고 있다 — 56회차 2일째 한낮, 일행을 알아보고 활을 겨눴다.",
-    "nameNote": "본명 미라 켈 — 베릭스 일행이 이름을 들으면 바꾼다"
+    "stanceWhy": "추포단의 길잡이로 아이린을 붙잡아 실버포트로 데려가려고 방앗간에서 서문을 살피고 있다 — 56회차 2일째 한낮, 일행을 알아보고 활을 겨눴다."
   }
 }
