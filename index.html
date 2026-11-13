@@ -5558,7 +5558,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.44";
+const HB_VERSION="v2.45";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -6349,7 +6349,7 @@ function basePeople(){
 }
 /* v2.44: 거점 삽화 — 단면 도면을 본으로 그려 받은 그림(assets/base_shop.jpg, 1536×1024) 위에 방 이름과 사람을 얹는다.
    그림은 도면과 투영이 달라, 방마다 그림 속 자리를 따로 적어 둔다. base.json에 여기 없는 방이 생기면(증축·이사) 도면으로 돌아간다. */
-const BASE_ART={src:"./assets/base_shop.jpg",ok:false,vb:[0,120,1536,810],
+const BASE_ART={src:"./assets/base_shop2.jpg",ok:false,vb:[0,120,1536,810],
   rooms:{r_verrix:[262,415],r_isabel:[640,415],r_idra:[852,415],r_livneri:[1062,415],hall2:[800,527],
          front:[272,700],lab:[640,672],ines:[852,690],back:[1105,700],hall1:[690,770]},
   marks:[[150,640,"정문"],[1012,640,"뒷문"],[478,640,"계단"],[62,850,"길"],[1400,900,"거울강"]], boat:[1305,715]};
@@ -7220,12 +7220,12 @@ let wView="world";
 const RG_VB={near:[0,0,2300,1400],city:[20,150,1480,720]}, RG_FS={near:34,city:21};
 const RG_HINT={
   near:"표식을 누르면 설명이 나옵니다. 눈금 한 칸(25 km)이 걸어서 하루 길입니다. 강은 북쪽 거울호에서 남쪽으로 흐릅니다 — 거슬러 오르면 북쪽, 내려가면 남쪽.",
-  city:"건물을 누르면 설명이 나옵니다. <b style=\"color:var(--gold-s)\">★ 물약 가게에서 걸어서</b> — 검인소·하역장 약 5분 · 아른 상회 동관 약 10분 · 동문 약 15분 · 시청·시장 광장 약 15분 · 동문 밖 마차 여관 약 20분 · 구시가·신전 약 35분 · 서문 약 45분."
+  city:"건물을 누르면 설명이 나옵니다. <b style=\"color:var(--gold-s)\">★ 물약 가게에서 걸어서</b> — 검인소·하역장 약 5분 · 아른 상회 동관 약 10분 · 동문 약 15분 · 시청·시장 광장 약 15분 · 동문 밖 마차 여관 약 20분 · 구시가·신전 약 35분 · 서문 약 45분 · 남문 약 10분 · 북문 약 35분. 성문은 넷(서·동·남·북)이고 선창은 강으로 열려 있습니다."
 };
 /* v2.43: 그림 바탕 — 위 도면(글자 뺀 것)을 본으로 그려 받은 삽화(assets/karlen_*.jpg, 1536×1024)를 같은 좌표에 깐다.
    표식·이름·누르는 자리는 그대로 위에 얹으므로 위치는 도면 그대로다. 그림을 못 읽으면 도면으로 보인다. */
 const RG_IMG={near:{src:"./assets/karlen_near.jpg",x:0,y:-67,w:2300,h:1533,cy:765,minH:1060},
-              city:{src:"./assets/karlen_city2.jpg",x:20,y:16,w:1480,h:987,cy:492,minH:690}};
+              city:{src:"./assets/karlen_city3.jpg",x:20,y:16,w:1480,h:987,cy:492,minH:690}};
 const RG_ART={near:false,city:false};
 Object.keys(RG_IMG).forEach(k=>{ const im=new Image(); im.onload=()=>{ RG_ART[k]=true; if(wView===k) renderRegion(); }; im.src=RG_IMG[k].src; });
 function rgArt(svg,k){ if(!RG_ART[k]) return false; const I=RG_IMG[k];
@@ -7430,19 +7430,21 @@ function drawCity(svg){
   /* 집들 — 빈터를 메우는 지붕 */
   const busy=(x,y)=>CITY_FEATS.some(f=>x>f[0]-34&&x<f[0]+f[2]+12&&y>f[1]-40&&y<f[1]+f[3]+34)
     ||!cityInside(x-8,y-8)||!cityInside(x+36,y+28)||!cityInside(x+36,y-8)||!cityInside(x-8,y+28)
-    ||(x>1060&&y>505)||Math.abs(y-490)<24&&x<1010||Math.abs(x-1000)<24&&y>470||Math.abs((y-490)+(x-1000)*0.826)<30&&x>980;
+    ||(x>1060&&y>505)||Math.abs(x-620)<24&&y<490||Math.abs(y-490)<24&&x<1010||Math.abs(x-1000)<24&&y>470||Math.abs((y-490)+(x-1000)*0.826)<30&&x>980;
   d="";
   for(let i=0;i<1150;i++){ const x=50+R()*1180, y=155+R()*680; if(busy(x,y)) continue; const w=13+R()*15, h=10+R()*10; d+=`M${x.toFixed(0)},${y.toFixed(0)} h${w.toFixed(0)} v${h.toFixed(0)} h${(-w).toFixed(0)}z`; }
   svg.appendChild(el("path",{d,fill:"#c9b384",stroke:"#a8915f","stroke-width":1,opacity:.75}));
   /* 길 */
   const st=(dd,w)=>svg.appendChild(el("path",{d:dd,fill:"none",stroke:"#fbf3dc","stroke-width":w,"stroke-linecap":"round","stroke-linejoin":"round"}));
   st("M-600,560 L60,490 L1000,490 L1232,300 L1372,300",15); st("M1000,490 L1000,770",15);
+  st("M620,490 L622,163 L650,40 L770,-130 L980,-420",11); st("M1000,770 L1000,824 L1022,900 L1100,1100 L1150,1500",11);   /* 북문 → 서안 둑길 · 남문 → 하류 강변길 */
   st("M345,490 L345,392 M500,490 L500,352 M770,490 L770,560 L870,570 M205,354 L345,440 M1000,560 L1030,560 M930,490 L985,476 M1012,380 L1112,380 L1150,366 M1000,700 L1090,750 M535,490 L535,520",8);
   /* 성벽 · 망루 · 성문 */
   svg.appendChild(el("path",{d:wallD,fill:"none",stroke:"#6b5b45","stroke-width":11,"stroke-linejoin":"round"}));
   svg.appendChild(el("rect",{x:1222,y:522,width:16,height:201,fill:"#9cc3da"}));      /* 선창이 강으로 열리는 자리 */
   svg.appendChild(el("rect",{x:1224,y:284,width:16,height:32,fill:"#fbf3dc"})); svg.appendChild(el("rect",{x:52,y:474,width:16,height:32,fill:"#fbf3dc"}));
-  d=""; [[1223,273],[1223,309],[51,463],[51,499]].forEach(([x,y])=>d+=`M${x},${y} h18 v18 h-18z`);
+  svg.appendChild(el("rect",{x:608,y:153,width:28,height:18,fill:"#fbf3dc"})); svg.appendChild(el("rect",{x:986,y:814,width:28,height:18,fill:"#fbf3dc"}));
+  d=""; [[1223,273],[1223,309],[51,463],[51,499],[592,152],[634,152],[970,813],[1012,813]].forEach(([x,y])=>d+=`M${x},${y} h18 v18 h-18z`);
   CITY_WALL.forEach(([x,y],i)=>{ if([9,10,12,13,25,26].includes(i)) return; d+=`M${x-10},${y-10} h20 v20 h-20z`; });
   svg.appendChild(el("path",{d,fill:"#6b5b45"}));
   const art=rgArt(svg,"city");
@@ -7452,6 +7454,7 @@ function drawCity(svg){
   rgText(svg,1305,624,"나루터 선창","rgs rgw","middle",0,0.36);
   rgText(svg,1062,318,"상인 거리","rgs","middle",0,-0.4);
   rgText(svg,994,700,"나루터 큰길","rgs","end",-0.7,0);
+  rgText(svg,700,95,"서안 둑길 → 갈대목","rgs rgr","start",0,0); rgText(svg,1040,900,"하류 강변길","rgs rgr","start",0.4,0);
   rgText(svg,560,490,"큰길","rgs","middle",0,-0.7);
   rgText(svg,84,512,"← 새벽문 방면 상단로","rgs rgr","start",0,1.5);
   rgText(svg,1420,150,"↑ 상류 · 갈대목","rgs rgw","middle",0,1.2);
@@ -7460,6 +7463,8 @@ function drawCity(svg){
   const spot=(x,y,w,h,name,anchor,dx,dy,desc)=>{ const g=rgPickable(svg,()=>`<b style="color:var(--gold-s)">${name}</b><br><span style="color:var(--parch)">${desc}</span>`);
     g.appendChild(el("rect",{x,y,width:w,height:h,fill:"transparent"})); rgText(g,x+w/2,y+h/2,name,"rgl",anchor,dx,dy); return g; };
   spot(20,455,70,70,"서문","middle",0,-1.9,"새벽문 방면 상단로로 나가는 문. 가게에서 걸어서 약 45분.");
+  spot(586,128,72,70,"북문","middle",0,-1.5,"시청 서쪽 길 끝의 문. 문 밖 길이 강가로 붙어 서안 둑길이 된다 — 물푸레 여울을 지나 갈대목까지 걸어서 이틀. 가게에서 걸어서 약 35분.");
+  spot(964,790,72,70,"남문","end",-1.6,0.5,"나루터 큰길 남쪽 끝의 문. 문 밖은 강을 따라 하류로 내려가는 강변길. 가게에서 걸어서 약 10분.");
   spot(1195,265,70,70,"동문","end",-1.3,-0.9,"강 쪽 문. 문 안쪽에 위병 초소가 있고, 문 밖 짐수레 길이 도선장까지 간다. 가게에서 걸어서 약 15분.");
   spot(1205,395,60,48,"동쪽 망루","end",-1.4,1.2,"구시가에서 이어지는 성벽 위 동쪽 망루. 아침 순찰이 지나가면 반 시간쯤 빈다.");
   const fg=spot(1340,268,64,64,"도선장","middle",0,2.2,"카를렌 나루. 여기서 거울강을 건너면 동쪽 상단로 — 노간까지 걸어서 사흘, 그 너머 옛 소금길로 소금샘.");
