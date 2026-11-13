@@ -5563,7 +5563,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.49";
+const HB_VERSION="v2.50";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -6604,8 +6604,9 @@ $("dgFit").onclick=()=>renderDungeon();
 /* ---------- 전투 격자 ---------- */
 let btNames=true, btRings=true;
 function renderBattle(){
-  const B=S.battle, svg=$("btSvg"); svg.innerHTML="";
-  $("btName").textContent=B.name+(B.round?` · ${B.round}라운드`:"");
+  /* v2.50: 싸움이 없으면 지금 함께 다니는 사람들을 빈 들판에 세워 둔다 */
+  const idle=!((S.battle||{}).tokens||[]).length, B=idle?btIdleBoard():S.battle, svg=$("btSvg"); svg.innerHTML="";
+  $("btName").textContent=idle?"일행 — 지금은 싸움이 없습니다":B.name+(B.round?` · ${B.round}라운드`:"");
   if(btIso){ renderBattleIso(B,svg); return; }
   btViewKey="";
   const cell=60, W=B.cols*cell, H=B.rows*cell;
@@ -6749,16 +6750,24 @@ const ISO_SURF={
 const ISO_OBJ={building:["#cbb894","#a8946f","#8a7758"],wall:["#b5b0a2","#8f8a7c","#716d61"],lowwall:["#bdb7a8","#948e80","#756f63"],
   crate:["#b98f57","#93703f","#74572f"],rock:["#a3a3a7","#7c7c82","#5f5f66"]};
 /* 캐릭터 그림표 — 한 장에 여러 인물. cells[key]={f:[x,y,w,h](앞모습, 왼쪽 아래를 봄), b:[...](뒷모습, 오른쪽 위를 봄)} */
+const BT_PB="./assets/sprites/party_b.png", BT_FB="./assets/sprites/foes_b.png";
 const BT_SHEETS=[
   {src:"./assets/sprites/party.png",w:1024,h:682,cells:{
-    verrix:{f:[34,66,136,250],b:[36,356,134,250]}, isabel:{f:[188,66,146,250],b:[204,356,148,250]}, liv:{f:[352,66,142,250],b:[358,356,140,250]},
-    neri:{f:[518,66,150,250],b:[510,356,152,250]}, idra:{f:[670,66,148,250],b:[694,356,148,250]}, nadin:{f:[842,66,160,250],b:[856,356,136,250]}}},
+    verrix:{f:[34,66,136,250],b:[36,356,134,250],fr:[30,56,136,250,BT_PB],bl:[32,356,134,250,BT_PB]},
+    isabel:{f:[188,66,146,250],b:[204,356,148,250],fr:[194,56,154,250,BT_PB],bl:[178,356,146,250,BT_PB]},
+    liv:{f:[352,66,142,250],b:[358,356,140,250],fr:[354,56,144,250,BT_PB],bl:[350,356,144,250,BT_PB]},
+    neri:{f:[518,66,150,250],b:[510,356,152,250],fr:[510,56,152,250,BT_PB],bl:[518,356,140,250,BT_PB]},
+    idra:{f:[670,66,148,250],b:[694,356,148,250],fr:[688,56,150,250,BT_PB],bl:[670,356,152,250,BT_PB]},
+    nadin:{f:[842,66,160,250],b:[856,356,136,250],fr:[850,56,158,250,BT_PB],bl:[856,356,142,250,BT_PB]}}},
+  /* 적·단역은 뒷모습 두 장이 거의 같게 그려져, 왼쪽 위 방향만 뒷모습을 뒤집어 쓴다 */
   {src:"./assets/sprites/foes.png",w:1024,h:682,cells:{
-    bandit:{f:[18,56,164,262],b:[28,360,160,262]}, crossbow:{f:[180,56,134,262],b:[204,360,140,262]}, brute:{f:[320,50,188,268],b:[338,356,184,266]},
-    officer:{f:[504,56,188,262],b:[518,360,178,262]}, clerk:{f:[704,56,110,262],b:[712,360,106,262]}, archer:{f:[860,56,146,262],b:[850,360,154,262]}},
+    bandit:{f:[18,56,164,262],b:[28,360,160,262],fr:[10,46,146,266,BT_FB]}, crossbow:{f:[180,56,134,262],b:[204,360,140,262],fr:[194,46,136,266,BT_FB]},
+    brute:{f:[320,50,188,268],b:[338,356,184,266],fr:[330,44,190,268,BT_FB]}, officer:{f:[504,56,188,262],b:[518,360,178,262],fr:[512,46,186,266,BT_FB]},
+    clerk:{f:[704,56,110,262],b:[712,360,106,262],fr:[704,46,120,266,BT_FB]}, archer:{f:[860,56,146,262],b:[850,360,154,262],fr:[844,46,160,266,BT_FB]}},
    /* 이름·메모 낱말로 고르는 그림(위에서부터 먼저 맞는 것) */
    match:[[/쇠뇌|석궁/,"crossbow"],[/덩치|거한|장사/,"brute"],[/부관|대장|두목|조장|장교|요르크/,"officer"],[/서기|검인관|학자|필경/,"clerk"],[/미라|궁수|활잡이/,"archer"],[/졸개|도적|산적|칼잡이|마부|불한당/,"bandit"]]}
 ];
+[BT_PB,BT_FB].forEach(u=>{ const im=new Image(); im.src=u; });
 function btSpriteKey(t){
   if(t.sprite) return t.sprite;
   const all=Object.assign({},...BT_SHEETS.map(s=>s.cells));
@@ -6842,7 +6851,7 @@ function renderBattleIso(B,svg){
   const ringSq=(cx,cy,n,style)=>{ for(let x=cx-n;x<=cx+n;x++) for(let y=cy-n;y<=cy+n;y++){ if(x<0||y<0||x>=C||y>=R) continue;
     const ds=[]; if(y===cy-n) ds.push("n"); if(y===cy+n) ds.push("s"); if(x===cx-n) ds.push("w"); if(x===cx+n) ds.push("e");
     if(ds.length) (edgeMarks[x+","+y]=edgeMarks[x+","+y]||[]).push({ds,style}); } };
-  if(btRings&&pc) [[6,"#9fd0ff"],[12,"#c4a3ec"],[24,"#e6c98a"]].forEach(([n,col])=>ringSq(pc.x,pc.y,n,{stroke:col,"stroke-width":2.2,"stroke-dasharray":"8 6",opacity:.9}));
+  if(btRings&&pc&&!B.idle) [[6,"#9fd0ff"],[12,"#c4a3ec"],[24,"#e6c98a"]].forEach(([n,col])=>ringSq(pc.x,pc.y,n,{stroke:col,"stroke-width":2.2,"stroke-dasharray":"8 6",opacity:.9}));
   const sel=btSel&&live.find(t=>t.id===btSel);
   if(sel){ if(sel.move){ for(let x=sel.x-sel.move;x<=sel.x+sel.move;x++) for(let y=sel.y-sel.move;y<=sel.y+sel.move;y++) tint[x+","+y]="rgba(110,168,232,.30)"; ringSq(sel.x,sel.y,sel.move,{stroke:"#8fc0ff","stroke-width":2}); }
     if(sel.range) ringSq(sel.x,sel.y,sel.range,{stroke:"#ffd772","stroke-width":2.2,"stroke-dasharray":"2 5"});
@@ -6887,12 +6896,14 @@ function renderBattleIso(B,svg){
       g.appendChild(el("circle",{cx:f[0]-15,cy:f[1]-6,r:7,fill:"#e9cfae",stroke:"#1a1410","stroke-width":2}));
       g.appendChild(el("path",{d:`M${f[0]-4},${f[1]-7} l10,7 M${f[0]+6},${f[1]-7} l-10,7`,stroke:"#1a1410","stroke-width":2.2})); top=f[1]-20;
     }else if(spr){
-      const c=front?spr.c.f:(spr.c.b||spr.c.f), Hh=74*c[3]/250, Ww=Hh*c[2]/c[3];
-      /* 원본: 앞모습은 왼쪽 아래를, 뒷모습은 오른쪽 위를 본다 → 반대쪽이면 좌우로 뒤집는다 */
-      const flip=front?right:!right;
+      /* 네 방향 그림: f 왼쪽 아래 · fr 오른쪽 아래 · b 오른쪽 위 · bl 왼쪽 위. fr·bl이 없는 인물만 좌우로 뒤집어 쓴다 */
+      let c, flip=false;
+      if(front){ if(right&&spr.c.fr) c=spr.c.fr; else{ c=spr.c.f; flip=right; } }
+      else{ if(!right&&spr.c.bl) c=spr.c.bl; else{ c=spr.c.b||spr.c.f; flip=!right; } }
+      const Hh=74*c[3]/250, Ww=Hh*c[2]/c[3];
       const h2=el("g",flip?{transform:`translate(${(2*f[0]).toFixed(1)},0) scale(-1,1)`}:{});
-      const s=el("svg",{x:(f[0]-Ww/2).toFixed(1),y:(f[1]-Hh+6).toFixed(1),width:Ww.toFixed(1),height:Hh.toFixed(1),viewBox:c.join(" "),preserveAspectRatio:"xMidYMax meet",overflow:"hidden"});
-      s.appendChild(el("image",{href:spr.s.src,x:0,y:0,width:spr.s.w,height:spr.s.h})); h2.appendChild(s); g.appendChild(h2); top=f[1]-Hh+6;
+      const s=el("svg",{x:(f[0]-Ww/2).toFixed(1),y:(f[1]-Hh+6).toFixed(1),width:Ww.toFixed(1),height:Hh.toFixed(1),viewBox:c.slice(0,4).join(" "),preserveAspectRatio:"xMidYMax meet",overflow:"hidden"});
+      s.appendChild(el("image",{href:c[4]||spr.s.src,x:0,y:0,width:spr.s.w,height:spr.s.h})); h2.appendChild(s); g.appendChild(h2); top=f[1]-Hh+6;
     }else{
       /* 말 인형 — 큰 머리·작은 몸. 옷 빛깔은 편, 머리 빛깔은 이름에서 */
       const hs=["#3a2a1e","#6b4a2a","#c9a35a","#8a3a2a","#2a2a35","#7a7a80","#a8623a"], hair=(t.look&&t.look.hair)||hs[[...String(t.id||t.name||"")].reduce((a,ch)=>a+ch.charCodeAt(0),0)%hs.length], skin=(t.look&&t.look.skin)||"#f0d6b6", cloth=(t.look&&t.look.cloth)||col;
@@ -6992,7 +7003,7 @@ function renderBattleIso(B,svg){
     const a=P(t.from.x+0.5,t.from.y+0.5,Math.max(0,gz(t.from.x,t.from.y))), b=P(t.x+0.5,t.y+0.5,tokZ(t)), col=BT_SIDE[t.side]||"#8792a8";
     gL.appendChild(el("line",{x1:a[0],y1:a[1],x2:b[0],y2:b[1],stroke:col,"stroke-width":2.5,"stroke-dasharray":"7 5",opacity:.85}));
     gL.appendChild(el("ellipse",{cx:a[0],cy:a[1],rx:9,ry:4.5,fill:"none",stroke:col,"stroke-width":2,opacity:.8})); });
-  if(btRings&&pc) [[6,"9 m","#9fd0ff"],[12,"18 m","#c4a3ec"],[24,"36 m","#e6c98a"]].forEach(([n,lab,col])=>{
+  if(btRings&&pc&&!B.idle) [[6,"9 m","#9fd0ff"],[12,"18 m","#c4a3ec"],[24,"36 m","#e6c98a"]].forEach(([n,lab,col])=>{
     [[pc.x+n,pc.y],[pc.x-n,pc.y],[pc.x,pc.y+n],[pc.x,pc.y-n]].forEach(([gx,gy])=>{ if(gx<0||gy<0||gx>=C||gy>=R) return; const q=P(gx+0.5,gy+0.5,gz(gx,gy));
       const tx=el("text",{x:q[0],y:q[1]+4,"text-anchor":"middle",class:"gm","font-size":String(Math.round(11*fk)),"font-weight":"bold",fill:col,style:"paint-order:stroke;stroke:#0a0c12;stroke-width:4px"}); tx.textContent=lab; gL.appendChild(tx); }); });
   labels.forEach(L=>{ const s=L.text.length>13?L.text.slice(0,12)+"…":L.text;
@@ -7014,6 +7025,15 @@ function renderBattleIso(B,svg){
     l.textContent="전투가 열리면 배치가 표시됩니다"; gL.appendChild(l); }
   svg.querySelectorAll("text[font-size]").forEach(t=>{ t.style.fontSize=t.getAttribute("font-size")+"px"; });
   btInitBar(B);
+}
+function btIdleBoard(){
+  const goers=[S.pc,...(S.party||[]).filter(a=>!a.at)].filter(Boolean);
+  const spots=[[4,4],[3,5],[5,5],[2,4],[6,4],[4,6],[3,3],[5,3],[1,5],[7,5]];
+  return {idle:true,name:"",cols:9,rows:8,round:0,ground:"grass",
+    terrain:[{x:0,y:0,w:1,h:1,type:"tree"},{x:2,y:0,w:1,h:1,type:"tree"},{x:8,y:3,w:1,h:1,type:"tree"},{x:0,y:7,w:1,h:1,type:"tree"},{x:8,y:7,w:1,h:1,type:"tree"},
+      {x:5,y:0,w:4,h:2,kind:"high",elev:1},{x:7,y:0,w:2,h:1,kind:"high",elev:2,surf:"stone"},{x:4,y:1,w:1,h:1,kind:"stairs",elev:0.5},{x:0,y:3,w:1,h:1,kind:"rock"}],
+    tokens:goers.slice(0,spots.length).map((a,i)=>({id:a.id||(i?("p"+i):"verrix"),name:String(a.name||"").split(" ")[0],side:"pc",x:spots[i][0],y:spots[i][1],face:"s",
+      hp:a.hp?`${a.hp.cur}/${a.hp.max}`:"",note:[a.race,a.cls,a.role].filter(Boolean).join(" · ")}))};
 }
 function btInitBar(B){
   const ib=$("btInit"); if(!ib) return;
