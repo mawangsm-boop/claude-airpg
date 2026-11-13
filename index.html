@@ -5563,7 +5563,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.50";
+const HB_VERSION="v2.51";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -7028,10 +7028,11 @@ function renderBattleIso(B,svg){
 }
 function btIdleBoard(){
   const goers=[S.pc,...(S.party||[]).filter(a=>!a.at)].filter(Boolean);
-  const spots=[[4,4],[3,5],[5,5],[2,4],[6,4],[4,6],[3,3],[5,3],[1,5],[7,5]];
+  /* 등각 화면에서는 대각선으로 이웃한 칸끼리 위아래로 겹친다 — 어느 방향으로 돌려도 서로 가리지 않게 화면 가로·세로가 모두 두 칸 이상 벌어지는 자리만 쓴다 */
+  const spots=[[5,5],[2,4],[4,2],[2,6],[6,2],[0,6],[1,1],[8,2]];
   return {idle:true,name:"",cols:9,rows:8,round:0,ground:"grass",
-    terrain:[{x:0,y:0,w:1,h:1,type:"tree"},{x:2,y:0,w:1,h:1,type:"tree"},{x:8,y:3,w:1,h:1,type:"tree"},{x:0,y:7,w:1,h:1,type:"tree"},{x:8,y:7,w:1,h:1,type:"tree"},
-      {x:5,y:0,w:4,h:2,kind:"high",elev:1},{x:7,y:0,w:2,h:1,kind:"high",elev:2,surf:"stone"},{x:4,y:1,w:1,h:1,kind:"stairs",elev:0.5},{x:0,y:3,w:1,h:1,kind:"rock"}],
+    terrain:[{x:0,y:0,w:1,h:1,type:"tree"},{x:2,y:0,w:1,h:1,type:"tree"},{x:8,y:6,w:1,h:1,type:"tree"},{x:0,y:7,w:1,h:1,type:"tree"},
+      {x:5,y:0,w:4,h:2,kind:"high",elev:1},{x:7,y:0,w:2,h:1,kind:"high",elev:2,surf:"stone"},{x:4,y:1,w:1,h:1,kind:"stairs",elev:0.5},{x:0,y:2,w:1,h:1,kind:"rock"}],
     tokens:goers.slice(0,spots.length).map((a,i)=>({id:a.id||(i?("p"+i):"verrix"),name:String(a.name||"").split(" ")[0],side:"pc",x:spots[i][0],y:spots[i][1],face:"s",
       hp:a.hp?`${a.hp.cur}/${a.hp.max}`:"",note:[a.race,a.cls,a.role].filter(Boolean).join(" · ")}))};
 }
