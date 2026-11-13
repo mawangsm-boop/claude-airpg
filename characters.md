@@ -22,7 +22,7 @@ Neri Hawick, a human female ranger in her mid-20s. Short auburn hair, sun-weathe
 Idra, a human female druid-apothecary in her early 30s. Long dark brown wavy hair braided and pinned up for work with loose strands at the temples, hazel-green eyes with a quiet, guarded look, pale skin rarely touched by direct sun, a few faint old scars across her hands and forearms. Wearing a sleeveless undyed linen and moss-green wool dress under a sturdy leather apothecary's apron lined with small herb pouches, a rope belt, a small silver leaf-shaped brooch pinned at the collar, soft hide shoes when outdoors and barefoot in the shop.
 
 ## 아이린 (NPC)
-Irene, a female half-elf bard in her mid-20s. Elegant embroidered clothing, several ornate rings, expressive charismatic face, minimal visible weapons. Holding an expensive lute, confident sociable posture.
+Irene, a female half-elf bard in her mid-20s. Embroidered clothing worn thin and frayed from six weeks on the road, only two ornate rings left, expressive charismatic face now tired and hollow-eyed, minimal visible weapons. Holding an expensive lute.
 
 ## 테사 밀번 (NPC)
 Tessa Milburn, a human female independent relic hunter in her late 20s. Faint freckles scattered across her face, messy brown curly hair tied back loosely, quick sharp eyes with a mischievous glint, confident lopsided grin. Wearing a patched brown leather jacket over practical travel clothes, a wide utility belt hung with lockpicks and small tools, fingerless gloves, scuffed boots suited for climbing and crawling through ruins.
@@ -97,4 +97,7 @@ Petro, a human male mercenary sergeant in his early forties. Thick unkempt beard
 Hart Vol, a human male mercenary captain in his fifties. Close-cropped grey hair, a weathered heavy-jawed face, an old ragged scar where his left ear should be. Wearing heavy splint armor over a padded coat, a greatsword, a heavy iron key on a chain around his neck.
 
 ## 세바 린드 (NPC)
-Seva Lind, a human female swordswoman in her mid-thirties. Brown hair pulled back tight in a knot, a lean sharp-boned face, cool heavy-lidded eyes and a faint sardonic smile. Wearing a long dark wool coat over a close-fitting black studded leather inner armor that covers the torso snugly, dark trousers, tall boots, a slender straight-bladed sword.
+Seva Lind, a human female swordswoman in her mid-thirties. Brown hair pulled back tight in a knot, a lean sharp-boned face, cool heavy-lidded eyes and a faint sardonic smile. Wearing a long dark wool coat over plain studded leather armor over the torso, dark trousers, tall boots, a slender straight-bladed sword.
+
+## 나딘 (NPC)
+Nadin, a female tiefling sorcerer in her 20s. Red skin, small curved horns, mischievous sharp eyes, faint arcane energy around her hands. Light minimal gear, small burn marks.
