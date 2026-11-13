@@ -1,0 +1,19 @@
+{
+  "char": {
+    "id": "mira_kel",
+    "name": "미라 켈",
+    "role": "여성 · 하프엘프 · 서른 안팎 · 추적꾼, 추포단의 길잡이",
+    "tag": "56회차 · 방앗간 꼭대기의 궁수",
+    "tagc": "",
+    "trait": "요르크 반스의 추포단에 길잡이로 고용됐다. 삯이 석 달째 밀려 있다. 선발대 일곱을 이끌고 바람 부는 언덕 방앗간에서 서문을 살핀다. 아직 베릭스 일행에게 이름을 대지 않았다.",
+    "voice": "짧은 반말 섞인 존댓말 — \"그쪽이 그 가게 주인이에요? 그럼 일이 쉬워지네.\" 농담을 표정 없이 한다. 마른 풀줄기를 씹는다.",
+    "code": {"does": "삯 받은 만큼만 한다, 진 싸움에서는 먼저 활을 내려놓는다", "wont": "삯도 안 나오는 싸움에 목숨을 걸지 않는다, 잡은 사람을 때리지 않는다"},
+    "drive": "삯. 요르크에게 받을 것이 석 달치 밀려 있다.",
+    "fear": "이름 없는 풀밭에서 죽는 것.",
+    "knows": "요르크 패의 수와 차림(A), 본대가 내일 한낮 돌목 길을 지난다는 것(A — 그녀가 잡은 길), 추포장이 서기 손에 있다는 것(A), 죄수 수레(A), 아이린이 붉은 티플링 여자와 다니고 뿔 달린 사내를 찾았다는 것(B — 여관 주인들)",
+    "unknown": "베릭스 일행의 정체와 힘(D), 아이린이 실제로 장부를 갖고 있지 않다는 것(D)",
+    "look": "Mira Kel, a female half-elf tracker around thirty. Lean, wiry build, sun-browned weathered face, faintly pointed ears, long black hair in a single tight braid down her back, narrow watchful eyes. A dry grass stalk between her lips. Wearing a faded grass-green hooded cloak over a scuffed leather jerkin, bracers, a quiver at her hip, carrying a tall longbow.",
+    "stance": "적대",
+    "stanceWhy": "추포단의 길잡이로 아이린을 붙잡아 실버포트로 데려가려고 방앗간에서 서문을 살피고 있다 — 56회차 2일째 한낮, 일행을 알아보고 활을 겨눴다."
+  }
+}

@@ -101,3 +101,6 @@ Seva Lind, a human female swordswoman in her mid-thirties. Brown hair pulled bac
 
 ## 나딘 (NPC)
 Nadin, a female tiefling sorcerer in her 20s. Red skin, small curved horns, mischievous sharp eyes, faint arcane energy around her hands. Light minimal gear, small burn marks.
+
+## 미라 켈 (NPC)
+Mira Kel, a female half-elf tracker around thirty. Lean, wiry build, sun-browned weathered face, faintly pointed ears, long black hair in a single tight braid down her back, narrow watchful eyes. A dry grass stalk between her lips. Wearing a faded grass-green hooded cloak over a scuffed leather jerkin, bracers, a quiver at her hip, carrying a tall longbow.
