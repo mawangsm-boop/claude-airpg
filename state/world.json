@@ -41,9 +41,11 @@
       "crowneck_fort",
       "mulpure_ford",
       "grandma_hill",
-      "dry_pond_camp"
+      "dry_pond_camp",
+      "windhill_mill",
+      "stoneneck_road"
     ],
-    "here": "galdaemok",
+    "here": "windhill_mill",
     "customPlaces": [
       {
         "id": "outpost3",
@@ -307,6 +309,24 @@
         "y": 1105,
         "d": "갈대목 서쪽 갈대밭 너머 숲 가장자리의 마른 웅덩이. 베인 하로의 칼잡이 패가 야영하던 곳. 54회차 2일째 한밤 야영지 싸움이 있었고 동쪽 갈대밭에 불이 붙었다.",
         "cat": "waypoint"
+      },
+      {
+        "id": "windhill_mill",
+        "n": "바람언덕 방앗간",
+        "t": "카를렌 서문 밖 상단로 12km",
+        "x": 1688,
+        "y": 1153,
+        "d": "서문에서 상단로로 12km, 길 북쪽 언덕 위의 돌 방앗간. 날개 넷, 삼층 돌탑. 56회차 2일째 한낮, 요르크 패의 선발대를 무너뜨리고 길잡이 미라를 사로잡았다.",
+        "cat": "terrain"
+      },
+      {
+        "id": "stoneneck_road",
+        "n": "돌목 길",
+        "t": "카를렌 서문 밖 상단로 28km",
+        "x": 1673,
+        "y": 1157,
+        "d": "서문에서 28km, 상단로가 낮은 돌 등성이를 파고 지나는 곳. 미라에 따르면 요르크의 본대가 3일째 한낮에 지난다.",
+        "cat": "terrain"
       }
     ]
   }
