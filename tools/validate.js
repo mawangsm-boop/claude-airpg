@@ -339,7 +339,17 @@ if (baseFile) {
         const o = readJSON(path2.join(dir, f), { required: false });
         const c = o && o.char;
         if (c && c.room !== undefined && !ids.has(c.room)) warn(path2.join(dir, f), `room "${c.room}"이 state/base.json에 없습니다 — 거점 탭에 표시되지 않습니다`);
+        // 거점에 방이 있는 NPC는 at이 있어야 가게 장면 명단(grep '"at": "상점"')에 걸린다(56회차 — 세이 누락)
+        if (dir === "state/npcs" && c && c.room && !c.at && !/사망/.test(String(c.tag || "")))
+          err(path2.join(dir, f), `${c.id || f}: room("${c.room}")은 있는데 at이 없습니다 — 가게 장면 명단에서 빠집니다("at": "상점")`);
       }
+    }
+    // 단역 모음도 같은 규칙
+    const minor = readJSON("state/npcs/_minor.json", { required: false });
+    const mlist = minor ? (minor.npcs || Object.values(minor).find(Array.isArray) || []) : [];
+    for (const n of mlist) {
+      if (n && n.room && !n.at && !/사망/.test(String(n.tag || "")))
+        err("state/npcs/_minor.json", `${n.id || n.name}: room("${n.room}")은 있는데 at이 없습니다 — 가게 장면 명단에서 빠집니다("at": "상점")`);
     }
   }
 }

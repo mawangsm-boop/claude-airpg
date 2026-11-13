@@ -75,9 +75,57 @@ function combatCheck(text) {
   return out;
 }
 
+// '쥐다' 비유 — 설계 문서의 '손(쥘 것)' 용어가 서술로 새어 나와 반복됐다(56회차 사용자 지적).
+// 칼자루·고삐를 쥐는 실제 손동작은 괜찮다. 비유로 굳은 표현이나, 한 답변에 세 번 넘게 나오면 잡는다.
+const GRIP_FIG = /장부(?:를|는)?\s?쥐|쥐여\s?주|쥘\s?것|(?:돈|밑천|금화|열쇠)(?:은|는|을|를)?\s?(?:내가\s?)?쥐고\s?있/;
+const GRIP_ANY = /쥐(?:[다고는며면어었여]|ㄴ|던)|쥔|쥘/g;
+
+// 동료 무기 — 장착하지 않은 무기를 들려 쓰지 않는다(56회차: 손쇠뇌를 단 리브에게 '활'을 메게 함).
+const WEAPON_FAMILY = [
+  ["활", /(?:장궁|단궁|활시위|활을|활은|활이|활도|활만)/],
+  ["쇠뇌", /쇠뇌/],
+  ["레이피어", /레이피어/],
+];
+function partyWeapons() {
+  try {
+    const idx = JSON.parse(fs.readFileSync(path.join(ROOT, "state", "chars", "_index.json"), "utf8"));
+    return [idx.pc, ...(idx.party || [])].map((id) => {
+      const c = JSON.parse(fs.readFileSync(path.join(ROOT, "state", "chars", id + ".json"), "utf8")).char;
+      const gear = [
+        ...(c.items || []).filter((i) => i.equipped).map((i) => i.n || ""),
+        ...(((c.sheet || {}).attacks) || []).map((a) => a.n || ""),
+        ...((c.attacks || []).map((a) => a.n || "")),
+      ].join(" ");
+      return { name: String(c.name || id).split(" ")[0], gear };
+    });
+  } catch {
+    return [];
+  }
+}
+function weaponCheck(prose) {
+  const out = [];
+  const sentences = prose.split(/(?<=[.!?。…])\s+|\n/);
+  for (const p of partyWeapons()) {
+    for (const [fam, re] of WEAPON_FAMILY) {
+      if (p.gear.includes(fam) || (fam === "활" && /장궁|단궁|활/.test(p.gear))) continue;
+      const s = sentences.find((x) => x.includes(p.name) && re.test(x) && !/["“]/.test(x));
+      if (s) { out.push(`${p.name}에게 장착하지 않은 무기(${fam}) — "${s.trim().slice(0, 40)}…" 캐릭터 파일의 equipped·attacks를 확인한다`); break; }
+    }
+  }
+  return out;
+}
+
 function check(raw, opts = {}) {
   const text = strip(raw);
   const out = [];
+  {
+    const prose0 = text.split("\n").filter((l) => !l.trim().startsWith(">")).join("\n");
+    const fig = prose0.match(GRIP_FIG);
+    const n = (prose0.match(GRIP_ANY) || []).length;
+    if (fig) out.push(`'쥐다' 비유 「${fig[0]}」 — 맡다·갖고 있다·건네다로(실제 손동작만 '쥐다')`);
+    else if (n >= 3) out.push(`'쥐다'가 한 답변에 ${n}번 — 실제 손동작이 아니면 맡다·갖다·건네다로 바꾼다`);
+    out.push(...weaponCheck(prose0));
+  }
   if (opts.combat || ROLL.test(text)) out.push(...combatCheck(text));
   for (const [re, why] of HARD) {
     const m = text.match(re);
@@ -135,6 +183,9 @@ if (cmd === "remind") {
       "④싸움이 예고되면 정찰 직후 round 0 전투판을 그리고, 베릭스 차례마다 main에 푸시한다.\n" +
       "⑤물건 값은 2024 PHB 표 기준 실버부터. ⑧탐지·길 안내·정찰 능력은 확정된 사실만 — 쓰는 순간 새 위험·장애물을 만들지 않는다(없으면 「위험 없음」, 의도에 맞는 안전한 길). ⑥계약·조건은 앞서 읽어 준 문장을 그대로 인용해 대조한다. ⑦포로·단역 목록을 장면마다 갱신한다." +
       "\n⑩서술은 도구 호출이 끝난 뒤 마지막 메시지에 쓴다(저장·굴림·검증 먼저). 인물의 시간 표현은 core·log의 실제 경과로 계산한다. 매혹·서제스천이 풀릴 때는 그 시점에 의심도·시계를 올린다." +
+      "\n⑪이자벨은 35회차부터 베스퍼다 — 그 전의 일·사람(옛 인물의 얼굴 포함)은 모른다(isabel.json unknown). 옛 인물이 재등장하면 이자벨의 반응은 unknown부터 본다." +
+      "\n⑫동료의 무기·장비를 서술에 넣기 전 캐릭터 파일의 equipped·attacks를 본다. 플레이어가 이미 정한 작전·조건은 다시 선택지로 묻지 않고 그대로 진행하며, 빈 곳만 묻는다. '쥐다'는 실제 손동작에만." +
+      "\n⑬장면에 '모두'를 부르면 at:상점 명단(_minor 포함)을 다시 훑는다 — grep -l '\"at\": \"상점\"' state/npcs/*.json 와 _minor.json." +
       (fs.existsSync(path.join(ROOT, "state", "battle.json"))
         ? "\n⑨전투 중 — CLAUDE.md '전투 서술 예문'대로: 라운드 제목만 두고, 행동마다 굵은 제목 없이 서술 문단(누가 누구에게·어떻게·보이는 결과, 두세 문장 이상) → 바로 아래 > 인용 블록에 '공격자 → 대상: 합계 vs AC — 명중(보정 설명)' / '피해: 주사위[값]+보정 = 합 → 대상 현재/최대'. 좌표는 서술에 넣지 않고 '현재 상황' 목록에만."
         : "")
