@@ -1,0 +1,172 @@
+{
+ "battle": {
+  "name": "염장 창고집 문간 — 준비 판(1일째 오전)",
+  "cols": 16,
+  "rows": 14,
+  "round": 0,
+  "ground": "dirt",
+  "terrain": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 16,
+    "h": 2,
+    "type": "tree",
+    "kind": "building",
+    "floors": 2,
+    "label": "북쪽 이웃집"
+   },
+   {
+    "x": 5,
+    "y": 3,
+    "w": 4,
+    "h": 7,
+    "type": "tree",
+    "kind": "building",
+    "floors": 2,
+    "label": "오틸리에 살림채(이층) — 문은 큰길 쪽"
+   },
+   {
+    "x": 12,
+    "y": 2,
+    "w": 4,
+    "h": 10,
+    "type": "tree",
+    "kind": "building",
+    "floors": 1,
+    "label": "옛 염장 창고(다락 창 · 강 쪽은 둑 벽)"
+   },
+   {
+    "x": 10,
+    "y": 4,
+    "w": 1,
+    "h": 1,
+    "type": "tree",
+    "kind": "crate",
+    "label": "절임 통 더미(반 엄폐)"
+   },
+   {
+    "x": 10,
+    "y": 8,
+    "w": 1,
+    "h": 1,
+    "type": "tree",
+    "kind": "crate",
+    "label": "절임 통 더미(반 엄폐)"
+   },
+   {
+    "x": 9,
+    "y": 6,
+    "w": 1,
+    "h": 2,
+    "type": "hazard",
+    "label": "소금물 웅덩이(미끄러움)"
+   },
+   {
+    "x": 7,
+    "y": 12,
+    "w": 1,
+    "h": 1,
+    "type": "tree",
+    "kind": "crate",
+    "label": "짐 더미"
+   },
+   {
+    "x": 11,
+    "y": 12,
+    "w": 2,
+    "h": 1,
+    "type": "tree",
+    "kind": "crate",
+    "label": "짐 더미"
+   },
+   {
+    "x": 5,
+    "y": 10,
+    "w": 4,
+    "h": 1,
+    "type": "mark",
+    "label": "마당 골목(좁다)"
+   },
+   {
+    "x": 5,
+    "y": 12,
+    "w": 11,
+    "h": 2,
+    "type": "mark",
+    "label": "하역장 북쪽 끝 →남쪽"
+   },
+   {
+    "x": 0,
+    "y": 2,
+    "w": 5,
+    "h": 12,
+    "type": "mark",
+    "label": "나루터 큰길"
+   }
+  ],
+  "tokens": [
+   {
+    "id": "verrix",
+    "name": "베릭스",
+    "side": "pc",
+    "x": 2,
+    "y": 2,
+    "hp": "89/89",
+    "move": 6,
+    "range": 18,
+    "note": "북쪽에서 큰길로 내려옴"
+   },
+   {
+    "id": "neri",
+    "name": "네리",
+    "side": "pc",
+    "x": 3,
+    "y": 2,
+    "hp": "21/21",
+    "move": 6,
+    "note": "동행"
+   },
+   {
+    "id": "irene",
+    "name": "아이린",
+    "side": "ally",
+    "x": 1,
+    "y": 2,
+    "note": "동행 — 싸우지 않는다"
+   },
+   {
+    "id": "otilie",
+    "name": "오틸리에",
+    "side": "neutral",
+    "x": 5,
+    "y": 6,
+    "note": "문턱에서 버팀"
+   },
+   {
+    "id": "dirk",
+    "name": "디르크",
+    "side": "enemy",
+    "x": 4,
+    "y": 6,
+    "note": "수금 대장 — 장부·쇠갈고리"
+   },
+   {
+    "id": "t1",
+    "name": "덩치 1",
+    "side": "enemy",
+    "x": 3,
+    "y": 5,
+    "note": "곤봉"
+   },
+   {
+    "id": "t2",
+    "name": "덩치 2",
+    "side": "enemy",
+    "x": 3,
+    "y": 7,
+    "note": "곤봉"
+   }
+  ]
+ }
+}
