@@ -1,0 +1,22 @@
+{
+  "char": {
+    "id": "magda_ren",
+    "name": "마그다 렌",
+    "role": "여성 · 인간 · 서른 초반 · 말뚝패 부관(옛 저울패 쇠뇌수)",
+    "tag": "57회차 · 적",
+    "tagc": "",
+    "trait": "토르벤 밑에서 쇠뇌를 쏘던 옛 저울패. 그레고르의 부관으로 자릿세 명단을 직접 쓴다. 2일째 새벽, 아이린에게 그레고르의 만남 답을 전했다. 2일째 오전, 늙은 황소를 살피던 리브를 오두막 지붕에서 보았다.",
+    "look": "Magda Ren, a human woman in her early thirties. Short-cropped black hair, an old crossbow-string scar on her left cheek, a worn dockhand's coat over leather armor, a heavy crossbow.",
+    "voice": "비꼬는 반말 섞인 하오체. 숫자를 잘 센다.",
+    "code": {
+      "does": "질 싸움에서 먼저 빠진다 / 그레고르의 장부(자릿세 명단)를 직접 쓴다",
+      "wont": "짐꾼에게 쇠뇌를 겨누지 않는다"
+    },
+    "drive": "저울패 때 못 받은 몫을 이번엔 받는 것.",
+    "fear": "",
+    "stance": "적대",
+    "stanceWhy": "그레고르의 부관 — 수금조가 베릭스 일행 손에 죽었고(57회차 1일째), 브로크를 죽인 자라는 소문(52회차, C)을 들었다.",
+    "knows": "자릿세 명단 전부(A). 헨드릭에게 가는 달마다의 봉투(A — 직접 나른다). 2일째 오전, 손쇠뇌를 찬 여자가 늙은 황소를 오래 지켜봤다(A).",
+    "unknown": "베릭스 일행의 실제 일(D)."
+  }
+}
