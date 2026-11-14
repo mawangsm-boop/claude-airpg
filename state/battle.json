@@ -1,0 +1,152 @@
+{
+ "battle": {
+  "name": "늙은 황소 — 준비 판(2일째 밤, 적 배치는 밤에 살핀 뒤)",
+  "cols": 32,
+  "rows": 18,
+  "round": 0,
+  "ground": "stone",
+  "terrain": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 32,
+    "h": 9,
+    "type": "mark",
+    "label": "하역장 마당(밤 — 횃불 둘)"
+   },
+   {
+    "x": 14,
+    "y": 3,
+    "w": 3,
+    "h": 3,
+    "type": "tree",
+    "label": "저울대(짐 그물 매달림 — 밧줄 AC 11·HP 5)",
+    "kind": "crate"
+   },
+   {
+    "x": 4,
+    "y": 5,
+    "w": 2,
+    "h": 2,
+    "type": "tree",
+    "label": "짐 더미(반 엄폐)",
+    "kind": "crate"
+   },
+   {
+    "x": 9,
+    "y": 2,
+    "w": 2,
+    "h": 2,
+    "type": "tree",
+    "label": "짐 더미(반 엄폐)",
+    "kind": "crate"
+   },
+   {
+    "x": 22,
+    "y": 4,
+    "w": 2,
+    "h": 2,
+    "type": "tree",
+    "label": "짐 더미(반 엄폐)",
+    "kind": "crate"
+   },
+   {
+    "x": 27,
+    "y": 6,
+    "w": 2,
+    "h": 2,
+    "type": "tree",
+    "label": "짐 더미(반 엄폐)",
+    "kind": "crate"
+   },
+   {
+    "x": 0,
+    "y": 9,
+    "w": 32,
+    "h": 1,
+    "type": "tree",
+    "label": "둑(높이 1.5m)",
+    "kind": "high",
+    "elev": 1
+   },
+   {
+    "x": 0,
+    "y": 10,
+    "w": 32,
+    "h": 8,
+    "type": "water",
+    "label": "강물(깊다)",
+    "kind": "water"
+   },
+   {
+    "x": 12,
+    "y": 10,
+    "w": 1,
+    "h": 3,
+    "type": "tree",
+    "label": "판자 다리 1(1칸 폭)",
+    "kind": "bridge",
+    "elev": 1
+   },
+   {
+    "x": 19,
+    "y": 10,
+    "w": 1,
+    "h": 3,
+    "type": "tree",
+    "label": "판자 다리 2(1칸 폭)",
+    "kind": "bridge",
+    "elev": 1
+   },
+   {
+    "x": 10,
+    "y": 13,
+    "w": 12,
+    "h": 5,
+    "type": "tree",
+    "label": "늙은 황소 갑판(물에서 2m)",
+    "kind": "high",
+    "elev": 1.5,
+    "surf": "wood"
+   },
+   {
+    "x": 18,
+    "y": 13,
+    "w": 4,
+    "h": 5,
+    "type": "tree",
+    "label": "고물 오두막(맹꽁이자물쇠 문·판자 창 · 처마 밑 기름통)",
+    "kind": "building",
+    "floors": 1
+   },
+   {
+    "x": 15,
+    "y": 15,
+    "w": 1,
+    "h": 1,
+    "type": "tree",
+    "label": "부러진 돛대와 쇠종",
+    "kind": "mark"
+   },
+   {
+    "x": 12,
+    "y": 16,
+    "w": 1,
+    "h": 1,
+    "type": "pit",
+    "label": "갑판 아래 사다리 구멍",
+    "kind": "pit"
+   },
+   {
+    "x": 16,
+    "y": 16,
+    "w": 1,
+    "h": 1,
+    "type": "pit",
+    "label": "갑판 아래 사다리 구멍",
+    "kind": "pit"
+   }
+  ],
+  "tokens": []
+ }
+}
