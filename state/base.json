@@ -329,6 +329,86 @@
             "kind": "work"
           }
         ]
+      },
+      {
+        "id": "saltyard",
+        "name": "염장 창고집",
+        "short": "염장 창고집",
+        "note": "가게 줄 맨 남쪽, 하역장 북쪽 끝과 맞닿은 집(57회차 1일째, 오틸리에 헤스에게서 가게 이름으로 500골드에 샀다 — 절인 생선 통 여섯 덤). 큰길 쪽 이층 살림채(1층 거실 겸 식당·부엌·작은 방, 2층 방 넷 — 가장 큰 방은 남쪽 창으로 하역장이 보임), 남향 안마당(우물), 강 쪽 옛 염장 창고(지상 통창고 25평, 남쪽 끝 다락 — 덧창에서 하역장·저울대·늙은 황소가 보임, 바닥 뚜껑문 아래 지하 염장고 10평). 강 쪽은 석축 둑 벽이라 물가 문이 없다. 짐수레는 살림채 남쪽 마당 골목으로 드나든다. 창고 자물쇠가 낡았고 지하 염장고 뚜껑에는 잠금이 없다. 오틸리에는 이번 달 안에 버들목으로 떠난다.",
+        "rooms": [
+          {
+            "id": "sh_hall",
+            "floor": 1,
+            "label": "거실 겸 식당",
+            "kind": "work"
+          },
+          {
+            "id": "sh_kitchen",
+            "floor": 1,
+            "label": "부엌",
+            "kind": "work"
+          },
+          {
+            "id": "sh_small",
+            "floor": 1,
+            "label": "작은 방",
+            "kind": "sleep"
+          },
+          {
+            "id": "sh_r1",
+            "floor": 2,
+            "label": "방 1",
+            "kind": "sleep"
+          },
+          {
+            "id": "sh_r2",
+            "floor": 2,
+            "label": "방 2",
+            "kind": "sleep"
+          },
+          {
+            "id": "sh_r3",
+            "floor": 2,
+            "label": "방 3",
+            "kind": "sleep"
+          },
+          {
+            "id": "sh_r4",
+            "floor": 2,
+            "label": "방 4(큰 방)",
+            "kind": "sleep"
+          },
+          {
+            "id": "sh_hall2",
+            "floor": 2,
+            "label": "복도",
+            "kind": "hall"
+          },
+          {
+            "id": "sh_yard",
+            "floor": 1,
+            "label": "안마당",
+            "kind": "work"
+          },
+          {
+            "id": "sh_store",
+            "floor": 1,
+            "label": "염장 창고",
+            "kind": "work"
+          },
+          {
+            "id": "sh_loft",
+            "floor": 2,
+            "label": "창고 다락",
+            "kind": "work"
+          },
+          {
+            "id": "sh_cellar",
+            "floor": 0,
+            "label": "지하 염장고",
+            "kind": "work"
+          }
+        ]
       }
     ]
   }
