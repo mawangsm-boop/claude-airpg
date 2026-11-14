@@ -93,6 +93,7 @@ function partyWeapons() {
       const c = JSON.parse(fs.readFileSync(path.join(ROOT, "state", "chars", id + ".json"), "utf8")).char;
       const gear = [
         ...(c.items || []).filter((i) => i.equipped).map((i) => i.n || ""),
+        ...(c.equipment || []).filter((i) => i.equipped).map((i) => i.item || i.n || ""),   /* 네리처럼 equipment 칸에 장비를 적은 파일 */
         ...(((c.sheet || {}).attacks) || []).map((a) => a.n || ""),
         ...((c.attacks || []).map((a) => a.n || "")),
       ].join(" ");
