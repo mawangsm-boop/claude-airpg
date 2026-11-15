@@ -23,6 +23,16 @@
     "look": "Ines Calo, a human female ledger-keeper in her late 20s. Black hair tied tightly at the nape, a long slender neck, grey eyes, a pen callus on her right middle finger. Wearing a deep-blue travel cloak over a fitted dark vest, a leather cord wrapped around her wrist.",
     "at": "상점",
     "room": "wo_r4",
-    "roomNote": "젖은 노 2층 방 4 — 아이린 밑에서 여관 장부"
+    "roomNote": "젖은 노 2층 방 4 — 아이린 밑에서 여관 장부",
+    "items": [
+      {
+        "id": "item_toll_roster_copy_s57",
+        "n": "자릿세 명단 베낌(상인 마흔하나)",
+        "q": 1,
+        "cat": "misc",
+        "d": "3일째 오후, 조장에게 본책을 넘기기 전에 이네스가 아이린의 부탁으로 상인 마흔하나의 이름·액수·밀린 달만 베껴 둠. 봉투 기록 뒷장은 베끼지 않았다.",
+        "sum": "선창 상인 명단 사본 — 아이린의 그물용"
+      }
+    ]
   }
 }
