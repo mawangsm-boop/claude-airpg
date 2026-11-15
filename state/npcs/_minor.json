@@ -354,8 +354,8 @@
       "look": "Sei, a young human female herb gatherer in her early twenties. Small and wiry, sun-tanned skin, dark hair in a single thick braid down her back, bright careful eyes, salt-chapped hands. Wearing a patched undyed wool tunic and a sleeveless sheepskin vest, sturdy short boots, a woven basket on her back, a small cloth pouch at her belt.",
       "at": "상점",
       "stance": "호의",
-      "room": "r_idra",
-      "roomNote": "이드라 방 한쪽에 간이 침상 — 젖은 노가 손질될 때까지"
+      "room": "sh_r3",
+      "roomNote": "소금꽃 집 2층 방 3"
     },
     {
       "id": "rake_s54",
@@ -508,7 +508,10 @@
       "drive": "버들목의 딸 집으로 올라가 손주를 보는 것.",
       "knows": "아이린·네리가 집을 보러 왔었다(A). 코라를 어릴 때부터 안다(A). 말뚝패 수금(A).",
       "unknown": "베릭스 일행의 일(D).",
-      "bond": "말뚝패를 문간에서 쫓아내 줌 · 아들이 하려던 텃밭을 일구겠다는 말을 들음"
+      "bond": "말뚝패를 문간에서 쫓아내 줌 · 아들이 하려던 텃밭을 일구겠다는 말을 들음",
+      "at": "상점",
+      "room": "sh_small",
+      "roomNote": "이번 달 안에 버들목으로 떠남"
     },
     {
       "id": "tough1_s57",

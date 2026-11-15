@@ -22,8 +22,8 @@
     "unknown": "베릭스 일행의 정체 전부(D등급).",
     "look": "Ines Calo, a human female ledger-keeper in her late 20s. Black hair tied tightly at the nape, a long slender neck, grey eyes, a pen callus on her right middle finger. Wearing a deep-blue travel cloak over a fitted dark vest, a leather cord wrapped around her wrist.",
     "at": "상점",
-    "room": "wo_r4",
-    "roomNote": "젖은 노 2층 방 4 — 아이린 밑에서 여관 장부",
+    "room": "ines",
+    "roomNote": "가게 1층 작은 방 — 부감독 임명이 확정되면 따로 나감",
     "items": [
       {
         "id": "item_toll_roster_copy_s57",
