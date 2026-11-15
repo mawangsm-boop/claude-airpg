@@ -118,6 +118,21 @@ function weaponCheck(prose) {
   return out;
 }
 
+/* 57회차 사용자 지시 — 베릭스의 반응(기회 공격)은 그 자리에서 묻는다.
+   battle.json에서 '이번에 움직인 적'(from이 있는 토큰) 가운데, 움직이기 전엔 베릭스 곁(1칸)이었는데
+   지금은 곁을 벗어난 자가 있으면, 답변에 '기회 공격'이 한 번도 나오지 않을 때 막는다. */
+function oaCheck(text) {
+  let b;
+  try { b = JSON.parse(fs.readFileSync(path.join(ROOT, "state", "battle.json"), "utf8")).battle; } catch { return []; }
+  if (!b || !Array.isArray(b.tokens)) return [];
+  const v = b.tokens.find((t) => t.id === "verrix");
+  if (!v) return [];
+  const d = (a, c) => Math.max(Math.abs(a.x - c.x), Math.abs(a.y - c.y));
+  const left = b.tokens.filter((t) => t.side === "enemy" && t.from && typeof t.from.x === "number" && d(t.from, v) <= 1 && d(t, v) > 1);
+  if (!left.length || /기회\s?공격/.test(text)) return [];
+  return [`베릭스 곁(1.5m)을 벗어난 적이 있음(${left.map((t) => t.name || t.id).join("·")}) — 그 자리에서 멈추고 "기회 공격을 쓰시겠습니까?"를 물었는가(답변에 '기회 공격'이 없음). 베릭스의 반응은 플레이어가 정한다`];
+}
+
 function check(raw, opts = {}) {
   const text = strip(raw);
   const out = [];
@@ -130,6 +145,7 @@ function check(raw, opts = {}) {
     out.push(...weaponCheck(prose0));
   }
   if (opts.combat || ROLL.test(text)) out.push(...combatCheck(text));
+  if (opts.combat) out.push(...oaCheck(text));
   for (const [re, why] of HARD) {
     const m = text.match(re);
     if (m) out.push(`「${m[0]}」 — ${why}`);
@@ -190,7 +206,9 @@ if (cmd === "remind") {
       "\n⑫동료의 무기·장비를 서술에 넣기 전 캐릭터 파일의 equipped·attacks를 본다. 플레이어가 이미 정한 작전·조건은 다시 선택지로 묻지 않고 그대로 진행하며, 빈 곳만 묻는다. '쥐다'는 실제 손동작에만." +
       "\n⑬장면에 '모두'를 부르면 at:상점 명단(_minor 포함)을 다시 훑는다 — grep -l '\"at\": \"상점\"' state/npcs/*.json 와 _minor.json." +
       (fs.existsSync(path.join(ROOT, "state", "battle.json"))
-        ? "\n⑨전투 중 — CLAUDE.md '전투 서술 예문'대로: 라운드 제목만 두고, 행동마다 굵은 제목 없이 서술 문단(누가 누구에게·어떻게·보이는 결과, 두세 문장 이상) → 바로 아래 > 인용 블록에 '공격자 → 대상: 합계 vs AC — 명중(보정 설명)' / '피해: 주사위[값]+보정 = 합 → 대상 현재/최대'. 좌표는 서술에 넣지 않고 '현재 상황' 목록에만."
+        ? "\n⑨전투 중 — CLAUDE.md '전투 서술 예문'대로: 라운드 제목만 두고, 행동마다 굵은 제목 없이 서술 문단(누가 누구에게·어떻게·보이는 결과, 두세 문장 이상) → 바로 아래 > 인용 블록에 '공격자 → 대상: 합계 vs AC — 명중(보정 설명)' / '피해: 주사위[값]+보정 = 합 → 대상 현재/최대'. 좌표는 서술에 넣지 않고 '현재 상황' 목록에만." +
+          "\n⑭적 차례 중 적이 베릭스 곁(1.5m)을 벗어나거나 반응 주문 조건이 생기면 거기서 멈추고 '기회 공격을 쓰시겠습니까?'를 묻는다(동료의 반응은 GM이 정한다)." +
+          "\n⑮슬롯·영감의 말·물약 같은 자원을 쓰면 그 자리에서 battle.json 베릭스 토큰 메모와 verrix.json을 함께 고친다(HP만 battle.json, 끝날 때 옮김) — validate.js가 둘을 대조한다."
         : "")
   );
 } else if (cmd === "lint") {

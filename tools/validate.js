@@ -308,6 +308,22 @@ if (battleFile) {
     } else if (b.round !== 0) warn("state/battle.json", "init(이니셔티브 순서)이 없습니다 — 화면에 차례가 표시되지 않습니다");
     // round 0 = 전투 준비(배치만 그린 판, 53회차 사용자 지시) — 우선권을 굴리기 전이라 init·turn을 비워 둔다.
     if (b.turn !== undefined && !tokenIds.has(b.turn)) err("state/battle.json", `turn "${b.turn}"에 해당하는 토큰이 없습니다`);
+    /* 57회차 사용자 지시 — 전투 중에도 자원 소모를 캐릭터 파일에 바로 적는다(핸드북 주문 잔량).
+       베릭스 토큰 메모의 '슬롯 N레벨 a/b'·'영감의 말 a/b'가 verrix.json과 다르면 막는다. */
+    const vt = (b.tokens || []).find((t) => t.id === "verrix");
+    const vf = readJSON("state/chars/verrix.json", { required: false });
+    if (vt && vt.note && vf && vf.char) {
+      const vc = vf.char;
+      for (const m of String(vt.note).matchAll(/(\d)레벨\s*(\d+)\/(\d+)/g)) {
+        const s = (vc.slots || []).find((x) => x.lvl === +m[1]);
+        if (s && (s.cur !== +m[2] || s.max !== +m[3]))
+          err("state/battle.json", `베릭스 ${m[1]}레벨 슬롯 — 전투판 메모 ${m[2]}/${m[3]}, verrix.json ${s.cur}/${s.max}. 쓰는 즉시 verrix.json도 고친다`);
+      }
+      const im = String(vt.note).match(/영감의 말\s*(\d+)\/(\d+)/);
+      const ir = (vc.resources || []).find((r) => r.id === "res_bardic_inspiration");
+      if (im && ir && (ir.cur !== +im[1] || ir.max !== +im[2]))
+        err("state/battle.json", `베릭스 영감의 말 — 전투판 메모 ${im[1]}/${im[2]}, verrix.json ${ir.cur}/${ir.max}. 쓰는 즉시 verrix.json도 고친다`);
+    }
   }
 }
 const dungeonFile = readJSON("state/dungeon.json", { required: false });
