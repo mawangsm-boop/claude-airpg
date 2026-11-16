@@ -356,7 +356,16 @@
       "room": "sh_r3",
       "roomNote": "소금꽃 집 2층 방 3",
       "sheet_note": "Commoner(SRD 5.2.1): HP 4(1d8), 이동 9m, 싸움 능력 없음. 58회차 동행.",
-      "at": "상점"
+      "at": "동행",
+      "items": [
+        {
+          "id": "item_sei_coat_s58",
+          "n": "두꺼운 여행복",
+          "q": 1,
+          "cat": "misc",
+          "d": "58회차 1일째 베릭스가 사 줌(2골드)."
+        }
+      ]
     },
     {
       "id": "rake_s54",
