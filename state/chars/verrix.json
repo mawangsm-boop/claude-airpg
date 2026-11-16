@@ -6,29 +6,29 @@
     "level": 7,
     "ac": 14,
     "hp": {
-      "cur": 10,
+      "cur": 98,
       "max": 98,
       "tmp": 0
     },
     "slots": [
       {
         "lvl": 1,
-        "cur": 0,
+        "cur": 4,
         "max": 4
       },
       {
         "lvl": 2,
-        "cur": 0,
+        "cur": 3,
         "max": 3
       },
       {
         "lvl": 3,
-        "cur": 0,
+        "cur": 3,
         "max": 3
       },
       {
         "lvl": 4,
-        "cur": 0,
+        "cur": 1,
         "max": 1
       }
     ],
@@ -37,7 +37,7 @@
         "id": "res_bardic_inspiration",
         "n": "영감의 말 (Bardic Inspiration)",
         "dice": "d8",
-        "cur": 3,
+        "cur": 6,
         "max": 6,
         "recharge": "short",
         "note": "2024판: 매력 수정치(6)만큼. 5레벨 영감의 샘 — 짧은 휴식·긴 휴식에 모두 회복, 주문 슬롯 하나를 써서(행동 불필요) 1회 되살릴 수 있다. 50회차 갱신.",
@@ -59,7 +59,7 @@
         "id": "res_forest_beast_command",
         "n": "숲을 갉아먹던 것의 파편 — 야수 명령",
         "dice": "",
-        "cur": 0,
+        "cur": 1,
         "max": 1,
         "recharge": "long",
         "note": "출처: 흩어진 문지기의 마지막 조각(40회차) 중 '숲을 갉아먹던 것의 파편'. 세부 효과는 쓸 때 정한다. 50회차 버들목에서 처음 사용 — GM 판정: 짐승 하나에게 짧은 명령 하나, 지혜 내성 DC 16, 실패하면 그 짐승의 다음 차례에 따른다(사거리는 시야 안, 18m로 둠).",
@@ -70,7 +70,7 @@
         "id": "res_beguiling_magic",
         "n": "매혹의 마법 (Beguiling Magic)",
         "dice": "",
-        "cur": 0,
+        "cur": 1,
         "max": 1,
         "recharge": "long",
         "note": "효과 텍스트는 48회차 사용자 제공본.",
@@ -80,7 +80,7 @@
         "id": "res_heartwood_plants",
         "n": "심목의 잔재 — 식물과의 대화 (무소모)",
         "dice": "",
-        "cur": 0,
+        "cur": 1,
         "max": 1,
         "recharge": "long",
         "note": "출처: 심목의 잔재(46회차). 49회차 2일째 새벽 조제실 화분에게 처음 써서 이드라가 화분이 기우는 걸 봤다. 50회차 3일째 한낮 버들목 갈대밭에 썼다 — 갈대가 크게 누워 움막 쪽 일꾼 하나가 나와 살폈다.",
@@ -91,7 +91,7 @@
         "id": "res_mantle_of_majesty",
         "n": "위엄의 망토 (Mantle of Majesty)",
         "dice": "",
-        "cur": 0,
+        "cur": 1,
         "max": 1,
         "recharge": "long",
         "sum": "보조 행동 · 1분 · 보조 행동마다 슬롯 없이 명령 · 매혹된 대상은 자동 실패 · 3레벨 슬롯으로 되살림",
@@ -462,7 +462,7 @@
         "cat": "accessory",
         "equipped": true,
         "charge": {
-          "cur": 0,
+          "cur": 1,
           "max": 1,
           "recharge": "long"
         },
@@ -614,7 +614,7 @@
         "cat": "accessory",
         "equipped": true,
         "charge": {
-          "cur": 0,
+          "cur": 1,
           "max": 1,
           "recharge": "long"
         },
@@ -667,7 +667,7 @@
         "cat": "accessory",
         "equipped": true,
         "charge": {
-          "cur": 0,
+          "cur": 1,
           "max": 1,
           "recharge": "long"
         },
@@ -908,9 +908,9 @@
       {
         "id": "item_blanket_s58",
         "n": "담요",
-        "q": 3,
+        "q": 2,
         "cat": "misc",
-        "d": "58회차 1일째. 하나 5실버."
+        "d": "58회차 1일째. 하나 5실버. 하나는 세이의 시신을 싸는 데 썼다."
       },
       {
         "id": "item_rope_s58",
