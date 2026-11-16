@@ -1,0 +1,230 @@
+{
+  "battle": {
+    "name": "고사목 골짜기 — 거미 그물",
+    "cols": 24,
+    "rows": 18,
+    "round": 1,
+    "ground": "dirt",
+    "init": [
+      "verrix",
+      "idra",
+      "sp3",
+      "sp1",
+      "ettercap",
+      "owl",
+      "sei"
+    ],
+    "turn": "verrix",
+    "terrain": [
+      {
+        "x": 19,
+        "y": 0,
+        "w": 5,
+        "h": 18,
+        "type": "hazard",
+        "kind": "mark",
+        "label": "동쪽 바위 비탈(맨바위 바닥 · 고사목 없음)",
+        "surf": "stone"
+      },
+      {
+        "x": 9,
+        "y": 5,
+        "w": 1,
+        "h": 1,
+        "type": "tree",
+        "kind": "tree",
+        "label": "죽은 가문비"
+      },
+      {
+        "x": 13,
+        "y": 4,
+        "w": 1,
+        "h": 1,
+        "type": "tree",
+        "kind": "tree",
+        "label": "죽은 가문비"
+      },
+      {
+        "x": 14,
+        "y": 9,
+        "w": 1,
+        "h": 1,
+        "type": "tree",
+        "kind": "tree",
+        "label": "죽은 가문비"
+      },
+      {
+        "x": 17,
+        "y": 6,
+        "w": 1,
+        "h": 1,
+        "type": "tree",
+        "kind": "tree",
+        "label": "죽은 가문비"
+      },
+      {
+        "x": 15,
+        "y": 13,
+        "w": 1,
+        "h": 1,
+        "type": "tree",
+        "kind": "tree",
+        "label": "죽은 가문비"
+      },
+      {
+        "x": 16,
+        "y": 16,
+        "w": 1,
+        "h": 1,
+        "type": "tree",
+        "kind": "tree",
+        "label": "죽은 가문비"
+      },
+      {
+        "x": 8,
+        "y": 11,
+        "w": 1,
+        "h": 1,
+        "type": "tree",
+        "kind": "tree",
+        "label": "죽은 가문비"
+      },
+      {
+        "x": 12,
+        "y": 14,
+        "w": 1,
+        "h": 1,
+        "type": "tree",
+        "kind": "tree",
+        "label": "죽은 가문비"
+      },
+      {
+        "x": 18,
+        "y": 9,
+        "w": 1,
+        "h": 1,
+        "type": "tree",
+        "kind": "tree",
+        "label": "죽은 가문비"
+      },
+      {
+        "x": 10,
+        "y": 7,
+        "w": 1,
+        "h": 1,
+        "type": "tree",
+        "kind": "tree",
+        "label": "죽은 가문비 — 에터캡의 그물 집"
+      },
+      {
+        "x": 12,
+        "y": 7,
+        "w": 2,
+        "h": 2,
+        "type": "hazard",
+        "kind": "mark",
+        "label": "거미줄(험지 · 닿으면 거미가 안다 · 불에 약함)"
+      },
+      {
+        "x": 13,
+        "y": 9,
+        "w": 2,
+        "h": 2,
+        "type": "hazard",
+        "kind": "mark",
+        "label": "거미줄"
+      },
+      {
+        "x": 15,
+        "y": 11,
+        "w": 1,
+        "h": 1,
+        "type": "hazard",
+        "kind": "mark",
+        "label": "거미줄"
+      },
+      {
+        "x": 10,
+        "y": 12,
+        "w": 2,
+        "h": 1,
+        "type": "hazard",
+        "kind": "mark",
+        "label": "거미줄"
+      }
+    ],
+    "tokens": [
+      {
+        "id": "verrix",
+        "name": "베릭스",
+        "side": "pc",
+        "x": 20,
+        "y": 12,
+        "hp": "98/98",
+        "move": 6,
+        "note": "슬롯 1레벨 4/4 · 2레벨 3/3 · 3레벨 3/3 · 4레벨 1/1 · 영감의 말 6/6 · 서제스천(무소모) 1/1 · 이슬가지 반지 0/1 · 심목의 잔재 0/1"
+      },
+      {
+        "id": "idra",
+        "name": "이드라",
+        "side": "ally",
+        "x": 20,
+        "y": 14,
+        "hp": "46/46",
+        "move": 6,
+        "note": "AC 12 · 슬롯 1레벨 4/4 · 2레벨 3/3 · 3레벨 3/3 · 야수 변신 2/3"
+      },
+      {
+        "id": "sei",
+        "name": "세이",
+        "side": "ally",
+        "x": 21,
+        "y": 13,
+        "hp": "4/4",
+        "move": 6,
+        "note": "일반인(Commoner) · AC 10"
+      },
+      {
+        "id": "owl",
+        "name": "부엉이",
+        "side": "ally",
+        "x": 20,
+        "y": 10,
+        "elev": 4,
+        "hp": "1/1",
+        "move": 12,
+        "note": "이드라의 사역마(요정) · 숲 위 · 공격 못 함 · 접촉 주문 전달"
+      },
+      {
+        "id": "sp1",
+        "name": "거인 거미 1",
+        "side": "enemy",
+        "x": 18,
+        "y": 9,
+        "hp": "26/26",
+        "move": 6,
+        "note": "AC 14 · 죽은 가문비 위"
+      },
+      {
+        "id": "sp3",
+        "name": "거인 거미 3",
+        "side": "enemy",
+        "x": 15,
+        "y": 13,
+        "hp": "26/26",
+        "move": 6,
+        "note": "AC 14 · 죽은 가문비 위"
+      },
+      {
+        "id": "ettercap",
+        "name": "에터캡",
+        "side": "enemy",
+        "x": 11,
+        "y": 8,
+        "hp": "44/44",
+        "move": 6,
+        "note": "AC 13 · 그물 집 곁"
+      }
+    ]
+  }
+}
