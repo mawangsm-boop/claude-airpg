@@ -433,7 +433,74 @@
       "stanceWhy": "강변 땅 습격에 가담해 세바와 얀을 베었고, 야영지에서 베릭스와 칼을 맞댄 뒤 패해 항복했다.",
       "knows": "의뢰인은 '카를렌 상회 영감, 접시 둘 달린 저울 인장 반지에 글자 둘을 덧새긴 것'(A, 베인 뒤에서 봄). 이름은 모른다. 일 값(B, 베인의 말).",
       "look": "Marta Coil, a stocky muscular human woman around thirty, short-cropped reddish-brown hair, a once-broken nose, iron-reinforced leather vest, two short blades.",
-      "at": "동행(북쪽 숲길)"
+      "at": "동행(북쪽 숲길)",
+      "sheet": {
+        "race": "인간",
+        "cls": "산적 두목(Bandit Captain) — 몬스터 수치표, 레벨 없음",
+        "ac": 15,
+        "ac_note": "징 박은 가죽 갑옷",
+        "stats": {
+          "STR": 15,
+          "DEX": 16,
+          "CON": 14,
+          "INT": 14,
+          "WIS": 11,
+          "CHA": 14
+        },
+        "profBonus": 2,
+        "saves": {
+          "proficient": [
+            "STR",
+            "DEX",
+            "WIS"
+          ],
+          "mods": {
+            "STR": 4,
+            "DEX": 5,
+            "CON": 2,
+            "INT": 2,
+            "WIS": 2,
+            "CHA": 2
+          }
+        },
+        "skills": {
+          "proficient": [
+            "운동",
+            "기만"
+          ],
+          "note": "운동 +4 · 기만 +4 · 수동 지각 10"
+        },
+        "initiative": 3,
+        "speed": "9m",
+        "hp_note": "8d8+16 = 52 · CR 2(450 XP)",
+        "abilities": [
+          {
+            "id": "ab_marta_multi",
+            "n": "연속 공격",
+            "t": "행동",
+            "d": "공격 두 번 — 언월도와 경쇠뇌를 아무렇게나 섞어서."
+          },
+          {
+            "id": "ab_marta_scimitar",
+            "n": "언월도(칼 두 자루로 묘사)",
+            "t": "행동",
+            "d": "근접 공격 +5, 사거리 1.5m. 명중 1d6+3 참격."
+          },
+          {
+            "id": "ab_marta_crossbow",
+            "n": "경쇠뇌",
+            "t": "행동",
+            "d": "원거리 공격 +5, 사거리 9/27m. 명중 1d10+3 관통. (원문은 권총 — 이 세계에 맞춰 경쇠뇌로 바꿈, 54회차부터)"
+          },
+          {
+            "id": "ab_marta_parry",
+            "n": "받아넘기기",
+            "t": "반응",
+            "d": "무기를 든 채 근접 공격에 맞을 때 그 공격에 AC +2."
+          }
+        ],
+        "src": "2024 Monster Manual의 Bandit Captain — aidedd.org 2024판(DnD 5.5) 대조, 2026-11-17. SRD 5.2.1·원서와는 대조 못 함."
+      }
     },
     {
       "id": "gro_s54",
