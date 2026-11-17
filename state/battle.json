@@ -3,13 +3,12 @@
     "name": "고사목 골짜기 — 그물 속 추격",
     "cols": 24,
     "rows": 18,
-    "round": 1,
+    "round": 2,
     "ground": "dirt",
     "init": [
       "verrix",
       "sei",
       "marta",
-      "sp2",
       "neri",
       "owl",
       "idra"
@@ -245,10 +244,13 @@
         "side": "enemy",
         "x": 14,
         "y": 9,
-        "hp": "26/26",
+        "hp": "0/26",
         "move": 6,
         "range": 12,
-        "note": "AC 14 · 죽은 가문비 · 거미줄 재충전 대기"
+        "note": "AC 14 · 죽은 가문비 · 거미줄 재충전 대기",
+        "st": [
+          "죽음"
+        ]
       }
     ]
   }
