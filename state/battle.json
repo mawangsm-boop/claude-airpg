@@ -3,7 +3,7 @@
     "name": "고사목 골짜기 — 그물 속 추격",
     "cols": 24,
     "rows": 18,
-    "round": 6,
+    "round": 7,
     "ground": "dirt",
     "init": [
       "verrix",
@@ -177,6 +177,15 @@
         "type": "hazard",
         "kind": "mark",
         "label": "에터캡의 거미줄 가닥(환영을 통과해 땅에 붙음)"
+      },
+      {
+        "x": 10,
+        "y": 7,
+        "w": 1,
+        "h": 1,
+        "type": "hazard",
+        "kind": "mark",
+        "label": "하급 환영 — 불꽃 모양(빛·열·소리 없음, 1분)"
       }
     ],
     "tokens": [
