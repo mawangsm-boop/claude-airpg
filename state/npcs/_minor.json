@@ -432,7 +432,8 @@
       "stance": "경계",
       "stanceWhy": "강변 땅 습격에 가담해 세바와 얀을 베었고, 야영지에서 베릭스와 칼을 맞댄 뒤 패해 항복했다.",
       "knows": "의뢰인은 '카를렌 상회 영감, 접시 둘 달린 저울 인장 반지에 글자 둘을 덧새긴 것'(A, 베인 뒤에서 봄). 이름은 모른다. 일 값(B, 베인의 말).",
-      "look": "Marta Coil, a stocky muscular human woman around thirty, short-cropped reddish-brown hair, a once-broken nose, iron-reinforced leather vest, two short blades."
+      "look": "Marta Coil, a stocky muscular human woman around thirty, short-cropped reddish-brown hair, a once-broken nose, iron-reinforced leather vest, two short blades.",
+      "at": "동행(북쪽 숲길)"
     },
     {
       "id": "gro_s54",
