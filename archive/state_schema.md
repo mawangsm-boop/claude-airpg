@@ -154,4 +154,7 @@ CLAUDE.md의 축약 규칙만으로 판단이 서지 않을 때만 여는 문서
   - terrain: `kind:"high"`+`elev`(올라설 수 있는 높은 땅·절벽·단, `surf`로 재질), `kind:"stairs"`+`elev`(계단 한 칸씩 높이를 달리 준다), `kind:"bridge"`+`elev`(아래가 비는 널다리), `kind:"water"`(+`elev`면 높은 곳의 물), `kind:"building"`+`floors`(층수).
   - token: `floor`(건물 안 층, 2면 이층 바닥 위에 선다. 없으면 note의 '이층'으로 짐작), `elev`(임의 높이), `face`(`n|e|s|w` 보는 방향, 없으면 가장 가까운 맞은편), `sprite`(그림 이름), `look:{hair,skin,cloth}`(그림이 없는 인형의 빛깔).
   - 캐릭터 그림표는 `assets/sprites/*.png`와 index.html `BT_SHEETS`. 지금 있는 그림: verrix·isabel·liv·neri·idra·nadin(토큰 id로 자동), bandit·crossbow·brute·officer·clerk·archer(이름·메모 낱말로 자동, 또는 `sprite`로 지정).
+  - (v2.62 추가) 적 — 남녀·보통/덩치·근접/원거리/마법: `f_sword`(여검사·여도적) `f_brute`(여장사·도끼) `m_hxbow`(중쇠뇌) `f_javelin`(투창·투석) `m_mage`(마법사·주술사) `f_witch`(마녀) `m_priest`(사제·신관, 덩치) `f_bigmage`(노파·대마녀, 덩치) `m_spear`(창병) `f_dagger`(단검·자객) `m_guard`(경비·위병·기사, 덩치) `f_xbow`(척후·여쇠뇌). 괄호 안 낱말이 이름·메모에 있으면 자동, 아니면 `sprite`로 지정.
+  - (v2.62 추가) 직업 없는 아군: `marta` `gro` `dorik` `moira` `seva`(이름으로 자동) `militia`(자경단·민병·마을 사람·일꾼).
+  - (v2.62 추가) 그림이 없으면 검은 그림자가 선다(3D 핀 대신): `sh_human`(기본) `sh_brute`(덩치·거한) `sh_wolf`(늑대·개·곰·짐승) `sh_bird`(부엉이·까마귀·박쥐·새) `sh_ogre`(오우거·트롤·거인·괴물·골렘) `sh_spider`(거미·지네·전갈). 이것도 `sprite`로 지정할 수 있다.
 - 전투판 v2.50: 캐릭터 그림은 네 방향(`f` 왼쪽 아래·`fr` 오른쪽 아래·`b` 오른쪽 위·`bl` 왼쪽 위). 파티·적 열둘 모두 네 장 따로(v2.52에서 손 위치를 못 박아 다시 받음 — party_c·foes_c). battle.json이 없거나 토큰이 없으면 전투 탭은 `at`이 없는(=동행 중인) 파티를 빈 들판에 세워 보인다.

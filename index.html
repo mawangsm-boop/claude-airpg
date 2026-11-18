@@ -7636,7 +7636,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.61";
+const HB_VERSION="v2.62";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -8864,6 +8864,7 @@ const ISO_OBJ={building:["#cbb894","#a8946f","#8a7758"],wall:["#b5b0a2","#8f8a7c
   crate:["#b98f57","#93703f","#74572f"],rock:["#a3a3a7","#7c7c82","#5f5f66"]};
 /* 캐릭터 그림표 — 한 장에 여러 인물. cells[key]={f:[x,y,w,h](앞모습, 왼쪽 아래를 봄), b:[...](뒷모습, 오른쪽 위를 봄)} */
 const BT_PB="./assets/sprites/party_c.png", BT_FB="./assets/sprites/foes_c.png";
+const BT_F2C="./assets/sprites/foes2_c.png", BT_F3C="./assets/sprites/foes3_c.png", BT_ALC="./assets/sprites/allies_c.png";
 /* 네 방향 모두 따로 그린 그림. 처음 받은 둘째 장은 첫 장을 거울처럼 뒤집은 그림이라(무기 든 손이 바뀜) 손 위치를 못 박아 다시 받았다(v2.52). */
 const BT_SHEETS=[
   {src:"./assets/sprites/party.png",w:1024,h:682,cells:{
@@ -8873,6 +8874,32 @@ const BT_SHEETS=[
     neri:{f:[518,66,150,250],b:[510,356,152,250],fr:[508,60,164,250,BT_PB],bl:[498,356,156,250,BT_PB]},
     idra:{f:[670,66,148,250],b:[694,356,148,250],fr:[676,60,150,250,BT_PB],bl:[688,356,154,250,BT_PB]},
     nadin:{f:[842,66,160,250],b:[856,356,136,250],fr:[844,60,162,250,BT_PB],bl:[854,356,152,250,BT_PB]}}},
+  /* v2.62: 새 적 — 남녀 · 보통/덩치 · 근접/원거리/마법(ChatGPT 그림, 2026-11-18) */
+  {src:"./assets/sprites/foes2.png",w:1024,h:682,cells:{
+    f_sword:{f:[11,69,148,251],b:[25,379,135,250],fr:[21,63,147,253,BT_F2C],bl:[14,365,154,258,BT_F2C]},
+    f_brute:{f:[159,46,187,275],b:[159,349,187,281],fr:[169,39,169,276,BT_F2C],bl:[168,336,169,289,BT_F2C]},
+    m_hxbow:{f:[346,71,172,251],b:[346,380,172,249],fr:[337,69,171,245,BT_F2C],bl:[337,361,166,263,BT_F2C]},
+    f_javelin:{f:[518,74,163,248],b:[519,379,166,251],fr:[508,70,155,245,BT_F2C],bl:[514,362,156,262,BT_F2C]},
+    m_mage:{f:[689,75,151,247],b:[690,379,143,253],fr:[671,73,155,242,BT_F2C],bl:[670,360,173,265,BT_F2C]},
+    f_witch:{f:[846,74,170,248],b:[847,379,166,251],fr:[844,74,163,242,BT_F2C],bl:[843,365,172,259,BT_F2C]}},
+   match:[[/여검사|여검객|여도적|여산적/,"f_sword"],[/여장사|여전사|도끼잡이|도끼 든/,"f_brute"],[/중쇠뇌/,"m_hxbow"],[/투창|투석|창던지/,"f_javelin"],[/마녀|여마법사|여주술사/,"f_witch"],[/마법사|주술사|술사|마술사/,"m_mage"]]},
+  {src:"./assets/sprites/foes3.png",w:1024,h:682,cells:{
+    m_priest:{f:[13,54,185,267],b:[6,358,190,277],fr:[13,53,197,269,BT_F3C],bl:[17,355,193,279,BT_F3C]},
+    f_bigmage:{f:[203,91,160,229],b:[203,399,162,235],fr:[210,91,155,231,BT_F3C],bl:[210,395,152,239,BT_F3C]},
+    m_spear:{f:[371,50,143,270],b:[367,351,143,283],fr:[365,50,153,272,BT_F3C],bl:[366,347,149,287,BT_F3C]},
+    f_dagger:{f:[527,97,140,222],b:[519,404,154,230],fr:[527,96,141,226,BT_F3C],bl:[523,402,145,231,BT_F3C]},
+    m_guard:{f:[681,59,177,261],b:[683,365,178,271],fr:[689,61,176,260,BT_F3C],bl:[671,363,194,272,BT_F3C]},
+    f_xbow:{f:[867,91,138,228],b:[874,395,143,239],fr:[872,91,142,231,BT_F3C],bl:[865,395,129,239,BT_F3C]}},
+   match:[[/사제|신관|수도사/,"m_priest"],[/노파|대마녀|늙은 마녀/,"f_bigmage"],[/창병|창잡이/,"m_spear"],[/단검|자객|여도둑|소매치기/,"f_dagger"],[/경비|위병|방패병|호위병|기사/,"m_guard"],[/여쇠뇌|여석궁|척후/,"f_xbow"]]},
+  /* v2.62: 직업 없는 아군 — 셈배 식구·세바·마을 자경단 */
+  {src:"./assets/sprites/allies.png",w:1024,h:682,cells:{
+    marta:{f:[20,77,132,240],b:[20,386,134,253],fr:[31,76,118,244,BT_ALC],bl:[9,384,138,259,BT_ALC]},
+    gro:{f:[185,63,157,253],b:[171,360,183,279],fr:[149,65,193,255,BT_ALC],bl:[151,363,185,281,BT_ALC]},
+    dorik:{f:[377,75,138,241],b:[354,382,151,257],fr:[342,75,170,245,BT_ALC],bl:[343,383,154,259,BT_ALC]},
+    moira:{f:[541,72,129,245],b:[537,379,127,259],fr:[534,77,125,243,BT_ALC],bl:[519,382,127,261,BT_ALC]},
+    seva:{f:[680,76,139,241],b:[692,383,149,257],fr:[698,74,126,245,BT_ALC],bl:[668,385,151,257,BT_ALC]},
+    militia:{f:[865,61,140,257],b:[859,369,143,269],fr:[860,63,134,256,BT_ALC],bl:[857,369,145,277,BT_ALC]}},
+   match:[[/마르타/,"marta"],[/(^|\s)그로(\s|$|\()/,"gro"],[/도릭/,"dorik"],[/모이라/,"moira"],[/세바/,"seva"],[/자경단|민병|마을 사람|일꾼/,"militia"]]},
   {src:"./assets/sprites/foes.png",w:1024,h:682,cells:{
     bandit:{f:[18,56,164,262],b:[28,360,160,262],fr:[24,46,140,262,BT_FB],bl:[32,346,154,262,BT_FB]},
     crossbow:{f:[180,56,134,262],b:[204,360,140,262],fr:[192,46,142,262,BT_FB],bl:[176,346,140,262,BT_FB]},
@@ -8883,7 +8910,23 @@ const BT_SHEETS=[
    /* 이름·메모 낱말로 고르는 그림(위에서부터 먼저 맞는 것) */
    match:[[/쇠뇌|석궁/,"crossbow"],[/덩치|거한|장사/,"brute"],[/부관|대장|두목|조장|장교|요르크/,"officer"],[/서기|검인관|학자|필경/,"clerk"],[/미라|궁수|활잡이/,"archer"],[/졸개|도적|산적|칼잡이|마부|불한당/,"bandit"]]}
 ];
-[BT_PB,BT_FB].forEach(u=>{ const im=new Image(); im.src=u; });
+/* v2.62: 그림이 없는 존재의 검은 그림자 — 3D 핀 대신. 한 방향만 그렸고 좌우는 뒤집어 쓴다(크기 1.45배로 사람 그림과 맞춤) */
+const BT_SHADOW={src:"./assets/sprites/shadow.png",w:1024,h:682,scale:1.45,cells:{
+    sh_human:{f:[11,137,132,167],b:[10,439,133,173]},
+    sh_brute:{f:[143,87,144,217],b:[161,396,140,217]},
+    sh_wolf:{f:[303,183,156,119],b:[301,475,165,139]},
+    sh_bird:{f:[466,149,171,154],b:[469,458,161,151]},
+    sh_ogre:{f:[642,59,181,244],b:[643,364,180,253]},
+    sh_spider:{f:[823,183,192,126],b:[823,490,192,121]}}};
+function btShadowKey(t){ const n=String(t.name||"")+" "+String(t.note||"");
+  if(/거미|지네|전갈|벌레|게 떼/.test(n)) return "sh_spider";
+  if(/부엉이|올빼미|까마귀|독수리|박쥐|(^|\s)새(\s|$)|(^|\s)매(\s|$)/.test(n)) return "sh_bird";
+  if(/늑대|사냥개|들개|여우|곰|멧돼지|표범|사슴|짐승|(^|\s)개(\s|$)/.test(n)) return "sh_wolf";
+  if(/오우거|트롤|거인|괴물|악마|골렘|파수병|수호자|괴수/.test(n)) return "sh_ogre";
+  if(/덩치|거한|장사/.test(n)) return "sh_brute";
+  return "sh_human"; }
+BT_SHEETS.push(BT_SHADOW);
+[BT_PB,BT_FB,BT_F2C,BT_F3C,BT_ALC].forEach(u=>{ const im=new Image(); im.src=u; });
 function btSpriteKey(t){
   if(t.sprite) return t.sprite;
   const all=Object.assign({},...BT_SHEETS.map(s=>s.cells));
@@ -9436,13 +9479,13 @@ function bt3Build(B){
     if(t.face&&FC[t.face]) [dx,dy]=FC[t.face];
     else{ const foes=live.filter(q=>q!==t&&!isDead(q)&&(t.side==="enemy"?(q.side==="pc"||q.side==="ally"):q.side==="enemy"));
       let best=null,bd=1e9; foes.forEach(q=>{ const d=Math.hypot(q.x-t.x,q.y-t.y); if(d<bd){bd=d;best=q;} }); if(best&&bd>0){ dx=best.x-t.x; dy=best.y-t.y; } }
-    const spr=btSprite(btSpriteKey(t)); let headY=1.0, sp=null;
+    const spr=btSprite(btSpriteKey(t)||btShadowKey(t)); let headY=1.0, sp=null;   /* 그림이 없으면 검은 그림자 */
     if(dead){
       const body=new T.Mesh(new T.CylinderGeometry(0.16,0.16,0.62,10),new T.MeshLambertMaterial({color:col,transparent:true,opacity:.75}));
       body.rotation.z=Math.PI/2; body.position.set(0,0.17,0); grp.add(body);
       const hd=new T.Mesh(new T.SphereGeometry(0.15,12,10),new T.MeshLambertMaterial({color:0xe9cfae,transparent:true,opacity:.75})); hd.position.set(-0.42,0.16,0); grp.add(hd); headY=0.45;
     }else if(spr){
-      const H=1.6*spr.c.f[3]/250, W=H*spr.c.f[2]/spr.c.f[3];
+      const H=1.6*spr.c.f[3]/250*(spr.s.scale||1), W=H*spr.c.f[2]/spr.c.f[3];
       sp=new T.Sprite(new T.SpriteMaterial({transparent:true,alphaTest:0.08,opacity:op}));
       sp.center.set(0.5,0.03); sp.scale.set(W,H,1); sp.position.y=0.02; grp.add(sp); headY=H+0.05;
     }else{
@@ -9482,7 +9525,7 @@ function bt3Faces(){
     else{ if(!right&&C.bl) cell=C.bl; else{ cell=C.b||C.f; flip=!right; } }
     const tex=bt3Tex(cell[4]||k.spr.s.src,cell.slice(0,4),flip);
     if(tex&&k.sp.material.map!==tex){ k.sp.material.map=tex; k.sp.material.needsUpdate=true;
-      const H=1.6*cell[3]/250; k.sp.scale.set(H*cell[2]/cell[3],H,1); }
+      const H=1.6*cell[3]/250*(k.spr.s.scale||1); k.sp.scale.set(H*cell[2]/cell[3],H,1); }
   });
 }
 /* 사람을 가리는 벽·건물·나무는 반투명하게 */
