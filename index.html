@@ -9494,7 +9494,7 @@ function bt3Occlude(){
     ray.intersectObjects(BT3.occ,true).forEach(h=>{ let o=h.object; while(o&&!BT3.occ.includes(o)) o=o.parent; if(o) faded.add(o); }); }); });
   ray.far=Infinity;
   BT3.occ.forEach(o=>{ const f=faded.has(o); if(o.userData.pick) o.userData.pick.faded=f;
-    o.traverse(n=>{ if(!n.material) return; if(n.userData.op0==null) n.userData.op0=n.material.opacity; n.material.opacity=f?0.22:n.userData.op0; n.material.depthWrite=!f&&n.userData.op0>=1; }); });
+    o.traverse(n=>{ if(!n.material) return; if(n.userData.op0==null) n.userData.op0=n.material.opacity; n.material.opacity=f?0.13:n.userData.op0; n.material.depthWrite=!f&&n.userData.op0>=1; }); });
 }
 function bt3Overlay(){
   const w=BT3.w, h=BT3.h, v=new THREE.Vector3(), put=[];
