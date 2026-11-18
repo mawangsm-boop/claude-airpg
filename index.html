@@ -7636,7 +7636,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.62";
+const HB_VERSION="v2.63";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -8874,6 +8874,15 @@ const BT_SHEETS=[
     neri:{f:[518,66,150,250],b:[510,356,152,250],fr:[508,60,164,250,BT_PB],bl:[498,356,156,250,BT_PB]},
     idra:{f:[670,66,148,250],b:[694,356,148,250],fr:[676,60,150,250,BT_PB],bl:[688,356,154,250,BT_PB]},
     nadin:{f:[842,66,160,250],b:[856,356,136,250],fr:[844,60,162,250,BT_PB],bl:[854,356,152,250,BT_PB]}}},
+  /* v2.63: 코볼드 — 한 방향만(반대쪽은 뒤집어 씀), 작은 크기라 0.78배. 날개 코볼드 셋 중 특정 개체는 토큰 sprite로 지정 */
+  {src:"./assets/sprites/kobold.png",w:1024,h:682,scale:0.78,cells:{
+    kb_warrior:{f:[17,89,159,225],b:[17,369,159,228]},
+    kb_thrower:{f:[177,95,165,219],b:[177,372,165,224]},
+    kb_digger:{f:[342,94,151,220],b:[342,371,151,227]},
+    kb_winged_old:{f:[493,91,189,223],b:[493,372,189,225]},
+    kb_winged_young:{f:[682,91,171,224],b:[682,369,171,227]},
+    kb_winged:{f:[866,95,144,219],b:[866,368,139,229]}},
+   match:[[/날개 코볼드|날개 코볼트/,"kb_winged"],[/코볼[드트].*(투척|던지)/,"kb_thrower"],[/코볼[드트].*(곡괭이|굴꾼|파는)/,"kb_digger"],[/코볼[드트]/,"kb_warrior"]]},
   /* v2.62: 새 적 — 남녀 · 보통/덩치 · 근접/원거리/마법(ChatGPT 그림, 2026-11-18) */
   {src:"./assets/sprites/foes2.png",w:1024,h:682,cells:{
     f_sword:{f:[11,69,148,251],b:[25,379,135,250],fr:[21,63,147,253,BT_F2C],bl:[14,365,154,258,BT_F2C]},
