@@ -1,0 +1,42 @@
+{
+  "char": {
+    "id": "halde_brunn",
+    "name": "할데 브룬",
+    "role": "여성 · 드워프 · 마흔 남짓 · 석공(전 카를렌 수문·둑 보수 석공)",
+    "hp": {
+      "cur": 4,
+      "max": 4
+    },
+    "tag": "59회차 · 젖은 노 굴뚝을 고치는 날품 석공",
+    "tagc": "",
+    "trait": "지난여름 썩은 들보를 새것이라 적은 보수 서류에 서명하길 거부해 시 일에서 잘렸다. 지금은 날품으로 굴뚝·우물을 고친다. 수문·둑 기초를 손으로 안다.",
+    "voice": "처음부터 짧은 존댓말. 셈을 손바닥 너비로 한다 — '이 벽은 손바닥 셋 두께요.' 남이 대충 말하면 되묻는다 — '몇 자요?'",
+    "code": {
+      "does": "셈한 대로 버틴다, 삯을 받으면 입을 닫는다",
+      "wont": "무너질 굴은 파지 않는다, 어린것·약한 것을 해치지 않는다"
+    },
+    "drive": "서류가 아니라 남는 것을 짓는 것.",
+    "fear": "굴이 무너져 사람이 깔리는 것.",
+    "bond": "59회차 1일째 아침, 아이린의 젖은 노에서 처음 마주침.",
+    "knows": "석공들 사이의 말로 강변 줄이 옛 큰물에 묻힌 적이 있다는 것(B). 수문·둑 기초의 짜임(A, 직업).",
+    "unknown": "코볼드 · 베릭스의 뜻 · 가게 줄 지하의 사정",
+    "look": "Halde Brunn, a dwarven female stonemason, around forty. Short braided copper hair pinned up, a white scar across the left eyebrow, broad shoulders, calloused hands, leather apron dusted with lime. Smiles with one corner of her mouth.",
+    "at": "젖은 노",
+    "room": "commute",
+    "stance": "중립",
+    "sheet": {
+      "race": "드워프",
+      "cls": "평민(Commoner) — 몬스터 수치표, 레벨 없음",
+      "ac": 10,
+      "stats": {
+        "STR": 10,
+        "DEX": 10,
+        "CON": 10,
+        "INT": 10,
+        "WIS": 10,
+        "CHA": 10
+      },
+      "profBonus": 2
+    }
+  }
+}
