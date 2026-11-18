@@ -8966,9 +8966,13 @@ function bt3Fit(pts,keepAuto){
   c.dist=Math.max(5,Math.min(140,(r+0.8)/Math.sin(Math.min(fh,fw))));
   /* 구는 넉넉하게 잡히므로, 실제로 화면에 비춰 보고 가장자리까지 당긴다 */
   const v=new THREE.Vector3();
-  for(let i=0;i<6;i++){ bt3Cam(); BT3.camera.updateMatrixWorld();
-    let mx=0; pts.forEach(p=>{ v.set(p[0],p[1],p[2]).project(BT3.camera); mx=Math.max(mx,Math.abs(v.x),Math.abs(v.y)); });
-    if(!(mx>0)) break; c.dist=Math.max(4,Math.min(140,c.dist*Math.pow(mx/0.9,0.85))); }
+  for(let i=0;i<10;i++){ bt3Cam(); BT3.camera.updateMatrixWorld();
+    let x0=9,x1=-9,y0=9,y1=-9; pts.forEach(p=>{ v.set(p[0],p[1],p[2]).project(BT3.camera); x0=Math.min(x0,v.x); x1=Math.max(x1,v.x); y0=Math.min(y0,v.y); y1=Math.max(y1,v.y); });
+    const cx=(x0+x1)/2, cy=(y0+y1)/2, m=Math.max((x1-x0)/2,(y1-y0)/2); if(!(m>0)) break;
+    /* 화면 가운데로 옮기고(땅 위에서), 가장자리 0.92까지 당긴다 */
+    const th=Math.tan(fh), sx=c.dist*th*(BT3.camera.aspect||1), sy=c.dist*th/Math.max(0.3,Math.sin(c.pitch)), sn=Math.sin(c.yaw), cs=Math.cos(c.yaw);
+    c.tx+=cs*cx*sx - sn*cy*sy; c.tz+=-sn*cx*sx - cs*cy*sy;
+    c.dist=Math.max(4,Math.min(140,c.dist*Math.pow(m/0.92,0.9))); }
   BT3.dirty=true;
 }
 function bt3Pan(dx,dy){
@@ -8981,7 +8985,9 @@ function bt3SaveCam(){ try{ localStorage.setItem("berix_bt3_cam",JSON.stringify(
 function bt3Controls(){
   const cv=BT3.cv, P=new Map(); let moved=0, pinch=null;
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-  cv.addEventListener("pointerdown",e=>{ BT3.autoFit=false; try{ cv.setPointerCapture(e.pointerId); }catch{} P.set(e.pointerId,{x:e.clientX,y:e.clientY,b:e.button,sh:e.shiftKey}); if(P.size===1) moved=0; pinch=null; });
+  /* 판을 감싼 .wrap에는 평면용 끌기·확대가 걸려 있어 포인터를 가로챈다 — 3D 캔버스의 이벤트는 위로 올려 보내지 않는다 */
+  ["pointerup","pointercancel","pointerleave","pointermove","dblclick"].forEach(ev=>cv.addEventListener(ev,e=>e.stopPropagation()));
+  cv.addEventListener("pointerdown",e=>{ e.stopPropagation(); BT3.autoFit=false; if(e.isPrimary) P.clear(); try{ cv.setPointerCapture(e.pointerId); }catch{} P.set(e.pointerId,{x:e.clientX,y:e.clientY,b:e.button,sh:e.shiftKey}); if(P.size===1) moved=0; pinch=null; });
   cv.addEventListener("pointermove",e=>{
     const p=P.get(e.pointerId); if(!p) return;
     const dx=e.clientX-p.x, dy=e.clientY-p.y; p.x=e.clientX; p.y=e.clientY; moved+=Math.abs(dx)+Math.abs(dy);
@@ -8994,7 +9000,7 @@ function bt3Controls(){
   const end=(e,pick)=>{ const had=P.delete(e.pointerId); pinch=null; if(had&&P.size===0){ if(pick&&moved<7) bt3Pick(e); else bt3SaveCam(); } };
   cv.addEventListener("pointerup",e=>end(e,true));
   cv.addEventListener("pointercancel",e=>end(e,false));
-  cv.addEventListener("wheel",e=>{ e.preventDefault(); BT3.autoFit=false; BT3.cam.dist=clamp(BT3.cam.dist*Math.exp(e.deltaY*0.0012),3,160); BT3.dirty=true; },{passive:false});
+  cv.addEventListener("wheel",e=>{ e.preventDefault(); e.stopPropagation(); BT3.autoFit=false; BT3.cam.dist=clamp(BT3.cam.dist*Math.exp(e.deltaY*0.0012),3,160); BT3.dirty=true; },{passive:false});
   cv.addEventListener("contextmenu",e=>e.preventDefault());
 }
 function bt3Pick(e){
@@ -9222,7 +9228,7 @@ function bt3Build(B){
   if(!live.length){ const d=document.createElement("div"); d.className="bt3empty"; d.textContent="전투가 열리면 배치가 표시됩니다"; ov.appendChild(d); }
   /* ---- 처음 열 때·판 크기가 바뀔 때·'화면 맞춤'을 누를 때만 시점을 다시 맞춘다 ---- */
   const key=`3d|${C}x${R}`;
-  if(btViewKey!==key){ btViewKey=key; bt3Fit([[0,0,0],[C,0,0],[0,0,R],[C,0,R],[C/2,2,R/2]]); }
+  if(btViewKey!==key){ btViewKey=key; BT3.cam.ty=0; bt3Fit([[0,0,0],[C,0,0],[0,0,R],[C,0,R],[0,1.6,0],[C,1.6,0],[0,1.6,R],[C,1.6,R]]); }
   BT3.lastYaw=null; BT3.dirty=true;
   btInitBar(B);
 }
