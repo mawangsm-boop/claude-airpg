@@ -7636,7 +7636,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.60";
+const HB_VERSION="v2.61";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -8936,11 +8936,12 @@ function bt3Init(){
   ["pointerdown","pointerup","pointermove","wheel"].forEach(ev=>ov.addEventListener(ev,e=>e.stopPropagation()));
   wrap.appendChild(box);
   const scene=new THREE.Scene();
-  scene.add(new THREE.HemisphereLight(0xe8eeff,0x5a4a34,0.78));
-  const sun=new THREE.DirectionalLight(0xfff0d8,0.72); sun.position.set(-0.55,1,0.4); scene.add(sun);
+  scene.add(new THREE.HemisphereLight(0xe8eeff,0x5a4a34,0.62));
+  const sun=new THREE.DirectionalLight(0xfff0d8,0.95); sun.position.set(-0.55,1,0.4); scene.add(sun); scene.add(sun.target);
+  try{ renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; sun.castShadow=true; sun.shadow.mapSize.set(2048,2048); sun.shadow.bias=-0.0006; sun.shadow.normalBias=0.03; }catch{}
   const camera=new THREE.PerspectiveCamera(38,1,0.1,600);
   BT3={renderer,scene,camera,box,cv,ov,wrap,root:null,cam:{yaw:Math.PI/4,pitch:0.9,dist:22,tx:0,ty:0,tz:0},
-       key:"",toks:[],occ:[],tags:[],labs:[],pick:[],bob:null,dirty:true,lastYaw:null,B:null,ray:new THREE.Raycaster()};
+       key:"",toks:[],occ:[],tags:[],labs:[],pick:[],bob:null,dirty:true,lastYaw:null,B:null,ray:new THREE.Raycaster(),sun};
   try{ const c=JSON.parse(localStorage.getItem("berix_bt3_cam")||"null"); if(c&&isFinite(c.yaw)&&isFinite(c.pitch)){ BT3.cam.yaw=c.yaw; BT3.cam.pitch=c.pitch; } }catch{}
   bt3Controls();
   if(window.ResizeObserver) new ResizeObserver(()=>bt3Size()).observe(wrap); else window.addEventListener("resize",bt3Size);
@@ -9050,13 +9051,173 @@ function bt3Mesh(g,opt){
   const m=new THREE.MeshLambertMaterial(Object.assign({vertexColors:true,side:THREE.DoubleSide},opt||{}));
   return new THREE.Mesh(geo,m);
 }
-function bt3Dispose(o){ o.traverse(n=>{ if(n.geometry) n.geometry.dispose(); if(n.material){ (Array.isArray(n.material)?n.material:[n.material]).forEach(m=>m.dispose()); } }); }
+function bt3Dispose(o){ o.traverse(n=>{ if(n.geometry) n.geometry.dispose(); if(n.material){ (Array.isArray(n.material)?n.material:[n.material]).forEach(m=>{ if(!m.userData.shared) m.dispose(); }); } }); }
+/* ---- v2.61: 재질 — 캔버스로 직접 그린 무늬(외부 그림 없음). 한 칸(1.5 m) = 무늬 한 장 ---- */
+const BT3_MAT={};
+function bt3Rng(s){ s=s%2147483647||7; return ()=>{ s=(s*16807)%2147483647; return (s-1)/2147483646; }; }
+function bt3Cv(n,draw){ const c=document.createElement("canvas"); c.width=c.height=n; draw(c.getContext("2d"),n); return c; }
+function bt3Speck(g,n,base,cols,count,r0,r1,rnd){ g.fillStyle=base; g.fillRect(0,0,n,n);
+  for(let i=0;i<count;i++){ g.fillStyle=cols[Math.floor(rnd()*cols.length)]; const r=r0+rnd()*(r1-r0); g.fillRect(rnd()*n,rnd()*n,r,r); } }
+const BT3_PAINT={
+  grass:(g,n,r)=>{ bt3Speck(g,n,"#6a9444",["#5d8a3c","#7aa64f","#83b257","#557f36","#8fbd5e","#4f7a33"],1400,1,3,r);
+    g.lineWidth=1.2; for(let i=0;i<220;i++){ const x=r()*n,y=r()*n; g.strokeStyle=r()<.5?"#92c262":"#4a7330"; g.beginPath(); g.moveTo(x,y); g.lineTo(x+(r()-.5)*4,y-3-r()*4); g.stroke(); } },
+  dirt:(g,n,r)=>{ bt3Speck(g,n,"#9c7b50",["#8d6e45","#a8875a","#b29266","#7f6340"],1200,1,3,r);
+    for(let i=0;i<40;i++){ g.fillStyle=r()<.5?"#c2a77c":"#6f5638"; g.beginPath(); g.ellipse(r()*n,r()*n,1.5+r()*2.5,1+r()*1.6,r()*3,0,7); g.fill(); } },
+  sand:(g,n,r)=>bt3Speck(g,n,"#d6c38a",["#cbb67c","#e0cf98","#c4ae73","#ead9a6"],1500,1,2.5,r),
+  snow:(g,n,r)=>bt3Speck(g,n,"#eef2f4",["#e2e8ec","#f8fbfc","#d6dde3"],900,1,3,r),
+  pit:(g,n,r)=>bt3Speck(g,n,"#1c1820",["#251f2a","#15121a","#2c2532"],800,1,4,r),
+  bed:(g,n,r)=>{ bt3Speck(g,n,"#4d5a4c",["#56634f","#434f43","#5f6b55","#3b463c"],1100,1,3,r);
+    for(let i=0;i<30;i++){ g.fillStyle=r()<.5?"#7b7d6a":"#353e36"; g.beginPath(); g.ellipse(r()*n,r()*n,2+r()*3,1.5+r()*2,r()*3,0,7); g.fill(); } },
+  cliff:(g,n,r)=>{ g.fillStyle="#86663f"; g.fillRect(0,0,n,n); let y=0;
+    while(y<n){ const h=6+r()*16; g.fillStyle=["#7a5c39","#91714a","#6c5133","#856647","#9a7a52"][Math.floor(r()*5)]; g.fillRect(0,y,n,h); y+=h; }
+    for(let i=0;i<900;i++){ g.fillStyle=r()<.5?"rgba(0,0,0,.12)":"rgba(255,240,210,.10)"; g.fillRect(r()*n,r()*n,1+r()*2,1+r()*2); }
+    for(let i=0;i<14;i++){ const x=r()*n,y2=r()*n,w=5+r()*10,h=3+r()*6; g.fillStyle=["#8c8a80","#7a776d","#9d9a8f"][Math.floor(r()*3)]; g.beginPath(); g.ellipse(x,y2,w,h,0,0,7); g.fill();
+      g.fillStyle="rgba(255,255,255,.18)"; g.beginPath(); g.ellipse(x-w*.25,y2-h*.3,w*.5,h*.35,0,0,7); g.fill(); } },
+  cobble:(g,n,r)=>{ g.fillStyle="#66635b"; g.fillRect(0,0,n,n); const k=4, s=n/k;
+    for(let i=0;i<k;i++) for(let j=0;j<k;j++){ const x=i*s+r()*3, y=j*s+r()*3, w=s-4-r()*3, h=s-4-r()*3;
+      g.fillStyle=["#a9a79f","#9b998f","#b3b0a6","#8f8c83","#a39e92"][Math.floor(r()*5)]; g.beginPath(); g.roundRect?g.roundRect(x,y,w,h,6):g.rect(x,y,w,h); g.fill();
+      g.fillStyle="rgba(255,255,255,.16)"; g.fillRect(x+3,y+3,w*.5,3); g.fillStyle="rgba(0,0,0,.18)"; g.fillRect(x+3,y+h-4,w-6,3); } },
+  stoneside:(g,n,r)=>BT3_PAINT.brick(g,n,r,["#8f8b80","#827e73","#9a968a","#77736a"],"#5b574f"),
+  brick:(g,n,r,cols,mortar)=>{ cols=cols||["#bcb19b","#ab9f89","#c6bba5","#a09580","#b5aa92"]; g.fillStyle=mortar||"#7a7266"; g.fillRect(0,0,n,n);
+    const rows=4, h=n/rows; for(let j=0;j<rows;j++){ const off=(j%2)*n/4; for(let i=-1;i<3;i++){ const x=i*n/2+off+2, y=j*h+2, w=n/2-4, hh=h-4;
+      g.fillStyle=cols[Math.floor(r()*cols.length)]; g.fillRect(x,y,w,hh); g.fillStyle="rgba(255,255,255,.14)"; g.fillRect(x,y,w,3); g.fillStyle="rgba(0,0,0,.16)"; g.fillRect(x,y+hh-3,w,3);
+      for(let q=0;q<10;q++){ g.fillStyle="rgba(0,0,0,.08)"; g.fillRect(x+r()*w,y+r()*hh,2,2); } } } },
+  plaster:(g,n,r)=>{ bt3Speck(g,n,"#e2d4b4",["#d8c9a7","#eadfc4","#d2c29f"],700,1,3,r);
+    g.fillStyle="#6b4a2c"; g.fillRect(0,0,n*.09,n); g.fillRect(0,0,n,n*.07); g.fillRect(0,n*.93,n,n*.07);
+    g.strokeStyle="#6b4a2c"; g.lineWidth=n*.06; g.beginPath(); g.moveTo(n*.09,n*.93); g.lineTo(n*.55,n*.07); g.stroke();
+    g.fillStyle="rgba(0,0,0,.12)"; g.fillRect(n*.09,0,3,n); },
+  plank:(g,n,r)=>{ const k=4, h=n/k; for(let j=0;j<k;j++){ g.fillStyle=["#a77d4c","#9a7144","#b0875a","#93693f"][Math.floor(r()*4)]; g.fillRect(0,j*h,n,h);
+      g.strokeStyle="rgba(60,35,15,.35)"; g.lineWidth=1; for(let q=0;q<4;q++){ const yy=j*h+3+r()*(h-6); g.beginPath(); g.moveTo(0,yy); g.bezierCurveTo(n*.3,yy+(r()-.5)*4,n*.7,yy+(r()-.5)*4,n,yy); g.stroke(); }
+      g.fillStyle="#4a3018"; g.fillRect(0,j*h,n,2); const sx=r()*n; g.fillRect(sx,j*h,2,h); g.fillStyle="#3a2412"; g.fillRect(sx+6,j*h+h/2-1,2,2); } },
+  plankwall:(g,n,r)=>{ const k=5, w=n/k; for(let i=0;i<k;i++){ g.fillStyle=["#8a6238","#7d5732","#966c40","#74502d"][Math.floor(r()*4)]; g.fillRect(i*w,0,w,n);
+      g.strokeStyle="rgba(40,25,10,.35)"; for(let q=0;q<3;q++){ const xx=i*w+3+r()*(w-6); g.beginPath(); g.moveTo(xx,0); g.lineTo(xx+(r()-.5)*5,n); g.stroke(); }
+      g.fillStyle="#3e2812"; g.fillRect(i*w,0,2,n); } g.fillStyle="#5a3c1e"; g.fillRect(0,n*.45,n,n*.06); },
+  roof:(g,n,r)=>{ g.fillStyle="#7a3420"; g.fillRect(0,0,n,n); const rows=5, h=n/rows, k=6, w=n/k;
+    for(let j=0;j<rows;j++) for(let i=-1;i<=k;i++){ const x=i*w+(j%2)*w/2, y=j*h;
+      g.fillStyle=["#b5583a","#a84f33","#c0643f","#9c4930"][Math.floor(r()*4)]; g.beginPath(); g.moveTo(x+1,y); g.lineTo(x+w-1,y); g.lineTo(x+w-1,y+h*.75); g.quadraticCurveTo(x+w/2,y+h*1.05,x+1,y+h*.75); g.fill();
+      g.fillStyle="rgba(255,220,190,.18)"; g.fillRect(x+3,y+2,w*.35,h*.5); g.fillStyle="rgba(0,0,0,.25)"; g.fillRect(x+w-3,y,2,h*.8); } },
+  bark:(g,n,r)=>{ g.fillStyle="#5e4128"; g.fillRect(0,0,n,n); for(let i=0;i<60;i++){ g.strokeStyle=["#4a3220","#73512f","#3d2918","#6a4a2c"][Math.floor(r()*4)]; g.lineWidth=1+r()*3; const x=r()*n; g.beginPath(); g.moveTo(x,0); g.bezierCurveTo(x+(r()-.5)*10,n*.3,x+(r()-.5)*10,n*.7,x,n); g.stroke(); } },
+  leaf:(g,n,r)=>{ bt3Speck(g,n,"#3f7a3a",["#4c8a44","#62a055","#356b30","#2c5a28","#71b062"],1800,2,6,r); },
+  rock:(g,n,r)=>{ bt3Speck(g,n,"#8f8f92",["#7f7f84","#a2a2a6","#6f6f75","#b3b3b6"],1300,1,4,r);
+    g.strokeStyle="rgba(40,40,45,.35)"; for(let i=0;i<8;i++){ g.beginPath(); let x=r()*n,y=r()*n; g.moveTo(x,y); for(let q=0;q<4;q++){ x+=(r()-.5)*30; y+=(r()-.5)*30; g.lineTo(x,y); } g.stroke(); } },
+  crate:(g,n,r)=>{ BT3_PAINT.plank(g,n,r); g.strokeStyle="#4a2e14"; g.lineWidth=n*.09; g.strokeRect(n*.045,n*.045,n*.91,n*.91);
+    g.lineWidth=n*.07; g.beginPath(); g.moveTo(n*.09,n*.09); g.lineTo(n*.91,n*.91); g.stroke(); },
+  water:(g,n,r)=>{ const gr=g.createLinearGradient(0,0,n,n); gr.addColorStop(0,"#3f86bf"); gr.addColorStop(1,"#3478ad"); g.fillStyle=gr; g.fillRect(0,0,n,n);
+    g.lineWidth=2; for(let i=0;i<26;i++){ g.strokeStyle=r()<.6?"rgba(200,235,255,.55)":"rgba(20,60,100,.35)"; const x=r()*n,y=r()*n,w=10+r()*22;
+      g.beginPath(); g.moveTo(x,y); g.quadraticCurveTo(x+w/2,y-4,x+w,y); g.stroke(); } },
+  window:(g,n,r)=>{ g.fillStyle="#5a3c1e"; g.fillRect(0,0,n,n); g.fillStyle="#22303f"; g.fillRect(n*.12,n*.12,n*.76,n*.76);
+    g.fillStyle="rgba(150,190,230,.35)"; g.fillRect(n*.16,n*.16,n*.3,n*.3); g.fillStyle="#5a3c1e"; g.fillRect(n*.46,n*.12,n*.08,n*.76); g.fillRect(n*.12,n*.46,n*.76,n*.08); },
+  door:(g,n,r)=>{ BT3_PAINT.plankwall(g,n,r); g.fillStyle="#3a3a40"; g.fillRect(0,n*.2,n,n*.06); g.fillRect(0,n*.72,n,n*.06); g.fillStyle="#c9a457"; g.beginPath(); g.arc(n*.78,n*.5,n*.05,0,7); g.fill(); },
+  tuft:(g,n,r)=>{ g.clearRect(0,0,n,n); g.lineCap="round"; for(let i=0;i<22;i++){ const x=n*.15+r()*n*.7; g.strokeStyle=["#5d8a3c","#7aa64f","#8fbd5e","#4f7a33"][Math.floor(r()*4)]; g.lineWidth=2+r()*2;
+    g.beginPath(); g.moveTo(x,n); g.quadraticCurveTo(x+(r()-.5)*14,n*.6,x+(r()-.5)*22,n*(.15+r()*.3)); g.stroke(); } }
+};
+function bt3M(name){
+  if(BT3_MAT[name]) return BT3_MAT[name];
+  const T=THREE, seed=[...name].reduce((a,c)=>a*31+c.charCodeAt(0),17);
+  const cv=bt3Cv(name==="tuft"?64:128,(g,n)=>BT3_PAINT[name](g,n,bt3Rng(seed)));
+  const tex=new T.CanvasTexture(cv); tex.wrapS=tex.wrapT=T.RepeatWrapping; tex.anisotropy=4;
+  const o={map:tex,vertexColors:true,side:T.DoubleSide};
+  if(name==="water"){ o.transparent=true; o.opacity=.78; o.depthWrite=false; }
+  if(name==="tuft"){ o.alphaTest=.45; o.vertexColors=false; }
+  const m=new T.MeshLambertMaterial(o); m.userData.shared=true; BT3_MAT[name]=m; return m;
+}
+/* 무늬 면 모음: 재질 이름별로 위치·uv·밝기 */
+function bt3TG(){ return {}; }
+function bt3TQ(g,mat,a,b,c,d,uv,tint){ const L=g[mat]||(g[mat]={p:[],u:[],c:[]}), vs=[a,b,c,d], T0=tint||[1,1,1,1];
+  [0,1,2,0,2,3].forEach(i=>{ const v=vs[i]; L.p.push(v[0],v[1],v[2]); L.u.push(uv[i][0],uv[i][1]); L.c.push(T0[i],T0[i],T0[i]); }); }
+/* mode: top(바닥 x·y) · x(동서로 놓인 면) · z(남북으로 놓인 면) */
+function bt3TQa(g,mat,a,b,c,d,mode,tint){ const f=mode==="top"?v=>[v[0],v[2]]:mode==="x"?v=>[v[0],v[1]]:v=>[v[2],v[1]]; bt3TQ(g,mat,a,b,c,d,[a,b,c,d].map(f),tint); }
+function bt3TBox(g,mat,x0,y0,x1,y1,z0,z1,top,ao){ const t=top||mat, k=ao==null?.72:ao, S=[k,k,1,1];
+  bt3TQa(g,t,[x0,z1,y0],[x1,z1,y0],[x1,z1,y1],[x0,z1,y1],"top");
+  bt3TQa(g,mat,[x0,z0,y1],[x1,z0,y1],[x1,z1,y1],[x0,z1,y1],"x",S); bt3TQa(g,mat,[x0,z0,y0],[x1,z0,y0],[x1,z1,y0],[x0,z1,y0],"x",S);
+  bt3TQa(g,mat,[x0,z0,y0],[x0,z0,y1],[x0,z1,y1],[x0,z1,y0],"z",S); bt3TQa(g,mat,[x1,z0,y0],[x1,z0,y1],[x1,z1,y1],[x1,z1,y0],"z",S); }
+function bt3TMesh(g,o){ o=o||{}; const T=THREE, grp=new T.Group();
+  Object.entries(g).forEach(([mat,L])=>{ if(!L.p.length) return; const geo=new T.BufferGeometry();
+    geo.setAttribute("position",new T.Float32BufferAttribute(L.p,3)); geo.setAttribute("uv",new T.Float32BufferAttribute(L.u,2)); geo.setAttribute("color",new T.Float32BufferAttribute(L.c,3));
+    geo.computeVertexNormals(); let mm=bt3M(mat); if(o.own){ mm=mm.clone(); mm.userData={}; } const m=new T.Mesh(geo,mm); m.castShadow=o.cast!==false; m.receiveShadow=true; grp.add(m); });
+  return grp; }
+/* 한 덩어리 모형(원기둥·원뿔·공) — 재질은 공유 무늬에 빛깔만 입힌다 */
+function bt3Solid(geo,mat,col){ const mm=bt3M(mat).clone(); mm.userData={}; mm.vertexColors=false; mm.color=new THREE.Color(col||"#ffffff");
+  const m=new THREE.Mesh(geo,mm); m.castShadow=true; m.receiveShadow=true; return m; }
+/* 집 — 벽(재질은 이름으로)·창·문·박공 기와지붕·굴뚝. 말뚝집이면 말뚝·마루·사다리 */
+function bt3House(o,z,ctx){
+  const T=THREE, FH=ISO.FH, grp=new T.Group(), g=bt3TG();
+  const x0=o.x,y0=o.y,x1=o.x+o.w,y1=o.y+o.h, L=String(o.t.label||""), th=0.12;
+  const wallMat=/목조|오두막|헛간|말뚝|움막|창고|천막|마구간|선실/.test(L)?"plankwall":/석조|탑|성|돌|요새|망루|신전|문루/.test(L)?"brick":"plaster";
+  const fz=z+(o.elev>0.05?o.elev:0), floors=o.floors||1, H=(o.open&&btFloor==="1"?1:floors)*FH;
+  /* 말뚝과 마루 */
+  if(fz>z+0.05){
+    const post=new T.CylinderGeometry(0.06,0.07,1,7);
+    for(let px=x0;px<=x1;px+=Math.max(1,o.w/Math.ceil(o.w/1.5))) for(let py=y0;py<=y1;py+=Math.max(1,o.h/Math.ceil(o.h/1.5))){
+      const bz=ctx.bedAt(Math.min(ctx.C-1,Math.floor(px)),Math.min(ctx.R-1,Math.floor(py))); const p=bt3Solid(post,"bark"); p.scale.y=fz-bz+0.05; p.position.set(Math.min(x1-0.08,Math.max(x0+0.08,px)),(fz+bz)/2,Math.min(y1-0.08,Math.max(y0+0.08,py))); grp.add(p); }
+    bt3TBox(g,"plank",x0-0.12,y0-0.12,x1+0.12,y1+0.12,fz-0.14,fz,"plank");
+    /* 사다리(남쪽 가운데) */
+    const lx=(x0+x1)/2, ly=y1+0.25, lg=bt3TG(); [-0.2,0.2].forEach(d=>bt3TBox(lg,"plank",lx+d-0.03,ly-0.03,lx+d+0.03,ly+0.03,z,fz+0.4,"plank"));
+    for(let k=z+0.3;k<fz;k+=0.3) bt3TBox(lg,"plank",lx-0.2,ly-0.025,lx+0.2,ly+0.025,k-0.025,k+0.025,"plank");
+    grp.add(bt3TMesh(lg));
+  }
+  /* 벽 — 1층 아래 0.5는 돌 기단(회벽 집만) */
+  const seg=(ax,ay,bx,by)=>{ const base=wallMat==="plaster"?Math.min(0.5,H):0; if(base) bt3TBox(g,"stoneside",ax,ay,bx,by,fz,fz+base,"stoneside"); bt3TBox(g,wallMat,ax,ay,bx,by,fz+base,fz+H,wallMat==="brick"?"cobble":"plank"); };
+  seg(x0,y0,x1,y0+th); seg(x0,y1-th,x1,y1); seg(x0,y0+th,x0+th,y1-th); seg(x1-th,y0+th,x1,y1-th);
+  /* 창·문: 바깥 면에 살짝 띄워 붙인다 */
+  const face=(mat,pts)=>bt3TQ(g,mat,pts[0],pts[1],pts[2],pts[3],[[0,0],[1,0],[1,1],[0,1]]);
+  const dW=0.55, dH=1.05, dx=(x0+x1)/2, ep=0.012;
+  face("door",[[dx-dW/2,fz,y1+ep],[dx+dW/2,fz,y1+ep],[dx+dW/2,fz+dH,y1+ep],[dx-dW/2,fz+dH,y1+ep]]);
+  const winW=0.36, winH=0.42;
+  for(let f=0;f<(o.open&&btFloor==="1"?1:floors);f++){ const wy=fz+f*FH+0.95;
+    const along=(a0,a1,put)=>{ const n=Math.max(1,Math.floor((a1-a0)/1.6)); for(let i=0;i<n;i++){ const c=a0+(i+0.5)*(a1-a0)/n; put(c); } };
+    along(x0,x1,c=>{ if(!(f===0&&Math.abs(c-dx)<0.5)) face("window",[[c-winW/2,wy,y1+ep],[c+winW/2,wy,y1+ep],[c+winW/2,wy+winH,y1+ep],[c-winW/2,wy+winH,y1+ep]]);
+      face("window",[[c+winW/2,wy,y0-ep],[c-winW/2,wy,y0-ep],[c-winW/2,wy+winH,y0-ep],[c+winW/2,wy+winH,y0-ep]]); });
+    along(y0,y1,c=>{ face("window",[[x0-ep,wy,c-winW/2],[x0-ep,wy,c+winW/2],[x0-ep,wy+winH,c+winW/2],[x0-ep,wy+winH,c-winW/2]]);
+      face("window",[[x1+ep,wy,c+winW/2],[x1+ep,wy,c-winW/2],[x1+ep,wy+winH,c-winW/2],[x1+ep,wy+winH,c+winW/2]]); }); }
+  if(o.open){
+    /* 안에 사람이 있으면 지붕을 걷고 마루를 보인다 */
+    bt3TQa(g,"plank",[x0+th,fz+0.01,y0+th],[x1-th,fz+0.01,y0+th],[x1-th,fz+0.01,y1-th],[x0+th,fz+0.01,y1-th],"top");
+  }else{
+    /* 박공지붕 — 긴 쪽으로 용마루 */
+    const ov=0.2, top=fz+H, alongX=o.w>=o.h;
+    const s0=(alongX?y0:x0)-ov, s1=(alongX?y1:x1)+ov, a0=(alongX?x0:y0)-ov, a1=(alongX?x1:y1)+ov, mid=(s0+s1)/2, rise=Math.min(1.6,(s1-s0)*0.42), rz=top+rise;
+    const P=(a,s,zz)=>alongX?[a,zz,s]:[s,zz,a], slope=Math.hypot(rise,(s1-s0)/2);
+    const rf=(sA,sB,flip)=>{ const q=[P(a0,sA,top-0.06),P(a1,sA,top-0.06),P(a1,sB,rz),P(a0,sB,rz)]; bt3TQ(g,"roof",q[0],q[1],q[2],q[3],[[0,0],[a1-a0,0],[a1-a0,slope],[0,slope]]); };
+    rf(s0,mid); rf(s1,mid);
+    /* 박공 세모 — 벽 재질 */
+    [a0+ov,a1-ov].forEach(a=>{ const L2=g[wallMat]||(g[wallMat]={p:[],u:[],c:[]}); const t1=P(a,s0+ov,top), t2=P(a,s1-ov,top), t3=P(a,mid,rz-0.05);
+      [t1,t2,t3].forEach(v=>{ L2.p.push(v[0],v[1],v[2]); L2.u.push(alongX?v[2]:v[0],v[1]); L2.c.push(.92,.92,.92); }); });
+    /* 용마루 · 굴뚝 */
+    const rg=bt3TG(); const r0=P(a0,mid-0.07,rz-0.05), r1=P(a1,mid+0.07,rz+0.06);
+    bt3TBox(rg,"bark",Math.min(r0[0],r1[0]),Math.min(r0[2],r1[2]),Math.max(r0[0],r1[0]),Math.max(r0[2],r1[2]),rz-0.05,rz+0.06,"bark");
+    const cA=a0+(a1-a0)*0.75, cS=(s0+mid)/2+0.1, cp=P(cA,cS,0); bt3TBox(rg,"brick",cp[0]-0.16,cp[2]-0.16,cp[0]+0.16,cp[2]+0.16,top,rz+0.35,"pit");
+    grp.add(bt3TMesh(rg,{own:true}));
+  }
+  if(o.open&&floors>=2&&btFloor!=="1"){ const sg=bt3TG(); bt3TBox(sg,"plank",x0+th,y0+th,x1-th,y1-th,fz+FH-0.1,fz+FH,"plank"); const sm=bt3TMesh(sg,{own:true});
+    if(btFloor!=="2") sm.traverse(n=>{ if(n.material){ n.material.transparent=true; n.material.opacity=.45; n.material.depthWrite=false; } }); grp.add(sm); }
+  grp.add(bt3TMesh(g,{own:true}));
+  return grp;
+}
+/* 나무 — 이름으로 침엽·덤불·갈대·활엽을 고른다 */
+function bt3Tree(x,y,z,L,seed){
+  const T=THREE, grp=new T.Group(), r=bt3Rng(seed), s=0.85+r()*0.35;
+  const leafCols=["#ffffff","#e2eed8","#f2f8e6","#cfe0c4"];
+  if(/갈대/.test(L)){ for(let i=0;i<9;i++){ const h=0.6+r()*0.6, m=bt3Solid(new T.CylinderGeometry(0.015,0.025,h,4),"leaf","#e8e0a0"); m.position.set(x+0.2+r()*0.6,z+h/2,y+0.2+r()*0.6); m.rotation.z=(r()-.5)*0.25; grp.add(m); } return grp; }
+  if(/덤불|수풀|관목/.test(L)){ for(let i=0;i<3;i++){ const m=bt3Solid(new T.IcosahedronGeometry(0.22+r()*0.12,1),"leaf",leafCols[i%4]); m.material.flatShading=true; m.position.set(x+0.3+r()*0.4,z+0.2+r()*0.1,y+0.3+r()*0.4); grp.add(m); } return grp; }
+  const tr=bt3Solid(new T.CylinderGeometry(0.07*s,0.11*s,0.8*s,7),"bark"); tr.position.set(x+0.5,z+0.4*s,y+0.5); grp.add(tr);
+  if(/전나무|소나무|침엽|가문비|삼나무/.test(L)){
+    [[0.46,0.8,0.75],[0.36,0.7,1.15],[0.25,0.55,1.5]].forEach(([rr,h,yy],i)=>{ const c=bt3Solid(new T.ConeGeometry(rr*s,h*s,9),"leaf",leafCols[i]); c.position.set(x+0.5,z+yy*s,y+0.5); grp.add(c); });
+  }else{
+    for(let i=0;i<4;i++){ const m=bt3Solid(new T.IcosahedronGeometry((0.26+r()*0.12)*s,1),"leaf",leafCols[Math.floor(r()*4)]); m.material.flatShading=true;
+      m.position.set(x+0.5+(r()-.5)*0.35,z+(0.95+r()*0.35)*s,y+0.5+(r()-.5)*0.35); grp.add(m); }
+  }
+  return grp;
+}
+
 function bt3Build(B){
-  const T=THREE, C=B.cols, R=B.rows, FH=ISO.FH, BASE=-1.2;
+  const T=THREE, C=B.cols, R=B.rows, FH=ISO.FH, BASE=-2.2;
   if(BT3.root){ BT3.scene.remove(BT3.root); bt3Dispose(BT3.root); }
   const root=new T.Group(); BT3.root=root; BT3.scene.add(root); BT3.B=B;
   BT3.toks=[]; BT3.occ=[]; BT3.pick=[]; BT3.bob=null; BT3.ov.innerHTML="";
   const tags=[], labs=[];
+  { const D=Math.max(C,R), sun=BT3.sun; sun.position.set(C/2-0.55*D,D*1.1,R/2+0.4*D); sun.target.position.set(C/2,0,R/2); sun.target.updateMatrixWorld();
+    const sc=sun.shadow&&sun.shadow.camera; if(sc){ const e=D*0.85; sc.left=-e; sc.right=e; sc.top=e; sc.bottom=-e; sc.near=0.5; sc.far=D*4; sc.updateProjectionMatrix(); } }
   /* ---- 판 읽기(2.5D 때와 같은 규칙) ---- */
   const ter=(B.terrain||[]).map(t=>({t,kind:isoKind(t),x:t.x,y:t.y,w:t.w||1,h:t.h||1}));
   const live=(B.tokens||[]), isDead=t=>!!t.down||/^0\//.test(String(t.hp||""));
@@ -9080,68 +9241,143 @@ function bt3Build(B){
     return {z,surf};
   };
   const G={}; for(let x=0;x<C;x++) for(let y=0;y<R;y++) G[x+","+y]=ground(x,y);
+  /* 물은 수면(z) 아래로 바닥(bed)을 깊게 판다 — 사람은 수면에 선다 */
+  Object.values(G).forEach(g=>{ g.bed=g.surf==="water"?Math.max(BASE+0.3,g.z-0.85):g.z; g.dz=g.bed; });
   const gz=(x,y)=>(x<0||y<0||x>=C||y>=R)?BASE:G[x+","+y].z;
+  const NB4=[[0,-1],[0,1],[-1,0],[1,0]];
+  /* 계단: 가장 낮은 이웃 쪽으로 세 단 */
+  const stairDir={};
+  for(let x=0;x<C;x++) for(let y=0;y<R;y++){ const k=x+","+y, g=G[k]; if(!at(x,y).some(o=>o.kind==="stairs")) continue; let best=null;
+    NB4.forEach(([dx,dy])=>{ const nx=x+dx, ny=y+dy; if(nx<0||ny<0||nx>=C||ny>=R) return; const n=G[nx+","+ny]; if(n.surf==="water") return; if(n.z<g.z-0.05&&(!best||n.z<best.z)) best={dx,dy,z:n.z}; });
+    if(best){ g.dz=Math.max(best.z,g.z-1.5); stairDir[k]=best; } }
+  /* 다리: 따로 높이를 적지 않았으면 양쪽 둑 높이에 맞춰 놓는다(전에는 1.5 m 떠 있었다) */
+  ter.forEach(o=>{ if(o.kind!=="bridge") return; const alongX=o.w>o.h||(o.w===o.h&&[[o.x-1,o.y],[o.x+o.w,o.y]].some(([x,y])=>G[x+","+y]&&G[x+","+y].surf!=="water"));
+    o.alongX=alongX; const ends=alongX?[[o.x-1,o.y],[o.x+o.w,o.y]]:[[o.x,o.y-1],[o.x,o.y+o.h]];
+    let bank=null, wl=null; for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++){ const g=G[x+","+y]; if(g&&g.surf==="water") wl=Math.max(wl==null?-9:wl,g.z); }
+    ends.forEach(([x,y])=>{ const g=G[x+","+y]; if(g&&g.surf!=="water") bank=Math.max(bank==null?-9:bank,g.z); });
+    o.deck=o.t.elev!=null?Number(o.t.elev):(bank!=null?bank+0.04:(wl!=null?wl+0.35:0.1)); });
   const bridgeAt=(x,y)=>at(x,y).find(o=>o.kind==="bridge");
   const bldAt=(x,y)=>at(x,y).find(o=>o.kind==="building"&&o.open);
-  const tokZ=t=>{ if(t.elev!=null) return Number(t.elev); const b=bridgeAt(t.x,t.y); const base=b?b.elev:gz(t.x,t.y); return base+(floorOf(t)-1)*FH; };
+  const stiltAt=(x,y)=>at(x,y).find(o=>o.kind==="building"&&o.elev>0.05);
+  const tokZ=t=>{ if(t.elev!=null) return Number(t.elev); const b=bridgeAt(t.x,t.y), st=stiltAt(t.x,t.y);
+    let base=b?b.deck:gz(t.x,t.y); if(st) base=Math.max(base,gz(t.x,t.y)+st.elev); return base+(floorOf(t)-1)*FH; };
   const say=html=>{ $("btInfo").innerHTML=html; };
   const pc=live.find(t=>!isDead(t)&&(t.id==="verrix"||/베릭스/.test(t.name||"")))||live.find(t=>t.side==="pc"&&!isDead(t));
   const multi=ter.some(o=>o.floors>=2&&o.open);
   const fb=$("btFloor"); if(fb){ fb.style.display=multi?"":"none"; if(!multi) btFloor="all"; fb.textContent="층: "+({all:"전체","1":"1층","2":"2층"})[btFloor]; fb.classList.toggle("on",btFloor!=="all"); }
-  /* ---- 땅: 칸마다 기둥 하나, 옆면은 이웃이 낮을 때만 ---- */
-  const gG=bt3GB(), NB=[[0,-1,1],[0,1,1],[-1,0,2],[1,0,2]];
+  /* ---- 땅(v2.61): 재질 무늬 · 두꺼운 단면(디오라마) · 물 깊이 ---- */
+  const TOP={grass:"grass",dirt:"dirt",stone:"cobble",sand:"sand",snow:"snow",wood:"plank",floor:"plank",water:"bed",pit:"pit"};
+  const SIDE={stone:"stoneside",wood:"plank",floor:"plank"};
+  const topOf=(x,y)=>(x<0||y<0||x>=C||y>=R)?BASE:G[x+","+y].dz;
+  const tg=bt3TG(), wg=bt3TG(), occCell=new Set();
+  ter.forEach(o=>{ if(o.kind==="tree"||ISO_OBJ[o.kind]||o.kind==="bridge") for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++) occCell.add(x+","+y); });
+  const sideQ=(g,mat,x,y,dx,dy,lo,hi,ao)=>{ const T0=[ao,ao,1,1];
+    if(dy===-1) bt3TQa(g,mat,[x+1,lo,y],[x,lo,y],[x,hi,y],[x+1,hi,y],"x",T0);
+    if(dy===1) bt3TQa(g,mat,[x,lo,y+1],[x+1,lo,y+1],[x+1,hi,y+1],[x,hi,y+1],"x",T0);
+    if(dx===-1) bt3TQa(g,mat,[x,lo,y],[x,lo,y+1],[x,hi,y+1],[x,hi,y],"z",T0);
+    if(dx===1) bt3TQa(g,mat,[x+1,lo,y+1],[x+1,lo,y],[x+1,hi,y],[x+1,hi,y+1],"z",T0); };
   for(let x=0;x<C;x++) for(let y=0;y<R;y++){
-    const g0=G[x+","+y], S0=ISO_SURF[g0.surf]||ISO_SURF.grass, z=g0.z;
-    bt3Quad(gG,[x,z,y],[x+1,z,y],[x+1,z,y+1],[x,z,y+1],S0.top[(x+y)&1]);
-    NB.forEach(([dx,dy,si])=>{ const nz=gz(x+dx,y+dy); if(nz>=z-0.01) return; const sc=S0.side[si===1?0:1];
-      if(dy===-1) bt3Quad(gG,[x,nz,y],[x+1,nz,y],[x+1,z,y],[x,z,y],sc);
-      if(dy===1) bt3Quad(gG,[x,nz,y+1],[x+1,nz,y+1],[x+1,z,y+1],[x,z,y+1],sc);
-      if(dx===-1) bt3Quad(gG,[x,nz,y],[x,nz,y+1],[x,z,y+1],[x,z,y],sc);
-      if(dx===1) bt3Quad(gG,[x+1,nz,y],[x+1,nz,y+1],[x+1,z,y+1],[x+1,z,y],sc); });
+    const k=x+","+y, g0=G[k], S=g0.surf, top=g0.dz, ck=(x+y)&1?0.94:1;
+    bt3TQa(tg,TOP[S]||"grass",[x,top,y],[x+1,top,y],[x+1,top,y+1],[x,top,y+1],"top",[ck,ck,ck,ck]);
+    NB4.forEach(([dx,dy])=>{ const nt=topOf(x+dx,y+dy); if(nt>=top-0.01) return;
+      const ao=nt<=BASE+0.01?0.42:0.62;
+      sideQ(tg,SIDE[S]||"cliff",x,y,dx,dy,nt,top,ao);
+      if(S==="grass"&&top-nt>0.12) sideQ(tg,"grass",x+dx*0.004,y+dy*0.004,dx,dy,top-0.13,top+0.002,0.9);   /* 풀 가장자리가 살짝 덮인다 */
+      if(S==="water"&&g0.z>nt+0.01) sideQ(wg,"water",x,y,dx,dy,Math.max(nt,top),g0.z,0.85); });
+    if(S==="water") bt3TQa(wg,"water",[x,g0.z,y],[x+1,g0.z,y],[x+1,g0.z,y+1],[x,g0.z,y+1],"top");
+    const sd=stairDir[k]; if(sd){ for(let i=0;i<3;i++){ const h=top+(g0.z-top)*(i+1)/3, a=i/3, b=1;
+      let r; if(sd.dx===1) r=[x,y,x+1-a,y+1]; else if(sd.dx===-1) r=[x+a,y,x+1,y+1]; else if(sd.dy===1) r=[x,y,x+1,y+1-a]; else r=[x,y+a,x+1,y+1];
+      bt3TBox(tg,"stoneside",r[0],r[1],r[2],r[3],top,h,"cobble",0.75); } }
   }
-  const gm=bt3Mesh(gG); gm.userData.pick={ground:true}; root.add(gm); BT3.pick.push(gm);
-  /* 격자선 — 칸을 셀 수 있게 아주 옅게 */
-  { const lp=[]; for(let x=0;x<C;x++) for(let y=0;y<R;y++){ const z=G[x+","+y].z+0.012; lp.push(x,z,y,x+1,z,y, x,z,y,x,z,y+1); if(x===C-1) lp.push(x+1,z,y,x+1,z,y+1); if(y===R-1) lp.push(x,z,y+1,x+1,z,y+1); }
+  const gm=bt3TMesh(tg,{cast:true}); gm.userData.pick={ground:true}; root.add(gm); BT3.pick.push(gm);
+  if(Object.keys(wg).length){ const wm=bt3TMesh(wg,{cast:false}); wm.renderOrder=2; root.add(wm); BT3.water=true; } else BT3.water=false;
+  /* 풀 포기 — 지형물이 없는 풀밭 칸에 */
+  { const cells=[]; for(let x=0;x<C;x++) for(let y=0;y<R;y++){ const k=x+","+y; if(G[k].surf==="grass"&&!occCell.has(k)&&!stairDir[k]) cells.push([x,y]); }
+    const rr=bt3Rng(C*131+R*7), list=[]; cells.forEach(([x,y])=>{ const n=rr()<0.55?1+Math.floor(rr()*2):0; for(let i=0;i<n;i++) list.push([x+0.15+rr()*0.7,G[x+","+y].dz,y+0.15+rr()*0.7,rr()*3.14,0.7+rr()*0.6]); });
+    if(list.length){ const p=[], u=[]; const q=(ax,az,bx,bz)=>{ p.push(ax,0,az, bx,0,bz, bx,1,bz, ax,0,az, bx,1,bz, ax,1,az); u.push(0,0,1,0,1,1,0,0,1,1,0,1); };
+      q(-0.17,0,0.17,0); q(0,-0.17,0,0.17); const geo=new T.BufferGeometry(); geo.setAttribute("position",new T.Float32BufferAttribute(p,3)); geo.setAttribute("uv",new T.Float32BufferAttribute(u,2)); geo.computeVertexNormals();
+      const im=new T.InstancedMesh(geo,bt3M("tuft"),list.length), m4=new T.Matrix4(), qq=new T.Quaternion(), sc=new T.Vector3(), ps=new T.Vector3();
+      list.forEach((L,i)=>{ qq.setFromAxisAngle(new T.Vector3(0,1,0),L[3]); sc.set(L[4],0.2*L[4],L[4]); ps.set(L[0],L[1],L[2]); m4.compose(ps,qq,sc); im.setMatrixAt(i,m4); });
+      root.add(im); } }
+  /* 격자선 — 칸을 셀 수 있게 아주 옅게(땅 위) */
+  { const lp=[]; for(let x=0;x<C;x++) for(let y=0;y<R;y++){ const g=G[x+","+y], z=(g.surf==="water"?g.z:g.dz)+0.012; lp.push(x,z,y,x+1,z,y, x,z,y,x,z,y+1); if(x===C-1) lp.push(x+1,z,y,x+1,z,y+1); if(y===R-1) lp.push(x,z,y+1,x+1,z,y+1); }
     const lg=new T.BufferGeometry(); lg.setAttribute("position",new T.Float32BufferAttribute(lp,3));
-    root.add(new T.LineSegments(lg,new T.LineBasicMaterial({color:0x10140c,transparent:true,opacity:.22}))); }
+    root.add(new T.LineSegments(lg,new T.LineBasicMaterial({color:0x10140c,transparent:true,opacity:.16}))); }
   /* 칸 위에 까는 반투명 판(위험·표시·이동 범위) */
   const flat=(cells,col,op)=>{ if(!cells.length) return; const g=bt3GB(); cells.forEach(([x,y])=>{ const z=G[x+","+y].z+0.02; bt3Quad(g,[x,z,y],[x+1,z,y],[x+1,z,y+1],[x,z,y+1],col); });
-    const m=bt3Mesh(g,{transparent:true,opacity:op,depthWrite:false}); root.add(m); };
+    const m=bt3Mesh(g,{transparent:true,opacity:op,depthWrite:false}); m.renderOrder=3; root.add(m); };
   const hz=[], mk=[]; for(let x=0;x<C;x++) for(let y=0;y<R;y++){ const os=at(x,y); if(os.some(o=>o.kind==="hazard")) hz.push([x,y]); if(os.some(o=>o.kind==="mark")) mk.push([x,y]); }
   flat(hz,"#d63e3e",.42); flat(mk,"#c9a457",.32);
   /* ---- 지형물: 덩어리마다 따로(가릴 때 반투명하게 하려고) ---- */
-  const occ=(obj,o)=>{ obj.userData.pick={ter:o}; obj.traverse(n=>{ if(n.material){ n.material.transparent=true; } }); root.add(obj); BT3.occ.push(obj); BT3.pick.push(obj); };
+  const occ=(obj,o)=>{ obj.userData.pick={ter:o};
+    obj.traverse(n=>{ if(!n.material) return; if(n.material.userData.shared){ n.material=n.material.clone(); n.material.userData={}; } n.material.transparent=true; });   /* 공유 재질을 반투명하게 하면 같은 무늬 전부가 흐려지므로 제 것을 갖게 한다 */
+    root.add(obj); BT3.occ.push(obj); BT3.pick.push(obj); };
   const showTer=o=>say(`<b style="color:var(--gold-s)">${o.t.label||"지형"}</b><br>칸 (${o.x},${o.y})${o.w>1||o.h>1?` 에서 ${o.w}×${o.h}칸`:""}${o.floors>1?` · ${o.floors}층`:""}${o.open?" · 안에 사람이 있어 지붕을 걷어 그렸습니다":""}`);
   BT3.onTer=showTer;
+  const ctx={C,R,bedAt:(x,y)=>(x<0||y<0||x>=C||y>=R)?0:G[x+","+y].bed};
   ter.forEach(o=>{
-    const z=G[Math.min(C-1,Math.max(0,o.x))+","+Math.min(R-1,Math.max(0,o.y))]?G[Math.min(C-1,Math.max(0,o.x))+","+Math.min(R-1,Math.max(0,o.y))].z:0;
-    const cx=o.x+o.w/2, cy=o.y+o.h/2;
+    const cl=(x,y)=>G[Math.min(C-1,Math.max(0,x))+","+Math.min(R-1,Math.max(0,y))];
+    let z=-9; for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++){ const g=cl(x,y); z=Math.max(z,g.surf==="water"?g.z:g.dz); } if(z<-8) z=0;
+    const cx=o.x+o.w/2, cy=o.y+o.h/2, L=String(o.t.label||"");
     if(o.kind==="tree"){
       const grp=new T.Group();
-      for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++){ if(x<0||y<0||x>=C||y>=R) continue; const zz=G[x+","+y].z, s=0.9+((x*5+y*3)%3)*0.12;
-        const tr=new T.Mesh(new T.CylinderGeometry(0.07,0.1,0.75*s,6),new T.MeshLambertMaterial({color:0x6b4a2a})); tr.position.set(x+0.5,zz+0.375*s,y+0.5); grp.add(tr);
-        [[0.42,0.8,0.7,0x3f7a3a],[0.34,0.7,1.15,0x4c8a44],[0.24,0.55,1.55,0x62a055]].forEach(([r,h,yy,c])=>{ const cn=new T.Mesh(new T.ConeGeometry(r*s,h*s,8),new T.MeshLambertMaterial({color:c})); cn.position.set(x+0.5,zz+yy*s,y+0.5); grp.add(cn); }); }
+      for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++){ if(x<0||y<0||x>=C||y>=R) continue; grp.add(bt3Tree(x,y,G[x+","+y].dz,L,x*97+y*13+5)); }
       occ(grp,o);
     }else if(o.kind==="bridge"){
-      const g=bt3GB(); for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++) bt3Box(g,x,y,x+1,y+1,o.elev-0.14,o.elev,[ISO_SURF.wood.top[(x+y)&1],ISO_SURF.wood.side[0],ISO_SURF.wood.side[1]]);
-      const m=bt3Mesh(g); m.userData.pick={ter:o}; root.add(m); BT3.pick.push(m);
-      if(o.t.label) labs.push({p:[cx,o.elev+0.1,cy],text:o.t.label,cls:"flat"});
+      const grp=new T.Group(), d=o.deck, ax=o.alongX, len=ax?o.w:o.h;
+      if(/쓰러진|통나무|외나무/.test(L)){
+        /* 쓰러진 나무: 통나무 한 줄기가 두 둑에 걸쳐 눕는다 */
+        const lg=bt3Solid(new T.CylinderGeometry(0.3,0.36,len+0.9,12),"bark"); lg.rotation[ax?"z":"x"]=Math.PI/2;
+        lg.position.set(ax?cx:o.x+0.5,d-0.28,ax?o.y+0.5:cy); grp.add(lg);
+        const r=bt3Rng(o.x*31+o.y); for(let i=0;i<3;i++){ const b=bt3Solid(new T.CylinderGeometry(0.04,0.07,0.5,6),"bark"); const t0=(r()-.5)*len*0.8;
+          b.position.set(ax?cx+t0:o.x+0.5+0.25,d-0.1,ax?o.y+0.5+0.25:cy+t0); b.rotation.set(ax?0.9:0.3,0,ax?0.3:0.9); grp.add(b); }
+      }else{
+        /* 판자 다리: 마루 · 난간 · 물속 기둥 */
+        const g=bt3TG(), x0=o.x,y0=o.y,x1=o.x+o.w,y1=o.y+o.h;
+        bt3TBox(g,"plank",ax?x0-0.25:x0+0.05,ax?y0+0.05:y0-0.25,ax?x1+0.25:x1-0.05,ax?y1-0.05:y1+0.25,d-0.12,d,"plank");
+        for(let i=0;i<=len;i++){ const along=(ax?x0:y0)+i;
+          [[0.08],[0.92]].forEach(([s])=>{ const px=ax?along:x0+s*(x1-x0), py=ax?y0+s*(y1-y0):along;
+            bt3TBox(g,"bark",px-0.05,py-0.05,px+0.05,py+0.05,d,d+0.55,"bark");
+            if(i%2===0){ const bz=ctx.bedAt(Math.min(C-1,Math.floor(px)),Math.min(R-1,Math.floor(py))); bt3TBox(g,"bark",px-0.06,py-0.06,px+0.06,py+0.06,bz,d-0.12,"bark"); } }); }
+        [[0.08],[0.92]].forEach(([s])=>{ if(ax){ const py=y0+s*(y1-y0); bt3TBox(g,"bark",x0,py-0.035,x1,py+0.035,d+0.47,d+0.55,"bark"); }
+          else{ const px=x0+s*(x1-x0); bt3TBox(g,"bark",px-0.035,y0,px+0.035,y1,d+0.47,d+0.55,"bark"); } });
+        grp.add(bt3TMesh(g));
+      }
+      grp.userData.pick={ter:o}; root.add(grp); BT3.pick.push(grp);
+      if(o.t.label) labs.push({p:[cx,d+0.15,cy],text:o.t.label,cls:"flat"});
     }else if(o.kind==="building"){
-      const col=ISO_OBJ.building, th=0.12, x0=o.x,y0=o.y,x1=o.x+o.w,y1=o.y+o.h;
-      const topZ=z+(o.open&&btFloor==="1"?1:(o.floors||1))*FH;
-      const g=bt3GB();
-      bt3Box(g,x0,y0,x1,y0+th,z,topZ,col); bt3Box(g,x0,y1-th,x1,y1,z,topZ,col);
-      bt3Box(g,x0,y0,x0+th,y1,z,topZ,col); bt3Box(g,x1-th,y0,x1,y1,z,topZ,col);
-      if(!o.open){ bt3Box(g,x0,y0,x1,y1,topZ,topZ+0.3,["#b5583a","#8e3f28","#73321f"]); }
-      const m=bt3Mesh(g); occ(m,o);
-      if(o.open&&o.floors>=2&&btFloor!=="1"){ const sg=bt3GB(); bt3Box(sg,x0+th,y0+th,x1-th,y1-th,z+FH-0.1,z+FH,[ISO_SURF.wood.top[0],ISO_SURF.wood.side[0],ISO_SURF.wood.side[1]]);
-        const sm=bt3Mesh(sg,{transparent:true,opacity:btFloor==="2"?1:.45,depthWrite:btFloor==="2"}); occ(sm,o); }
-      if(o.t.label) labs.push({p:[cx,topZ+(o.open?0.15:0.45),cy],text:o.t.label});
-    }else if(ISO_OBJ[o.kind]){
-      const hgt=o.cut?0.35:o.elev, ins=o.kind==="crate"||o.kind==="rock"?0.14:0, g=bt3GB();
-      for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++){ if(x<0||y<0||x>=C||y>=R) continue; const zz=G[x+","+y].z; bt3Box(g,x+ins,y+ins,x+1-ins,y+1-ins,zz,zz+hgt,ISO_OBJ[o.kind]); }
-      occ(bt3Mesh(g),o);
-      if(o.t.label) labs.push({p:[cx,z+hgt+0.15,cy],text:o.t.label});
+      const h=bt3House(o,z,ctx); occ(h,o);
+      const fz=z+(o.elev>0.05?o.elev:0), H=(o.open&&btFloor==="1"?1:(o.floors||1))*FH;
+      if(o.t.label) labs.push({p:[cx,fz+H+(o.open?0.15:0.9),cy],text:o.t.label});
+    }else if(o.kind==="wall"){
+      const g=bt3TG(), hgt=o.cut?0.35:o.elev;
+      for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++){ if(x<0||y<0||x>=C||y>=R) continue; const zz=G[x+","+y].dz;
+        bt3TBox(g,"brick",x,y,x+1,y+1,zz,zz+hgt,"cobble"); if(!o.cut) bt3TBox(g,"stoneside",x-0.04,y-0.04,x+1.04,y+1.04,zz+hgt,zz+hgt+0.12,"cobble",0.9); }
+      occ(bt3TMesh(g,{own:true}),o);
+      if(o.t.label) labs.push({p:[cx,z+hgt+0.3,cy],text:o.t.label});
+    }else if(o.kind==="lowwall"){
+      const g=bt3TG(), wood=/울타리|목책|난간|방책/.test(L);
+      for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++){ if(x<0||y<0||x>=C||y>=R) continue; const zz=G[x+","+y].dz;
+        if(wood){ [[x+0.1,y+0.5],[x+0.9,y+0.5],[x+0.5,y+0.1],[x+0.5,y+0.9]].forEach(([px,py],i)=>{ if((o.w>=o.h)!==(i<2)) return; bt3TBox(g,"bark",px-0.05,py-0.05,px+0.05,py+0.05,zz,zz+0.75,"bark"); });
+          if(o.w>=o.h) [0.3,0.6].forEach(hh=>bt3TBox(g,"plank",x,y+0.46,x+1,y+0.54,zz+hh,zz+hh+0.09,"plank")); else [0.3,0.6].forEach(hh=>bt3TBox(g,"plank",x+0.46,y,x+0.54,y+1,zz+hh,zz+hh+0.09,"plank")); }
+        else bt3TBox(g,"stoneside",x+0.08,y+0.08,x+0.92,y+0.92,zz,zz+0.6,"cobble"); }
+      occ(bt3TMesh(g,{own:true}),o);
+      if(o.t.label) labs.push({p:[cx,z+0.9,cy],text:o.t.label});
+    }else if(o.kind==="crate"){
+      const grp=new T.Group(), r=bt3Rng(o.x*17+o.y*3+1);
+      for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++){ if(x<0||y<0||x>=C||y>=R) continue; const zz=G[x+","+y].dz;
+        if(/통|술통/.test(L)&&!/통나무/.test(L)){ const b=bt3Solid(new T.CylinderGeometry(0.28,0.28,0.7,12),"plank","#d0b090"); b.position.set(x+0.5,zz+0.35,y+0.5); grp.add(b); }
+        else{ const g=bt3TG(), s=0.55+r()*0.2, ox=x+0.5+(r()-.5)*0.15, oy=y+0.5+(r()-.5)*0.15; bt3TBox(g,"crate",ox-s/2,oy-s/2,ox+s/2,oy+s/2,zz,zz+s,"crate",0.8);
+          if(r()<0.4){ const s2=s*0.7; bt3TBox(g,"crate",ox-s2/2,oy-s2/2,ox+s2/2,oy+s2/2,zz+s,zz+s+s2,"crate",0.8); } grp.add(bt3TMesh(g)); } }
+      occ(grp,o);
+      if(o.t.label) labs.push({p:[cx,z+1,cy],text:o.t.label});
+    }else if(o.kind==="rock"){
+      const grp=new T.Group(), r=bt3Rng(o.x*23+o.y*7+3);
+      for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++){ if(x<0||y<0||x>=C||y>=R) continue; const zz=G[x+","+y].dz, hh=o.elev||1.1;
+        const m=bt3Solid(new T.DodecahedronGeometry(0.45,0),"rock"); m.material.flatShading=true; m.scale.set(1+r()*0.15,hh*0.85,1+r()*0.15); m.rotation.set(r()*0.4,r()*6,r()*0.4); m.position.set(x+0.5,zz+hh*0.33,y+0.5); grp.add(m);
+        if(r()<0.6){ const s=bt3Solid(new T.DodecahedronGeometry(0.18,0),"rock"); s.material.flatShading=true; s.position.set(x+0.5+(r()-.5)*0.8,zz+0.08,y+0.5+(r()-.5)*0.8); grp.add(s); } }
+      occ(grp,o);
+      if(o.t.label) labs.push({p:[cx,z+(o.elev||1.1)+0.2,cy],text:o.t.label});
     }else if(o.t.label&&(o.kind==="hazard"||o.kind==="mark"||o.kind==="water"||o.kind==="pit"||o.kind==="high"||o.kind==="stairs")){
       const zz=G[Math.min(C-1,Math.floor(cx))+","+Math.min(R-1,Math.floor(cy))]; labs.push({p:[cx,(zz?zz.z:0)+0.1,cy],text:o.t.label,cls:"flat"});
     }
@@ -9285,7 +9521,8 @@ function bt3Loop(ts){
   const moving=BT3.dirty;
   if(moving){ bt3Cam(); if(BT3.lastYaw!==BT3.cam.yaw){ bt3Faces(); BT3.lastYaw=BT3.cam.yaw; } bt3Occlude(); bt3Overlay(); BT3.dirty=false; }
   if(BT3.bob){ BT3.bob.m.position.y=BT3.bob.y+Math.sin((ts||0)/260)*0.08; BT3.bob.m.rotation.y=(ts||0)/700; }
-  if(moving||BT3.bob||BT3.texWait) BT3.renderer.render(BT3.scene,BT3.camera);
+  if(BT3.water&&BT3_MAT.water){ const t=(ts||0)/1000; BT3_MAT.water.map.offset.set(t*0.03,Math.sin(t*0.4)*0.04); }
+  if(moving||BT3.bob||BT3.water||BT3.texWait) BT3.renderer.render(BT3.scene,BT3.camera);
 }
 /* 살아 있는 적이 다 들어오게(없으면 모두) */
 function bt3FitEnemies(){
