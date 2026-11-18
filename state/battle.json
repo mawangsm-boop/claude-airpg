@@ -3,15 +3,15 @@
     "name": "소금 늪 — 꽃이 피는 밤(6일째, 해 지고 한 시간)",
     "cols": 24,
     "rows": 18,
-    "round": 0,
+    "round": 1,
     "ground": "dirt",
     "init": [
       "verrix",
+      "sei",
+      "idra",
       "marta",
       "neri",
-      "idra",
       "owl",
-      "sei",
       "wisp1",
       "wisp2",
       "wisp3",
@@ -122,6 +122,15 @@
         "type": "hazard",
         "kind": "mark",
         "label": "횃불 셋(꽂아 둠)"
+      },
+      {
+        "x": 9,
+        "y": 6,
+        "w": 3,
+        "h": 2,
+        "type": "hazard",
+        "kind": "mark",
+        "label": "던진 신발·단추(웅덩이 가)"
       }
     ],
     "tokens": [
