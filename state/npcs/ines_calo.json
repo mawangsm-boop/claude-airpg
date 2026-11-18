@@ -34,6 +34,56 @@
         "sum": "선창 상인 명단 사본 — 아이린의 그물용"
       }
     ],
-    "stance": "호의"
+    "stance": "호의",
+    "sheet": {
+      "race": "인간",
+      "cls": "평민(Commoner) — 몬스터 수치표, 레벨 없음",
+      "ac": 10,
+      "stats": {
+        "STR": 10,
+        "DEX": 10,
+        "CON": 10,
+        "INT": 10,
+        "WIS": 10,
+        "CHA": 10
+      },
+      "profBonus": 2,
+      "saves": {
+        "proficient": [],
+        "mods": {
+          "STR": 0,
+          "DEX": 0,
+          "CON": 0,
+          "INT": 0,
+          "WIS": 0,
+          "CHA": 0
+        }
+      },
+      "skills": {
+        "proficient": [
+          "수사"
+        ],
+        "note": "수치표의 '익숙한 일'(DM이 기술 하나를 고름) — 수사 +2, 판정에 이점. 2026-11-18 GM 확정."
+      },
+      "languages": "공용어",
+      "initiative": 0,
+      "speed": "9m",
+      "hp_note": "1d8 = 4 · CR 0(10 XP)",
+      "abilities": [
+        {
+          "id": "ab_training",
+          "n": "익숙한 일 — 수사",
+          "t": "패시브",
+          "d": "수사에 숙련, 그 기술로 하는 능력 판정에 이점. (관리인의 장부를 실제로 쓰고, 누구의 글씨든 가려내는 손)"
+        },
+        {
+          "id": "ab_club",
+          "n": "곤봉",
+          "t": "행동",
+          "d": "근접 공격 +2, 사거리 1.5m. 명중 1d4 타격."
+        }
+      ],
+      "src": "D&D 2024 Monster Manual(aidedd.org 전사본 대조, 2026-11-18)"
+    }
   }
 }

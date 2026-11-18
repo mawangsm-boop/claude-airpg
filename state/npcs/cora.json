@@ -28,6 +28,60 @@
     "at": "상점",
     "items": [],
     "room": "sh_small",
-    "roomNote": "소금꽃 집 1층 작은 방 — 동생 둘과(오틸리에가 떠난 뒤) · 집 관리"
+    "roomNote": "소금꽃 집 1층 작은 방 — 동생 둘과(오틸리에가 떠난 뒤) · 집 관리",
+    "sheet": {
+      "race": "인간",
+      "cls": "평민(Commoner) — 몬스터 수치표, 레벨 없음",
+      "ac": 10,
+      "stats": {
+        "STR": 10,
+        "DEX": 10,
+        "CON": 10,
+        "INT": 10,
+        "WIS": 10,
+        "CHA": 10
+      },
+      "profBonus": 2,
+      "saves": {
+        "proficient": [],
+        "mods": {
+          "STR": 0,
+          "DEX": 0,
+          "CON": 0,
+          "INT": 0,
+          "WIS": 0,
+          "CHA": 0
+        }
+      },
+      "skills": {
+        "proficient": [
+          "설득"
+        ],
+        "note": "수치표의 '익숙한 일'(DM이 기술 하나를 고름) — 설득 +2, 판정에 이점. 2026-11-18 GM 확정."
+      },
+      "languages": "공용어",
+      "initiative": 0,
+      "speed": "9m",
+      "hp_note": "1d8 = 4 · CR 0(10 XP)",
+      "abilities": [
+        {
+          "id": "ab_training",
+          "n": "익숙한 일 — 설득",
+          "t": "패시브",
+          "d": "설득에 숙련, 그 기술로 하는 능력 판정에 이점. (나루터 상인들 사이에서 붙임성으로 평판을 얻은 접객원)"
+        },
+        {
+          "id": "ab_club",
+          "n": "곤봉",
+          "t": "행동",
+          "d": "근접 공격 +2, 사거리 1.5m. 명중 1d4 타격."
+        }
+      ],
+      "src": "D&D 2024 Monster Manual(aidedd.org 전사본 대조, 2026-11-18)"
+    },
+    "hp": {
+      "cur": 4,
+      "max": 4
+    }
   }
 }

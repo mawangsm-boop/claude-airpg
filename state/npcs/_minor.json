@@ -234,7 +234,58 @@
         "cur": 11,
         "max": 11
       },
-      "at": "셈배"
+      "at": "셈배",
+      "sheet": {
+        "race": "인간",
+        "cls": "산적(Bandit) — 몬스터 수치표, 레벨 없음 · 강배 사공",
+        "ac": 12,
+        "ac_note": "가죽 갑옷",
+        "stats": {
+          "STR": 11,
+          "DEX": 12,
+          "CON": 12,
+          "INT": 10,
+          "WIS": 10,
+          "CHA": 10
+        },
+        "profBonus": 2,
+        "saves": {
+          "proficient": [],
+          "mods": {
+            "STR": 0,
+            "DEX": 1,
+            "CON": 1,
+            "INT": 0,
+            "WIS": 0,
+            "CHA": 0
+          }
+        },
+        "skills": {
+          "proficient": [],
+          "note": "수치표에 기술 없음."
+        },
+        "languages": "공용어 · 도둑의 은어",
+        "initiative": 1,
+        "speed": "9m",
+        "hp_note": "2d8+2 = 11 · CR 1/8(25 XP)",
+        "abilities": [
+          {
+            "id": "ab_dorik_scimitar",
+            "n": "언월도",
+            "t": "행동",
+            "d": "근접 공격 +3, 사거리 1.5m. 명중 1d6+1 참격."
+          },
+          {
+            "id": "ab_dorik_xbow",
+            "n": "경쇠뇌",
+            "t": "행동",
+            "d": "원거리 공격 +3, 사거리 24/96m. 명중 1d8+1 관통."
+          }
+        ],
+        "src": "D&D 2024 Monster Manual(aidedd.org 전사본 대조, 2026-11-18). 50회차 셈배 지붕 쇠뇌수(HP 11)와 같은 수치표."
+      },
+      "room": "sb_bow",
+      "roomNote": "해먹 — 노를 몰고 키를 거든다"
     },
     {
       "id": "reedisle_captives_s51",
@@ -498,7 +549,9 @@
           }
         ],
         "src": "2024 Monster Manual의 Bandit Captain — aidedd.org 2024판(DnD 5.5) 대조, 2026-11-17. SRD 5.2.1·원서와는 대조 못 함."
-      }
+      },
+      "room": "sb_bow",
+      "roomNote": "해먹 — 칼 두 자루는 곁에"
     },
     {
       "id": "gro_s54",
@@ -514,7 +567,64 @@
       "voice": "말이 거의 없다. 마르타의 말만 듣는다.",
       "stance": "경계",
       "stanceWhy": "칼잡이 패로 야영지에서 베릭스와 이자벨을 쐈고, 패한 뒤 항복했다.",
-      "at": "셈배"
+      "at": "셈배",
+      "sheet": {
+        "race": "인간",
+        "cls": "덩치(Tough) — 몬스터 수치표, 레벨 없음",
+        "ac": 12,
+        "ac_note": "가죽 갑옷",
+        "stats": {
+          "STR": 15,
+          "DEX": 12,
+          "CON": 14,
+          "INT": 10,
+          "WIS": 10,
+          "CHA": 11
+        },
+        "profBonus": 2,
+        "saves": {
+          "proficient": [],
+          "mods": {
+            "STR": 2,
+            "DEX": 1,
+            "CON": 2,
+            "INT": 0,
+            "WIS": 0,
+            "CHA": 0
+          }
+        },
+        "skills": {
+          "proficient": [],
+          "note": "수치표에 기술 없음."
+        },
+        "languages": "공용어",
+        "initiative": 1,
+        "speed": "9m",
+        "hp_note": "5d8+10 = 32 · CR 1/2(100 XP)",
+        "abilities": [
+          {
+            "id": "ab_gro_pack",
+            "n": "무리 전술",
+            "t": "패시브",
+            "d": "적의 1.5m 안에 무력화되지 않은 아군이 있으면 그 적에 대한 공격 판정에 이점."
+          },
+          {
+            "id": "ab_gro_mace",
+            "n": "철퇴",
+            "t": "행동",
+            "d": "근접 공격 +4, 사거리 1.5m. 명중 1d6+2 타격."
+          },
+          {
+            "id": "ab_gro_hxbow",
+            "n": "중쇠뇌",
+            "t": "행동",
+            "d": "원거리 공격 +3, 사거리 30/120m. 명중 1d10+1 관통."
+          }
+        ],
+        "src": "D&D 2024 Monster Manual(aidedd.org 전사본 대조, 2026-11-18). 54회차 설계(덩치 Tough 32)와 같은 수치표."
+      },
+      "room": "sb_bow",
+      "roomNote": "해먹 — 노꾼"
     },
     {
       "id": "perrin_s55",

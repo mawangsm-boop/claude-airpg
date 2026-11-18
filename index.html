@@ -2552,6 +2552,50 @@ const SEED = {
             "kind": "work"
           }
         ]
+      },
+      {
+        "id": "semboat",
+        "name": "셈배 '물새'",
+        "short": "셈배",
+        "note": "옛 관리인(브람 헤일록)이 부리던 강배 — 50회차 거울호 싸움 뒤 베릭스의 배가 됐다. 선장 모이라(월 50골드, 달마다 사흘은 갈대목). 뱃머리 아래 선원 칸(해먹 셋), 노 자리가 있는 갑판과 돛대 하나, 고물 쪽 선실(자물쇠 달린 문 · 침상 · 탁자 · 궤짝, 지붕은 난간 두른 망대 — 50회차에 쇠뇌수 셋이 섰던 자리), 맨 고물의 키와 키잡이 자리, 갑판 아래 짐칸. 평소 가게 뒷문 물가에 맨다. 구조는 2026-11-18 거점 그림을 그리며 GM 확정(50회차 기록의 지붕·선실 자물쇠·노·돛과 맞춤). 그림 속 가구·짐 수는 장식.",
+        "rooms": [
+          {
+            "id": "sb_bow",
+            "floor": 1,
+            "label": "선원 칸",
+            "kind": "sleep"
+          },
+          {
+            "id": "sb_deck",
+            "floor": 1,
+            "label": "갑판(노 자리)",
+            "kind": "work"
+          },
+          {
+            "id": "sb_cabin",
+            "floor": 1,
+            "label": "선실",
+            "kind": "sleep"
+          },
+          {
+            "id": "sb_roof",
+            "floor": 2,
+            "label": "선실 지붕(망대)",
+            "kind": "work"
+          },
+          {
+            "id": "sb_stern",
+            "floor": 1,
+            "label": "고물(키)",
+            "kind": "sleep"
+          },
+          {
+            "id": "sb_hold",
+            "floor": 0,
+            "label": "짐칸",
+            "kind": "work"
+          }
+        ]
       }
     ]
   },
@@ -4855,7 +4899,87 @@ const SEED = {
       "stance": "호의",
       "at": "상점",
       "room": "sh_r1",
-      "roomNote": "소금꽃 집 2층 방 1 — 젖은 노는 손님방으로"
+      "roomNote": "소금꽃 집 2층 방 1 — 젖은 노는 손님방으로",
+      "sheet": {
+        "race": "하프엘프",
+        "cls": "첩자(Spy) — 몬스터 수치표, 레벨 없음 · 정보상",
+        "ac": 12,
+        "stats": {
+          "STR": 10,
+          "DEX": 15,
+          "CON": 10,
+          "INT": 12,
+          "WIS": 14,
+          "CHA": 16
+        },
+        "profBonus": 2,
+        "saves": {
+          "proficient": [],
+          "mods": {
+            "STR": 0,
+            "DEX": 2,
+            "CON": 0,
+            "INT": 1,
+            "WIS": 2,
+            "CHA": 3
+          }
+        },
+        "skills": {
+          "proficient": [
+            "기만",
+            "통찰",
+            "수사",
+            "지각",
+            "손재주",
+            "은신"
+          ],
+          "mods": {
+            "기만": 5,
+            "통찰": 4,
+            "수사": 5,
+            "지각": 6,
+            "손재주": 4,
+            "은신": 6
+          },
+          "passivePerception": 16,
+          "note": "수치표 그대로."
+        },
+        "tools": {
+          "proficient": [
+            "도둑 도구"
+          ]
+        },
+        "languages": "공용어 · 엘프어",
+        "initiative": 4,
+        "speed": "9m · 등반 9m",
+        "hp_note": "6d8 = 27 · CR 1(200 XP)",
+        "abilities": [
+          {
+            "id": "ab_irene_shortsword",
+            "n": "소검",
+            "t": "행동",
+            "d": "근접 공격 +4, 사거리 1.5m. 명중 1d6+2 관통 + 2d6 독."
+          },
+          {
+            "id": "ab_irene_handxbow",
+            "n": "손쇠뇌",
+            "t": "행동",
+            "d": "원거리 공격 +4, 사거리 9/36m. 명중 1d6+2 관통 + 2d6 독."
+          },
+          {
+            "id": "ab_irene_cunning",
+            "n": "교활한 행동",
+            "t": "보조 행동",
+            "d": "질주·이탈·숨기 중 하나."
+          }
+        ],
+        "src": "D&D 2024 Monster Manual(aidedd.org 전사본 대조, 2026-11-18). GM 확정 이유: 직접 싸우기보다 정보망과 퇴로를 맡던 정보상('완전히 믿진 마') — 공연가(Performer)보다 첩자 쪽. 독 피해는 칼날·화살촉에 바른 독으로 본다. 언어 하나 더는 하프엘프라 엘프어."
+      },
+      "hp": {
+        "cur": 27,
+        "max": 27,
+        "tmp": 0
+      }
     },
     {
       "id": "marg",
@@ -4983,7 +5107,67 @@ const SEED = {
       "note_ui": "look 필드 2026-09-20 신규 등록 — 35회차 확립 단서(작고 여윈, 20세)만 확실하고 머리색 등 세부는 GM이 최소한으로 채운 것. 사용자가 다른 인상을 원하면 언제든 교체.",
       "at": "상점",
       "room": "lab",
-      "roomNote": "잠들지 않고 늘 일한다"
+      "roomNote": "잠들지 않고 늘 일한다",
+      "sheet": {
+        "race": "인간(구동핵을 심은 빈 몸)",
+        "cls": "평민(Commoner) — 몬스터 수치표, 레벨 없음",
+        "ac": 10,
+        "stats": {
+          "STR": 10,
+          "DEX": 10,
+          "CON": 10,
+          "INT": 10,
+          "WIS": 10,
+          "CHA": 10
+        },
+        "profBonus": 2,
+        "saves": {
+          "proficient": [],
+          "mods": {
+            "STR": 0,
+            "DEX": 0,
+            "CON": 0,
+            "INT": 0,
+            "WIS": 0,
+            "CHA": 0
+          }
+        },
+        "skills": {
+          "proficient": [
+            "손재주"
+          ],
+          "note": "수치표의 '익숙한 일'(DM이 기술 하나를 고름) — 손재주 +2, 판정에 이점. 2026-11-18 GM 확정."
+        },
+        "languages": "공용어(알아듣기만, 짧은 확인만 말함)",
+        "initiative": 0,
+        "speed": "9m",
+        "hp_note": "1d8 = 4 · CR 0(10 XP)",
+        "abilities": [
+          {
+            "id": "ab_training",
+            "n": "익숙한 일 — 손재주",
+            "t": "패시브",
+            "d": "손재주에 숙련, 그 기술로 하는 능력 판정에 이점. (조제 조수 — 불 보기·거르기·졸이기, 부품 손질)"
+          },
+          {
+            "id": "ab_club",
+            "n": "곤봉",
+            "t": "행동",
+            "d": "근접 공격 +2, 사거리 1.5m. 명중 1d4 타격. 명령 없이는 싸우지 않는다."
+          },
+          {
+            "id": "ab_husk_order",
+            "n": "명령 수행체",
+            "t": "패시브",
+            "d": "인격이 없다. 받은 명령만 수행하고 되묻지 않는다. 잠들지 않는다(roomNote)."
+          }
+        ],
+        "src": "D&D 2024 Monster Manual(aidedd.org 전사본 대조, 2026-11-18)"
+      },
+      "hp": {
+        "cur": 4,
+        "max": 4
+      }
     },
     {
       "id": "daria",
@@ -5079,7 +5263,139 @@ const SEED = {
           "INT": 10,
           "WIS": 12,
           "CHA": 8
-        }
+        },
+        "profBonus": 2,
+        "initiative": 1,
+        "speed": "9m",
+        "ac_note": "브로크의 비늘 갑옷 14+민첩 1(최대 2), 은신 불리점",
+        "saves": {
+          "proficient": [
+            "STR",
+            "CON"
+          ]
+        },
+        "skills": {
+          "proficient": [
+            "지각",
+            "생존",
+            "운동",
+            "위협"
+          ],
+          "note": "클래스(파이터) 둘: 지각·생존 — 예전 레아의 추적·생존(spotlight) / 배경(군인) 둘: 운동·위협. 2026-11-18 GM 확정. 인격이 없어 명령 없이는 판정을 시도하지 않는다."
+        },
+        "tools": {
+          "proficient": [
+            "주사위 놀이"
+          ],
+          "note": "군인 배경 몫."
+        },
+        "languages": "공용어 · 드워프어 · 하플링어",
+        "background": {
+          "n": "군인 (Soldier)",
+          "d": "능력치 근력·민첩·건강 중에서(지금 수치에 들어 있다고 봄) · 특기 사나운 공격자 · 기술 운동·위협 · 도구 놀이 도구(주사위). 예전 레아의 배경 기록이 없어 지금 몸(근력 16·건강 15, 큰 칼)에 맞춰 2026-11-18 GM 확정. 출처: D&D 2024 PHB(dnd2024.wikidot 전사본 대조, 2026-11-18)"
+        },
+        "weaponMastery": {
+          "kinds": [
+            {
+              "w": "대검",
+              "m": "Graze",
+              "d": "빗나가도 공격에 쓴 능력치 보정(+3)만큼 같은 종류 피해."
+            },
+            {
+              "w": "경쇠뇌",
+              "m": "Slow",
+              "d": "명중해 피해를 주면 다음 차례 시작까지 속도 −3m."
+            },
+            {
+              "w": "장검",
+              "m": "Sap",
+              "d": "맞힌 생물은 다음 차례 시작 전 다음 공격 판정에 불리점."
+            }
+          ],
+          "note": "파이터 1~3레벨 세 종류, 긴 휴식 때 하나를 바꿀 수 있다. 출처: D&D 2024 PHB(dnd2024.wikidot 전사본 대조, 2026-11-18)"
+        },
+        "attacks": [
+          {
+            "n": "브로크의 큰 칼(대검)",
+            "atk": "+5",
+            "dmg": "2d6+3 참격",
+            "note": "근력 +3·숙련 +2 · 양손·무거움 · 대형 무기 전투(1·2는 3으로) · 19~20 치명타 · 스침(빗나가도 3)"
+          },
+          {
+            "n": "경쇠뇌(주운 것)",
+            "atk": "+3",
+            "dmg": "1d8+1 관통",
+            "note": "민첩 +1·숙련 +2 · 24/96m · 장전 · 둔화"
+          }
+        ],
+        "resources": [
+          {
+            "id": "res_rea_second_wind",
+            "n": "재정비 (Second Wind)",
+            "cur": 2,
+            "max": 2,
+            "recharge": "long",
+            "sum": "보조 행동 1d10+3 회복 — 짧은 휴식에 1회, 긴 휴식에 전부 회복"
+          },
+          {
+            "id": "res_rea_action_surge",
+            "n": "행동 쇄도 (Action Surge)",
+            "cur": 1,
+            "max": 1,
+            "recharge": "short"
+          }
+        ],
+        "abilities": [
+          {
+            "id": "ab_rea_gwf",
+            "n": "전투 방식: 대형 무기 전투",
+            "t": "패시브 (1레벨)",
+            "d": "양손으로 든 근접 무기(양손·다용도)의 피해 주사위 1·2를 3으로 친다. 출처: D&D 2024 PHB(dnd2024.wikidot 전사본 대조, 2026-11-18)"
+          },
+          {
+            "id": "ab_rea_second_wind",
+            "n": "재정비",
+            "t": "보조 행동 (1레벨)",
+            "d": "1d10+파이터 레벨(3) 회복. 2회, 짧은 휴식에 1회·긴 휴식에 전부 회복. 출처: D&D 2024 PHB(dnd2024.wikidot 전사본 대조, 2026-11-18)"
+          },
+          {
+            "id": "ab_rea_action_surge",
+            "n": "행동 쇄도",
+            "t": "2레벨",
+            "d": "자기 차례에 행동 하나 더(마법 행동 제외). 짧은·긴 휴식 뒤 다시. 출처: D&D 2024 PHB(dnd2024.wikidot 전사본 대조, 2026-11-18)"
+          },
+          {
+            "id": "ab_rea_tactical_mind",
+            "n": "전술적 판단",
+            "t": "2레벨",
+            "d": "능력 판정에 실패하면 재정비 1회를 써 1d10을 더한다 — 그래도 실패하면 소모하지 않는다. 출처: D&D 2024 PHB(dnd2024.wikidot 전사본 대조, 2026-11-18)"
+          },
+          {
+            "id": "ab_rea_improved_crit",
+            "n": "향상된 치명타",
+            "t": "챔피언 3레벨",
+            "d": "무기·맨손 공격이 19~20에 치명타. 출처: D&D 2024 PHB(dnd2024.wikidot 전사본 대조, 2026-11-18)"
+          },
+          {
+            "id": "ab_rea_athlete",
+            "n": "뛰어난 운동선수",
+            "t": "챔피언 3레벨",
+            "d": "우선권과 근력(운동) 판정에 이점. 치명타를 낸 직후 기회 공격 없이 속도 절반까지 이동. 출처: D&D 2024 PHB(dnd2024.wikidot 전사본 대조, 2026-11-18)"
+          },
+          {
+            "id": "ab_rea_savage",
+            "n": "사나운 공격자 (Savage Attacker)",
+            "t": "기원 특기(배경: 군인)",
+            "d": "차례당 한 번, 무기로 맞히면 피해 주사위를 두 번 굴려 원하는 쪽을 쓴다. 출처: D&D 2024 PHB(dnd2024.wikidot 전사본 대조, 2026-11-18)"
+          },
+          {
+            "id": "ab_rea_vessel",
+            "n": "명령 수행체",
+            "t": "패시브",
+            "d": "인격이 없다. 명령 없이는 아무것도 하지 않고, 받은 명령만 그대로 수행한다. 잠들지 않고 늘 지킨다."
+          }
+        ],
+        "hp_note": "1레벨 10+2, 2~3레벨 평균 6+2씩 = 28"
       },
       "at": "상점",
       "items": [
@@ -5178,7 +5494,61 @@ const SEED = {
       "at": "상점",
       "items": [],
       "room": "sh_small",
-      "roomNote": "소금꽃 집 1층 작은 방 — 동생 둘과(오틸리에가 떠난 뒤) · 집 관리"
+      "roomNote": "소금꽃 집 1층 작은 방 — 동생 둘과(오틸리에가 떠난 뒤) · 집 관리",
+      "sheet": {
+        "race": "인간",
+        "cls": "평민(Commoner) — 몬스터 수치표, 레벨 없음",
+        "ac": 10,
+        "stats": {
+          "STR": 10,
+          "DEX": 10,
+          "CON": 10,
+          "INT": 10,
+          "WIS": 10,
+          "CHA": 10
+        },
+        "profBonus": 2,
+        "saves": {
+          "proficient": [],
+          "mods": {
+            "STR": 0,
+            "DEX": 0,
+            "CON": 0,
+            "INT": 0,
+            "WIS": 0,
+            "CHA": 0
+          }
+        },
+        "skills": {
+          "proficient": [
+            "설득"
+          ],
+          "note": "수치표의 '익숙한 일'(DM이 기술 하나를 고름) — 설득 +2, 판정에 이점. 2026-11-18 GM 확정."
+        },
+        "languages": "공용어",
+        "initiative": 0,
+        "speed": "9m",
+        "hp_note": "1d8 = 4 · CR 0(10 XP)",
+        "abilities": [
+          {
+            "id": "ab_training",
+            "n": "익숙한 일 — 설득",
+            "t": "패시브",
+            "d": "설득에 숙련, 그 기술로 하는 능력 판정에 이점. (나루터 상인들 사이에서 붙임성으로 평판을 얻은 접객원)"
+          },
+          {
+            "id": "ab_club",
+            "n": "곤봉",
+            "t": "행동",
+            "d": "근접 공격 +2, 사거리 1.5m. 명중 1d4 타격."
+          }
+        ],
+        "src": "D&D 2024 Monster Manual(aidedd.org 전사본 대조, 2026-11-18)"
+      },
+      "hp": {
+        "cur": 4,
+        "max": 4
+      }
     },
     {
       "id": "moira",
@@ -5201,7 +5571,63 @@ const SEED = {
       "knows": "오스릭과 주고받은 편지 내용과 선금 20gp 송금(A등급, 본인이 직접). 갈대목의 사정(A등급). 나루터에 말 잘하는 외지인이 있다는 하역꾼들의 소문(C등급). 48회차: 약초 우선 납품·나룻삯 면제·하겔 전리품 불가침·에다 소개·마을이 따로 드릴 물건, 다섯 조건에 서명(A등급).",
       "unknown": "베릭스 일행의 정체·과거 전부(D등급). 오스릭의 실제 행방(D등급).",
       "look": "Moira Hasek, a human female river boatwoman in her mid 20s. Sun-tanned skin, broad strong rower's shoulders, short cropped brown hair, lips chapped by river wind, rope marks on her forearms. Wearing a worn linen shirt with the sleeves always rolled up past the elbows.",
-      "at": "카를렌 나루터"
+      "at": "카를렌 나루터",
+      "sheet": {
+        "race": "인간",
+        "cls": "평민(Commoner) — 몬스터 수치표, 레벨 없음",
+        "ac": 10,
+        "stats": {
+          "STR": 10,
+          "DEX": 10,
+          "CON": 10,
+          "INT": 10,
+          "WIS": 10,
+          "CHA": 10
+        },
+        "profBonus": 2,
+        "saves": {
+          "proficient": [],
+          "mods": {
+            "STR": 0,
+            "DEX": 0,
+            "CON": 0,
+            "INT": 0,
+            "WIS": 0,
+            "CHA": 0
+          }
+        },
+        "skills": {
+          "proficient": [
+            "운동"
+          ],
+          "note": "수치표의 '익숙한 일'(DM이 기술 하나를 고름) — 운동 +2, 판정에 이점. 2026-11-18 GM 확정."
+        },
+        "languages": "공용어",
+        "initiative": 0,
+        "speed": "9m",
+        "hp_note": "1d8 = 4 · CR 0(10 XP)",
+        "abilities": [
+          {
+            "id": "ab_training",
+            "n": "익숙한 일 — 운동",
+            "t": "패시브",
+            "d": "운동에 숙련, 그 기술로 하는 능력 판정에 이점. (혼자 배를 몰고 카를렌까지 내려온 사공 — 노 젓기·헤엄·줄 다루기)"
+          },
+          {
+            "id": "ab_club",
+            "n": "노(곤봉으로 침)",
+            "t": "행동",
+            "d": "근접 공격 +2, 사거리 1.5m. 명중 1d4 타격."
+          }
+        ],
+        "src": "D&D 2024 Monster Manual(aidedd.org 전사본 대조, 2026-11-18)"
+      },
+      "hp": {
+        "cur": 4,
+        "max": 4
+      },
+      "room": "sb_stern",
+      "roomNote": "선장 — 키 곁 잠자리(달마다 사흘은 갈대목)"
     },
     {
       "id": "ian",
@@ -5323,7 +5749,57 @@ const SEED = {
           "sum": "선창 상인 명단 사본 — 아이린의 그물용"
         }
       ],
-      "stance": "호의"
+      "stance": "호의",
+      "sheet": {
+        "race": "인간",
+        "cls": "평민(Commoner) — 몬스터 수치표, 레벨 없음",
+        "ac": 10,
+        "stats": {
+          "STR": 10,
+          "DEX": 10,
+          "CON": 10,
+          "INT": 10,
+          "WIS": 10,
+          "CHA": 10
+        },
+        "profBonus": 2,
+        "saves": {
+          "proficient": [],
+          "mods": {
+            "STR": 0,
+            "DEX": 0,
+            "CON": 0,
+            "INT": 0,
+            "WIS": 0,
+            "CHA": 0
+          }
+        },
+        "skills": {
+          "proficient": [
+            "수사"
+          ],
+          "note": "수치표의 '익숙한 일'(DM이 기술 하나를 고름) — 수사 +2, 판정에 이점. 2026-11-18 GM 확정."
+        },
+        "languages": "공용어",
+        "initiative": 0,
+        "speed": "9m",
+        "hp_note": "1d8 = 4 · CR 0(10 XP)",
+        "abilities": [
+          {
+            "id": "ab_training",
+            "n": "익숙한 일 — 수사",
+            "t": "패시브",
+            "d": "수사에 숙련, 그 기술로 하는 능력 판정에 이점. (관리인의 장부를 실제로 쓰고, 누구의 글씨든 가려내는 손)"
+          },
+          {
+            "id": "ab_club",
+            "n": "곤봉",
+            "t": "행동",
+            "d": "근접 공격 +2, 사거리 1.5m. 명중 1d4 타격."
+          }
+        ],
+        "src": "D&D 2024 Monster Manual(aidedd.org 전사본 대조, 2026-11-18)"
+      }
     },
     {
       "id": "maren_sor",
@@ -6381,7 +6857,58 @@ const SEED = {
         "cur": 11,
         "max": 11
       },
-      "at": "셈배"
+      "at": "셈배",
+      "sheet": {
+        "race": "인간",
+        "cls": "산적(Bandit) — 몬스터 수치표, 레벨 없음 · 강배 사공",
+        "ac": 12,
+        "ac_note": "가죽 갑옷",
+        "stats": {
+          "STR": 11,
+          "DEX": 12,
+          "CON": 12,
+          "INT": 10,
+          "WIS": 10,
+          "CHA": 10
+        },
+        "profBonus": 2,
+        "saves": {
+          "proficient": [],
+          "mods": {
+            "STR": 0,
+            "DEX": 1,
+            "CON": 1,
+            "INT": 0,
+            "WIS": 0,
+            "CHA": 0
+          }
+        },
+        "skills": {
+          "proficient": [],
+          "note": "수치표에 기술 없음."
+        },
+        "languages": "공용어 · 도둑의 은어",
+        "initiative": 1,
+        "speed": "9m",
+        "hp_note": "2d8+2 = 11 · CR 1/8(25 XP)",
+        "abilities": [
+          {
+            "id": "ab_dorik_scimitar",
+            "n": "언월도",
+            "t": "행동",
+            "d": "근접 공격 +3, 사거리 1.5m. 명중 1d6+1 참격."
+          },
+          {
+            "id": "ab_dorik_xbow",
+            "n": "경쇠뇌",
+            "t": "행동",
+            "d": "원거리 공격 +3, 사거리 24/96m. 명중 1d8+1 관통."
+          }
+        ],
+        "src": "D&D 2024 Monster Manual(aidedd.org 전사본 대조, 2026-11-18). 50회차 셈배 지붕 쇠뇌수(HP 11)와 같은 수치표."
+      },
+      "room": "sb_bow",
+      "roomNote": "해먹 — 노를 몰고 키를 거든다"
     },
     {
       "id": "reedisle_captives_s51",
@@ -6645,7 +7172,9 @@ const SEED = {
           }
         ],
         "src": "2024 Monster Manual의 Bandit Captain — aidedd.org 2024판(DnD 5.5) 대조, 2026-11-17. SRD 5.2.1·원서와는 대조 못 함."
-      }
+      },
+      "room": "sb_bow",
+      "roomNote": "해먹 — 칼 두 자루는 곁에"
     },
     {
       "id": "gro_s54",
@@ -6661,7 +7190,64 @@ const SEED = {
       "voice": "말이 거의 없다. 마르타의 말만 듣는다.",
       "stance": "경계",
       "stanceWhy": "칼잡이 패로 야영지에서 베릭스와 이자벨을 쐈고, 패한 뒤 항복했다.",
-      "at": "셈배"
+      "at": "셈배",
+      "sheet": {
+        "race": "인간",
+        "cls": "덩치(Tough) — 몬스터 수치표, 레벨 없음",
+        "ac": 12,
+        "ac_note": "가죽 갑옷",
+        "stats": {
+          "STR": 15,
+          "DEX": 12,
+          "CON": 14,
+          "INT": 10,
+          "WIS": 10,
+          "CHA": 11
+        },
+        "profBonus": 2,
+        "saves": {
+          "proficient": [],
+          "mods": {
+            "STR": 2,
+            "DEX": 1,
+            "CON": 2,
+            "INT": 0,
+            "WIS": 0,
+            "CHA": 0
+          }
+        },
+        "skills": {
+          "proficient": [],
+          "note": "수치표에 기술 없음."
+        },
+        "languages": "공용어",
+        "initiative": 1,
+        "speed": "9m",
+        "hp_note": "5d8+10 = 32 · CR 1/2(100 XP)",
+        "abilities": [
+          {
+            "id": "ab_gro_pack",
+            "n": "무리 전술",
+            "t": "패시브",
+            "d": "적의 1.5m 안에 무력화되지 않은 아군이 있으면 그 적에 대한 공격 판정에 이점."
+          },
+          {
+            "id": "ab_gro_mace",
+            "n": "철퇴",
+            "t": "행동",
+            "d": "근접 공격 +4, 사거리 1.5m. 명중 1d6+2 타격."
+          },
+          {
+            "id": "ab_gro_hxbow",
+            "n": "중쇠뇌",
+            "t": "행동",
+            "d": "원거리 공격 +3, 사거리 30/120m. 명중 1d10+1 관통."
+          }
+        ],
+        "src": "D&D 2024 Monster Manual(aidedd.org 전사본 대조, 2026-11-18). 54회차 설계(덩치 Tough 32)와 같은 수치표."
+      },
+      "room": "sb_bow",
+      "roomNote": "해먹 — 노꾼"
     },
     {
       "id": "perrin_s55",
@@ -6768,7 +7354,7 @@ const SEED = {
       "unknown": "헨드릭의 일(D)."
     }
   ],
-  "seedRev": "S58-111"
+  "seedRev": "S58-112"
 };/* ==================== 상태 관리 ==================== */
 const KEY="berix_handbook_v2_17_s40";
 let S = load(), HIST = [];
@@ -7845,6 +8431,9 @@ const BASE_ARTS={
            sh_hall:[235,560],sh_kitchen:[450,560],sh_small:[625,560],sh_yard:[800,470],
            sh_store:[1180,450],sh_loft:[1395,330],sh_cellar:[1060,760]},
     marks:[[100,505,"정문"],[815,385,"마당 골목"],[1135,640,"뚜껑문"],[50,720,"길"],[1270,975,"석축 둑 벽 — 문 없음"],[1450,960,"거울강"]]},
+  semboat:{src:"./assets/base_semboat.jpg",ok:false,vb:[0,40,1536,960],
+    rooms:{sb_bow:[240,530],sb_deck:[600,360],sb_cabin:[1175,400],sb_roof:[1060,235],sb_stern:[1370,405],sb_hold:[790,620]},
+    marks:[[330,60,"돛대"],[905,378,"선실 문(자물쇠)"],[1490,720,"키"],[760,1000,"가게 뒷문 물가"],[150,780,"거울강"]]},
   tower:{src:"./assets/base_tower.jpg",ok:false,vb:[0,20,1536,990],
     rooms:{tw_top:[640,205],tw_3a:[560,328],tw_3b:[790,328],tw_2a:[560,452],tw_2b:[790,452],
            tw_1:[665,600],tw_cellar:[560,795]},
@@ -7901,7 +8490,7 @@ function renderBaseRoster(){
   const tr=rows.map(a=>{ const {bd,r}=idx[a.room]; const bn=bd?(bd.short||bd.name):"—";
     const first=bn!==prev; prev=bn;
     const note=(a.roomNote||"").startsWith(bn)?a.roomNote.slice(bn.length).replace(/^[^—(]*/,"").replace(/^—\s*/,"").trim():(a.roomNote||"");
-    const at=a.at&&!/^상점/.test(a.at)?`<div class="away">지금: ${escAttr(a.at)}</div>`:"";
+    const at=a.at&&!/^상점/.test(a.at)&&!(bd&&a.at.startsWith(bd.short||bd.name))?`<div class="away">지금: ${escAttr(a.at)}</div>`:"";
     return `<tr${bd?` data-bsview="${escAttr(bd.id)}"`:""}><td class="bd">${first?escAttr(bn):""}</td><td class="nm">${escAttr(a.name||a.n||a.id)}</td>`+
       `<td class="rm">${escAttr(r.label)}${bd&&fl(r)?` <span class="sub">${fl(r)}</span>`:""}</td><td>${note?`<span class="sub">${escAttr(note)}</span>`:""}${at}</td></tr>`; }).join("");
   box.innerHTML=`<div class="roster-sum">${rows.length}명 · 건물 ${blds.size}채 — 줄을 누르면 그 건물 그림으로 갑니다</div>`+

@@ -20,6 +20,62 @@
     "knows": "오스릭과 주고받은 편지 내용과 선금 20gp 송금(A등급, 본인이 직접). 갈대목의 사정(A등급). 나루터에 말 잘하는 외지인이 있다는 하역꾼들의 소문(C등급). 48회차: 약초 우선 납품·나룻삯 면제·하겔 전리품 불가침·에다 소개·마을이 따로 드릴 물건, 다섯 조건에 서명(A등급).",
     "unknown": "베릭스 일행의 정체·과거 전부(D등급). 오스릭의 실제 행방(D등급).",
     "look": "Moira Hasek, a human female river boatwoman in her mid 20s. Sun-tanned skin, broad strong rower's shoulders, short cropped brown hair, lips chapped by river wind, rope marks on her forearms. Wearing a worn linen shirt with the sleeves always rolled up past the elbows.",
-    "at": "카를렌 나루터"
+    "at": "카를렌 나루터",
+    "sheet": {
+      "race": "인간",
+      "cls": "평민(Commoner) — 몬스터 수치표, 레벨 없음",
+      "ac": 10,
+      "stats": {
+        "STR": 10,
+        "DEX": 10,
+        "CON": 10,
+        "INT": 10,
+        "WIS": 10,
+        "CHA": 10
+      },
+      "profBonus": 2,
+      "saves": {
+        "proficient": [],
+        "mods": {
+          "STR": 0,
+          "DEX": 0,
+          "CON": 0,
+          "INT": 0,
+          "WIS": 0,
+          "CHA": 0
+        }
+      },
+      "skills": {
+        "proficient": [
+          "운동"
+        ],
+        "note": "수치표의 '익숙한 일'(DM이 기술 하나를 고름) — 운동 +2, 판정에 이점. 2026-11-18 GM 확정."
+      },
+      "languages": "공용어",
+      "initiative": 0,
+      "speed": "9m",
+      "hp_note": "1d8 = 4 · CR 0(10 XP)",
+      "abilities": [
+        {
+          "id": "ab_training",
+          "n": "익숙한 일 — 운동",
+          "t": "패시브",
+          "d": "운동에 숙련, 그 기술로 하는 능력 판정에 이점. (혼자 배를 몰고 카를렌까지 내려온 사공 — 노 젓기·헤엄·줄 다루기)"
+        },
+        {
+          "id": "ab_club",
+          "n": "노(곤봉으로 침)",
+          "t": "행동",
+          "d": "근접 공격 +2, 사거리 1.5m. 명중 1d4 타격."
+        }
+      ],
+      "src": "D&D 2024 Monster Manual(aidedd.org 전사본 대조, 2026-11-18)"
+    },
+    "hp": {
+      "cur": 4,
+      "max": 4
+    },
+    "room": "sb_stern",
+    "roomNote": "선장 — 키 곁 잠자리(달마다 사흘은 갈대목)"
   }
 }
