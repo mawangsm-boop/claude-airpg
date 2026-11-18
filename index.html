@@ -191,6 +191,24 @@ details.actgrp[open]>summary::before{transform:rotate(90deg)}
 .trait{font-size:12px;line-height:1.6;border-top:1px dashed var(--line);padding-top:7px;margin-top:7px}
 .wrap{position:relative;background:#0a0c12;border:1px solid var(--border);border-radius:9px;overflow:hidden;touch-action:none}
 .wrap svg{display:block;width:100%;height:100%}
+/* v2.60: 전투판 3D — 캔버스 위에 이름표·글자를 HTML로 겹친다 */
+#bt3d{position:absolute;inset:0;background:linear-gradient(#3d5f8f,#22355a 55%,#0b101c)}
+#bt3d .bt3cv{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+#bt3d .bt3cv:active{cursor:grabbing}
+.bt3ov{position:absolute;inset:0;pointer-events:none;overflow:hidden;font-family:var(--f-body)}
+.bt3tag{position:absolute;left:0;top:0;pointer-events:auto;cursor:pointer;text-align:center;white-space:nowrap;line-height:1.15;will-change:transform}
+.bt3tag b{display:inline-block;font-size:12.5px;font-weight:700;color:#fff4dc;padding:1px 6px;border-radius:9px;background:rgba(10,12,18,.72);border:1.5px solid rgba(255,255,255,.2)}
+.bt3tag.enemy b{color:#ffd9d6;border-color:#e0666a;background:rgba(70,14,18,.85)}
+.bt3tag.ally b{border-color:#7ac68f}.bt3tag.pc b{border-color:#6ea8e8}.bt3tag.neutral b{border-color:#c9a457}
+.bt3tag.turn b{box-shadow:0 0 0 2px #ffe08a}
+.bt3tag.dim,.bt3tag.dead{opacity:.55}
+.bt3tag i{display:block;width:36px;height:5px;margin:2px auto 0;background:#0a0c12;border-radius:3px;overflow:hidden;border:1px solid #0a0c12}
+.bt3tag i s{display:block;height:100%}
+.bt3tag em{display:block;font-style:normal;font-size:10.5px;color:var(--violet-s);text-shadow:0 0 3px #000,0 0 3px #000}
+.bt3lab{position:absolute;left:0;top:0;font-size:11px;color:#f1ead8;white-space:nowrap;text-shadow:0 0 3px #0a0c12,0 0 3px #0a0c12,0 0 2px #0a0c12;will-change:transform}
+.bt3lab.flat{color:#ffe6a8}.bt3lab.ring{font-weight:700;font-size:11.5px}
+.bt3lab.cmp{font-size:14px;font-weight:700;color:#aab4c8}.bt3lab.cmp.n{color:#ffe08a}
+.bt3empty{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#f1ead8;font-size:16px;text-shadow:0 0 4px #000}
 #dgWrap{min-height:130px}
 #btWrap{min-height:130px}
 #wWrap{min-height:130px}
@@ -411,9 +429,9 @@ summary>span:first-child>em{font-style:normal;overflow:hidden;text-overflow:elli
     <div class="card">
       <h2 id="btName">전투</h2>
       <div class="tools">
-        <button id="btIso" class="on">입체</button>
-        <button id="btRotL">⟲ 돌리기</button>
-        <button id="btRotR">돌리기 ⟳</button>
+        <button id="btIso" class="on">3D</button>
+        <button id="btRotL">적 보기</button>
+        <button id="btRotR">시점 초기화</button>
         <button id="btFloor" style="display:none">층: 전체</button>
         <button id="btNames" class="on">이름 표시</button>
         <button id="btFit">화면 맞춤</button>
@@ -7616,7 +7634,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.59";
+const HB_VERSION="v2.60";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -8700,8 +8718,8 @@ function renderBattle(){
   /* v2.50: 싸움이 없으면 지금 함께 다니는 사람들을 빈 들판에 세워 둔다 */
   const idle=!((S.battle||{}).tokens||[]).length, B=idle?btIdleBoard():S.battle, svg=$("btSvg"); svg.innerHTML="";
   $("btName").textContent=idle?"일행 — 지금은 싸움이 없습니다":B.name+(B.round?` · ${B.round}라운드`:"");
-  if(btIso){ renderBattleIso(B,svg); return; }
-  btViewKey="";
+  if(btIso){ renderBattle3D(B); return; }
+  bt3Show(false); btViewKey="";
   const cell=60, W=B.cols*cell, H=B.rows*cell;
   /* v2.35: 판이 넓을수록 글자가 작아지므로 글자 크기를 판 폭에 맞춰 키운다(16칸 기준) */
   const fk=Math.max(1,Math.min(1.8,B.cols/16));
@@ -8874,31 +8892,155 @@ function btSpriteKey(t){
 }
 function btSprite(key){ for(const s of BT_SHEETS) if(s.ok&&s.cells[key]) return {s,c:s.cells[key]}; return null; }
 function btLoadSheets(){ BT_SHEETS.forEach(s=>{ if(s.req) return; s.req=true; const im=new Image(); im.onload=()=>{ s.ok=true; try{ if(btIso&&$("s-battle").classList.contains("on")) renderBattle(); }catch{} }; im.src=s.src; }); }
-function renderBattleIso(B,svg){
-  const C=B.cols,R=B.rows,{TW,TH,ZH,FH}=ISO, r=btRot;
-  const rotP=(x,y)=>r===0?[x,y]:r===1?[y,C-x]:r===2?[C-x,R-y]:[R-y,x];
-  const rotV=(dx,dy)=>r===0?[dx,dy]:r===1?[dy,-dx]:r===2?[-dx,-dy]:[-dy,dx];
-  const P=(x,y,z)=>{ const [u,v]=rotP(x,y); return [(u-v)*TW/2,(u+v)*TH/2-(z||0)*ZH]; };
-  const depth=(x,y)=>{ const [u,v]=rotP(x+0.5,y+0.5); return u+v; };
-  const pts=a=>a.map(p=>p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
-  const poly=(parent,a,o)=>parent.appendChild(el("polygon",Object.assign({points:pts(a)},o)));
-  const NB={n:[0,-1],e:[1,0],s:[0,1],w:[-1,0]};
-  /* 화면 앞쪽으로 보이는 두 방향(격자 기준): 회전한 좌표에서 u+, v+ 쪽 */
-  const dirOf=(du,dv)=>Object.keys(NB).find(k=>{ const [a,b]=rotV(NB[k][0],NB[k][1]); return a===du&&b===dv; });
-  const dRight=dirOf(1,0), dLeft=dirOf(0,1), dBackR=dirOf(0,-1), dBackL=dirOf(-1,0);
-  const edgePts=(x,y,d)=>d==="n"?[[x,y],[x+1,y]]:d==="s"?[[x,y+1],[x+1,y+1]]:d==="w"?[[x,y],[x,y+1]]:[[x+1,y],[x+1,y+1]];
-  /* 기둥: (x,y,w,h) 밑면 z0, 윗면 z1 */
-  const prism=(parent,x,y,w,h,z0,z1,col,o)=>{
-    const c=[[x,y],[x+w,y],[x+w,y+h],[x,y+h]].map(g=>({g,uv:rotP(g[0],g[1])}));
-    const pick=f=>c.slice().sort(f)[0].g;
-    const top=pick((a,b)=>(a.uv[0]+a.uv[1])-(b.uv[0]+b.uv[1])), bot=pick((a,b)=>(b.uv[0]+b.uv[1])-(a.uv[0]+a.uv[1])),
-          lef=pick((a,b)=>(a.uv[0]-a.uv[1])-(b.uv[0]-b.uv[1])), rig=pick((a,b)=>(b.uv[0]-b.uv[1])-(a.uv[0]-a.uv[1]));
-    const T=g=>P(g[0],g[1],z1), Bm=g=>P(g[0],g[1],z0), ex=o||{};
-    poly(parent,[Bm(lef),Bm(bot),T(bot),T(lef)],Object.assign({fill:col[1],stroke:"rgba(0,0,0,.25)","stroke-width":0.6},ex));
-    poly(parent,[Bm(bot),Bm(rig),T(rig),T(bot)],Object.assign({fill:col[2],stroke:"rgba(0,0,0,.25)","stroke-width":0.6},ex));
-    return poly(parent,[T(top),T(rig),T(bot),T(lef)],Object.assign({fill:col[0],stroke:"rgba(0,0,0,.3)","stroke-width":0.7},ex));
-  };
-  /* ---- 판 읽기 ---- */
+/* ==================== 전투판 3D (v2.60) ====================
+   2.5D(네 방향 고정)를 바꿔 three.js로 판을 실제 3D로 세운다. 판·지형·토큰 읽는 법은 2.5D 때와 같다(isoKind·ISO_H·높이·층·그림표).
+   · 한 손가락 끌기 = 돌리기·기울이기, 두 손가락 = 확대·축소와 옮기기, 마우스 휠 = 확대, 오른쪽 끌기(또는 Shift) = 옮기기.
+   · 이름표·HP 막대는 그림 위에 따로 띄워 늘 보인다(적은 빨간 테두리). 벽·건물·나무가 사람을 가리면 그 덩어리만 반투명해진다.
+   · three.js는 assets/vendor/three.min.js(r149)를 3D를 처음 열 때만 불러온다. 못 띄우는 기기면 평면으로 돌아간다. */
+let BT3=null, btThreeState="";
+const BT3_IMG={}, BT3_TEX={};
+function btNeedThree(cb){
+  if(window.THREE) return cb(true);
+  if(btThreeState==="fail") return cb(false);
+  (btNeedThree.q=btNeedThree.q||[]).push(cb);
+  if(btThreeState==="loading") return;
+  btThreeState="loading";
+  const s=document.createElement("script"); s.src="./assets/vendor/three.min.js";
+  s.onload=()=>{ btThreeState=window.THREE?"ok":"fail"; const q=btNeedThree.q; btNeedThree.q=[]; q.forEach(f=>f(!!window.THREE)); };
+  s.onerror=()=>{ btThreeState="fail"; const q=btNeedThree.q; btNeedThree.q=[]; q.forEach(f=>f(false)); };
+  document.head.appendChild(s);
+}
+function bt3Show(on){
+  const svg=$("btSvg"); if(svg) svg.style.display=on?"none":"";
+  if(BT3) BT3.box.style.display=on?"":"none";
+}
+function renderBattle3D(B){
+  bt3Show(true);
+  btNeedThree(ok=>{
+    if(!ok||!bt3Init()){ btIso=false; bt3Show(false); btSyncButtons(); try{ toast("이 기기에서 3D를 띄우지 못해 평면으로 보여 줍니다"); }catch{} renderBattle(); return; }
+    if(!btIso) return;
+    bt3Show(true); bt3Size(); bt3Build(B);
+  });
+}
+function bt3Init(){
+  if(BT3) return true;
+  const wrap=$("btWrap"); let renderer;
+  try{ renderer=new THREE.WebGLRenderer({antialias:true,alpha:true}); }catch(e){ return false; }
+  renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+  const box=document.createElement("div"); box.id="bt3d";
+  const cv=renderer.domElement; cv.className="bt3cv"; box.appendChild(cv);
+  const ov=document.createElement("div"); ov.className="bt3ov"; box.appendChild(ov);
+  wrap.appendChild(box);
+  const scene=new THREE.Scene();
+  scene.add(new THREE.HemisphereLight(0xe8eeff,0x5a4a34,0.78));
+  const sun=new THREE.DirectionalLight(0xfff0d8,0.72); sun.position.set(-0.55,1,0.4); scene.add(sun);
+  const camera=new THREE.PerspectiveCamera(38,1,0.1,600);
+  BT3={renderer,scene,camera,box,cv,ov,wrap,root:null,cam:{yaw:Math.PI/4,pitch:0.9,dist:22,tx:0,ty:0,tz:0},
+       key:"",toks:[],occ:[],tags:[],labs:[],pick:[],bob:null,dirty:true,lastYaw:null,B:null,ray:new THREE.Raycaster()};
+  try{ const c=JSON.parse(localStorage.getItem("berix_bt3_cam")||"null"); if(c&&isFinite(c.yaw)&&isFinite(c.pitch)){ BT3.cam.yaw=c.yaw; BT3.cam.pitch=c.pitch; } }catch{}
+  bt3Controls();
+  if(window.ResizeObserver) new ResizeObserver(()=>bt3Size()).observe(wrap); else window.addEventListener("resize",bt3Size);
+  requestAnimationFrame(bt3Loop);
+  return true;
+}
+function bt3Size(){
+  if(!BT3) return; const w=BT3.box.clientWidth, h=BT3.box.clientHeight; if(w<10||h<10) return;
+  if(BT3.w===w&&BT3.h===h) return; BT3.w=w; BT3.h=h;
+  BT3.renderer.setSize(w,h,false); BT3.camera.aspect=w/h; BT3.camera.updateProjectionMatrix(); BT3.dirty=true;
+}
+function bt3Cam(){
+  const c=BT3.cam, cp=Math.cos(c.pitch);
+  BT3.camera.position.set(c.tx+c.dist*cp*Math.sin(c.yaw), c.ty+c.dist*Math.sin(c.pitch), c.tz+c.dist*cp*Math.cos(c.yaw));
+  BT3.camera.lookAt(c.tx,c.ty,c.tz);
+}
+/* 점들이 다 들어오게 맞춘다(보는 각도는 그대로) */
+function bt3Fit(pts){
+  if(!pts.length) return; const c=BT3.cam;
+  let mn=[1e9,1e9,1e9], mx=[-1e9,-1e9,-1e9];
+  pts.forEach(p=>{ for(let i=0;i<3;i++){ mn[i]=Math.min(mn[i],p[i]); mx[i]=Math.max(mx[i],p[i]); } });
+  c.tx=(mn[0]+mx[0])/2; c.ty=(mn[1]+mx[1])/2; c.tz=(mn[2]+mx[2])/2;
+  let r=0; pts.forEach(p=>{ r=Math.max(r,Math.hypot(p[0]-c.tx,p[1]-c.ty,p[2]-c.tz)); });
+  const fh=BT3.camera.fov*Math.PI/360, fw=Math.atan(Math.tan(fh)*(BT3.camera.aspect||1));
+  c.dist=Math.max(5,Math.min(140,(r+0.8)/Math.sin(Math.min(fh,fw))));
+  BT3.dirty=true;
+}
+function bt3Pan(dx,dy){
+  const c=BT3.cam, k=c.dist*0.0016, s=Math.sin(c.yaw), co=Math.cos(c.yaw);
+  c.tx-=co*dx*k; c.tz-=-s*dx*k;          /* 오른쪽 벡터 (cos,−sin) */
+  c.tx+=-s*dy*k; c.tz+=-co*dy*k;         /* 앞쪽 벡터 (−sin,−cos) */
+  BT3.dirty=true;
+}
+function bt3SaveCam(){ try{ localStorage.setItem("berix_bt3_cam",JSON.stringify({yaw:BT3.cam.yaw,pitch:BT3.cam.pitch})); }catch{} }
+function bt3Controls(){
+  const cv=BT3.cv, P=new Map(); let moved=0, pinch=null;
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  cv.addEventListener("pointerdown",e=>{ try{ cv.setPointerCapture(e.pointerId); }catch{} P.set(e.pointerId,{x:e.clientX,y:e.clientY,b:e.button,sh:e.shiftKey}); if(P.size===1) moved=0; pinch=null; });
+  cv.addEventListener("pointermove",e=>{
+    const p=P.get(e.pointerId); if(!p) return;
+    const dx=e.clientX-p.x, dy=e.clientY-p.y; p.x=e.clientX; p.y=e.clientY; moved+=Math.abs(dx)+Math.abs(dy);
+    const c=BT3.cam;
+    if(P.size>=2){ const [a,b]=[...P.values()]; const d=Math.max(8,Math.hypot(a.x-b.x,a.y-b.y)), mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+      if(pinch){ c.dist=clamp(c.dist*pinch.d/d,3,160); bt3Pan(mx-pinch.mx,my-pinch.my); } pinch={d,mx,my}; }
+    else if(p.b===2||p.sh) bt3Pan(dx,dy);
+    else{ c.yaw-=dx*0.0085; c.pitch=clamp(c.pitch+dy*0.0065,0.12,1.55); }
+    BT3.dirty=true; });
+  const end=(e,pick)=>{ const had=P.delete(e.pointerId); pinch=null; if(had&&P.size===0){ if(pick&&moved<7) bt3Pick(e); else bt3SaveCam(); } };
+  cv.addEventListener("pointerup",e=>end(e,true));
+  cv.addEventListener("pointercancel",e=>end(e,false));
+  cv.addEventListener("wheel",e=>{ e.preventDefault(); BT3.cam.dist=clamp(BT3.cam.dist*Math.exp(e.deltaY*0.0012),3,160); BT3.dirty=true; },{passive:false});
+  cv.addEventListener("contextmenu",e=>e.preventDefault());
+}
+function bt3Pick(e){
+  const r=BT3.cv.getBoundingClientRect();
+  const v=new THREE.Vector2(((e.clientX-r.left)/r.width)*2-1, -((e.clientY-r.top)/r.height)*2+1);
+  BT3.ray.setFromCamera(v,BT3.camera);
+  const hits=BT3.ray.intersectObjects(BT3.pick,true);
+  for(const h of hits){ let o=h.object; while(o&&!o.userData.pick) o=o.parent; if(!o) continue;
+    const u=o.userData.pick;
+    if(u.faded) continue;                    /* 반투명해진 벽은 지나쳐 뒤를 고른다 */
+    if(u.tok){ BT3.onTok(u.tok); return; }
+    if(u.ter){ BT3.onTer(u.ter); return; }
+    if(u.ground){ const x=Math.floor(h.point.x), y=Math.floor(h.point.z); BT3.onCell(Math.max(0,Math.min(BT3.B.cols-1,x)),Math.max(0,Math.min(BT3.B.rows-1,y))); return; }
+  }
+}
+/* 그림표 한 칸 → 텍스처(좌우 뒤집기 포함), 그림이 아직 안 왔으면 null */
+function bt3Tex(src,rect,flip){
+  const key=src+"|"+rect.join(",")+"|"+(flip?1:0); if(BT3_TEX[key]) return BT3_TEX[key];
+  let im=BT3_IMG[src];
+  if(!im){ im=BT3_IMG[src]=new Image(); im.onload=()=>{ if(btIso&&$("s-battle").classList.contains("on")) renderBattle(); }; im.src=src; }
+  if(!im.complete||!im.naturalWidth) return null;
+  const cv=document.createElement("canvas"); cv.width=rect[2]; cv.height=rect[3]; const g=cv.getContext("2d");
+  if(flip){ g.translate(rect[2],0); g.scale(-1,1); }
+  g.drawImage(im,rect[0],rect[1],rect[2],rect[3],0,0,rect[2],rect[3]);
+  const t=new THREE.CanvasTexture(cv); t.anisotropy=4; BT3_TEX[key]=t; return t;
+}
+/* 면 모음 — 정점 빛깔을 가진 사각형들을 한 덩어리로 */
+function bt3GB(){ return {p:[],c:[]}; }
+function bt3Quad(g,a,b,c,d,col){ const C=new THREE.Color(col); [a,b,c,a,c,d].forEach(v=>{ g.p.push(v[0],v[1],v[2]); g.c.push(C.r,C.g,C.b); }); }
+function bt3Box(g,x0,y0,x1,y1,z0,z1,cols){   /* 격자 x·y, 높이 z → 세계 (x, z, y) */
+  const top=cols[0], s1=cols[1], s2=cols[2]||cols[1];
+  bt3Quad(g,[x0,z1,y0],[x1,z1,y0],[x1,z1,y1],[x0,z1,y1],top);
+  bt3Quad(g,[x0,z0,y1],[x1,z0,y1],[x1,z1,y1],[x0,z1,y1],s1);   /* 남 */
+  bt3Quad(g,[x0,z0,y0],[x1,z0,y0],[x1,z1,y0],[x0,z1,y0],s1);   /* 북 */
+  bt3Quad(g,[x0,z0,y0],[x0,z0,y1],[x0,z1,y1],[x0,z1,y0],s2);   /* 서 */
+  bt3Quad(g,[x1,z0,y0],[x1,z0,y1],[x1,z1,y1],[x1,z1,y0],s2);   /* 동 */
+}
+function bt3Mesh(g,opt){
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute("position",new THREE.Float32BufferAttribute(g.p,3));
+  geo.setAttribute("color",new THREE.Float32BufferAttribute(g.c,3));
+  geo.computeVertexNormals();
+  const m=new THREE.MeshLambertMaterial(Object.assign({vertexColors:true,side:THREE.DoubleSide},opt||{}));
+  return new THREE.Mesh(geo,m);
+}
+function bt3Dispose(o){ o.traverse(n=>{ if(n.geometry) n.geometry.dispose(); if(n.material){ (Array.isArray(n.material)?n.material:[n.material]).forEach(m=>m.dispose()); } }); }
+function bt3Build(B){
+  const T=THREE, C=B.cols, R=B.rows, FH=ISO.FH, BASE=-1.2;
+  if(BT3.root){ BT3.scene.remove(BT3.root); bt3Dispose(BT3.root); }
+  const root=new T.Group(); BT3.root=root; BT3.scene.add(root); BT3.B=B;
+  BT3.toks=[]; BT3.occ=[]; BT3.pick=[]; BT3.bob=null; BT3.ov.innerHTML="";
+  const tags=[], labs=[];
+  /* ---- 판 읽기(2.5D 때와 같은 규칙) ---- */
   const ter=(B.terrain||[]).map(t=>({t,kind:isoKind(t),x:t.x,y:t.y,w:t.w||1,h:t.h||1}));
   const live=(B.tokens||[]), isDead=t=>!!t.down||/^0\//.test(String(t.hp||""));
   const inRect=(o,k)=>k.x>=o.x&&k.x<o.x+o.w&&k.y>=o.y&&k.y<o.y+o.h;
@@ -8911,8 +9053,7 @@ function renderBattleIso(B,svg){
   const cellTer={}; ter.forEach(o=>{ for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++){ if(x<0||y<0||x>=C||y>=R) continue; (cellTer[x+","+y]=cellTer[x+","+y]||[]).push(o); } });
   const at=(x,y)=>cellTer[x+","+y]||[];
   const HT=B.heights;
-  const ground=(x,y)=>{   /* 칸의 땅 높이와 재질 */
-    if(x<0||y<0||x>=C||y>=R) return {z:-99,surf:"grass"};
+  const ground=(x,y)=>{
     let z=HT&&HT[y]&&HT[y][x]!=null?Number(HT[y][x]):0, surf=B.ground||"grass";
     at(x,y).forEach(o=>{
       if(o.kind==="high"||o.kind==="stairs"){ if(o.elev>=z){ z=o.elev; surf=o.t.surf||(o.kind==="stairs"?"stone":surf); } }
@@ -8922,7 +9063,7 @@ function renderBattleIso(B,svg){
     return {z,surf};
   };
   const G={}; for(let x=0;x<C;x++) for(let y=0;y<R;y++) G[x+","+y]=ground(x,y);
-  const gz=(x,y)=>(G[x+","+y]||{z:-99}).z;
+  const gz=(x,y)=>(x<0||y<0||x>=C||y>=R)?BASE:G[x+","+y].z;
   const bridgeAt=(x,y)=>at(x,y).find(o=>o.kind==="bridge");
   const bldAt=(x,y)=>at(x,y).find(o=>o.kind==="building"&&o.open);
   const tokZ=t=>{ if(t.elev!=null) return Number(t.elev); const b=bridgeAt(t.x,t.y); const base=b?b.elev:gz(t.x,t.y); return base+(floorOf(t)-1)*FH; };
@@ -8930,197 +9071,203 @@ function renderBattleIso(B,svg){
   const pc=live.find(t=>!isDead(t)&&(t.id==="verrix"||/베릭스/.test(t.name||"")))||live.find(t=>t.side==="pc"&&!isDead(t));
   const multi=ter.some(o=>o.floors>=2&&o.open);
   const fb=$("btFloor"); if(fb){ fb.style.display=multi?"":"none"; if(!multi) btFloor="all"; fb.textContent="층: "+({all:"전체","1":"1층","2":"2층"})[btFloor]; fb.classList.toggle("on",btFloor!=="all"); }
-  /* ---- 보이는 범위 ---- */
-  let zMax=0; Object.values(G).forEach(g=>{ zMax=Math.max(zMax,g.z); }); ter.forEach(o=>{ zMax=Math.max(zMax,(o.kind==="building"?(o.floors||1)*FH+0.6:o.elev||0)); });
-  const cs=[[0,0],[C,0],[C,R],[0,R]].map(p=>P(p[0],p[1],0));
-  const minX=Math.min(...cs.map(p=>p[0]))-36, maxX=Math.max(...cs.map(p=>p[0]))+36;
-  const minY=Math.min(...cs.map(p=>p[1]))-70-zMax*ZH, maxY=Math.max(...cs.map(p=>p[1]))+64;
-  const key=`iso|${C}x${R}|${r}|${Math.round(zMax)}`;
-  if(btViewKey!==key){ svg.setAttribute("viewBox",`${minX} ${minY} ${maxX-minX} ${maxY-minY}`); btViewKey=key; }
-  const fk=Math.max(1,Math.min(2.1,(maxX-minX)/900));
-  const defs=el("defs",{}); const gr=el("linearGradient",{id:"btSky",x1:"0",y1:"0",x2:"0",y2:"1"});
-  [["0%","#3d5f8f"],["55%","#22355a"],["100%","#0b101c"]].forEach(([o,c])=>gr.appendChild(el("stop",{offset:o,"stop-color":c})));
-  defs.appendChild(gr); svg.appendChild(defs);
-  svg.appendChild(el("rect",{x:minX-4000,y:minY-4000,width:maxX-minX+8000,height:maxY-minY+8000,fill:"url(#btSky)"}));
-  /* ---- 땅 위 표시 미리 셈: 거리 테두리 · 고른 토큰의 이동·사거리 ---- */
-  const edgeMarks={}, tint={};
-  const ringSq=(cx,cy,n,style)=>{ for(let x=cx-n;x<=cx+n;x++) for(let y=cy-n;y<=cy+n;y++){ if(x<0||y<0||x>=C||y>=R) continue;
-    const ds=[]; if(y===cy-n) ds.push("n"); if(y===cy+n) ds.push("s"); if(x===cx-n) ds.push("w"); if(x===cx+n) ds.push("e");
-    if(ds.length) (edgeMarks[x+","+y]=edgeMarks[x+","+y]||[]).push({ds,style}); } };
-  if(btRings&&pc&&!B.idle) [[6,"#9fd0ff"],[12,"#c4a3ec"],[24,"#e6c98a"]].forEach(([n,col])=>ringSq(pc.x,pc.y,n,{stroke:col,"stroke-width":2.2,"stroke-dasharray":"8 6",opacity:.9}));
+  /* ---- 땅: 칸마다 기둥 하나, 옆면은 이웃이 낮을 때만 ---- */
+  const gG=bt3GB(), NB=[[0,-1,1],[0,1,1],[-1,0,2],[1,0,2]];
+  for(let x=0;x<C;x++) for(let y=0;y<R;y++){
+    const g0=G[x+","+y], S0=ISO_SURF[g0.surf]||ISO_SURF.grass, z=g0.z;
+    bt3Quad(gG,[x,z,y],[x+1,z,y],[x+1,z,y+1],[x,z,y+1],S0.top[(x+y)&1]);
+    NB.forEach(([dx,dy,si])=>{ const nz=gz(x+dx,y+dy); if(nz>=z-0.01) return; const sc=S0.side[si===1?0:1];
+      if(dy===-1) bt3Quad(gG,[x,nz,y],[x+1,nz,y],[x+1,z,y],[x,z,y],sc);
+      if(dy===1) bt3Quad(gG,[x,nz,y+1],[x+1,nz,y+1],[x+1,z,y+1],[x,z,y+1],sc);
+      if(dx===-1) bt3Quad(gG,[x,nz,y],[x,nz,y+1],[x,z,y+1],[x,z,y],sc);
+      if(dx===1) bt3Quad(gG,[x+1,nz,y],[x+1,nz,y+1],[x+1,z,y+1],[x+1,z,y],sc); });
+  }
+  const gm=bt3Mesh(gG); gm.userData.pick={ground:true}; root.add(gm); BT3.pick.push(gm);
+  /* 격자선 — 칸을 셀 수 있게 아주 옅게 */
+  { const lp=[]; for(let x=0;x<C;x++) for(let y=0;y<R;y++){ const z=G[x+","+y].z+0.012; lp.push(x,z,y,x+1,z,y, x,z,y,x,z,y+1); if(x===C-1) lp.push(x+1,z,y,x+1,z,y+1); if(y===R-1) lp.push(x,z,y+1,x+1,z,y+1); }
+    const lg=new T.BufferGeometry(); lg.setAttribute("position",new T.Float32BufferAttribute(lp,3));
+    root.add(new T.LineSegments(lg,new T.LineBasicMaterial({color:0x10140c,transparent:true,opacity:.22}))); }
+  /* 칸 위에 까는 반투명 판(위험·표시·이동 범위) */
+  const flat=(cells,col,op)=>{ if(!cells.length) return; const g=bt3GB(); cells.forEach(([x,y])=>{ const z=G[x+","+y].z+0.02; bt3Quad(g,[x,z,y],[x+1,z,y],[x+1,z,y+1],[x,z,y+1],col); });
+    const m=bt3Mesh(g,{transparent:true,opacity:op,depthWrite:false}); root.add(m); };
+  const hz=[], mk=[]; for(let x=0;x<C;x++) for(let y=0;y<R;y++){ const os=at(x,y); if(os.some(o=>o.kind==="hazard")) hz.push([x,y]); if(os.some(o=>o.kind==="mark")) mk.push([x,y]); }
+  flat(hz,"#d63e3e",.42); flat(mk,"#c9a457",.32);
+  /* ---- 지형물: 덩어리마다 따로(가릴 때 반투명하게 하려고) ---- */
+  const occ=(obj,o)=>{ obj.userData.pick={ter:o}; obj.traverse(n=>{ if(n.material){ n.material.transparent=true; } }); root.add(obj); BT3.occ.push(obj); BT3.pick.push(obj); };
+  const showTer=o=>say(`<b style="color:var(--gold-s)">${o.t.label||"지형"}</b><br>칸 (${o.x},${o.y})${o.w>1||o.h>1?` 에서 ${o.w}×${o.h}칸`:""}${o.floors>1?` · ${o.floors}층`:""}${o.open?" · 안에 사람이 있어 지붕을 걷어 그렸습니다":""}`);
+  BT3.onTer=showTer;
+  ter.forEach(o=>{
+    const z=G[Math.min(C-1,Math.max(0,o.x))+","+Math.min(R-1,Math.max(0,o.y))]?G[Math.min(C-1,Math.max(0,o.x))+","+Math.min(R-1,Math.max(0,o.y))].z:0;
+    const cx=o.x+o.w/2, cy=o.y+o.h/2;
+    if(o.kind==="tree"){
+      const grp=new T.Group();
+      for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++){ if(x<0||y<0||x>=C||y>=R) continue; const zz=G[x+","+y].z, s=0.9+((x*5+y*3)%3)*0.12;
+        const tr=new T.Mesh(new T.CylinderGeometry(0.07,0.1,0.75*s,6),new T.MeshLambertMaterial({color:0x6b4a2a})); tr.position.set(x+0.5,zz+0.375*s,y+0.5); grp.add(tr);
+        [[0.42,0.8,0.7,0x3f7a3a],[0.34,0.7,1.15,0x4c8a44],[0.24,0.55,1.55,0x62a055]].forEach(([r,h,yy,c])=>{ const cn=new T.Mesh(new T.ConeGeometry(r*s,h*s,8),new T.MeshLambertMaterial({color:c})); cn.position.set(x+0.5,zz+yy*s,y+0.5); grp.add(cn); }); }
+      occ(grp,o);
+    }else if(o.kind==="bridge"){
+      const g=bt3GB(); for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++) bt3Box(g,x,y,x+1,y+1,o.elev-0.14,o.elev,[ISO_SURF.wood.top[(x+y)&1],ISO_SURF.wood.side[0],ISO_SURF.wood.side[1]]);
+      const m=bt3Mesh(g); m.userData.pick={ter:o}; root.add(m); BT3.pick.push(m);
+      if(o.t.label) labs.push({p:[cx,o.elev+0.1,cy],text:o.t.label,cls:"flat"});
+    }else if(o.kind==="building"){
+      const col=ISO_OBJ.building, th=0.12, x0=o.x,y0=o.y,x1=o.x+o.w,y1=o.y+o.h;
+      const topZ=z+(o.open&&btFloor==="1"?1:(o.floors||1))*FH;
+      const g=bt3GB();
+      bt3Box(g,x0,y0,x1,y0+th,z,topZ,col); bt3Box(g,x0,y1-th,x1,y1,z,topZ,col);
+      bt3Box(g,x0,y0,x0+th,y1,z,topZ,col); bt3Box(g,x1-th,y0,x1,y1,z,topZ,col);
+      if(!o.open){ bt3Box(g,x0,y0,x1,y1,topZ,topZ+0.3,["#b5583a","#8e3f28","#73321f"]); }
+      const m=bt3Mesh(g); occ(m,o);
+      if(o.open&&o.floors>=2&&btFloor!=="1"){ const sg=bt3GB(); bt3Box(sg,x0+th,y0+th,x1-th,y1-th,z+FH-0.1,z+FH,[ISO_SURF.wood.top[0],ISO_SURF.wood.side[0],ISO_SURF.wood.side[1]]);
+        const sm=bt3Mesh(sg,{transparent:true,opacity:btFloor==="2"?1:.45,depthWrite:btFloor==="2"}); occ(sm,o); }
+      if(o.t.label) labs.push({p:[cx,topZ+(o.open?0.15:0.45),cy],text:o.t.label});
+    }else if(ISO_OBJ[o.kind]){
+      const hgt=o.cut?0.35:o.elev, ins=o.kind==="crate"||o.kind==="rock"?0.14:0, g=bt3GB();
+      for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++){ if(x<0||y<0||x>=C||y>=R) continue; const zz=G[x+","+y].z; bt3Box(g,x+ins,y+ins,x+1-ins,y+1-ins,zz,zz+hgt,ISO_OBJ[o.kind]); }
+      occ(bt3Mesh(g),o);
+      if(o.t.label) labs.push({p:[cx,z+hgt+0.15,cy],text:o.t.label});
+    }else if(o.t.label&&(o.kind==="hazard"||o.kind==="mark"||o.kind==="water"||o.kind==="pit"||o.kind==="high"||o.kind==="stairs")){
+      const zz=G[Math.min(C-1,Math.floor(cx))+","+Math.min(R-1,Math.floor(cy))]; labs.push({p:[cx,(zz?zz.z:0)+0.1,cy],text:o.t.label,cls:"flat"});
+    }
+  });
+  /* ---- 땅 위 선: 거리 테두리 · 고른 토큰의 이동·사거리 · 이동 흔적 ---- */
+  const lines={};   /* 빛깔·점선별로 모은다 */
+  const seg=(key,a,b)=>{ (lines[key]=lines[key]||[]).push(a[0],a[1],a[2],b[0],b[1],b[2]); };
+  const ringSq=(cx,cy,n,key)=>{ for(let x=cx-n;x<=cx+n;x++) for(let y=cy-n;y<=cy+n;y++){ if(x<0||y<0||x>=C||y>=R) continue; const z=G[x+","+y].z+0.05;
+    if(y===cy-n) seg(key,[x,z,y],[x+1,z,y]); if(y===cy+n) seg(key,[x,z,y+1],[x+1,z,y+1]);
+    if(x===cx-n) seg(key,[x,z,y],[x,z,y+1]); if(x===cx+n) seg(key,[x+1,z,y],[x+1,z,y+1]); } };
+  if(btRings&&pc&&!B.idle) [[6,"#9fd0ff","9 m"],[12,"#c4a3ec","18 m"],[24,"#e6c98a","36 m"]].forEach(([n,col,lab])=>{ ringSq(pc.x,pc.y,n,col+"|d");
+    [[pc.x+n,pc.y],[pc.x-n,pc.y],[pc.x,pc.y+n],[pc.x,pc.y-n]].forEach(([gx,gy])=>{ if(gx<0||gy<0||gx>=C||gy>=R) return; labs.push({p:[gx+0.5,G[gx+","+gy].z+0.1,gy+0.5],text:lab,cls:"ring",col}); }); });
   const sel=btSel&&live.find(t=>t.id===btSel);
-  if(sel){ if(sel.move){ for(let x=sel.x-sel.move;x<=sel.x+sel.move;x++) for(let y=sel.y-sel.move;y<=sel.y+sel.move;y++) tint[x+","+y]="rgba(110,168,232,.30)"; ringSq(sel.x,sel.y,sel.move,{stroke:"#8fc0ff","stroke-width":2}); }
-    if(sel.range) ringSq(sel.x,sel.y,sel.range,{stroke:"#ffd772","stroke-width":2.2,"stroke-dasharray":"2 5"});
-    tint[sel.x+","+sel.y]="rgba(255,230,168,.55)"; }
-  /* ---- 그리기: 칸마다 뒤에서 앞으로 ---- */
-  const cells=[]; for(let x=0;x<C;x++) for(let y=0;y<R;y++) cells.push([x,y]);
-  cells.sort((a,b)=>depth(a[0],a[1])-depth(b[0],b[1]));
-  const gT=el("g",{}); svg.appendChild(gT);
-  const tokAt={}; live.forEach(t=>{ (tokAt[t.x+","+t.y]=tokAt[t.x+","+t.y]||[]).push(t); });
-  const labels=[], tags=[], BASE=-1.2;
-  const sideFace=(x,y,d,z0,z1,fill,lip)=>{ const e=edgePts(x,y,d);
-    poly(gT,[P(e[0][0],e[0][1],z0),P(e[1][0],e[1][1],z0),P(e[1][0],e[1][1],z1),P(e[0][0],e[0][1],z1)],{fill,stroke:"rgba(0,0,0,.22)","stroke-width":0.6});
-    if(z1-z0>0.7){ let d2=""; for(let k=z0+0.5;k<z1-0.2;k+=0.55){ const a=P(e[0][0],e[0][1],k), b=P(e[1][0],e[1][1],k+((x+y)&1?0.06:-0.06)); d2+=`M${a[0].toFixed(1)},${a[1].toFixed(1)} L${b[0].toFixed(1)},${b[1].toFixed(1)}`; }
-      if(d2) gT.appendChild(el("path",{d:d2,stroke:"rgba(0,0,0,.2)","stroke-width":1.1,fill:"none"})); }
-    if(lip&&z1-z0>0.15) poly(gT,[P(e[0][0],e[0][1],z1-0.16),P(e[1][0],e[1][1],z1-0.16),P(e[1][0],e[1][1],z1),P(e[0][0],e[0][1],z1)],{fill:lip}); };
-  const wallSeg=(x,y,d,z0,z1,col,win)=>{ const th=0.14, q=d==="n"?[x,y,1,th]:d==="s"?[x,y+1-th,1,th]:d==="w"?[x,y,th,1]:[x+1-th,y,th,1];
-    const top=prism(gT,q[0],q[1],q[2],q[3],z0,z1,col);
-    if(win&&z1-z0>1.2){ /* 창 — 안쪽 면에 */ const a=d==="n"?[[x+0.32,y+th],[x+0.68,y+th]]:d==="w"?[[x+th,y+0.32],[x+th,y+0.68]]:null;
-      if(a) for(let f=z0;f+1.2<=z1+0.01;f+=FH) poly(gT,[P(a[0][0],a[0][1],f+0.75),P(a[1][0],a[1][1],f+0.75),P(a[1][0],a[1][1],f+1.3),P(a[0][0],a[0][1],f+1.3)],{fill:"#3b5674",stroke:"#5e4a32","stroke-width":1.5}); }
-    return top; };
-  const drawToken=(t,x,y)=>{
-    const dead=isDead(t), fl=floorOf(t), inB=bldAt(x,y);
-    let ghost=false;
-    if(inB&&inB.floors>=2&&btFloor!=="all"){ if(String(fl)!==btFloor){ if(btFloor==="2"&&fl===1){ tags.push({x:P(x+0.5,y+0.5,gz(x,y)+FH+0.2)[0],y:P(x+0.5,y+0.5,gz(x,y)+FH+0.2)[1]-4,name:"▽ "+(t.name||""),hp:null,dim:true,side:t.side}); return; } ghost=true; } }
-    const z=tokZ(t), f=P(x+0.5,y+0.5,z), col=BT_SIDE[t.side]||"#8792a8";
-    const g=el("g",{style:"cursor:pointer",opacity:ghost?".35":dead?".65":"1"});
-    if(t.elev!=null&&t.elev>gz(x,y)+0.05){ const q=P(x+0.5,y+0.5,gz(x,y)); g.appendChild(el("line",{x1:f[0],y1:f[1],x2:q[0],y2:q[1],stroke:"rgba(255,255,255,.4)","stroke-width":1.5,"stroke-dasharray":"3 3"})); }
-    g.appendChild(el("ellipse",{cx:f[0],cy:f[1],rx:16,ry:7.5,fill:"rgba(0,0,0,.36)"}));
-    g.appendChild(el("ellipse",{cx:f[0],cy:f[1],rx:14,ry:6.5,fill:"none",stroke:col,"stroke-width":2.5,opacity:.95}));
-    const myTurn=B.turn&&t.id===B.turn;
-    if(myTurn) g.appendChild(el("ellipse",{cx:f[0],cy:f[1],rx:22,ry:10.5,fill:"none",stroke:"#ffe08a","stroke-width":2.5}));
-    /* 보는 방향: face가 있으면 그대로, 없으면 가장 가까운 맞은편을 본다 */
-    let dx=0,dy=1; const FC={n:[0,-1],e:[1,0],s:[0,1],w:[-1,0]};
+  if(sel){
+    if(sel.move){ const cs=[]; for(let x=sel.x-sel.move;x<=sel.x+sel.move;x++) for(let y=sel.y-sel.move;y<=sel.y+sel.move;y++) if(x>=0&&y>=0&&x<C&&y<R) cs.push([x,y]); flat(cs,"#6ea8e8",.28); ringSq(sel.x,sel.y,sel.move,"#8fc0ff|s"); }
+    if(sel.range) ringSq(sel.x,sel.y,sel.range,"#ffd772|d");
+    if(sel.x>=0&&sel.y>=0&&sel.x<C&&sel.y<R) flat([[sel.x,sel.y]],"#ffe6a8",.5);
+  }
+  live.forEach(t=>{ if(!t.from||(t.from.x===t.x&&t.from.y===t.y)) return; const col=BT_SIDE[t.side]||"#8792a8";
+    const a=[t.from.x+0.5,Math.max(0,gz(t.from.x,t.from.y))+0.08,t.from.y+0.5], b=[t.x+0.5,tokZ(t)+0.08,t.y+0.5]; seg(col+"|d",a,b);
+    const rg=new T.Mesh(new T.RingGeometry(0.18,0.24,24),new T.MeshBasicMaterial({color:col,transparent:true,opacity:.8,side:T.DoubleSide,depthWrite:false}));
+    rg.rotation.x=-Math.PI/2; rg.position.set(a[0],a[1],a[2]); root.add(rg); });
+  Object.entries(lines).forEach(([k,p])=>{ const [col,st]=k.split("|"); const lg=new T.BufferGeometry(); lg.setAttribute("position",new T.Float32BufferAttribute(p,3));
+    const L=new T.LineSegments(lg,st==="d"?new T.LineDashedMaterial({color:col,dashSize:0.32,gapSize:0.22,transparent:true,opacity:.95}):new T.LineBasicMaterial({color:col,transparent:true,opacity:.95}));
+    if(st==="d") L.computeLineDistances(); root.add(L); });
+  /* ---- 토큰 ---- */
+  const showTok=t=>{ btSel=btSel===t.id?null:t.id; renderBattle();
+    const fl=floorOf(t), z=tokZ(t);
+    const moved=t.from&&(t.from.x!==t.x||t.from.y!==t.y)?` · 이동 (${t.from.x},${t.from.y})→(${t.x},${t.y})`:"";
+    say(`<b style="color:var(--gold-s)">${t.name}</b><br>
+      ${({pc:"베릭스 쪽",ally:"아군",enemy:"적",neutral:"중립·목표"})[t.side]||t.side} · 칸 (${t.x},${t.y})${fl>1?` · ${fl}층`:""}${z?` · 높이 ${(Math.round(z*15)/10)} m`:""}${moved}<br>
+      ${t.hp?`HP ${t.hp}<br>`:""}
+      ${t.st&&t.st.length?`<span style="color:var(--violet-s)">${t.st.join(" · ")}</span><br>`:""}
+      ${t.move?`이동 ${t.move}칸(${(t.move*1.5).toFixed(1)} m)`:""}${t.move&&t.range?" · ":""}${t.range?`사거리 ${t.range}칸(${(t.range*1.5).toFixed(1)} m)`:""}
+      ${(t.move||t.range)?"<br>":""}<span style="color:var(--parch)">${t.note||""}</span>`); };
+  BT3.onTok=showTok;
+  BT3.onCell=(x,y)=>{ const os=at(x,y), z=G[x+","+y].z, d=pc?Math.max(Math.abs(pc.x-x),Math.abs(pc.y-y)):null, lab=os.map(o=>o.t.label).filter(Boolean).join(" · ");
+    if(btSel){ btSel=null; renderBattle(); }
+    say(`<b style="color:var(--gold-s)">칸 (${x},${y})</b>${z>0.05?` · 높이 ${(Math.round(z*15)/10)} m`:z<-0.05?" · 낮은 곳":""}${d!=null?` · ${pc.name}에게서 ${d}칸(${(d*1.5).toFixed(1)} m)`:""}${lab?`<br><span style="color:var(--parch)">${lab}</span>`:""}`); };
+  const FC={n:[0,-1],e:[1,0],s:[0,1],w:[-1,0]};
+  const ringMat=col=>new T.MeshBasicMaterial({color:col,transparent:true,opacity:.95,side:T.DoubleSide,depthWrite:false});
+  live.forEach(t=>{
+    if(t.x<0||t.y<0||t.x>=C||t.y>=R) return;
+    const dead=isDead(t), fl=floorOf(t), inB=bldAt(t.x,t.y);
+    const ghost=inB&&inB.floors>=2&&btFloor!=="all"&&String(fl)!==btFloor;
+    const z=tokZ(t), col=BT_SIDE[t.side]||"#8792a8", myTurn=B.turn&&t.id===B.turn;
+    const grp=new T.Group(); grp.position.set(t.x+0.5,z,t.y+0.5); grp.userData.pick={tok:t};
+    const op=ghost?.3:dead?.6:1;
+    const sh=new T.Mesh(new T.CircleGeometry(0.42,24),new T.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.35*op,depthWrite:false})); sh.rotation.x=-Math.PI/2; sh.position.y=0.025; grp.add(sh);
+    const rg=new T.Mesh(new T.RingGeometry(0.33,0.42,32),ringMat(col)); rg.material.opacity=.95*op; rg.rotation.x=-Math.PI/2; rg.position.y=0.035; grp.add(rg);
+    if(myTurn){ const r2=new T.Mesh(new T.RingGeometry(0.5,0.58,32),ringMat("#ffe08a")); r2.rotation.x=-Math.PI/2; r2.position.y=0.04; grp.add(r2); }
+    if(t.elev!=null&&t.elev>gz(t.x,t.y)+0.05){ const lg=new T.BufferGeometry(); lg.setAttribute("position",new T.Float32BufferAttribute([0,0,0,0,gz(t.x,t.y)-z,0],3));
+      const L=new T.Line(lg,new T.LineDashedMaterial({color:0xffffff,dashSize:.1,gapSize:.08,transparent:true,opacity:.45})); L.computeLineDistances(); grp.add(L); }
+    /* 보는 방향: face가 있으면 그대로, 없으면 가장 가까운 맞은편 */
+    let dx=0,dy=1;
     if(t.face&&FC[t.face]) [dx,dy]=FC[t.face];
     else{ const foes=live.filter(q=>q!==t&&!isDead(q)&&(t.side==="enemy"?(q.side==="pc"||q.side==="ally"):q.side==="enemy"));
-      let best=null,bd=1e9; foes.forEach(q=>{ const d=Math.hypot(q.x-t.x,q.y-t.y); if(d<bd){bd=d;best=q;} }); if(best){ dx=best.x-t.x; dy=best.y-t.y; } }
-    const [du,dv]=rotV(dx,dy), front=(du+dv)>=0, right=(du-dv)>0;
-    const spr=btSprite(btSpriteKey(t));
-    let top=f[1]-56;
+      let best=null,bd=1e9; foes.forEach(q=>{ const d=Math.hypot(q.x-t.x,q.y-t.y); if(d<bd){bd=d;best=q;} }); if(best&&bd>0){ dx=best.x-t.x; dy=best.y-t.y; } }
+    const spr=btSprite(btSpriteKey(t)); let headY=1.0, sp=null;
     if(dead){
-      g.appendChild(el("ellipse",{cx:f[0],cy:f[1]-3,rx:18,ry:7,fill:col,stroke:"#1a1410","stroke-width":2}));
-      g.appendChild(el("circle",{cx:f[0]-15,cy:f[1]-6,r:7,fill:"#e9cfae",stroke:"#1a1410","stroke-width":2}));
-      g.appendChild(el("path",{d:`M${f[0]-4},${f[1]-7} l10,7 M${f[0]+6},${f[1]-7} l-10,7`,stroke:"#1a1410","stroke-width":2.2})); top=f[1]-20;
+      const body=new T.Mesh(new T.CylinderGeometry(0.16,0.16,0.62,10),new T.MeshLambertMaterial({color:col,transparent:true,opacity:.75}));
+      body.rotation.z=Math.PI/2; body.position.set(0,0.17,0); grp.add(body);
+      const hd=new T.Mesh(new T.SphereGeometry(0.15,12,10),new T.MeshLambertMaterial({color:0xe9cfae,transparent:true,opacity:.75})); hd.position.set(-0.42,0.16,0); grp.add(hd); headY=0.45;
     }else if(spr){
-      /* 네 방향 그림: f 왼쪽 아래 · fr 오른쪽 아래 · b 오른쪽 위 · bl 왼쪽 위. fr·bl이 없는 인물만 좌우로 뒤집어 쓴다 */
-      let c, flip=false;
-      if(front){ if(right&&spr.c.fr) c=spr.c.fr; else{ c=spr.c.f; flip=right; } }
-      else{ if(!right&&spr.c.bl) c=spr.c.bl; else{ c=spr.c.b||spr.c.f; flip=!right; } }
-      const Hh=74*c[3]/250, Ww=Hh*c[2]/c[3];
-      const h2=el("g",flip?{transform:`translate(${(2*f[0]).toFixed(1)},0) scale(-1,1)`}:{});
-      const s=el("svg",{x:(f[0]-Ww/2).toFixed(1),y:(f[1]-Hh+6).toFixed(1),width:Ww.toFixed(1),height:Hh.toFixed(1),viewBox:c.slice(0,4).join(" "),preserveAspectRatio:"xMidYMax meet",overflow:"hidden"});
-      s.appendChild(el("image",{href:c[4]||spr.s.src,x:0,y:0,width:spr.s.w,height:spr.s.h})); h2.appendChild(s); g.appendChild(h2); top=f[1]-Hh+6;
+      const H=1.3*spr.c.f[3]/250, W=H*spr.c.f[2]/spr.c.f[3];
+      sp=new T.Sprite(new T.SpriteMaterial({transparent:true,alphaTest:0.08,opacity:op}));
+      sp.center.set(0.5,0.03); sp.scale.set(W,H,1); sp.position.y=0.02; grp.add(sp); headY=H+0.05;
     }else{
-      /* 말 인형 — 큰 머리·작은 몸. 옷 빛깔은 편, 머리 빛깔은 이름에서 */
-      const hs=["#3a2a1e","#6b4a2a","#c9a35a","#8a3a2a","#2a2a35","#7a7a80","#a8623a"], hair=(t.look&&t.look.hair)||hs[[...String(t.id||t.name||"")].reduce((a,ch)=>a+ch.charCodeAt(0),0)%hs.length], skin=(t.look&&t.look.skin)||"#f0d6b6", cloth=(t.look&&t.look.cloth)||col;
-      const h2=el("g",right?{transform:`translate(${(2*f[0]).toFixed(1)},0) scale(-1,1)`}:{}), X=f[0], Y=f[1], ol={stroke:"#2a1c12","stroke-width":1.8,"stroke-linejoin":"round"};
-      h2.appendChild(el("path",Object.assign({d:`M${X-7},${Y-12} l-1,10 l6,1 l1,-9 Z M${X+1},${Y-12} l1,10 l6,-1 l-1,-10 Z`,fill:"#4a3a2c"},ol)));
-      h2.appendChild(el("path",Object.assign({d:`M${X-10},${Y-30} Q${X},${Y-35} ${X+10},${Y-30} L${X+12},${Y-10} Q${X},${Y-5} ${X-12},${Y-10} Z`,fill:cloth},ol)));
-      h2.appendChild(el("path",{d:`M${X-11},${Y-17} Q${X},${Y-13} ${X+11},${Y-17}`,fill:"none",stroke:"rgba(0,0,0,.35)","stroke-width":2.5}));
-      h2.appendChild(el("path",Object.assign({d:front?`M${X-11},${Y-28} q-5,8 -2,15`:`M${X+11},${Y-28} q5,8 2,15`,fill:"none","stroke-linecap":"round"},{stroke:"#2a1c12","stroke-width":5.5})));
-      h2.appendChild(el("path",{d:front?`M${X-11},${Y-28} q-5,8 -2,15`:`M${X+11},${Y-28} q5,8 2,15`,fill:"none","stroke-linecap":"round",stroke:cloth,"stroke-width":3}));
-      h2.appendChild(el("circle",Object.assign({cx:X,cy:Y-42,r:12.5,fill:front?skin:hair},ol)));
-      if(front){ h2.appendChild(el("path",Object.assign({d:`M${X-12.5},${Y-43} a12.5,12.5 0 0,1 25,0 q-3,-7 -11,-6 q-9,-2 -14,6Z`,fill:hair},ol)));
-        h2.appendChild(el("ellipse",{cx:X-6,cy:Y-40,rx:1.7,ry:2.6,fill:"#2a1c12"})); h2.appendChild(el("ellipse",{cx:X+2,cy:Y-40,rx:1.7,ry:2.6,fill:"#2a1c12"})); }
-      else h2.appendChild(el("path",{d:`M${X-8},${Y-47} q8,-6 16,0`,fill:"none",stroke:"rgba(255,255,255,.25)","stroke-width":2}));
-      g.appendChild(h2); top=f[1]-60;
+      const hs=["#3a2a1e","#6b4a2a","#c9a35a","#8a3a2a","#2a2a35","#7a7a80","#a8623a"], hair=(t.look&&t.look.hair)||hs[[...String(t.id||t.name||"")].reduce((a,ch)=>a+ch.charCodeAt(0),0)%hs.length];
+      const body=new T.Mesh(new T.CylinderGeometry(0.17,0.24,0.62,12),new T.MeshLambertMaterial({color:(t.look&&t.look.cloth)||col,transparent:true,opacity:op})); body.position.y=0.34; grp.add(body);
+      const hd=new T.Mesh(new T.SphereGeometry(0.19,14,12),new T.MeshLambertMaterial({color:(t.look&&t.look.skin)||"#f0d6b6",transparent:true,opacity:op})); hd.position.y=0.86; grp.add(hd);
+      const hr=new T.Mesh(new T.SphereGeometry(0.2,14,8,0,Math.PI*2,0,Math.PI/2),new T.MeshLambertMaterial({color:hair,transparent:true,opacity:op})); hr.position.y=0.88; grp.add(hr); headY=1.12;
     }
-    if(myTurn&&!dead){ const m=el("path",{d:`M${f[0]-7},${top-16} l7,9 l7,-9 l-7,-9 z`,fill:"#ffe08a",stroke:"#7a5a12","stroke-width":1.5});
-      m.appendChild(el("animateTransform",{attributeName:"transform",type:"translate",values:"0 0;0 -6;0 0",dur:"1.2s",repeatCount:"indefinite"})); g.appendChild(m); }
+    if(myTurn&&!dead){ const dm=new T.Mesh(new T.OctahedronGeometry(0.12),new T.MeshLambertMaterial({color:0xffe08a,emissive:0x6a4a08})); dm.position.y=headY+0.42; grp.add(dm); BT3.bob={m:dm,y:headY+0.42}; }
+    root.add(grp); BT3.pick.push(grp);
+    BT3.toks.push({t,grp,sp,spr,dx,dy,dead,ghost,head:headY});
     const hm=String(t.hp||"").match(/^(\d+)\s*\/\s*(\d+)/);
-    tags.push({x:f[0],y:top-(myTurn&&!dead?22:0),name:t.name||"",hp:hm&&!dead?Math.max(0,Math.min(1,hm[1]/hm[2])):null,dead,side:t.side,dim:ghost,st:(!dead&&t.st&&t.st.length)?t.st.join(" · "):""});
-    g.addEventListener("click",()=>{ btSel=btSel===t.id?null:t.id; renderBattle();
-      const moved=t.from&&(t.from.x!==t.x||t.from.y!==t.y)?` · 이동 (${t.from.x},${t.from.y})→(${t.x},${t.y})`:"";
-      say(`<b style="color:var(--gold-s)">${t.name}</b><br>
-        ${({pc:"베릭스 쪽",ally:"아군",enemy:"적",neutral:"중립·목표"})[t.side]||t.side} · 칸 (${t.x},${t.y})${fl>1?` · ${fl}층`:""}${z?` · 높이 ${(Math.round(z*15)/10)} m`:""}${moved}<br>
-        ${t.hp?`HP ${t.hp}<br>`:""}
-        ${t.st&&t.st.length?`<span style="color:var(--violet-s)">${t.st.join(" · ")}</span><br>`:""}
-        ${t.move?`이동 ${t.move}칸(${(t.move*1.5).toFixed(1)} m)`:""}${t.move&&t.range?" · ":""}${t.range?`사거리 ${t.range}칸(${(t.range*1.5).toFixed(1)} m)`:""}
-        ${(t.move||t.range)?"<br>":""}<span style="color:var(--parch)">${t.note||""}</span>`); });
-    gT.appendChild(g);
-  };
-  cells.forEach(([x,y])=>{
-    const g0=G[x+","+y], S0=ISO_SURF[g0.surf]||ISO_SURF.grass, z=g0.z, os=at(x,y);
-    /* 1) 땅 기둥: 앞쪽 두 옆면은 이웃이 낮을 때만 */
-    [[dLeft,0],[dRight,1]].forEach(([d,i])=>{ const nx=x+NB[d][0], ny=y+NB[d][1], nz=Math.max(BASE,gz(nx,ny)); if(nz<z-0.01) sideFace(x,y,d,nz,z,S0.side[i],S0.lip); });
-    const a=[P(x,y,z),P(x+1,y,z),P(x+1,y+1,z),P(x,y+1,z)];
-    const tile=poly(gT,a,{fill:S0.top[(x+y)&1],stroke:"rgba(20,26,16,.28)","stroke-width":0.7,style:"cursor:pointer"});
-    const m0=P(x+0.5,y+0.5,z), hsh=(x*37+y*101)%11;
-    if(g0.surf==="grass"&&hsh<4) gT.appendChild(el("path",{d:`M${m0[0]-9+hsh*4},${m0[1]+2} l-2,-5 m4,5 l0,-6 m4,6 l2,-5`,stroke:"#557f3c","stroke-width":1.1,fill:"none",style:"pointer-events:none"}));
-    if(g0.surf==="stone"&&hsh<3) gT.appendChild(el("path",{d:`M${m0[0]-10},${m0[1]} l8,3 l6,-4`,stroke:"rgba(0,0,0,.18)","stroke-width":1,fill:"none",style:"pointer-events:none"}));
-    if(g0.surf==="water") gT.appendChild(el("path",{d:`M${m0[0]-13},${m0[1]+(hsh%3)-1} q6,-4 12,0 t12,0`,fill:"none",stroke:"#bfe3f7","stroke-width":1.2,opacity:.65,style:"pointer-events:none"}));
-    if(os.some(o=>o.kind==="stairs")){ let d2=""; [0.25,0.5,0.75].forEach(k=>{ const p=P(x+k,y,z),q=P(x+k,y+1,z); d2+=`M${p[0]},${p[1]} L${q[0]},${q[1]}`; }); gT.appendChild(el("path",{d:d2,stroke:"rgba(0,0,0,.3)","stroke-width":1.2,style:"pointer-events:none"})); }
-    if(os.some(o=>o.kind==="hazard")) poly(gT,a,{fill:"rgba(214,62,62,.42)",stroke:"#f08a6a","stroke-width":1.2,"stroke-dasharray":"5 4",style:"pointer-events:none"});
-    if(os.some(o=>o.kind==="mark")) poly(gT,a,{fill:"rgba(201,164,87,.28)",stroke:"#c9a457","stroke-width":1,"stroke-dasharray":"3 4",style:"pointer-events:none"});
-    if(tint[x+","+y]) poly(gT,a,{fill:tint[x+","+y],style:"pointer-events:none"});
-    (edgeMarks[x+","+y]||[]).forEach(mk=>mk.ds.forEach(d=>{ const e=edgePts(x,y,d), p=P(e[0][0],e[0][1],z), q=P(e[1][0],e[1][1],z);
-      gT.appendChild(el("line",Object.assign({x1:p[0],y1:p[1],x2:q[0],y2:q[1],style:"pointer-events:none"},mk.style))); }));
-    tile.addEventListener("click",()=>{ btSel=null;
-      const d=pc?Math.max(Math.abs(pc.x-x),Math.abs(pc.y-y)):null, lab=os.map(o=>o.t.label).filter(Boolean).join(" · ");
-      if(sel) renderBattle();
-      say(`<b style="color:var(--gold-s)">칸 (${x},${y})</b>${z>0.05?` · 높이 ${(Math.round(z*15)/10)} m`:z<-0.05?" · 낮은 곳":""}${d!=null?` · ${pc.name}에게서 ${d}칸(${(d*1.5).toFixed(1)} m)`:""}${lab?`<br><span style="color:var(--parch)">${lab}</span>`:""}`); });
-    /* 2) 이 칸의 지형물 */
-    const toks=(tokAt[x+","+y]||[]).slice().sort((p,q)=>(isDead(q)?1:0)-(isDead(p)?1:0));
-    const bl=bldAt(x,y), frontSegs=[];
-    os.forEach(o=>{
-      const info=n=>{ if(!n) return; n.style.cursor="pointer"; n.addEventListener("click",()=>say(`<b style="color:var(--gold-s)">${o.t.label||"지형"}</b><br>칸 (${o.x},${o.y})${o.w>1||o.h>1?` 에서 ${o.w}×${o.h}칸`:""}${o.floors>1?` · ${o.floors}층`:""}${o.open?" · 안에 사람이 있어 앞벽을 낮춰 그렸습니다":""}`)); };
-      const mid=x===o.x+Math.floor((o.w-1)/2)&&y===o.y+Math.floor((o.h-1)/2);
-      if(o.kind==="tree"){
-        const b=P(x+0.5,y+0.5,z), s=1.15+((x*5+y*3)%3)*0.14;
-        gT.appendChild(el("ellipse",{cx:b[0],cy:b[1],rx:15,ry:7,fill:"rgba(0,0,0,.28)"}));
-        gT.appendChild(el("rect",{x:b[0]-3.5,y:b[1]-18*s,width:7,height:18*s,fill:"#6b4a2a",stroke:"#3a2716","stroke-width":1}));
-        [[21,14,"#3f7a3a"],[17,30,"#4c8a44"],[12,45,"#62a055"]].forEach(([w,h,c])=>info(gT.appendChild(el("path",{d:`M${b[0]-w*s},${b[1]-h*s+12} Q${b[0]},${b[1]-(h+30)*s+12} ${b[0]+w*s},${b[1]-h*s+12} Q${b[0]},${b[1]-(h-7)*s+12} ${b[0]-w*s},${b[1]-h*s+12} Z`,fill:c,stroke:"#2c5229","stroke-width":1}))));
-      }else if(o.kind==="bridge"){
-        info(prism(gT,x,y,1,1,o.elev-0.14,o.elev,[ISO_SURF.wood.top[(x+y)&1],ISO_SURF.wood.side[0],ISO_SURF.wood.side[1]]));
-      }else if(o.kind==="building"&&o.open){
-        /* 열린 건물: 뒤쪽 두 벽은 높게, 앞쪽 두 벽은 낮게 */
-        const topZ=z+(btFloor==="1"?1:o.floors)*FH;
-        [["n",y===o.y],["s",y===o.y+o.h-1],["w",x===o.x],["e",x===o.x+o.w-1]].forEach(([d,on])=>{ if(!on) return;
-          if(d===dBackL||d===dBackR) info(wallSeg(x,y,d,z,topZ,ISO_OBJ.building,true)); else frontSegs.push(d); });
-        if(mid&&o.t.label) labels.push({p:P(o.x+o.w/2,o.y+o.h/2,z+o.floors*FH+0.4),text:o.t.label});
-      }else if(o.kind==="building"){
-        const hgt=(o.floors||1)*FH; info(prism(gT,x,y,1,1,z,z+hgt,ISO_OBJ.building));
-        /* 지붕: 한 단 올려 기와 빛깔 */ info(prism(gT,x,y,1,1,z+hgt,z+hgt+0.35,["#b5583a","#8e3f28","#73321f"]));
-        if(mid&&o.t.label) labels.push({p:P(o.x+o.w/2,o.y+o.h/2,z+hgt+0.4),text:o.t.label});
-      }else if(ISO_OBJ[o.kind]){
-        const hgt=o.cut?0.35:o.elev, inset=o.kind==="crate"||o.kind==="rock"?0.14:0;
-        info(prism(gT,x+inset,y+inset,1-2*inset,1-2*inset,z,z+hgt,ISO_OBJ[o.kind]));
-        if(o.kind==="crate"){ const p1=P(x+0.14,y+0.5,z+hgt), p2=P(x+0.86,y+0.5,z+hgt); gT.appendChild(el("line",{x1:p1[0],y1:p1[1],x2:p2[0],y2:p2[1],stroke:"rgba(0,0,0,.3)","stroke-width":1.2,style:"pointer-events:none"})); }
-        if(mid&&o.t.label) labels.push({p:P(o.x+o.w/2,o.y+o.h/2,z+hgt),text:o.t.label});
-      }else if(mid&&o.t.label&&(o.kind==="hazard"||o.kind==="mark"||o.kind==="water"||o.kind==="pit"||o.kind==="high")){
-        labels.push({p:P(o.x+o.w/2,o.y+o.h/2,z),text:o.t.label,flat:true});
-      }
-    });
-    /* 3) 토큰과 층 */
-    if(bl&&bl.floors>=2){
-      toks.filter(t=>floorOf(t)===1).forEach(t=>drawToken(t,x,y));
-      if(btFloor!=="1"){ const zz=z+FH, slab=btFloor==="2"?{}:{opacity:.5};
-        prism(gT,x,y,1,1,zz-0.12,zz,[ISO_SURF.wood.top[(x+y)&1],ISO_SURF.wood.side[0],ISO_SURF.wood.side[1]],Object.assign({style:"pointer-events:none"},slab)); }
-      toks.filter(t=>floorOf(t)>=2).forEach(t=>drawToken(t,x,y));
-      frontSegs.forEach(d=>{ if(btFloor==="2"){ wallSeg(x,y,d,z,z+FH,ISO_OBJ.building); wallSeg(x,y,d,z+FH,z+FH+0.32,ISO_OBJ.building); } else wallSeg(x,y,d,z,z+0.32,ISO_OBJ.building); });
-    }else{
-      toks.forEach(t=>drawToken(t,x,y));
-      frontSegs.forEach(d=>wallSeg(x,y,d,z,z+0.32,ISO_OBJ.building));
-    }
+    tags.push({t,pos:[t.x+0.5,z+headY+(myTurn&&!dead?0.32:0),t.y+0.5],name:t.name||"",hp:hm&&!dead?Math.max(0,Math.min(1,hm[1]/hm[2])):null,dead,dim:ghost,side:t.side,turn:myTurn,st:(!dead&&t.st&&t.st.length)?t.st.join(" · "):""});
   });
-  /* ---- 맨 위 층: 이동 흔적 · 이름표 · 방위 ---- */
-  const gL=el("g",{style:"pointer-events:none"}); svg.appendChild(gL);
-  live.forEach(t=>{ if(!t.from||(t.from.x===t.x&&t.from.y===t.y)) return;
-    const a=P(t.from.x+0.5,t.from.y+0.5,Math.max(0,gz(t.from.x,t.from.y))), b=P(t.x+0.5,t.y+0.5,tokZ(t)), col=BT_SIDE[t.side]||"#8792a8";
-    gL.appendChild(el("line",{x1:a[0],y1:a[1],x2:b[0],y2:b[1],stroke:col,"stroke-width":2.5,"stroke-dasharray":"7 5",opacity:.85}));
-    gL.appendChild(el("ellipse",{cx:a[0],cy:a[1],rx:9,ry:4.5,fill:"none",stroke:col,"stroke-width":2,opacity:.8})); });
-  if(btRings&&pc&&!B.idle) [[6,"9 m","#9fd0ff"],[12,"18 m","#c4a3ec"],[24,"36 m","#e6c98a"]].forEach(([n,lab,col])=>{
-    [[pc.x+n,pc.y],[pc.x-n,pc.y],[pc.x,pc.y+n],[pc.x,pc.y-n]].forEach(([gx,gy])=>{ if(gx<0||gy<0||gx>=C||gy>=R) return; const q=P(gx+0.5,gy+0.5,gz(gx,gy));
-      const tx=el("text",{x:q[0],y:q[1]+4,"text-anchor":"middle",class:"gm","font-size":String(Math.round(11*fk)),"font-weight":"bold",fill:col,style:"paint-order:stroke;stroke:#0a0c12;stroke-width:4px"}); tx.textContent=lab; gL.appendChild(tx); }); });
-  labels.forEach(L=>{ const s=L.text.length>13?L.text.slice(0,12)+"…":L.text;
-    const tx=el("text",{x:L.p[0],y:L.p[1]+(L.flat?4:-4),"text-anchor":"middle",class:"gm","font-size":String(Math.round(10.5*fk)),fill:L.flat?"#ffe6a8":"#f1ead8",style:"paint-order:stroke;stroke:#0a0c12;stroke-width:4px"}); tx.textContent=s; gL.appendChild(tx); });
-  const fsN=Math.round(12.5*fk), put=[];
-  tags.sort((a,b)=>b.y-a.y).forEach(T=>{
-    const hw=(btNames?T.name.length*fsN*0.5:0)+6; let y=T.y, n=0;
-    while(n<6&&put.some(q=>Math.abs(q.x-T.x)<q.hw+hw&&Math.abs(q.y-y)<fsN*1.15)){ y-=fsN*0.95; n++; }
-    put.push({x:T.x,y,hw});
-    if(y!==T.y) gL.appendChild(el("line",{x1:T.x,y1:T.y+4,x2:T.x,y2:y+6,stroke:"rgba(255,244,220,.5)","stroke-width":1}));
-    if(btNames){ const l=el("text",{x:T.x,y,"text-anchor":"middle",class:"gm","font-size":String(fsN),fill:T.side==="enemy"?"#ffd9d6":"#fff4dc",opacity:T.dead||T.dim?.55:1,style:"paint-order:stroke;stroke:#0a0c12;stroke-width:4.5px;font-weight:700"}); l.textContent=T.name; gL.appendChild(l); }
-    if(T.hp!=null){ const w=30*Math.min(1.5,fk);
-      gL.appendChild(el("rect",{x:T.x-w/2,y:y+3,width:w,height:4.5,rx:2,fill:"#0a0c12",stroke:"#0a0c12","stroke-width":1.5,opacity:T.dim?.5:1}));
-      gL.appendChild(el("rect",{x:T.x-w/2,y:y+3,width:w*T.hp,height:4.5,rx:2,fill:T.hp>.6?"#7ac68f":T.hp>.3?"#e0c060":"#d9666a",opacity:T.dim?.5:1})); }
-  });
-  [["북",C/2,-0.9],["남",C/2,R+0.9],["서",-0.9,R/2],["동",C+0.9,R/2]].forEach(([n,gx,gy])=>{ const q=P(gx,gy,0);
-    const tx=el("text",{x:q[0],y:q[1]+5,"text-anchor":"middle",class:"gm","font-size":String(Math.round(14*fk)),"font-weight":"bold",fill:n==="북"?"#ffe08a":"#aab4c8",style:"paint-order:stroke;stroke:#0a0c12;stroke-width:4px"}); tx.textContent=n; gL.appendChild(tx); });
-  if(!live.length){ const q=P(C/2,R/2,0); const l=el("text",{x:q[0],y:q[1],"text-anchor":"middle",class:"gm","font-size":"18",fill:"#f1ead8",style:"paint-order:stroke;stroke:#0a0c12;stroke-width:5px"});
-    l.textContent="전투가 열리면 배치가 표시됩니다"; gL.appendChild(l); }
-  svg.querySelectorAll("text[font-size]").forEach(t=>{ t.style.fontSize=t.getAttribute("font-size")+"px"; });
+  /* ---- 이름표·글자(겹쳐 그리는 HTML) ---- */
+  const ov=BT3.ov;
+  BT3.tags=tags.map(T0=>{ const d=document.createElement("div"); d.className=`bt3tag ${T0.side||""}${T0.dead?" dead":""}${T0.dim?" dim":""}${T0.turn?" turn":""}`;
+    d.innerHTML=(btNames?`<b>${escAttr(T0.name)}</b>`:"")+(T0.hp!=null?`<i><s style="width:${Math.round(T0.hp*100)}%;background:${T0.hp>.6?"#7ac68f":T0.hp>.3?"#e0c060":"#d9666a"}"></s></i>`:"")+(T0.st?`<em>${escAttr(T0.st)}</em>`:"");
+    d.addEventListener("click",()=>showTok(T0.t)); ov.appendChild(d); return {el:d,pos:T0.pos}; });
+  [["북",C/2,-0.9,"n"],["남",C/2,R+0.9,""],["서",-0.9,R/2,""],["동",C+0.9,R/2,""]].forEach(([n,x,y,c])=>labs.push({p:[x,0,y],text:n,cls:"cmp "+c}));
+  BT3.labs=labs.map(L=>{ const d=document.createElement("div"); d.className="bt3lab "+(L.cls||""); const s=L.text.length>14?L.text.slice(0,13)+"…":L.text; d.textContent=s; if(L.col) d.style.color=L.col; ov.appendChild(d); return {el:d,pos:L.p}; });
+  if(!live.length){ const d=document.createElement("div"); d.className="bt3empty"; d.textContent="전투가 열리면 배치가 표시됩니다"; ov.appendChild(d); }
+  /* ---- 처음 열 때·판 크기가 바뀔 때·'화면 맞춤'을 누를 때만 시점을 다시 맞춘다 ---- */
+  const key=`3d|${C}x${R}`;
+  if(btViewKey!==key){ btViewKey=key; bt3Fit([[0,0,0],[C,0,0],[0,0,R],[C,0,R],[C/2,2,R/2]]); }
+  BT3.lastYaw=null; BT3.dirty=true;
   btInitBar(B);
+}
+/* 그림 방향: 카메라 쪽을 보는지(앞), 화면 오른쪽을 보는지 → f·fr·b·bl 칸 고르기 */
+function bt3Faces(){
+  const y=BT3.cam.yaw, s=Math.sin(y), c=Math.cos(y);
+  BT3.toks.forEach(k=>{ if(!k.sp||!k.spr) return;
+    const front=(k.dx*s+k.dy*c)>=0, right=(k.dx*c-k.dy*s)>0, C=k.spr.c;
+    let cell,flip=false;
+    if(front){ if(right&&C.fr) cell=C.fr; else{ cell=C.f; flip=right; } }
+    else{ if(!right&&C.bl) cell=C.bl; else{ cell=C.b||C.f; flip=!right; } }
+    const tex=bt3Tex(cell[4]||k.spr.s.src,cell.slice(0,4),flip);
+    if(tex&&k.sp.material.map!==tex){ k.sp.material.map=tex; k.sp.material.needsUpdate=true;
+      const H=1.3*cell[3]/250; k.sp.scale.set(H*cell[2]/cell[3],H,1); }
+  });
+}
+/* 사람을 가리는 벽·건물·나무는 반투명하게 */
+function bt3Occlude(){
+  const cam=BT3.camera.position, faded=new Set(), ray=BT3.ray, v=new THREE.Vector3();
+  BT3.toks.forEach(k=>{ if(k.dead) return; [0.35,k.head*0.85].forEach(hy=>{
+    v.set(k.grp.position.x,k.grp.position.y+hy,k.grp.position.z); const dir=v.clone().sub(cam); const d=dir.length(); dir.normalize();
+    ray.set(cam,dir); ray.far=d-0.25;
+    ray.intersectObjects(BT3.occ,true).forEach(h=>{ let o=h.object; while(o&&!BT3.occ.includes(o)) o=o.parent; if(o) faded.add(o); }); }); });
+  ray.far=Infinity;
+  BT3.occ.forEach(o=>{ const f=faded.has(o); if(o.userData.pick) o.userData.pick.faded=f;
+    o.traverse(n=>{ if(!n.material) return; if(n.userData.op0==null) n.userData.op0=n.material.opacity; n.material.opacity=f?0.22:n.userData.op0; n.material.depthWrite=!f&&n.userData.op0>=1; }); });
+}
+function bt3Overlay(){
+  const w=BT3.w, h=BT3.h, v=new THREE.Vector3(), put=[];
+  const proj=p=>{ v.set(p[0],p[1],p[2]).project(BT3.camera); return v.z<1&&v.z>-1?[(v.x+1)/2*w,(1-v.y)/2*h]:null; };
+  BT3.labs.forEach(L=>{ const q=proj(L.pos); if(!q){ L.el.style.display="none"; return; } L.el.style.display=""; L.el.style.transform=`translate(${q[0].toFixed(1)}px,${q[1].toFixed(1)}px) translate(-50%,-50%)`; });
+  const ts=BT3.tags.map(T0=>({T0,q:proj(T0.pos)})).filter(o=>{ if(!o.q){ o.T0.el.style.display="none"; return false; } o.T0.el.style.display=""; return true; });
+  ts.sort((a,b)=>b.q[1]-a.q[1]).forEach(o=>{ const hw=o.T0.el.offsetWidth/2+3, hh=o.T0.el.offsetHeight||18; let y=o.q[1], n=0;
+    while(n<8&&put.some(p=>Math.abs(p.x-o.q[0])<p.hw+hw&&Math.abs(p.y-y)<(p.hh+hh)/2)){ y-=hh*0.9; n++; }
+    put.push({x:o.q[0],y,hw,hh});
+    o.T0.el.style.transform=`translate(${o.q[0].toFixed(1)}px,${y.toFixed(1)}px) translate(-50%,-100%)`; });
+}
+function bt3Loop(ts){
+  requestAnimationFrame(bt3Loop);
+  if(!BT3||!btIso||BT3.box.style.display==="none"||!$("s-battle").classList.contains("on")) return;
+  bt3Size();
+  if(!BT3.w) return;
+  const moving=BT3.dirty;
+  if(moving){ bt3Cam(); if(BT3.lastYaw!==BT3.cam.yaw){ bt3Faces(); BT3.lastYaw=BT3.cam.yaw; } bt3Occlude(); bt3Overlay(); BT3.dirty=false; }
+  if(BT3.bob){ BT3.bob.m.position.y=BT3.bob.y+Math.sin((ts||0)/260)*0.08; BT3.bob.m.rotation.y=(ts||0)/700; }
+  if(moving||BT3.bob||BT3.texWait) BT3.renderer.render(BT3.scene,BT3.camera);
+}
+/* 살아 있는 적이 다 들어오게(없으면 모두) */
+function bt3FitEnemies(){
+  if(!BT3||!BT3.B) return; const live=(BT3.B.tokens||[]).filter(t=>!t.down&&!/^0\//.test(String(t.hp||"")));
+  let tk=live.filter(t=>t.side==="enemy"); if(!tk.length) tk=live; if(!tk.length) return;
+  const pts=[]; tk.forEach(t=>{ pts.push([t.x+0.1,0,t.y+0.1],[t.x+0.9,1.4,t.y+0.9]); });
+  bt3Fit(pts); BT3.cam.dist=Math.max(BT3.cam.dist,7);
 }
 function btIdleBoard(){
   const goers=[S.pc,...(S.party||[]).filter(a=>!a.at)].filter(Boolean);
@@ -9138,12 +9285,12 @@ function btInitBar(B){
   ib.innerHTML=(B.init||[]).map(id=>{ const t=byId[id]; if(!t) return ""; return `<span class="${B.turn===id?"now":""}${t.down?" dead":""}">${t.name}${t.hp?" "+t.hp:""}</span>`; }).join("");
 }
 function btSyncButtons(){
-  $("btIso").classList.toggle("on",btIso); $("btIso").textContent=btIso?"입체":"평면";
+  $("btIso").classList.toggle("on",btIso); $("btIso").textContent=btIso?"3D":"평면";
   $("btRotL").style.display=$("btRotR").style.display=btIso?"":"none"; if(!btIso) $("btFloor").style.display="none";
 }
 $("btIso").onclick=()=>{ btIso=!btIso; btViewKey=""; try{ localStorage.setItem("berix_bt_flat",btIso?"0":"1"); }catch{} btSyncButtons(); renderBattle(); };
-$("btRotL").onclick=()=>{ btRot=(btRot+3)%4; try{ localStorage.setItem("berix_bt_rot",btRot); }catch{} renderBattle(); };
-$("btRotR").onclick=()=>{ btRot=(btRot+1)%4; try{ localStorage.setItem("berix_bt_rot",btRot); }catch{} renderBattle(); };
+$("btRotL").onclick=()=>{ bt3FitEnemies(); };
+$("btRotR").onclick=()=>{ if(!BT3) return; BT3.cam.yaw=Math.PI/4; BT3.cam.pitch=0.9; bt3SaveCam(); btViewKey=""; renderBattle(); };
 $("btFloor").onclick=()=>{ btFloor=btFloor==="all"?"1":btFloor==="1"?"2":"all"; renderBattle(); };
 btSyncButtons(); btLoadSheets();
 
