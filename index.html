@@ -213,6 +213,19 @@ textarea{width:100%;height:130px;background:#080a10;color:#9fb3cc;border:1px sol
   border:1px solid var(--gold);color:var(--gold-s);padding:9px 16px;border-radius:20px;font-size:12px;
   opacity:0;transition:opacity .25s;pointer-events:none}
 .toast.on{opacity:1}
+/* 거점 식구 표 — 나중에 그래픽으로 바꿀 자리 */
+.roster{width:100%;border-collapse:collapse;font-size:13px;color:var(--parch)}
+.roster th{text-align:left;font-weight:600;color:var(--muted);font-size:11.5px;padding:5px 8px;border-bottom:1px solid var(--border);white-space:nowrap}
+.roster td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.roster tr[data-bsview]{cursor:pointer}
+.roster tr[data-bsview]:hover td{background:var(--panel2)}
+.roster td.bd{color:var(--gold-s);white-space:nowrap}
+.roster td.nm{font-weight:600;white-space:nowrap}
+.roster td.rm{white-space:nowrap}
+.roster .sub{color:var(--muted);font-size:12px}
+.roster .away{color:var(--violet-s);font-size:12px}
+.roster-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.roster-sum{color:var(--muted);font-size:12px;margin:0 0 6px}
 .legend{display:flex;flex-wrap:wrap;gap:5px 12px;font-size:11px;color:var(--parch);
   margin:0 0 8px;padding:7px 10px;background:var(--panel2);border:1px solid var(--line);border-radius:8px}
 .legend span{display:inline-flex;align-items:center}
@@ -358,6 +371,7 @@ summary>span:first-child>em{font-style:normal;overflow:hidden;text-overflow:elli
   <section id="s-party"></section>
 
   <section id="s-base">
+    <div class="card"><h2>거점 식구</h2><div id="bsRoster"></div></div>
     <div class="card">
       <h2 id="bsName">거점</h2>
       <div class="tools" id="bsTabs"></div>
@@ -7545,7 +7559,29 @@ function renderBaseArt(B,svg,by,A){
   });
   baseInfoRows(S.base,by);
 }
+/* 거점 식구 표 — 인물 파일의 room이 거점 건물(가게·딸린 집)의 방이거나 outside(가게 밖)인 사람을 건물·방 순서로 한 줄씩. 줄을 누르면 그 건물 그림으로 간다. */
+function renderBaseRoster(){
+  const box=$("bsRoster"); if(!box) return;
+  const B=S.base; if(!B||!(B.rooms||[]).length){ box.innerHTML='<div class="note">거점 배치가 아직 없습니다.</div>'; return; }
+  const idx={}; let n=0;
+  baseBuildings(B).forEach(bd=>bd.rooms.forEach(r=>{ idx[r.id]={bd,r,o:n++}; }));
+  (B.outside||[]).forEach(o=>{ idx[o.id]={bd:null,r:o,o:n++}; });
+  const fl=r=>r.floor===0?"지하":r.floor?r.floor+"층":"";
+  const rows=[S.pc,...(S.party||[]),...(S.npcs||[])].filter(a=>a&&a.room&&idx[a.room]).sort((a,b)=>idx[a.room].o-idx[b.room].o);
+  if(!rows.length){ box.innerHTML='<div class="note">방이 적힌 인물이 없습니다.</div>'; return; }
+  const blds=new Set(rows.map(a=>idx[a.room].bd&&idx[a.room].bd.id).filter(Boolean));
+  let prev=null;
+  const tr=rows.map(a=>{ const {bd,r}=idx[a.room]; const bn=bd?(bd.short||bd.name):"—";
+    const first=bn!==prev; prev=bn;
+    const note=(a.roomNote||"").startsWith(bn)?a.roomNote.slice(bn.length).replace(/^[^—(]*/,"").replace(/^—\s*/,"").trim():(a.roomNote||"");
+    const at=a.at&&!/^상점/.test(a.at)?`<div class="away">지금: ${escAttr(a.at)}</div>`:"";
+    return `<tr${bd?` data-bsview="${escAttr(bd.id)}"`:""}><td class="bd">${first?escAttr(bn):""}</td><td class="nm">${escAttr(a.name||a.n||a.id)}</td>`+
+      `<td class="rm">${escAttr(r.label)}${bd&&fl(r)?` <span class="sub">${fl(r)}</span>`:""}</td><td>${note?`<span class="sub">${escAttr(note)}</span>`:""}${at}</td></tr>`; }).join("");
+  box.innerHTML=`<div class="roster-sum">${rows.length}명 · 건물 ${blds.size}채 — 줄을 누르면 그 건물 그림으로 갑니다</div>`+
+    `<div class="roster-wrap"><table class="roster"><thead><tr><th>건물</th><th>이름</th><th>방</th><th>비고</th></tr></thead><tbody>${tr}</tbody></table></div>`;
+}
 function renderBase(){
+  try{ renderBaseRoster(); }catch(e){ console.error(e); }
   const navD=$("navDungeon"); if(navD) navD.hidden=!((S.dungeon&&S.dungeon.rooms||[]).length);
   const B=S.base, svg=$("bsSvg"); if(!svg) return; svg.innerHTML="";
   if(!B||!(B.rooms||[]).length){ $("bsName").textContent="거점"; $("bsNote").textContent="거점 배치가 아직 없습니다(state/base.json)."; $("bsInfo").textContent=""; return; }
@@ -7651,7 +7687,7 @@ function renderBase(){
   baseInfoRows(B,by);
 }
 
-document.addEventListener("click",e=>{ const b=e.target.closest("[data-bsview]"); if(b){ bsView=b.dataset.bsview; renderBase(); } });
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-bsview]"); if(b){ bsView=b.dataset.bsview; renderBase(); if(b.tagName==="TR"){ const w=$("bsWrap"); if(w) w.closest(".card").scrollIntoView({behavior:"smooth",block:"start"}); } } });
 
 /* ---------- 던전 (평면도) ---------- */
 const SVGNS="http://www.w3.org/2000/svg";
