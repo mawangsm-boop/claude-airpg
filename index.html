@@ -8932,6 +8932,8 @@ function bt3Init(){
   const box=document.createElement("div"); box.id="bt3d";
   const cv=renderer.domElement; cv.className="bt3cv"; box.appendChild(cv);
   const ov=document.createElement("div"); ov.className="bt3ov"; box.appendChild(ov);
+  /* 이름표를 누를 때도 .wrap의 평면용 손잡이가 포인터를 가로채 클릭이 사라지므로 막는다 */
+  ["pointerdown","pointerup","pointermove","wheel"].forEach(ev=>ov.addEventListener(ev,e=>e.stopPropagation()));
   wrap.appendChild(box);
   const scene=new THREE.Scene();
   scene.add(new THREE.HemisphereLight(0xe8eeff,0x5a4a34,0.78));
