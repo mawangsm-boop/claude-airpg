@@ -8947,6 +8947,8 @@ function bt3Size(){
   if(!BT3) return; const w=BT3.box.clientWidth, h=BT3.box.clientHeight; if(w<10||h<10) return;
   if(BT3.w===w&&BT3.h===h) return; BT3.w=w; BT3.h=h;
   BT3.renderer.setSize(w,h,false); BT3.camera.aspect=w/h; BT3.camera.updateProjectionMatrix(); BT3.dirty=true;
+  /* 탭이 숨어 있을 때(크기 0) 맞춘 시점은 틀리므로, 사용자가 손대기 전까지는 크기가 바뀔 때마다 다시 맞춘다 */
+  if(BT3.autoFit&&BT3.fitPts) bt3Fit(BT3.fitPts,true);
 }
 function bt3Cam(){
   const c=BT3.cam, cp=Math.cos(c.pitch);
@@ -8954,8 +8956,8 @@ function bt3Cam(){
   BT3.camera.lookAt(c.tx,c.ty,c.tz);
 }
 /* 점들이 다 들어오게 맞춘다(보는 각도는 그대로) */
-function bt3Fit(pts){
-  if(!pts.length) return; const c=BT3.cam;
+function bt3Fit(pts,keepAuto){
+  if(!pts.length) return; const c=BT3.cam; BT3.fitPts=pts; if(!keepAuto) BT3.autoFit=true;
   let mn=[1e9,1e9,1e9], mx=[-1e9,-1e9,-1e9];
   pts.forEach(p=>{ for(let i=0;i<3;i++){ mn[i]=Math.min(mn[i],p[i]); mx[i]=Math.max(mx[i],p[i]); } });
   c.tx=(mn[0]+mx[0])/2; c.ty=(mn[1]+mx[1])/2; c.tz=(mn[2]+mx[2])/2;
@@ -8979,7 +8981,7 @@ function bt3SaveCam(){ try{ localStorage.setItem("berix_bt3_cam",JSON.stringify(
 function bt3Controls(){
   const cv=BT3.cv, P=new Map(); let moved=0, pinch=null;
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-  cv.addEventListener("pointerdown",e=>{ try{ cv.setPointerCapture(e.pointerId); }catch{} P.set(e.pointerId,{x:e.clientX,y:e.clientY,b:e.button,sh:e.shiftKey}); if(P.size===1) moved=0; pinch=null; });
+  cv.addEventListener("pointerdown",e=>{ BT3.autoFit=false; try{ cv.setPointerCapture(e.pointerId); }catch{} P.set(e.pointerId,{x:e.clientX,y:e.clientY,b:e.button,sh:e.shiftKey}); if(P.size===1) moved=0; pinch=null; });
   cv.addEventListener("pointermove",e=>{
     const p=P.get(e.pointerId); if(!p) return;
     const dx=e.clientX-p.x, dy=e.clientY-p.y; p.x=e.clientX; p.y=e.clientY; moved+=Math.abs(dx)+Math.abs(dy);
@@ -8992,7 +8994,7 @@ function bt3Controls(){
   const end=(e,pick)=>{ const had=P.delete(e.pointerId); pinch=null; if(had&&P.size===0){ if(pick&&moved<7) bt3Pick(e); else bt3SaveCam(); } };
   cv.addEventListener("pointerup",e=>end(e,true));
   cv.addEventListener("pointercancel",e=>end(e,false));
-  cv.addEventListener("wheel",e=>{ e.preventDefault(); BT3.cam.dist=clamp(BT3.cam.dist*Math.exp(e.deltaY*0.0012),3,160); BT3.dirty=true; },{passive:false});
+  cv.addEventListener("wheel",e=>{ e.preventDefault(); BT3.autoFit=false; BT3.cam.dist=clamp(BT3.cam.dist*Math.exp(e.deltaY*0.0012),3,160); BT3.dirty=true; },{passive:false});
   cv.addEventListener("contextmenu",e=>e.preventDefault());
 }
 function bt3Pick(e){
