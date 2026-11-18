@@ -202,6 +202,8 @@ details.actgrp[open]>summary::before{transform:rotate(90deg)}
 .bt3tag.ally b{border-color:#7ac68f}.bt3tag.pc b{border-color:#6ea8e8}.bt3tag.neutral b{border-color:#c9a457}
 .bt3tag.turn b{box-shadow:0 0 0 2px #ffe08a}
 .bt3tag.dim,.bt3tag.dead{opacity:.55}
+.bt3tag u{display:none;position:absolute;left:50%;top:100%;width:1.5px;height:var(--stem,0);margin-left:-.75px;background:rgba(255,244,220,.55);pointer-events:none}
+.bt3tag.moved u{display:block}
 .bt3tag i{display:block;width:36px;height:5px;margin:2px auto 0;background:#0a0c12;border-radius:3px;overflow:hidden;border:1px solid #0a0c12}
 .bt3tag i s{display:block;height:100%}
 .bt3tag em{display:block;font-style:normal;font-size:10.5px;color:var(--violet-s);text-shadow:0 0 3px #000,0 0 3px #000}
@@ -8995,7 +8997,7 @@ function bt3Controls(){
     if(P.size>=2){ const [a,b]=[...P.values()]; const d=Math.max(8,Math.hypot(a.x-b.x,a.y-b.y)), mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
       if(pinch){ c.dist=clamp(c.dist*pinch.d/d,3,160); bt3Pan(mx-pinch.mx,my-pinch.my); } pinch={d,mx,my}; }
     else if(p.b===2||p.sh) bt3Pan(dx,dy);
-    else{ c.yaw-=dx*0.0085; c.pitch=clamp(c.pitch+dy*0.0065,0.12,1.55); }
+    else{ c.yaw-=dx*0.0065; c.pitch=clamp(c.pitch+dy*0.005,0.12,1.55); }
     BT3.dirty=true; });
   const end=(e,pick)=>{ const had=P.delete(e.pointerId); pinch=null; if(had&&P.size===0){ if(pick&&moved<7) bt3Pick(e); else bt3SaveCam(); } };
   cv.addEventListener("pointerup",e=>end(e,true));
@@ -9220,7 +9222,7 @@ function bt3Build(B){
   /* ---- 이름표·글자(겹쳐 그리는 HTML) ---- */
   const ov=BT3.ov;
   BT3.tags=tags.map(T0=>{ const d=document.createElement("div"); d.className=`bt3tag ${T0.side||""}${T0.dead?" dead":""}${T0.dim?" dim":""}${T0.turn?" turn":""}`;
-    d.innerHTML=(btNames?`<b>${escAttr(T0.name)}</b>`:"")+(T0.hp!=null?`<i><s style="width:${Math.round(T0.hp*100)}%;background:${T0.hp>.6?"#7ac68f":T0.hp>.3?"#e0c060":"#d9666a"}"></s></i>`:"")+(T0.st?`<em>${escAttr(T0.st)}</em>`:"");
+    d.innerHTML="<u></u>"+(btNames?`<b>${escAttr(T0.name)}</b>`:"")+(T0.hp!=null?`<i><s style="width:${Math.round(T0.hp*100)}%;background:${T0.hp>.6?"#7ac68f":T0.hp>.3?"#e0c060":"#d9666a"}"></s></i>`:"")+(T0.st?`<em>${escAttr(T0.st)}</em>`:"");
     d.addEventListener("click",()=>showTok(T0.t)); ov.appendChild(d); return {el:d,pos:T0.pos}; });
   [["북",C/2,-0.9,"n"],["남",C/2,R+0.9,""],["서",-0.9,R/2,""],["동",C+0.9,R/2,""]].forEach(([n,x,y,c])=>labs.push({p:[x,0,y],text:n,cls:"cmp "+c}));
   const pri=L=>/cmp|ring/.test(L.cls||"")?0:1; labs.sort((a,b)=>pri(a)-pri(b));
@@ -9263,7 +9265,8 @@ function bt3Overlay(){
   ts.sort((a,b)=>b.q[1]-a.q[1]).forEach(o=>{ const hw=o.T0.el.offsetWidth/2+3, hh=o.T0.el.offsetHeight||18; let y=o.q[1], n=0;
     while(n<8&&put.some(p=>Math.abs(p.x-o.q[0])<p.hw+hw&&Math.abs(p.y-y)<(p.hh+hh)/2)){ y-=hh*0.9; n++; }
     put.push({x:o.q[0],y,hw,hh});
-    o.T0.el.style.transform=`translate(${o.q[0].toFixed(1)}px,${y.toFixed(1)}px) translate(-50%,-100%)`; });
+    o.T0.el.style.transform=`translate(${o.q[0].toFixed(1)}px,${y.toFixed(1)}px) translate(-50%,-100%)`;
+    o.T0.el.style.setProperty("--stem",Math.max(0,o.q[1]-y).toFixed(0)+"px"); o.T0.el.classList.toggle("moved",o.q[1]-y>2); });
   /* 땅 글자는 사람 이름표 다음 — 겹치면 숨긴다(거리·방위 글자가 먼저) */
   const boxes=put.map(p=>({x:p.x,y:p.y-p.hh/2,hw:p.hw,hh:p.hh}));
   BT3.labs.forEach(L=>{ const q=proj(L.pos); if(!q){ L.el.style.display="none"; return; }
