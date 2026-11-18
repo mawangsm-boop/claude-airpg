@@ -9289,8 +9289,9 @@ function bt3Loop(ts){
 function bt3FitEnemies(){
   if(!BT3||!BT3.B) return; const live=(BT3.B.tokens||[]).filter(t=>!t.down&&!/^0\//.test(String(t.hp||"")));
   let tk=live.filter(t=>t.side==="enemy"); if(!tk.length) tk=live; if(!tk.length) return;
-  const pts=[]; tk.forEach(t=>{ pts.push([t.x+0.1,0,t.y+0.1],[t.x+0.9,1.4,t.y+0.9]); });
-  bt3Fit(pts); BT3.cam.dist=Math.max(BT3.cam.dist,7);
+  /* 적 둘레 네 칸까지 넣고, 너무 눕힌 시점이면 위로 올려 앞사람에게 가리지 않게 */
+  const B=BT3.B, M=4, pts=[]; tk.forEach(t=>{ pts.push([Math.max(0,t.x-M),0,Math.max(0,t.y-M)],[Math.min(B.cols,t.x+1+M),1.6,Math.min(B.rows,t.y+1+M)]); });
+  BT3.cam.pitch=Math.max(BT3.cam.pitch,0.95); bt3Fit(pts); bt3SaveCam();
 }
 function btIdleBoard(){
   const goers=[S.pc,...(S.party||[]).filter(a=>!a.at)].filter(Boolean);
