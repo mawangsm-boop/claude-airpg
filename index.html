@@ -5944,7 +5944,112 @@ const SEED = {
       },
       "at": "상점",
       "room": "sh_r2",
-      "roomNote": "소금꽃 집 2층 방 2"
+      "roomNote": "소금꽃 집 2층 방 2",
+      "sheet": {
+        "race": "하프엘프",
+        "cls": "정찰대장(Scout Captain) — 몬스터 수치표, 레벨 없음",
+        "ac": 15,
+        "ac_note": "징 박은 가죽 갑옷",
+        "stats": {
+          "STR": 11,
+          "DEX": 16,
+          "CON": 12,
+          "INT": 14,
+          "WIS": 15,
+          "CHA": 11
+        },
+        "profBonus": 2,
+        "saves": {
+          "proficient": [
+            "DEX",
+            "INT"
+          ],
+          "mods": {
+            "STR": 0,
+            "DEX": 5,
+            "CON": 1,
+            "INT": 4,
+            "WIS": 2,
+            "CHA": 0
+          }
+        },
+        "skills": {
+          "proficient": [
+            "지각",
+            "은신",
+            "생존"
+          ],
+          "expertise": [
+            "지각",
+            "은신",
+            "생존"
+          ],
+          "mods": {
+            "지각": 6,
+            "은신": 7,
+            "생존": 6
+          },
+          "passivePerception": 16,
+          "note": "수치표 그대로 — 지각 +6 · 은신 +7 · 생존 +6 · 수동 지각 16."
+        },
+        "languages": "공용어 · 엘프어",
+        "initiative": 5,
+        "speed": "9m · 등반 9m",
+        "hp_note": "12d8+12 = 66 · CR 3(700 XP)",
+        "abilities": [
+          {
+            "id": "ab_mira_multi",
+            "n": "연속 공격",
+            "t": "행동",
+            "d": "공격 두 번 — 소검과 장궁을 아무렇게나 섞어서."
+          },
+          {
+            "id": "ab_mira_shortsword",
+            "n": "소검",
+            "t": "행동",
+            "d": "근접 공격 +5, 사거리 1.5m. 명중 1d6+3 관통, 이점으로 맞혔으면 3d6 관통 추가."
+          },
+          {
+            "id": "ab_mira_longbow",
+            "n": "장궁",
+            "t": "행동",
+            "d": "원거리 공격 +5, 사거리 45/180m. 명중 1d8+3 관통, 이점으로 맞혔으면 3d6 관통 추가."
+          },
+          {
+            "id": "ab_mira_aim",
+            "n": "조준",
+            "t": "보조 행동",
+            "d": "이번 차례에 하는 다음 공격 판정에 이점."
+          },
+          {
+            "id": "ab_mira_dodge",
+            "n": "기막힌 회피",
+            "t": "반응",
+            "d": "공격 판정에 맞았을 때 그 공격의 피해를 절반(내림)으로."
+          }
+        ],
+        "src": "D&D 2024 Monster Manual 'Scout Captain'(aidedd.org·roll20 전사본 두 곳 대조, 2026-11-18). 56회차 설계(gm_notes/S56 §표)와 AC·HP·공격이 같다. 언어는 '공용어와 하나 더' — 하프엘프라 엘프어로 GM 확정. 클래스·레벨이 없는 수치표 인물이라 레벨업 대신 필요할 때 다른 수치표로 바꾼다(마르타와 같은 방식)."
+      },
+      "equipment": [
+        {
+          "slot": "weapon",
+          "item": "장궁",
+          "desc": "키만 한 장궁",
+          "equipped": true
+        },
+        {
+          "slot": "weapon2",
+          "item": "소검",
+          "desc": "허리의 예비 칼",
+          "equipped": true
+        },
+        {
+          "slot": "body",
+          "item": "징 박은 가죽 갑옷",
+          "desc": "닳은 가죽 조끼와 팔목 보호대",
+          "equipped": true
+        }
+      ]
     },
     {
       "id": "yorck_barnes",
@@ -6663,7 +6768,7 @@ const SEED = {
       "unknown": "헨드릭의 일(D)."
     }
   ],
-  "seedRev": "S58-110"
+  "seedRev": "S58-111"
 };/* ==================== 상태 관리 ==================== */
 const KEY="berix_handbook_v2_17_s40";
 let S = load(), HIST = [];
