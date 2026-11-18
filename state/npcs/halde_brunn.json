@@ -7,7 +7,7 @@
       "cur": 4,
       "max": 4
     },
-    "tag": "59회차 · 젖은 노 굴뚝을 고치는 날품 석공",
+    "tag": "59회차 · 젖은 노부터 지하 구멍을 파는 석공(고용, 선금 20골드)",
     "tagc": "",
     "trait": "지난여름 썩은 들보를 새것이라 적은 보수 서류에 서명하길 거부해 시 일에서 잘렸다. 지금은 날품으로 굴뚝·우물을 고친다. 수문·둑 기초를 손으로 안다.",
     "voice": "처음부터 짧은 존댓말. 셈을 손바닥 너비로 한다 — '이 벽은 손바닥 셋 두께요.' 남이 대충 말하면 되묻는다 — '몇 자요?'",
@@ -17,7 +17,7 @@
     },
     "drive": "서류가 아니라 남는 것을 짓는 것.",
     "fear": "굴이 무너져 사람이 깔리는 것.",
-    "bond": "59회차 1일째 아침, 아이린의 젖은 노에서 처음 마주침.",
+    "bond": "59회차 1일째, 아이린의 젖은 노에서 처음 마주침. 한낮 소금꽃 집 염장고에서 공사 값(하루 4골드·열흘 남짓·들보 약 30·연장 약 5)을 불렀고 베릭스가 선금 20골드를 주고 젖은 노 구멍부터 시작하게 했다. '도둑을 잡는 거요, 죽이는 거요?' — 베릭스: '아직 모른다, 말이 통하지 않으면 피를 볼 수밖에.' 할데: 피 보는 일은 자기 일이 아니며 어린것이 있으면 그날로 연장을 내려놓는다(code).",
     "knows": "석공들 사이의 말로 강변 줄이 옛 큰물에 묻힌 적이 있다는 것(B). 수문·둑 기초의 짜임(A, 직업).",
     "unknown": "코볼드 · 베릭스의 뜻 · 가게 줄 지하의 사정",
     "look": "Halde Brunn, a dwarven female stonemason, around forty. Short braided copper hair pinned up, a white scar across the left eyebrow, broad shoulders, calloused hands, leather apron dusted with lime. Smiles with one corner of her mouth.",
