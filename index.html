@@ -9026,7 +9026,7 @@ function bt3Init(){
   const sun=new THREE.DirectionalLight(0xfff0d8,0.95); sun.position.set(-0.55,1,0.4); scene.add(sun); scene.add(sun.target);
   try{ renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; sun.castShadow=true; sun.shadow.mapSize.set(2048,2048); sun.shadow.bias=-0.0006; sun.shadow.normalBias=0.03; }catch{}
   const camera=new THREE.PerspectiveCamera(38,1,0.1,600);
-  BT3={renderer,scene,camera,box,cv,ov,wrap,root:null,cam:{yaw:Math.PI/4,pitch:0.9,dist:22,tx:0,ty:0,tz:0},
+  BT3={renderer,scene,camera,box,cv,ov,root:null,cam:{yaw:Math.PI/4,pitch:0.9,dist:22,tx:0,ty:0,tz:0},
        key:"",toks:[],occ:[],tags:[],labs:[],pick:[],bob:null,dirty:true,lastYaw:null,B:null,ray:new THREE.Raycaster(),sun,mode:null,cfg:null,maxF:2};
   BT3.cams={battle:BT3.cam,base:{yaw:Math.PI/4,pitch:0.95,dist:30,tx:0,ty:0,tz:0}};
   Object.keys(BT3_CFG).forEach(m=>{ try{ const c=JSON.parse(localStorage.getItem(BT3_CFG[m].camKey)||"null"); if(c&&isFinite(c.yaw)&&isFinite(c.pitch)){ BT3.cams[m].yaw=c.yaw; BT3.cams[m].pitch=c.pitch; } }catch{} });
