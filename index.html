@@ -8531,7 +8531,7 @@ function renderBase(){
   /* v2.65: 3D 디오라마 보기 */
   bs3Sync();
   if(bs3On){ renderBase3D(); baseInfoRows(B,basePeople()); return; }
-  bt3ShowM("base",false);
+  bt3ShowM("base",false); { const w=$("bsWrap"); if(w) w.style.maxHeight=""; }
   $("bsName").textContent=cur.name||"거점"; $("bsNote").textContent=cur.note||"";
   if(bsView!=="shop"){
     const A=BASE_ARTS[bsView], by=basePeople();
@@ -9696,7 +9696,8 @@ function bs3Board(){
   (B.rooms||[]).forEach(r=>{ if(r.kind!=="stairs"&&rooms[r.id]) part(r.id,rooms[r.id]); });
   Object.values(BS3_PART).forEach(ids=>ids.forEach(id=>part(id,rooms[id])));
   /* 방 이름(층 높이에) */
-  Object.entries(rooms).forEach(([id,r])=>{ if(!names[id]||/^sb_/.test(id)&&id!=="sb_cabin") return; const [x0,y0,x1,y1,f]=r; const deck=/^sb_/.test(id)?BS3_DECK:0;
+  const bLabels=new Set(T.filter(o=>o.kind==="building").map(o=>String(o.label).replace(/\(.*$/,"")));
+  Object.entries(rooms).forEach(([id,r])=>{ if(!names[id]||/^sb_/.test(id)&&id!=="sb_cabin"||bLabels.has(names[id])) return; const [x0,y0,x1,y1,f]=r; const deck=/^sb_/.test(id)?BS3_DECK:0;
     T.push({x:(x0+x1)/2-0.01,y:(y0+y1)/2-0.01,w:0.02,h:0.02,kind:"label",label:names[id],floor:f,elev:deck+(f-1)*ISO.FH+0.05}); });
   /* 사람 — 방마다 모아 방 안에 고르게 */
   const by={}; [S.pc,...(S.party||[]),...(S.npcs||[])].filter(a=>a&&a.room&&rooms[a.room]).forEach(a=>{ (by[a.room]=by[a.room]||[]).push(a); });
@@ -9717,7 +9718,7 @@ function bs3Sync(){
   const lg=$("bsLegend"); if(lg) lg.style.display=bs3On?"none":"";
 }
 function renderBase3D(){
-  const wrap=$("bsWrap"); if(wrap) wrap.style.aspectRatio="4/3";
+  const wrap=$("bsWrap"); if(wrap){ wrap.style.aspectRatio="4/3"; wrap.style.maxHeight="75vh"; }
   $("bsName").textContent="카를렌 나루터 거점 — 3D 디오라마";
   $("bsNote").textContent="서쪽 큰길 → 동쪽 거울강. 건물을 누르면 이름이, 사람을 누르면 방이 아래에 나옵니다. 사람이 있는 집은 지붕을 걷어 보이고, '층' 버튼으로 층별로 봅니다. 건물 버튼을 누르면 그 집으로 시점이 갑니다. 건물 자리·방 배치는 기록에 맞춘 대략값입니다.";
   bt3Render("base",bs3Board(),()=>{ if(bs3FocusReq){ const r=BS3_BLD[bs3FocusReq]; bs3FocusReq=null;
@@ -10128,6 +10129,8 @@ document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
   document.querySelectorAll("section").forEach(x=>x.classList.remove("on"));
   b.classList.add("on"); $("s-"+b.dataset.t).classList.add("on"); window.scrollTo(0,0);
   document.body.classList.toggle("lock",!!LOCK_TABS[b.dataset.t]);
+  /* v2.65: 3D 화면은 전투·거점이 하나를 나눠 쓴다 — 탭을 옮기면 그 탭으로 데려온다 */
+  try{ if(BT3){ if(b.dataset.t==="battle"&&btIso&&BT3.mode!=="battle") renderBattle(); else if(b.dataset.t==="base"&&bs3On&&BT3.mode!=="base") renderBase(); } }catch(e){ console.error(e); }
   setMapMax(false,true);
   if(LOCK_TABS[b.dataset.t]) requestAnimationFrame(()=>{
     if(b.dataset.t==="dungeon") fitWrapHeight("dgWrap",dgVB.w/dgVB.h);
