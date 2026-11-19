@@ -394,7 +394,7 @@ summary>span:first-child>em{font-style:normal;overflow:hidden;text-overflow:elli
     <div class="card"><h2>거점 식구</h2><div id="bsRoster"></div></div>
     <div class="card">
       <h2 id="bsName">거점</h2>
-      <div class="tools" id="bs3Tools"><button id="bs3Toggle">그림</button><button id="bs3Floor" style="display:none">층: 전체</button><button id="bs3Fit" style="display:none">화면 맞춤</button></div>
+      <div class="tools" id="bs3Tools"><button id="bs3Toggle">그림</button><button id="bs3Floor" style="display:none">층: 전체</button><button id="bs3Roof" style="display:none">지붕 걷음</button><button id="bs3Fit" style="display:none">화면 맞춤</button></div>
       <div class="tools" id="bsTabs"></div>
       <div class="legend" id="bsLegend">
         <span><i style="background:#3d2f5c"></i>잠자리</span>
@@ -7638,7 +7638,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.65";
+const HB_VERSION="v2.66";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -8969,7 +8969,8 @@ function btLoadSheets(){ BT_SHEETS.forEach(s=>{ if(s.req) return; s.req=true; co
    · three.js는 assets/vendor/three.min.js(r149)를 3D를 처음 열 때만 불러온다. 못 띄우는 기기면 평면으로 돌아간다. */
 let BT3=null, btThreeState="";
 /* v2.65: 같은 3D 판을 전투 탭과 거점 탭(디오라마)이 함께 쓴다 — 탭마다 판 자리·정보 칸·층·시점을 따로 둔다 */
-let bs3On=false, bs3Floor="all", bs3VK="", bs3FocusReq=null;
+let bs3On=false, bs3Floor="all", bs3VK="", bs3FocusReq=null, bs3Roof="off";
+try{ if(localStorage.getItem("berix_bs3_roof")==="on") bs3Roof="on"; }catch{}
 try{ bs3On=localStorage.getItem("berix_bs3_on")==="1"; }catch{}
 const BT3_CFG={
   battle:{wrap:"btWrap",svg:"btSvg",info:"btInfo",floorBtn:"btFloor",section:"s-battle",camKey:"berix_bt3_cam",
@@ -8978,7 +8979,7 @@ const BT3_CFG={
     active:()=>bs3On, rerender:()=>renderBase(), getFloor:()=>bs3Floor, setFloor:v=>{bs3Floor=v;}, getVK:()=>bs3VK, setVK:v=>{bs3VK=v;}}
 };
 function bt3F(){ return BT3&&BT3.cfg?BT3.cfg.getFloor():"all"; }
-function bt3NextFloor(cur){ const m=(BT3&&BT3.maxF)||2; return cur==="all"?"1":(+cur>=m?"all":String(+cur+1)); }
+function bt3NextFloor(cur){ const m=(BT3&&BT3.maxF)||2, c0=BT3&&BT3.hasCellar; return cur==="all"?(c0?"0":"1"):(+cur>=m?"all":String(+cur+1)); }
 const BT3_IMG={}, BT3_TEX={};
 function btNeedThree(cb){
   if(window.THREE) return cb(true);
@@ -9228,10 +9229,12 @@ function bt3Solid(geo,mat,col){ const mm=bt3M(mat).clone(); mm.userData={}; mm.v
   const m=new THREE.Mesh(geo,mm); m.castShadow=true; m.receiveShadow=true; return m; }
 /* 집 — 벽(재질은 이름으로)·창·문·박공 기와지붕·굴뚝. 말뚝집이면 말뚝·마루·사다리 */
 function bt3House(o,z,ctx){
-  const T=THREE, FH=ISO.FH, grp=new T.Group(), g=bt3TG();
+  const T=THREE, FH=ctx.FH||ISO.FH, grp=new T.Group(), g=bt3TG();
   const x0=o.x,y0=o.y,x1=o.x+o.w,y1=o.y+o.h, L=String(o.t.label||""), th=0.12;
   const wallMat=/목조|오두막|헛간|말뚝|움막|창고|천막|마구간|선실/.test(L)?"plankwall":/석조|탑|성|돌|요새|망루|신전|문루/.test(L)?"brick":"plaster";
-  const F=bt3F(), onDeck=o.t.deck!=null, fz=onDeck?Number(o.t.deck):z+(o.elev>0.05?o.elev:0), floors=o.floors||1, shown=o.open&&F!=="all"?Math.min(floors,+F):floors, H=shown*FH;
+  const F=bt3F(), onDeck=o.t.deck!=null, fz=onDeck?Number(o.t.deck):z+(o.elev>0.05?o.elev:0), floors=o.floors||1, shown=F==="0"?0:(o.open&&F!=="all"?Math.min(floors,+F):floors), H=shown*FH;
+  /* '지하' 보기: 집은 주춧돌 테두리만 */
+  if(shown===0){ [[x0,y0,x1,y0+th],[x0,y1-th,x1,y1],[x0,y0,x0+th,y1],[x1-th,y0,x1,y1]].forEach(q=>bt3TBox(g,"stoneside",q[0],q[1],q[2],q[3],fz,fz+0.3,"cobble")); grp.add(bt3TMesh(g,{own:true})); return grp; }
   /* 말뚝과 마루(배 위의 선실은 갑판에 바로 선다) */
   if(!onDeck&&fz>z+0.05){
     const post=new T.CylinderGeometry(0.06,0.07,1,7);
@@ -9248,22 +9251,28 @@ function bt3House(o,z,ctx){
   seg(x0,y0,x1,y0+th); seg(x0,y1-th,x1,y1); seg(x0,y0+th,x0+th,y1-th); seg(x1-th,y0+th,x1,y1-th);
   /* 창·문: 바깥 면에 살짝 띄워 붙인다 */
   const face=(mat,pts)=>bt3TQ(g,mat,pts[0],pts[1],pts[2],pts[3],[[0,0],[1,0],[1,1],[0,1]]);
-  const dW=0.55, dH=1.05, dx=(x0+x1)/2, ep=0.012;
-  face("door",[[dx-dW/2,fz,y1+ep],[dx+dW/2,fz,y1+ep],[dx+dW/2,fz+dH,y1+ep],[dx-dW/2,fz+dH,y1+ep]]);
-  const winW=0.36, winH=0.42;
-  for(let f=0;f<shown;f++){ const wy=fz+f*FH+0.95;
-    const along=(a0,a1,put)=>{ const n=Math.max(1,Math.floor((a1-a0)/1.6)); for(let i=0;i<n;i++){ const c=a0+(i+0.5)*(a1-a0)/n; put(c); } };
-    along(x0,x1,c=>{ if(!(f===0&&Math.abs(c-dx)<0.5)) face("window",[[c-winW/2,wy,y1+ep],[c+winW/2,wy,y1+ep],[c+winW/2,wy+winH,y1+ep],[c-winW/2,wy+winH,y1+ep]]);
-      face("window",[[c+winW/2,wy,y0-ep],[c-winW/2,wy,y0-ep],[c-winW/2,wy+winH,y0-ep],[c+winW/2,wy+winH,y0-ep]]); });
-    along(y0,y1,c=>{ face("window",[[x0-ep,wy,c-winW/2],[x0-ep,wy,c+winW/2],[x0-ep,wy+winH,c+winW/2],[x0-ep,wy+winH,c-winW/2]]);
-      face("window",[[x1+ep,wy,c+winW/2],[x1+ep,wy,c-winW/2],[x1+ep,wy+winH,c-winW/2],[x1+ep,wy+winH,c+winW/2]]); }); }
+  /* 문 — t.doors(n·s·e·w)마다 그 벽 가운데, 안팎 양쪽 면에 */
+  const dW=Math.max(0.55,FH*0.36), dH=Math.max(1.05,FH*0.74), ep=0.012, doorAt={};
+  const putDoor=(sd,c,e)=>{ if(sd==="s") face("door",[[c-dW/2,fz,y1+e],[c+dW/2,fz,y1+e],[c+dW/2,fz+dH,y1+e],[c-dW/2,fz+dH,y1+e]]);
+    if(sd==="n") face("door",[[c+dW/2,fz,y0-e],[c-dW/2,fz,y0-e],[c-dW/2,fz+dH,y0-e],[c+dW/2,fz+dH,y0-e]]);
+    if(sd==="w") face("door",[[x0-e,fz,c-dW/2],[x0-e,fz,c+dW/2],[x0-e,fz+dH,c+dW/2],[x0-e,fz+dH,c-dW/2]]);
+    if(sd==="e") face("door",[[x1+e,fz,c+dW/2],[x1+e,fz,c-dW/2],[x1+e,fz+dH,c-dW/2],[x1+e,fz+dH,c+dW/2]]); };
+  (o.t.doors||["s"]).forEach(sd=>{ const c=sd==="n"||sd==="s"?(x0+x1)/2:(y0+y1)/2; doorAt[sd]=c; putDoor(sd,c,ep); putDoor(sd,c,-(th+ep)); });
+  const winW=Math.max(0.36,FH*0.2), winH=Math.max(0.42,FH*0.26), gapW=Math.max(1.6,FH*0.95);
+  const skip=(sd,c,f)=>f===0&&doorAt[sd]!=null&&Math.abs(c-doorAt[sd])<dW;
+  for(let f=0;f<shown;f++){ const wy=fz+f*FH+FH*0.46;
+    const along=(a0,a1,put)=>{ const n=Math.max(1,Math.floor((a1-a0)/gapW)); for(let i=0;i<n;i++){ const c=a0+(i+0.5)*(a1-a0)/n; put(c); } };
+    along(x0,x1,c=>{ if(!skip("s",c,f)) face("window",[[c-winW/2,wy,y1+ep],[c+winW/2,wy,y1+ep],[c+winW/2,wy+winH,y1+ep],[c-winW/2,wy+winH,y1+ep]]);
+      if(!skip("n",c,f)) face("window",[[c+winW/2,wy,y0-ep],[c-winW/2,wy,y0-ep],[c-winW/2,wy+winH,y0-ep],[c+winW/2,wy+winH,y0-ep]]); });
+    along(y0,y1,c=>{ if(!skip("w",c,f)) face("window",[[x0-ep,wy,c-winW/2],[x0-ep,wy,c+winW/2],[x0-ep,wy+winH,c+winW/2],[x0-ep,wy+winH,c-winW/2]]);
+      if(!skip("e",c,f)) face("window",[[x1+ep,wy,c+winW/2],[x1+ep,wy,c-winW/2],[x1+ep,wy+winH,c-winW/2],[x1+ep,wy+winH,c+winW/2]]); }); }
   if(o.open){
     /* 안에 사람이 있으면 지붕을 걷고 마루를 보인다 */
     bt3TQa(g,"plank",[x0+th,fz+0.01,y0+th],[x1-th,fz+0.01,y0+th],[x1-th,fz+0.01,y1-th],[x0+th,fz+0.01,y1-th],"top");
   }else{
     /* 박공지붕 — 긴 쪽으로 용마루 */
-    const ov=0.2, top=fz+H, alongX=o.w>=o.h;
-    const s0=(alongX?y0:x0)-ov, s1=(alongX?y1:x1)+ov, a0=(alongX?x0:y0)-ov, a1=(alongX?x1:y1)+ov, mid=(s0+s1)/2, rise=Math.min(1.6,(s1-s0)*0.42), rz=top+rise;
+    const ov=0.2*Math.max(1,FH/ISO.FH), top=fz+H, alongX=o.w>=o.h;
+    const s0=(alongX?y0:x0)-ov, s1=(alongX?y1:x1)+ov, a0=(alongX?x0:y0)-ov, a1=(alongX?x1:y1)+ov, mid=(s0+s1)/2, rise=Math.min(1.6*Math.max(1,FH/ISO.FH),(s1-s0)*0.42), rz=top+rise;
     const P=(a,s,zz)=>alongX?[a,zz,s]:[s,zz,a], slope=Math.hypot(rise,(s1-s0)/2);
     const rf=(sA,sB,flip)=>{ const q=[P(a0,sA,top-0.06),P(a1,sA,top-0.06),P(a1,sB,rz),P(a0,sB,rz)]; bt3TQ(g,"roof",q[0],q[1],q[2],q[3],[[0,0],[a1-a0,0],[a1-a0,slope],[0,slope]]); };
     rf(s0,mid); rf(s1,mid);
@@ -9273,7 +9282,7 @@ function bt3House(o,z,ctx){
     /* 용마루 · 굴뚝 */
     const rg=bt3TG(); const r0=P(a0,mid-0.07,rz-0.05), r1=P(a1,mid+0.07,rz+0.06);
     bt3TBox(rg,"bark",Math.min(r0[0],r1[0]),Math.min(r0[2],r1[2]),Math.max(r0[0],r1[0]),Math.max(r0[2],r1[2]),rz-0.05,rz+0.06,"bark");
-    const cA=a0+(a1-a0)*0.75, cS=(s0+mid)/2+0.1, cp=P(cA,cS,0); bt3TBox(rg,"brick",cp[0]-0.16,cp[2]-0.16,cp[0]+0.16,cp[2]+0.16,top,rz+0.35,"pit");
+    const cA=a0+(a1-a0)*0.75, cS=(s0+mid)/2+0.1, cp=P(cA,cS,0), cw=0.16*Math.max(1,FH/ISO.FH); bt3TBox(rg,"brick",cp[0]-cw,cp[2]-cw,cp[0]+cw,cp[2]+cw,top,rz+0.35,"pit");
     grp.add(bt3TMesh(rg,{own:true}));
   }
   /* 위층 마루 — 보고 있는 층은 꽉 차게, 아래층은 비쳐 보이게 */
@@ -9282,6 +9291,74 @@ function bt3House(o,z,ctx){
   grp.add(bt3TMesh(g,{own:true}));
   return grp;
 }
+/* ---- v2.66: 가구 · 원통 탑 ---- */
+BT3_PAINT.cloth=(g,n,r)=>{ bt3Speck(g,n,"#8a3a32",["#7a3029","#9a4639","#6e2a24"],900,1,3,r); g.strokeStyle="rgba(230,200,150,.35)"; g.lineWidth=3; for(let i=8;i<n;i+=22){ g.beginPath(); g.moveTo(0,i); g.lineTo(n,i); g.stroke(); } };
+BT3_PAINT.rug=(g,n,r)=>{ g.fillStyle="#6a2f2a"; g.fillRect(0,0,n,n); g.strokeStyle="#c9a457"; g.lineWidth=5; g.strokeRect(8,8,n-16,n-16); g.strokeStyle="#2f4a6a"; g.lineWidth=4; g.strokeRect(18,18,n-36,n-36);
+  g.fillStyle="#c9a457"; for(let i=0;i<4;i++){ g.beginPath(); g.moveTo(n/2,26+i*20); g.lineTo(n/2+12,36+i*20); g.lineTo(n/2,46+i*20); g.lineTo(n/2-12,36+i*20); g.fill(); } };
+BT3_PAINT.linen=(g,n,r)=>bt3Speck(g,n,"#e9e2cf",["#ddd5c0","#f3eedf"],500,1,3,r);
+/* 공유 무늬에 빛깔·반복만 바꾼 재질 */
+function bt3MatC(name,col,rx,ry,emis){ const b=bt3M(name), m=b.clone(); m.userData={}; m.vertexColors=false; m.color=new THREE.Color(col||"#ffffff");
+  if(rx||ry){ m.map=b.map.clone(); m.map.needsUpdate=true; m.map.repeat.set(rx||1,ry||1); } if(emis){ m.emissive=new THREE.Color(emis); } return m; }
+function bt3Bx(grp,mat,x0,y0,x1,y1,z0,z1){ const m=new THREE.Mesh(new THREE.BoxGeometry(Math.max(0.01,x1-x0),Math.max(0.01,z1-z0),Math.max(0.01,y1-y0)),mat); m.position.set((x0+x1)/2,(z0+z1)/2,(y0+y1)/2); m.castShadow=true; m.receiveShadow=true; grp.add(m); return m; }
+/* 가구 하나 — 바닥 사각(x0,y0)-(x1,y1), 바닥 높이 z */
+function bt3Prop(type,x0,y0,x1,y1,z,seed){
+  const T=THREE, g=new T.Group(), r=bt3Rng(seed||7), w=x1-x0, d=y1-y0, cx=(x0+x1)/2, cy=(y0+y1)/2, wood=bt3MatC("plank","#ffffff"), dark=bt3MatC("plank","#9a8470");
+  const bottles=(bx0,by0,bx1,by1,bz,n)=>{ for(let i=0;i<n;i++){ const c=["#c94a4a","#4a8ac9","#5aba6a","#c9a43a","#9a5ac9"][Math.floor(r()*5)];
+    const m=new T.Mesh(new T.CylinderGeometry(0.05,0.07,0.22,8),new T.MeshLambertMaterial({color:c,emissive:new T.Color(c).multiplyScalar(0.25)}));
+    m.position.set(bx0+(bx1-bx0)*(i+0.5)/n,bz+0.11,by0+(by1-by0)*(0.3+r()*0.4)); g.add(m); } };
+  if(type==="bed"){ bt3Bx(g,dark,x0,y0,x1,y1,z,z+0.32); bt3Bx(g,bt3MatC("cloth","#ffffff"),x0+0.06,y0+0.06,x1-0.06,y1-0.06,z+0.32,z+0.5);
+    const along=d>=w; if(along) bt3Bx(g,bt3MatC("linen"),x0+0.15,y0+0.1,x1-0.15,y0+0.5,z+0.5,z+0.62); else bt3Bx(g,bt3MatC("linen"),x0+0.1,y0+0.15,x0+0.5,y1-0.15,z+0.5,z+0.62);
+    if(along) bt3Bx(g,dark,x0,y0-0.05,x1,y0+0.06,z,z+0.95); else bt3Bx(g,dark,x0-0.05,y0,x0+0.06,y1,z,z+0.95); }
+  else if(type==="chest"){ bt3Bx(g,bt3MatC("crate","#d8b080"),x0,y0,x1,y1,z,z+0.5); bt3Bx(g,bt3MatC("bark","#706050"),x0-0.02,y0-0.02,x1+0.02,y1+0.02,z+0.5,z+0.58); }
+  else if(type==="stool"){ bt3Bx(g,wood,x0,y0,x1,y1,z+0.38,z+0.46); [[x0+0.05,y0+0.05],[x1-0.1,y0+0.05],[x0+0.05,y1-0.1],[x1-0.1,y1-0.1]].forEach(([a,b])=>bt3Bx(g,dark,a,b,a+0.05,b+0.05,z,z+0.38)); }
+  else if(type==="table"||type==="bench"){ const h=type==="table"?0.78:0.42; bt3Bx(g,wood,x0,y0,x1,y1,z+h-0.08,z+h);
+    [[x0+0.08,y0+0.08],[x1-0.16,y0+0.08],[x0+0.08,y1-0.16],[x1-0.16,y1-0.16]].forEach(([a,b])=>bt3Bx(g,dark,a,b,a+0.08,b+0.08,z,z+h-0.08));
+    if(type==="table"&&r()<0.8){ const cup=new T.Mesh(new T.CylinderGeometry(0.06,0.05,0.12,8),new T.MeshLambertMaterial({color:"#8a6a4a"})); cup.position.set(cx+(r()-.5)*w*0.5,z+h+0.06,cy+(r()-.5)*d*0.5); g.add(cup); } }
+  else if(type==="counter"){ bt3Bx(g,dark,x0,y0,x1,y1,z,z+1.0); bt3Bx(g,wood,x0-0.05,y0-0.05,x1+0.05,y1+0.05,z+1.0,z+1.08); bottles(x0+0.1,y0,x1-0.1,y1,z+1.08,Math.max(2,Math.round(Math.max(w,d)/0.45))); }
+  else if(type==="shelf"){ const H=2.0, along=w>=d; bt3Bx(g,dark,x0,y0,x1,y1,z,z+0.06);
+    if(along) bt3Bx(g,dark,x0,y0,x1,y0+0.06,z,z+H); else bt3Bx(g,dark,x0,y0,x0+0.06,y1,z,z+H);
+    [0.55,1.05,1.55,2.0].forEach(h=>{ bt3Bx(g,wood,x0,y0,x1,y1,z+h-0.05,z+h); if(h<2) bottles(x0+0.05,y0,x1-0.05,y1,z+h,Math.max(2,Math.round(Math.max(w,d)/0.35))); }); }
+  else if(type==="barrel"){ const rr=Math.min(w,d)/2*0.92; const b=new T.Mesh(new T.CylinderGeometry(rr*0.92,rr*0.92,1.0,14),bt3MatC("plank","#d8b890",1,2)); b.position.set(cx,z+0.5,cy); b.castShadow=true; g.add(b);
+    [0.15,0.85].forEach(h=>{ const ring=new T.Mesh(new T.CylinderGeometry(rr*0.95,rr*0.95,0.06,14),new T.MeshLambertMaterial({color:"#3a3a40"})); ring.position.set(cx,z+h,cy); g.add(ring); }); }
+  else if(type==="crates"){ const s=Math.min(w,d)*0.8; bt3Bx(g,bt3MatC("crate"),cx-s/2,cy-s/2,cx+s/2,cy+s/2,z,z+s); if(r()<0.6){ const s2=s*0.7; bt3Bx(g,bt3MatC("crate"),cx-s2/2,cy-s2/2,cx+s2/2,cy+s2/2,z+s,z+s+s2); } }
+  else if(type==="hearth"){ const H=1.7; bt3Bx(g,bt3MatC("brick","#ffffff",1,1),x0,y0,x1,y1,z,z+H);
+    const along=w>=d, fw=(along?w:d)*0.55; const glow=new T.MeshLambertMaterial({color:"#ff9a3a",emissive:"#a8400a"});
+    if(along){ bt3Bx(g,new T.MeshLambertMaterial({color:"#1a1410"}),cx-fw/2,y1-0.02,cx+fw/2,y1+0.01,z+0.1,z+0.75); bt3Bx(g,glow,cx-fw/3,y1-0.15,cx+fw/3,y1,z+0.1,z+0.3); }
+    else{ bt3Bx(g,new T.MeshLambertMaterial({color:"#1a1410"}),x1-0.02,cy-fw/2,x1+0.01,cy+fw/2,z+0.1,z+0.75); bt3Bx(g,glow,x1-0.15,cy-fw/3,x1,cy+fw/3,z+0.1,z+0.3); } }
+  else if(type==="cauldron"){ const rr=Math.min(w,d)/2*0.85; const c=new T.Mesh(new T.SphereGeometry(rr,14,10,0,Math.PI*2,Math.PI*0.3,Math.PI*0.7),new T.MeshLambertMaterial({color:"#2a2a30",side:T.DoubleSide})); c.position.set(cx,z+rr*0.9,cy); g.add(c);
+    const top=new T.Mesh(new T.CircleGeometry(rr*0.8,14),new T.MeshLambertMaterial({color:"#5ac86a",emissive:"#1a6a2a"})); top.rotation.x=-Math.PI/2; top.position.set(cx,z+rr*1.35,cy); g.add(top);
+    const fire=new T.Mesh(new T.ConeGeometry(rr*0.5,0.3,8),new T.MeshLambertMaterial({color:"#ff9a3a",emissive:"#a8400a"})); fire.position.set(cx,z+0.15,cy); g.add(fire); }
+  else if(type==="rug"){ const m=new T.Mesh(new T.PlaneGeometry(w,d),bt3MatC("rug")); m.rotation.x=-Math.PI/2; m.position.set(cx,z+0.02,cy); m.receiveShadow=true; g.add(m); }
+  else if(type==="bench"){ }
+  return g;
+}
+/* 둥근 돌탑 — 원통 벽 · 둥근 마루 · 창 · 문 · 원뿔 지붕 */
+function bt3Tower(o,z,ctx){
+  const T=THREE, FH=ctx.FH||ISO.FH, grp=new T.Group(), F=bt3F();
+  const cx=o.x+o.w/2, cy=o.y+o.h/2, R=Math.min(o.w,o.h)/2-0.1, floors=o.floors||1, fz=z, C=2*Math.PI*R;
+  const shown=F==="0"?0:(o.open&&F!=="all"?Math.min(floors,+F):floors), H=Math.max(0.35,shown*FH);
+  const wall=new T.Mesh(new T.CylinderGeometry(R,R,H,48,1,true),bt3MatC("brick","#ffffff",Math.round(C/1.4),H/1.1)); wall.material.side=T.DoubleSide; wall.position.set(cx,fz+H/2,cy); wall.castShadow=true; wall.receiveShadow=true; grp.add(wall);
+  const inner=new T.Mesh(new T.CylinderGeometry(R-0.3,R-0.3,H,48,1,true),bt3MatC("stoneside","#e8e4dc",Math.round(C/1.4),H/1.1)); inner.material.side=T.DoubleSide; inner.position.copy(wall.position); grp.add(inner);
+  const cap=new T.Mesh(new T.RingGeometry(R-0.3,R,48),bt3MatC("cobble")); cap.material.side=T.DoubleSide; cap.rotation.x=-Math.PI/2; cap.position.set(cx,fz+H+0.005,cy); grp.add(cap);
+  const disk=(k,op)=>{ const m=new T.Mesh(new T.CylinderGeometry(R-0.28,R-0.28,0.12,40),bt3MatC("plank","#ffffff",R,R)); m.position.set(cx,fz+(k-1)*FH-0.06,cy); m.receiveShadow=true;
+    if(op<1){ m.material.transparent=true; m.material.opacity=op; m.material.depthWrite=false; } grp.add(m); };
+  disk(1,1);
+  if(shown===0) return grp;
+  if(o.open) for(let k=2;k<=shown;k++) disk(k,(F!=="all"&&k===+F)?1:0.45);
+  /* 문(서쪽) · 창 */
+  const plane=(mat,w,h,a,y,rr)=>{ const m=new T.Mesh(new T.PlaneGeometry(w,h),mat); m.position.set(cx+Math.cos(a)*rr,y,cy+Math.sin(a)*rr); m.rotation.y=Math.PI/2-a; grp.add(m); };
+  const dW=Math.max(0.7,FH*0.38), dH=Math.max(1.1,FH*0.74);
+  plane(bt3MatC("door"),dW,dH,Math.PI,fz+dH/2,R+0.03);
+  for(let f=0;f<shown;f++) [0,0.5,1.5,0.25,1.25,1.75].forEach((q,i)=>{ if(f===0&&q===1) return; if(i>=3&&f%2===0) return; plane(bt3MatC("window"),Math.max(0.36,FH*0.16),Math.max(0.55,FH*0.3),q*Math.PI,fz+f*FH+FH*0.55,R+0.03); });
+  /* 지붕: 총안 + 원뿔 */
+  if(!o.open&&shown===floors){
+    for(let i=0;i<20;i++){ const a=i/20*Math.PI*2; if(i%2) continue; const m=new T.Mesh(new T.BoxGeometry(0.45,0.5,0.3),bt3MatC("brick","#ffffff",0.4,0.4)); m.position.set(cx+Math.cos(a)*(R-0.15),fz+H+0.25,cy+Math.sin(a)*(R-0.15)); m.rotation.y=-a; m.castShadow=true; grp.add(m); }
+    const rh=R*1.2, cone=new T.Mesh(new T.ConeGeometry(R*0.92,rh,40,1,true),bt3MatC("roof","#ffffff",Math.round(C/1.3),rh/0.8)); cone.material.side=T.DoubleSide; cone.position.set(cx,fz+H+0.5+rh/2,cy); cone.castShadow=true; grp.add(cone);
+    const post=new T.Mesh(new T.CylinderGeometry(0.06,0.06,0.5,6),new T.MeshLambertMaterial({color:"#3a2a1a"})); post.position.set(cx,fz+H+0.5+rh+0.25,cy); grp.add(post);
+  }
+  return grp;
+}
+
 /* 나무 — 이름으로 침엽·덤불·갈대·활엽을 고른다 */
 function bt3Tree(x,y,z,L,seed){
   const T=THREE, grp=new T.Group(), r=bt3Rng(seed), s=0.85+r()*0.35;
@@ -9299,7 +9376,7 @@ function bt3Tree(x,y,z,L,seed){
 }
 
 function bt3Build(B){
-  const T=THREE, C=B.cols, R=B.rows, FH=ISO.FH, BASE=-2.2;
+  const T=THREE, C=B.cols, R=B.rows, FH=B.floorH||ISO.FH, BASE=B.floorH?-(B.floorH+1.2):-2.2;
   if(BT3.root){ BT3.scene.remove(BT3.root); bt3Dispose(BT3.root); }
   const root=new T.Group(); BT3.root=root; BT3.scene.add(root); BT3.B=B;
   BT3.toks=[]; BT3.occ=[]; BT3.pick=[]; BT3.bob=null; BT3.ov.innerHTML="";
@@ -9311,10 +9388,13 @@ function bt3Build(B){
   const live=(B.tokens||[]), isDead=t=>!!t.down||/^0\//.test(String(t.hp||""));
   const inRect=(o,k)=>k.x>=o.x&&k.x<o.x+o.w&&k.y>=o.y&&k.y<o.y+o.h;
   const floorOf=t=>t.floor!=null?Number(t.floor):(/이층|2층|위층|이 층/.test(String(t.note||"")+" "+(t.st||[]).join(" "))?2:1);
+  const F0=BT3.cfg.getFloor();
   ter.forEach(o=>{
     o.elev=o.t.elev!=null?Number(o.t.elev):(ISO_H[o.kind]||0);
     if(o.kind==="building"||o.kind==="wall"){ const ins=live.filter(k=>inRect(o,k));
-      o.floors=Math.max(Number(o.t.floors)||1,...ins.map(floorOf),1); o.open=ins.length>0&&o.kind==="building"; o.cut=ins.length>0&&o.kind==="wall"; }
+      o.floors=Math.max(Number(o.t.floors)||1,...ins.map(floorOf),1);
+      /* 지붕: 판의 roof가 off면 모두 걷고, on이면 모두 덮는다. 정하지 않으면 사람이 든 집만 걷는다(전투판) */
+      o.open=o.kind==="building"&&(B.roof==="off"||F0==="0"||(B.roof!=="on"&&ins.length>0)); o.cut=ins.length>0&&o.kind==="wall"; }
   });
   const cellTer={}; ter.forEach(o=>{ for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++){ if(x<0||y<0||x>=C||y>=R) continue; (cellTer[x+","+y]=cellTer[x+","+y]||[]).push(o); } });
   const at=(x,y)=>cellTer[x+","+y]||[];
@@ -9325,7 +9405,9 @@ function bt3Build(B){
       if(o.kind==="high"||o.kind==="stairs"){ if(o.elev>=z){ z=o.elev; surf=o.t.surf||(o.kind==="stairs"?"stone":surf); } }
       else if(o.t.surf&&!ISO_OBJ[o.kind]&&o.kind!=="tree") surf=o.t.surf;
     });
-    at(x,y).forEach(o=>{ if(o.kind==="water"){ z=(o.t.elev!=null?o.elev:z)-0.3; surf="water"; } if(o.kind==="pit"){ z=z-0.8; surf="pit"; } if(o.open||o.cut) surf=o.t.surf||"floor"; });
+    at(x,y).forEach(o=>{ if(o.kind==="water"){ z=(o.t.elev!=null?o.elev:z)-0.3; surf="water"; } if(o.kind==="pit"){ z=z-0.8; surf="pit"; } if((o.open&&o.t.shape!=="round")||o.cut) surf=o.t.surf||"floor"; });
+    /* '지하' 보기: 지하실 자리의 땅을 걷어 낸다 */
+    if(F0==="0") at(x,y).forEach(o=>{ if(o.kind==="cellar"){ z=-Number(o.t.depth||FH); surf="stone"; } });
     return {z,surf};
   };
   const G={}; for(let x=0;x<C;x++) for(let y=0;y<R;y++) G[x+","+y]=ground(x,y);
@@ -9348,14 +9430,15 @@ function bt3Build(B){
   const bldAt=(x,y)=>at(x,y).find(o=>o.kind==="building"&&o.open);
   const stiltAt=(x,y)=>at(x,y).find(o=>o.kind==="building"&&o.elev>0.05);
   const boatAt=(x,y)=>at(x,y).find(o=>o.kind==="boat");
-  const tokZ=t=>{ if(t.elev!=null) return Number(t.elev); const b=bridgeAt(t.x,t.y), st=stiltAt(t.x,t.y), bo=boatAt(t.x,t.y);
+  const tokZ=t=>{ if(t.elev!=null) return Number(t.elev); if(floorOf(t)===0&&F0==="0"&&at(t.x,t.y).some(o=>o.kind==="cellar")) return gz(t.x,t.y);
+    const b=bridgeAt(t.x,t.y), st=stiltAt(t.x,t.y), bo=boatAt(t.x,t.y);
     let base=b?b.deck:gz(t.x,t.y); if(st) base=Math.max(base,gz(t.x,t.y)+st.elev); if(bo) base=Number(bo.t.deck); return base+(floorOf(t)-1)*FH; };
   const say=html=>{ const e=$(BT3.cfg.info); if(e) e.innerHTML=html; };
   const pc=live.find(t=>!isDead(t)&&(t.id==="verrix"||/베릭스/.test(t.name||"")))||live.find(t=>t.side==="pc"&&!isDead(t));
-  const maxF=Math.max(1,...ter.filter(o=>o.open).map(o=>o.floors||1)); BT3.maxF=maxF;
+  const maxF=Math.max(1,...ter.filter(o=>o.kind==="building").map(o=>o.floors||1)); BT3.maxF=maxF; BT3.hasCellar=ter.some(o=>o.kind==="cellar");
   if(BT3.cfg.getFloor()!=="all"&&+BT3.cfg.getFloor()>maxF) BT3.cfg.setFloor("all");
   const F=BT3.cfg.getFloor();
-  const fb=$(BT3.cfg.floorBtn); if(fb){ fb.style.display=maxF>=2?"":"none"; if(maxF<2) BT3.cfg.setFloor("all"); fb.textContent="층: "+(BT3.cfg.getFloor()==="all"?"전체":BT3.cfg.getFloor()+"층"); fb.classList.toggle("on",BT3.cfg.getFloor()!=="all"); }
+  const fb=$(BT3.cfg.floorBtn); if(fb){ const any=maxF>=2||BT3.hasCellar; fb.style.display=any?"":"none"; if(!any) BT3.cfg.setFloor("all"); const f=BT3.cfg.getFloor(); fb.textContent="층: "+(f==="all"?"전체":f==="0"?"지하":f+"층"); fb.classList.toggle("on",f!=="all"); }
   /* ---- 땅(v2.61): 재질 무늬 · 두꺼운 단면(디오라마) · 물 깊이 ---- */
   const TOP={grass:"grass",dirt:"dirt",stone:"cobble",sand:"sand",snow:"snow",wood:"plank",floor:"plank",water:"bed",pit:"pit"};
   const SIDE={stone:"stoneside",wood:"plank",floor:"plank"};
@@ -9405,7 +9488,7 @@ function bt3Build(B){
     root.add(obj); BT3.occ.push(obj); BT3.pick.push(obj); };
   const showTer=o=>say(`<b style="color:var(--gold-s)">${o.t.label||"지형"}</b><br>칸 (${o.x},${o.y})${o.w>1||o.h>1?` 에서 ${o.w}×${o.h}칸`:""}${o.floors>1?` · ${o.floors}층`:""}${o.open?" · 안에 사람이 있어 지붕을 걷어 그렸습니다":""}`);
   BT3.onTer=showTer;
-  const ctx={C,R,bedAt:(x,y)=>(x<0||y<0||x>=C||y>=R)?0:G[x+","+y].bed};
+  const ctx={C,R,FH,bedAt:(x,y)=>(x<0||y<0||x>=C||y>=R)?0:G[x+","+y].bed};
   ter.forEach(o=>{
     const cl=(x,y)=>G[Math.min(C-1,Math.max(0,Math.floor(x)))+","+Math.min(R-1,Math.max(0,Math.floor(y)))];
     let z=-9; for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++){ const g=cl(x,y); z=Math.max(z,g.surf==="water"?g.z:g.dz); } if(z<-8) z=0;
@@ -9437,16 +9520,21 @@ function bt3Build(B){
       grp.userData.pick={ter:o}; root.add(grp); BT3.pick.push(grp);
       if(o.t.label) labs.push({p:[cx,d+0.15,cy],text:o.t.label,cls:"flat"});
     }else if(o.kind==="building"){
-      const h=bt3House(o,z,ctx); occ(h,o);
-      const fz=o.t.deck!=null?Number(o.t.deck):z+(o.elev>0.05?o.elev:0), H=(o.open&&F!=="all"?Math.min(o.floors||1,+F):(o.floors||1))*FH;
+      const h=o.t.shape==="round"?bt3Tower(o,z,ctx):bt3House(o,z,ctx); occ(h,o);
+      const fz=o.t.deck!=null?Number(o.t.deck):z+(o.elev>0.05?o.elev:0), H=(F==="0"?0:o.open&&F!=="all"?Math.min(o.floors||1,+F):(o.floors||1))*FH;
       if(o.t.label) labs.push({p:[cx,fz+H+(o.open?0.15:0.9),cy],text:o.t.label});
+    }else if(o.kind==="prop"){
+      /* 가구 — 그 층이 보일 때만(지하 가구는 '지하' 보기에서만) */
+      const fl=o.t.floor==null?1:o.t.floor; if(fl===0&&F!=="0") return; if(F!=="all"&&fl>+F) return;
+      root.add(bt3Prop(o.t.prop,o.x,o.y,o.x+o.w,o.y+o.h,Number(o.t.z0||0),Math.round(o.x*31+o.y*7)));
+    }else if(o.kind==="cellar"){
     }else if(o.kind==="label"){
       /* 글자만(방 이름 등) — 보고 있는 층보다 위면 숨긴다 */
-      if(F!=="all"&&(o.t.floor||1)>+F) return;
+      { const fl=o.t.floor==null?1:o.t.floor; if(F!=="all"&&fl>+F) return; if(fl===0&&F!=="0") return; }
       labs.push({p:[cx,(o.t.elev!=null?Number(o.t.elev):z)+0.08,cy],text:L,cls:o.t.cls||"flat"});
     }else if(o.kind==="partition"){
       /* 집 안 칸막이 — 허리 높이로 낮게(안이 들여다보이게) */
-      const fl=o.t.floor||1; if(F!=="all"&&fl>+F) return;
+      const fl=o.t.floor==null?1:o.t.floor; if(F!=="all"&&fl>+F) return; if(fl===0&&F!=="0") return;
       const zz=(o.t.z0!=null?Number(o.t.z0):z)+(fl-1)*FH, g=bt3TG(); bt3TBox(g,"plankwall",o.x,o.y,o.x+o.w,o.y+o.h,zz,zz+(o.t.ht||1.05),"plank",0.8); occ(bt3TMesh(g,{own:true}),o);
     }else if(o.kind==="boat"){
       /* 배 — 물에 뜬 선체, 사람은 갑판(deck)에 선다 */
@@ -9640,79 +9728,119 @@ function bt3FitEnemies(){
   const B=BT3.B, M=4, pts=[]; tk.forEach(t=>{ pts.push([Math.max(0,t.x-M),0,Math.max(0,t.y-M)],[Math.min(B.cols,t.x+1+M),1.6,Math.min(B.rows,t.y+1+M)]); });
   BT3.cam.pitch=Math.max(BT3.cam.pitch,0.95); bt3Fit(pts); bt3SaveCam();
 }
-/* ==================== 거점 3D 디오라마 (v2.65) ====================
-   전투판 3D 엔진으로 카를렌 나루터 거점 한 구획을 세운다. 서쪽 큰길 → 동쪽 거울강. 1칸 = 1.5 m.
-   건물 자리·방 배치는 base.json의 글(평수·방 구성)과 시내 지도에 맞춰 GM이 정한 대략값이다(2026-11-20).
-   물약 가게의 방은 base.json 좌표(x·z)를 그대로 줄여 쓴다. 선창 망루는 실제로는 수문 쪽에 따로 서 있어 북쪽 끝에 떼어 놓았다(사각 탑으로 대신).
-   사람은 인물 파일의 room(방 id)대로 그 방 안에 세운다 — 따로 관리할 것이 없다. */
-const BS3_BLD={wetoar:[2,8,10,12],shop:[2,13,10,16],annex:[2,17,8,20],saltyard:[2,24,12,31],tower:[9,1,12,4],semboat:[13,13,16,25]};
-const BS3_DECK=0.15;
-/* 방 id → [x0,y0,x1,y1,층]. 물약 가게 방은 아래에서 base.json으로 채운다 */
+/* ==================== 거점 3D 디오라마 (v2.66) ====================
+   전투판 3D 엔진으로 카를렌 나루터 거점 한 구획을 세운다. 서쪽 큰길 → 동쪽 거울강.
+   v2.66: 실내를 보이게 판 전체를 두 배로 키웠다(사람 크기는 그대로) — 이 판의 한 칸은 약 0.75 m, 한 층 높이 2.6.
+   건물 자리·방 배치는 base.json의 글(평수·방 구성)과 시내 지도에 맞춰 GM이 정한 대략값(2026-11-20). 물약 가게 방은 base.json 좌표(x·z)를 줄여 쓴다.
+   선창 망루는 실제로는 수문 쪽에 따로 서 있어 북쪽 끝에 떼어 놓았다(둥근 돌탑).
+   사람은 인물 파일의 room(방 id)대로 그 방 안에 세우고, 방마다 쓰임에 맞는 가구를 놓는다. */
+const BS3_SC=2, BS3_FH=2.6, BS3_DECK=0.15;
+/* 아래 좌표는 모두 '작은 칸'(옛 축척) — 그릴 때 BS3_SC를 곱한다 */
+const BS3_BLD={wetoar:[2,8,10,12],shop:[2,13,10,16],annex:[2,17,8,20],saltyard:[2,24,12,31],tower:[8.5,0.5,12.5,4.5],semboat:[13,13,16,25]};
 const BS3_ROOMS={
-  ax_front:[2,17,5,20,1], ax_bed:[5,17,8,20,1],
-  wo_tap:[2,8,8,12,1], wo_kitchen:[8,8,10,12,1],
+  ax_front:[2,17,5,20,1], ax_bed:[5,17,8,20,1], ax_cellar:[2,17,3.5,18.5,0],
+  wo_tap:[2,8,8,12,1], wo_kitchen:[8,8,10,12,1], wo_cellar:[2,8,6,10,0],
   wo_r1:[2,8,3.5,10.3,2], wo_r2:[3.5,8,5,10.3,2], wo_r3:[5,8,6.5,10.3,2], wo_r4:[6.5,8,8,10.3,2], wo_hall:[2,10.3,8,12,2],
   sh_hall:[2,24,4,28,1], sh_kitchen:[4,24,5.5,28,1], sh_small:[5.5,24,7,28,1],
   sh_r1:[2,24,3.25,26.5,2], sh_r2:[3.25,24,4.5,26.5,2], sh_r3:[4.5,24,5.75,26.5,2], sh_r4:[5.75,24,7,26.5,2], sh_hall2:[2,26.5,7,28,2],
-  sh_yard:[2,28,8,31,1], sh_store:[8,24,12,29,1], sh_loft:[8,29,12,31,1],
-  tw_1:[9,1,12,4,1], tw_2a:[9,1,10.5,4,2], tw_2b:[10.5,1,12,4,2], tw_3a:[9,1,10.5,4,3], tw_3b:[10.5,1,12,4,3],
+  sh_yard:[2,28,8,31,1], sh_store:[8,24,12,29,1], sh_loft:[8,29,12,31,1], sh_cellar:[8,24,12,28,0],
+  tw_1:[8.5,0.5,12.5,4.5,1], tw_2a:[8.5,0.5,10.5,4.5,2], tw_2b:[10.5,0.5,12.5,4.5,2], tw_3a:[8.5,0.5,10.5,4.5,3], tw_3b:[10.5,0.5,12.5,4.5,3], tw_cellar:[9,1,12,4,0],
   sb_bow:[13,13.4,16,15.5,1], sb_deck:[13,15.5,16,20,1], sb_cabin:[13,20,16,23,1], sb_stern:[13,23,16,24.8,1],
   commute:[0.3,13.5,1.7,15.5,1]
 };
-/* 칸막이를 세울 방(바깥이 아닌 집 안) — 건물 id별 */
 const BS3_PART={wetoar:["wo_r1","wo_r2","wo_r3","wo_r4","wo_hall"],annex:["ax_front","ax_bed"],saltyard:["sh_hall","sh_kitchen","sh_small","sh_r1","sh_r2","sh_r3","sh_r4","sh_hall2"],tower:["tw_2a","tw_3a"]};
+/* 방 쓰임 → 가구 */
+function bs3Furnish(T,id,label,kind,r,f,deck){
+  const [x0,y0,x1,y1]=r, w=x1-x0, d=y1-y0, z=(deck||0)+(f===0?-BS3_FH:(f-1)*BS3_FH), m=0.35;
+  const P=(type,a,b,c,e)=>T.push({kind:"prop",prop:type,floor:f,z0:z,x:a,y:b,w:c-a,h:e-b});
+  const L=String(label||""), sleep=kind==="sleep"||/^(r_|wo_r|sh_r|tw_2|tw_3)|ax_bed|sb_cabin|sh_small/.test(id);
+  if(id==="sb_bow"||id==="sb_deck"||id==="sb_stern"){ P("crates",x0+m,y0+m,x0+m+1.1,y0+m+1.1); return; }
+  if(f===0){ /* 지하 — 통·선반·상자 */
+    for(let i=0;i<Math.max(1,Math.floor((w-2*m)/1.2));i++) P("barrel",x0+m+i*1.2,y0+m,x0+m+i*1.2+1.0,y0+m+1.0);
+    if(d>3) P("shelf",x0+m,y1-m-0.5,Math.min(x1-m,x0+m+2.4),y1-m); if(w>3) P("crates",x1-m-1.2,y1-m-1.2,x1-m,y1-m); return; }
+  if(/hall|복도/.test(id)&&!/sh_hall$/.test(id)||/복도/.test(L)){ if(w>1.6&&d>1.6) P("rug",x0+0.5,y0+0.5,x1-0.5,y1-0.5); return; }
+  if(sleep){ const along=d>=w, bw=1.3, bl=2.4;
+    if(along){ P("bed",x0+m,y0+m,x0+m+bw,Math.min(y1-m,y0+m+bl)); if(w>2.4) P("chest",x0+m+bw+0.3,y0+m,x0+m+bw+1.1,y0+m+0.55); if(d>3.2&&w>2) P("stool",x1-m-0.5,y1-m-0.5,x1-m,y1-m); }
+    else{ P("bed",x0+m,y0+m,Math.min(x1-m,x0+m+bl),y0+m+bw); if(d>2.4) P("chest",x0+m,y0+m+bw+0.3,x0+m+0.55,y0+m+bw+1.1); }
+    if(id==="sh_small"&&w>2.6) P("bed",x1-m-bw,y1-m-bl,x1-m,y1-m);
+    if(w>2.6&&d>2.6) P("rug",x0+w*0.45,y0+d*0.45,x1-m,y1-m); return; }
+  if(id==="front"){ P("counter",x0+m+1.0,y0+m+0.6,x0+m+1.8,y1-m-0.6); P("shelf",x0+m,y0+m,x1-m,y0+m+0.5); P("shelf",x0+m,y1-m-0.5,x1-m,y1-m); return; }
+  if(id==="lab"){ P("table",x0+m,y0+m,x1-m,y0+m+0.9); P("cauldron",(x0+x1)/2-0.6,(y0+y1)/2-0.1,(x0+x1)/2+0.6,(y0+y1)/2+1.1); P("shelf",x0+m,y1-m-0.5,x1-m,y1-m); return; }
+  if(id==="ines"){ P("bed",x0+m,y0+m,x1-m,Math.min(y1-m,y0+m+2.2)); return; }
+  if(id==="back"){ P("crates",x0+m,y0+m,x0+m+1.2,y0+m+1.2); P("barrel",x1-m-1,y0+m,x1-m,y0+m+1); P("table",x0+m,y1-m-1,x0+m+1.6,y1-m); return; }
+  if(id==="wo_tap"){ P("counter",x1-m-0.9,y0+m+0.8,x1-m,y1-m-0.8); P("hearth",x0+m,y0+m,x0+m+2,y0+m+0.8);
+    [[0.3,0.45],[0.55,0.45],[0.3,0.75],[0.55,0.75]].forEach(([a,b])=>{ const cx=x0+w*a, cy=y0+d*b; P("table",cx-0.8,cy-0.5,cx+0.8,cy+0.5); P("stool",cx-0.25,cy+0.65,cx+0.2,cy+1.1); });
+    P("barrel",x1-m-1,y0+m,x1-m,y0+m+1); return; }
+  if(/kitchen|주방|부엌/.test(id+L)){ P("hearth",x0+m,y0+m,x0+m+Math.min(2,w-2*m),y0+m+0.8); P("table",x0+m,(y0+y1)/2,x0+m+Math.min(1.6,w-2*m),(y0+y1)/2+0.9); P("barrel",x1-m-0.9,y1-m-0.9,x1-m,y1-m); return; }
+  if(id==="sh_hall"){ P("hearth",x0+m,y0+m,x0+m+1.8,y0+m+0.8); P("table",x0+m+0.5,(y0+y1)/2-0.5,x1-m-0.5,(y0+y1)/2+0.5);
+    P("bench",x0+m+0.5,(y0+y1)/2-1.0,x1-m-0.5,(y0+y1)/2-0.65); P("bench",x0+m+0.5,(y0+y1)/2+0.65,x1-m-0.5,(y0+y1)/2+1.0); return; }
+  if(id==="sh_store"){ for(let i=0;i<3;i++) for(let j=0;j<3;j++) P("barrel",x0+m+0.3+i*2.1,y0+m+0.3+j*2.1,x0+m+1.3+i*2.1,y0+m+1.3+j*2.1); return; }
+  if(id==="sh_loft"){ P("crates",x0+m,y0+m,x0+m+1.2,y0+m+1.2); P("crates",x0+m+1.6,y0+m,x0+m+2.8,y0+m+1.2); return; }
+  if(id==="ax_front"){ P("hearth",x0+m,y0+m,x0+m+1.8,y0+m+0.8); P("table",(x0+x1)/2-0.8,(y0+y1)/2,(x0+x1)/2+0.8,(y0+y1)/2+1); P("shelf",x0+m,y1-m-0.5,x1-m,y1-m); return; }
+  if(id==="tw_1"){ const cx=(x0+x1)/2, cy=(y0+y1)/2; P("counter",cx-1.2,cy-0.2,cx+1.2,cy+0.6); P("hearth",cx-1,y0+m+0.9,cx+1,y0+m+1.6); P("chest",cx+0.6,cy+1.3,cx+1.4,cy+1.85); return; }
+}
 function bs3Board(){
-  const B=S.base||{}, rooms=Object.assign({},BS3_ROOMS), names={};
-  /* 물약 가게: base.json의 x(길→강 0~430)·z(앞→뒤 0~150) → 칸 */
+  const B=S.base||{}, SC=BS3_SC, FH=BS3_FH, rooms={}, names={}, kinds={};
+  const sc=r=>[r[0]*SC,r[1]*SC,r[2]*SC,r[3]*SC,r[4]];
+  Object.entries(BS3_ROOMS).forEach(([k,r])=>{ rooms[k]=sc(r); });
+  /* 물약 가게: base.json의 x(길→강)·z(앞→뒤) → 칸 */
   const sw=B.width||Math.max(1,...(B.rooms||[]).map(r=>r.x+r.w)), sd=B.depth||150, [bx0,by0,bx1,by1]=BS3_BLD.shop;
-  (B.rooms||[]).forEach(r=>{ if(r.kind==="stairs") return; const z=r.z||0, d=r.d||sd;
-    rooms[r.id]=[bx0+r.x/sw*(bx1-bx0),by0+z/sd*(by1-by0),bx0+(r.x+r.w)/sw*(bx1-bx0),by0+(z+d)/sd*(by1-by0),r.floor||1]; names[r.id]=r.label; });
-  baseBuildings(B).forEach(bd=>(bd.rooms||[]).forEach(r=>{ names[r.id]=r.label; })); (B.outside||[]).forEach(o=>{ names[o.id]=o.label; });
+  (B.rooms||[]).forEach(r0=>{ if(r0.kind==="stairs") return; let r=r0; if(r.x==null){ const lab=(B.rooms||[]).find(q=>q.id==="lab"); if(!lab) return; r=Object.assign({},lab,{id:r0.id,floor:r0.floor,label:r0.label,kind:r0.kind}); }  /* 지하실은 조제실 뚜껑문 아래 */
+    const z=r.z||0, d=r.d||sd;
+    rooms[r.id]=sc([bx0+r.x/sw*(bx1-bx0),by0+z/sd*(by1-by0),bx0+(r.x+r.w)/sw*(bx1-bx0),by0+(z+d)/sd*(by1-by0),r.floor==null?1:r.floor]); names[r.id]=r.label; kinds[r.id]=r.kind; });
+  baseBuildings(B).forEach(bd=>(bd.rooms||[]).forEach(r=>{ names[r.id]=r.label; kinds[r.id]=r.kind; })); (B.outside||[]).forEach(o=>{ names[o.id]=o.label; });
   const bname={}; baseBuildings(B).forEach(bd=>{ bname[bd.id]=bd.short||bd.name; });
+  const R4=(a,b,c,d)=>({x:Math.round(a*SC),y:Math.round(b*SC),w:Math.round((c-a)*SC),h:Math.round((d-b)*SC)});
   const T=[
-    {x:0,y:0,w:2,h:34,kind:"high",elev:0,surf:"stone",label:"큰길"},
-    {x:12,y:0,w:5,h:34,type:"water",label:"거울강"},
-    {x:3,y:5,w:9,h:2,type:"water",label:"선창 물길"},
-    {x:2,y:31,w:10,h:3,kind:"high",elev:0,surf:"wood",label:"하역장"},
-    {x:12,y:31,w:4,h:2,kind:"bridge",label:"하역장 부두"},
-    {x:2,y:0,w:2,h:3,type:"tree",label:"버드나무"},{x:5,y:0,w:2,h:2,type:"tree",label:"덤불"},
-    {x:10,y:13,w:1,h:7,kind:"lowwall",label:"물가 말뚝 울타리"},
-    {x:9,y:28,w:2,h:2,kind:"crate",label:"절인 생선 통"},{x:6,y:32,w:2,h:1,kind:"crate",label:"짐 상자"},
-    {x:2,y:8,w:6,h:4,kind:"building",floors:2,label:"젖은 노"},
-    {x:8,y:8,w:2,h:4,kind:"building",floors:1,label:"젖은 노 주방"},
-    {x:2,y:13,w:8,h:3,kind:"building",floors:2,label:"물약 가게"},
-    {x:2,y:17,w:6,h:3,kind:"building",floors:1,label:"물가 별채"},
-    {x:2,y:21,w:4,h:2,kind:"building",floors:2,label:"이웃집"},{x:6,y:21,w:4,h:2,kind:"building",floors:1,label:"이웃집"},
-    {x:2,y:24,w:5,h:4,kind:"building",floors:2,label:"소금꽃 집"},
-    {x:8,y:24,w:4,h:7,kind:"building",floors:1,label:"염장 창고(목조)"},
-    {x:9,y:1,w:3,h:3,kind:"building",floors:3,label:"선창 망루(석조)"},
-    {x:13,y:13,w:3,h:12,kind:"boat",deck:BS3_DECK,label:"셈배"},
-    {x:13,y:20,w:3,h:3,kind:"building",floors:1,deck:BS3_DECK,label:"셈배 선실(목조)"}
+    Object.assign(R4(0,0,2,34),{kind:"high",elev:0,surf:"stone",label:"큰길"}),
+    Object.assign(R4(12,0,17,34),{type:"water",label:"거울강"}),
+    Object.assign(R4(3,5,12,7),{type:"water",label:"선창 물길"}),
+    Object.assign(R4(2,31,12,34),{kind:"high",elev:0,surf:"wood",label:"하역장"}),
+    Object.assign(R4(12,31,16,33),{kind:"bridge",label:"하역장 부두"}),
+    Object.assign(R4(2,0,4,3),{type:"tree",label:"버드나무"}),Object.assign(R4(5,0,7,2),{type:"tree",label:"덤불"}),
+    Object.assign(R4(10.5,13,11,20),{kind:"lowwall",label:"물가 말뚝 울타리"}),
+    Object.assign(R4(6,32,8,33),{kind:"crate",label:"짐 상자"}),
+    Object.assign(R4(2,8,8,12),{kind:"building",floors:2,label:"젖은 노",doors:["w"]}),
+    Object.assign(R4(8,8,10,12),{kind:"building",floors:1,label:"젖은 노 주방",doors:["s"]}),
+    Object.assign(R4(2,13,10,16),{kind:"building",floors:2,label:"물약 가게",doors:["w","e"]}),
+    Object.assign(R4(2,17,8,20),{kind:"building",floors:1,label:"물가 별채",doors:["w","e"]}),
+    Object.assign(R4(2,21,6,23),{kind:"building",floors:2,label:"이웃집",doors:["w"]}),Object.assign(R4(6,21,10,23),{kind:"building",floors:1,label:"이웃집",doors:["w"]}),
+    Object.assign(R4(2,24,7,28),{kind:"building",floors:2,label:"소금꽃 집",doors:["w","s"]}),
+    Object.assign(R4(8,24,12,31),{kind:"building",floors:1,label:"염장 창고(목조)",doors:["w"]}),
+    Object.assign(R4(8.5,0.5,12.5,4.5),{kind:"building",shape:"round",floors:3,label:"선창 망루(석조)"}),
+    Object.assign(R4(13,13,16,25),{kind:"boat",deck:BS3_DECK,label:"셈배"}),
+    Object.assign(R4(13,20,16,23),{kind:"building",floors:1,deck:BS3_DECK,label:"셈배 선실(목조)",doors:["s"]})
   ];
-  /* 물약 가게 칸막이 — 방의 오른쪽·아래쪽 가장자리가 집 안이면 */
-  const part=(id,r)=>{ const [x0,y0,x1,y1,f]=r, bb=Object.values(BS3_BLD).find(b=>x0>=b[0]-0.01&&x1<=b[2]+0.01&&y0>=b[1]-0.01&&y1<=b[3]+0.01); if(!bb) return;
-    if(x1<bb[2]-0.05) T.push({x:x1-0.05,y:y0,w:0.1,h:y1-y0,kind:"partition",floor:f});
-    if(y1<bb[3]-0.05) T.push({x:x0,y:y1-0.05,w:x1-x0,h:0.1,kind:"partition",floor:f}); };
-  (B.rooms||[]).forEach(r=>{ if(r.kind!=="stairs"&&rooms[r.id]) part(r.id,rooms[r.id]); });
-  Object.values(BS3_PART).forEach(ids=>ids.forEach(id=>part(id,rooms[id])));
-  /* 방 이름(층 높이에) */
+  /* 지하실 — '지하' 층 보기에서 땅을 파 보인다 */
+  Object.entries(rooms).forEach(([id,r])=>{ if(r[4]!==0) return; T.push({x:Math.round(r[0]),y:Math.round(r[1]),w:Math.max(1,Math.round(r[2]-r[0])),h:Math.max(1,Math.round(r[3]-r[1])),kind:"cellar",depth:FH,label:""}); });
+  /* 칸막이 — 방의 오른쪽·아래쪽이 집 안이면, 가운데에 문틈을 남긴다 */
+  const blds=Object.values(BS3_BLD).map(b=>b.map(v=>v*SC));
+  const wall=(x,y,w,h,f)=>T.push({x,y,w,h,kind:"partition",floor:f,ht:1.15});
+  const part=(r)=>{ const [x0,y0,x1,y1,f]=r, bb=blds.find(b=>x0>=b[0]-0.01&&x1<=b[2]+0.01&&y0>=b[1]-0.01&&y1<=b[3]+0.01); if(!bb||f===0) return; const gap=1.3;
+    if(x1<bb[2]-0.05){ const L=y1-y0; if(L>gap+1){ const m=(y0+y1)/2; wall(x1-0.06,y0,0.12,m-gap/2-y0,f); wall(x1-0.06,m+gap/2,0.12,y1-m-gap/2,f); } else wall(x1-0.06,y0,0.12,L,f); }
+    if(y1<bb[3]-0.05){ const L=x1-x0; if(L>gap+1){ const m=(x0+x1)/2; wall(x0,y1-0.06,m-gap/2-x0,0.12,f); wall(m+gap/2,y1-0.06,x1-m-gap/2,0.12,f); } else wall(x0,y1-0.06,L,0.12,f); } };
+  (B.rooms||[]).forEach(r=>{ if(r.kind!=="stairs"&&rooms[r.id]) part(rooms[r.id]); });
+  Object.values(BS3_PART).forEach(ids=>ids.forEach(id=>part(rooms[id])));
+  /* 방 이름 · 가구 */
   const bLabels=new Set(T.filter(o=>o.kind==="building").map(o=>String(o.label).replace(/\(.*$/,"")));
-  Object.entries(rooms).forEach(([id,r])=>{ if(!names[id]||/^sb_/.test(id)&&id!=="sb_cabin"||bLabels.has(names[id])) return; const [x0,y0,x1,y1,f]=r; const deck=/^sb_/.test(id)?BS3_DECK:0;
-    T.push({x:(x0+x1)/2-0.01,y:(y0+y1)/2-0.01,w:0.02,h:0.02,kind:"label",label:names[id],floor:f,elev:deck+(f-1)*ISO.FH+0.05}); });
+  Object.entries(rooms).forEach(([id,r])=>{ const [x0,y0,x1,y1,f]=r, deck=/^sb_/.test(id)?BS3_DECK:0;
+    if(names[id]&&!(/^sb_/.test(id)&&id!=="sb_cabin")&&!bLabels.has(names[id])) T.push({x:(x0+x1)/2-0.01,y:(y0+y1)/2-0.01,w:0.02,h:0.02,kind:"label",label:names[id],floor:f,elev:deck+(f===0?-FH:(f-1)*FH)+0.05});
+    if(id!=="commute"&&id!=="sh_yard") bs3Furnish(T,id,names[id],kinds[id],r,f,deck); });
   /* 사람 — 방마다 모아 방 안에 고르게 */
   const by={}; [S.pc,...(S.party||[]),...(S.npcs||[])].filter(a=>a&&a.room&&rooms[a.room]).forEach(a=>{ (by[a.room]=by[a.room]||[]).push(a); });
   const toks=[];
   Object.entries(by).forEach(([rid,ppl])=>{ const [x0,y0,x1,y1,f]=rooms[rid], n=ppl.length, cols=Math.ceil(Math.sqrt(n*(x1-x0)/Math.max(0.5,y1-y0)))||1, rows=Math.ceil(n/cols);
     ppl.forEach((a,i)=>{ const cx=i%cols, cy=Math.floor(i/cols), px=x0+(x1-x0)*(cx+0.5)/cols, py=y0+(y1-y0)*(cy+0.5)/rows;
-      const bd=Object.entries(BS3_BLD).find(([k,b])=>px>=b[0]&&px<=b[2]&&py>=b[1]&&py<=b[3]);
+      const bd=Object.entries(BS3_BLD).find(([k,b])=>px>=b[0]*SC&&px<=b[2]*SC&&py>=b[1]*SC&&py<=b[3]*SC);
       toks.push({id:a.id||("p"+toks.length),name:String(a.name||"").replace(/\(.*?\)/g,"").trim().split(" ")[0],side:(a===S.pc||a.id==="verrix")?"pc":"ally",
         x:Math.floor(px),y:Math.floor(py),px,py,floor:f,face:"s",
         note:`${bd?(bname[bd[0]]||""):"가게 밖"} · ${names[rid]||rid}${a.roomNote?` — ${a.roomNote}`:""}`}); }); });
-  return {idle:true,noGrid:true,name:"",cols:17,rows:34,round:0,ground:"dirt",terrain:T,tokens:toks};
+  return {idle:true,noGrid:true,name:"",cols:17*SC,rows:34*SC,round:0,ground:"dirt",floorH:FH,roof:bs3Roof,terrain:T,tokens:toks};
 }
 function bs3Sync(){
   const t=$("bs3Toggle"); if(t){ t.classList.toggle("on",bs3On); t.textContent=bs3On?"3D 디오라마":"그림"; }
-  ["bs3Fit"].forEach(id=>{ const e=$(id); if(e) e.style.display=bs3On?"":"none"; });
+  ["bs3Fit","bs3Roof"].forEach(id=>{ const e=$(id); if(e) e.style.display=bs3On?"":"none"; });
+  const rb=$("bs3Roof"); if(rb){ rb.textContent=bs3Roof==="on"?"지붕 덮음":"지붕 걷음"; rb.classList.toggle("on",bs3Roof==="off"); }
   if(!bs3On){ const f=$("bs3Floor"); if(f) f.style.display="none"; }
   const inf=$("bs3Info"); if(inf) inf.style.display=bs3On?"":"none";
   const lg=$("bsLegend"); if(lg) lg.style.display=bs3On?"none":"";
@@ -9720,9 +9848,9 @@ function bs3Sync(){
 function renderBase3D(){
   const wrap=$("bsWrap"); if(wrap){ wrap.style.aspectRatio="4/3"; wrap.style.maxHeight="75vh"; }
   $("bsName").textContent="카를렌 나루터 거점 — 3D 디오라마";
-  $("bsNote").textContent="서쪽 큰길 → 동쪽 거울강. 건물을 누르면 이름이, 사람을 누르면 방이 아래에 나옵니다. 사람이 있는 집은 지붕을 걷어 보이고, '층' 버튼으로 층별로 봅니다. 건물 버튼을 누르면 그 집으로 시점이 갑니다. 건물 자리·방 배치는 기록에 맞춘 대략값입니다.";
-  bt3Render("base",bs3Board(),()=>{ if(bs3FocusReq){ const r=BS3_BLD[bs3FocusReq]; bs3FocusReq=null;
-    if(r){ const m=2.5, h=7; BT3.cam.pitch=Math.max(BT3.cam.pitch,0.8); bt3Fit([[r[0]-m,0,r[1]-m],[r[2]+m,0,r[1]-m],[r[0]-m,0,r[3]+m],[r[2]+m,0,r[3]+m],[r[0],h,r[1]],[r[2],h,r[3]],[r[0],h,r[3]],[r[2],h,r[1]]]); } } });
+  $("bsNote").textContent="서쪽 큰길 → 동쪽 거울강. 사람을 누르면 방이 아래에 나옵니다. '지붕' 버튼으로 모든 지붕을 걷거나 덮고, '층' 버튼으로 지하·1층·2층·3층을 따로 봅니다. 건물 버튼을 누르면 그 집으로 시점이 갑니다. 건물 자리·방 배치는 기록에 맞춘 대략값입니다.";
+  bt3Render("base",bs3Board(),()=>{ if(bs3FocusReq){ const r0=BS3_BLD[bs3FocusReq], r=r0&&r0.map(v=>v*BS3_SC); bs3FocusReq=null;
+    if(r){ const m=3, h=9; BT3.cam.pitch=Math.max(BT3.cam.pitch,0.8); bt3Fit([[r[0]-m,0,r[1]-m],[r[2]+m,0,r[1]-m],[r[0]-m,0,r[3]+m],[r[2]+m,0,r[3]+m],[r[0],h,r[1]],[r[2],h,r[3]],[r[0],h,r[3]],[r[2],h,r[1]]]); } } });
 }
 
 function btIdleBoard(){
@@ -9752,6 +9880,7 @@ btSyncButtons(); btLoadSheets();
 $("bs3Toggle").onclick=()=>{ bs3On=!bs3On; try{ localStorage.setItem("berix_bs3_on",bs3On?"1":"0"); }catch{} bs3VK=""; bs3Sync(); renderBase(); };
 $("bs3Floor").onclick=()=>{ bs3Floor=bt3NextFloor(bs3Floor); renderBase(); };
 $("bs3Fit").onclick=()=>{ bs3VK=""; renderBase(); };
+$("bs3Roof").onclick=()=>{ bs3Roof=bs3Roof==="on"?"off":"on"; try{ localStorage.setItem("berix_bs3_roof",bs3Roof); }catch{} bs3Sync(); renderBase(); };
 bs3Sync();
 
 /* ---------- 대륙 ---------- */
