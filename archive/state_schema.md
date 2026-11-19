@@ -158,4 +158,5 @@ CLAUDE.md의 축약 규칙만으로 판단이 서지 않을 때만 여는 문서
   - (v2.62 추가) 직업 없는 아군: `marta` `gro` `dorik` `moira` `seva`(이름으로 자동) `militia`(자경단·민병·마을 사람·일꾼).
   - (v2.62 추가) 그림이 없으면 검은 그림자가 선다(3D 핀 대신): `sh_human`(기본) `sh_brute`(덩치·거한) `sh_wolf`(늑대·개·곰·짐승) `sh_bird`(부엉이·까마귀·박쥐·새) `sh_ogre`(오우거·트롤·거인·괴물·골렘) `sh_spider`(거미·지네·전갈). 이것도 `sprite`로 지정할 수 있다.
   - (v2.63 추가) 코볼드: `kb_warrior`(기본) `kb_thrower`(투척) `kb_digger`(곡괭이) `kb_winged`(날개 코볼드 기본) `kb_winged_old`(잿빛·찢긴 날개) `kb_winged_young`(녹청·이빨 칼) — 개별 날개 코볼드는 토큰 `sprite`로 지정.
+  - (v2.64 추가) 정령·빛(빛나는 실루엣): `sp_wisp`(불빛·도깨비불·정령) `sp_ghost`(유령·망령) `sp_fire`(불 정령) `sp_water`(물 정령) `sp_air`(바람 정령) `sp_earth`(흙·돌 정령).
 - 전투판 v2.50: 캐릭터 그림은 네 방향(`f` 왼쪽 아래·`fr` 오른쪽 아래·`b` 오른쪽 위·`bl` 왼쪽 위). 파티·적 열둘 모두 네 장 따로(v2.52에서 손 위치를 못 박아 다시 받음 — party_c·foes_c). battle.json이 없거나 토큰이 없으면 전투 탭은 `at`이 없는(=동행 중인) 파티를 빈 들판에 세워 보인다.

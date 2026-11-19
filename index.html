@@ -7636,7 +7636,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.63";
+const HB_VERSION="v2.64";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -8864,7 +8864,7 @@ const ISO_OBJ={building:["#cbb894","#a8946f","#8a7758"],wall:["#b5b0a2","#8f8a7c
   crate:["#b98f57","#93703f","#74572f"],rock:["#a3a3a7","#7c7c82","#5f5f66"]};
 /* 캐릭터 그림표 — 한 장에 여러 인물. cells[key]={f:[x,y,w,h](앞모습, 왼쪽 아래를 봄), b:[...](뒷모습, 오른쪽 위를 봄)} */
 const BT_PB="./assets/sprites/party_c.png", BT_FB="./assets/sprites/foes_c.png";
-const BT_F2C="./assets/sprites/foes2_c.png", BT_F3C="./assets/sprites/foes3_c.png", BT_ALC="./assets/sprites/allies_c.png";
+const BT_KBC="./assets/sprites/kobold_c.png", BT_F2C="./assets/sprites/foes2_c.png", BT_F3C="./assets/sprites/foes3_c.png", BT_ALC="./assets/sprites/allies_c.png";
 /* 네 방향 모두 따로 그린 그림. 처음 받은 둘째 장은 첫 장을 거울처럼 뒤집은 그림이라(무기 든 손이 바뀜) 손 위치를 못 박아 다시 받았다(v2.52). */
 const BT_SHEETS=[
   {src:"./assets/sprites/party.png",w:1024,h:682,cells:{
@@ -8874,14 +8874,14 @@ const BT_SHEETS=[
     neri:{f:[518,66,150,250],b:[510,356,152,250],fr:[508,60,164,250,BT_PB],bl:[498,356,156,250,BT_PB]},
     idra:{f:[670,66,148,250],b:[694,356,148,250],fr:[676,60,150,250,BT_PB],bl:[688,356,154,250,BT_PB]},
     nadin:{f:[842,66,160,250],b:[856,356,136,250],fr:[844,60,162,250,BT_PB],bl:[854,356,152,250,BT_PB]}}},
-  /* v2.63: 코볼드 — 한 방향만(반대쪽은 뒤집어 씀), 작은 크기라 0.78배. 날개 코볼드 셋 중 특정 개체는 토큰 sprite로 지정 */
+  /* v2.63: 코볼드 — 네 방향, 작은 크기라 0.78배. 날개 코볼드 셋 중 특정 개체는 토큰 sprite로 지정 */
   {src:"./assets/sprites/kobold.png",w:1024,h:682,scale:0.78,cells:{
-    kb_warrior:{f:[17,89,159,225],b:[17,369,159,228]},
-    kb_thrower:{f:[177,95,165,219],b:[177,372,165,224]},
-    kb_digger:{f:[342,94,151,220],b:[342,371,151,227]},
-    kb_winged_old:{f:[493,91,189,223],b:[493,372,189,225]},
-    kb_winged_young:{f:[682,91,171,224],b:[682,369,171,227]},
-    kb_winged:{f:[866,95,144,219],b:[866,368,139,229]}},
+    kb_warrior:{f:[17,89,159,225],b:[17,369,159,228],fr:[14,87,155,228,BT_KBC],bl:[9,367,160,232,BT_KBC]},
+    kb_thrower:{f:[177,95,165,219],b:[177,372,165,224],fr:[176,92,165,223,BT_KBC],bl:[169,368,172,230,BT_KBC]},
+    kb_digger:{f:[342,94,151,220],b:[342,371,151,227],fr:[341,91,144,223,BT_KBC],bl:[341,364,149,234,BT_KBC]},
+    kb_winged_old:{f:[493,91,189,223],b:[493,372,189,225],fr:[492,91,170,223,BT_KBC],bl:[508,367,158,231,BT_KBC]},
+    kb_winged_young:{f:[682,91,171,224],b:[682,369,171,227],fr:[672,90,175,225,BT_KBC],bl:[679,366,174,231,BT_KBC]},
+    kb_winged:{f:[866,95,144,219],b:[866,368,139,229],fr:[860,97,151,217,BT_KBC],bl:[863,365,153,233,BT_KBC]}},
    match:[[/날개 코볼드|날개 코볼트/,"kb_winged"],[/코볼[드트].*(투척|던지)/,"kb_thrower"],[/코볼[드트].*(곡괭이|굴꾼|파는)/,"kb_digger"],[/코볼[드트]/,"kb_warrior"]]},
   /* v2.62: 새 적 — 남녀 · 보통/덩치 · 근접/원거리/마법(ChatGPT 그림, 2026-11-18) */
   {src:"./assets/sprites/foes2.png",w:1024,h:682,cells:{
@@ -8934,8 +8934,18 @@ function btShadowKey(t){ const n=String(t.name||"")+" "+String(t.note||"");
   if(/오우거|트롤|거인|괴물|악마|골렘|파수병|수호자|괴수/.test(n)) return "sh_ogre";
   if(/덩치|거한|장사/.test(n)) return "sh_brute";
   return "sh_human"; }
+/* v2.64: 정령·빛 — 빛나는 반투명 실루엣. 한 방향만(좌우는 뒤집어 씀). 도깨비불은 칸 위에 떠 있게 아래를 비워 둠 */
+const BT_SPIRIT={src:"./assets/sprites/spirit.png",w:1024,h:682,scale:1.1,cells:{
+    sp_wisp:{f:[24,109,92,177],b:[23,420,93,185]},
+    sp_ghost:{f:[130,61,151,223],b:[121,367,160,235]},
+    sp_fire:{f:[307,43,125,243],b:[303,353,135,252]},
+    sp_water:{f:[448,58,161,228],b:[459,371,149,234]},
+    sp_air:{f:[633,36,178,250],b:[633,350,182,255]},
+    sp_earth:{f:[815,52,193,233],b:[815,363,195,242]}},
+  match:[[/불의 정령|불 정령|화염 정령|불꽃 정령/,"sp_fire"],[/물의 정령|물 정령/,"sp_water"],[/바람의 정령|바람 정령|공기 정령/,"sp_air"],[/흙의 정령|흙 정령|땅 정령|돌 정령|대지 정령/,"sp_earth"],[/유령|망령|원혼|혼령/,"sp_ghost"],[/불빛|도깨비불|위습|빛덩이|정령/,"sp_wisp"]]};
+BT_SHEETS.push(BT_SPIRIT);
 BT_SHEETS.push(BT_SHADOW);
-[BT_PB,BT_FB,BT_F2C,BT_F3C,BT_ALC].forEach(u=>{ const im=new Image(); im.src=u; });
+[BT_PB,BT_FB,BT_F2C,BT_F3C,BT_ALC,BT_KBC].forEach(u=>{ const im=new Image(); im.src=u; });
 function btSpriteKey(t){
   if(t.sprite) return t.sprite;
   const all=Object.assign({},...BT_SHEETS.map(s=>s.cells));
