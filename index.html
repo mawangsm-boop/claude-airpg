@@ -7638,7 +7638,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.73";
+const HB_VERSION="v2.74";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -8869,17 +8869,17 @@ const ISO_SURF={
 const ISO_OBJ={building:["#cbb894","#a8946f","#8a7758"],wall:["#b5b0a2","#8f8a7c","#716d61"],lowwall:["#bdb7a8","#948e80","#756f63"],
   crate:["#b98f57","#93703f","#74572f"],rock:["#a3a3a7","#7c7c82","#5f5f66"]};
 /* 캐릭터 그림표 — 한 장에 여러 인물. cells[key]={f:[x,y,w,h](앞모습, 왼쪽 아래를 봄), b:[...](뒷모습, 오른쪽 위를 봄)} */
-const BT_PB="./assets/sprites/party_c.png?v=273", BT_FB="./assets/sprites/foes_c.png";
+const BT_PB="./assets/sprites/party_c.png?v=274", BT_FB="./assets/sprites/foes_c.png";
 const BT_KBC="./assets/sprites/kobold_c.png", BT_F2C="./assets/sprites/foes2_c.png", BT_F3C="./assets/sprites/foes3_c.png", BT_ALC="./assets/sprites/allies_c.png"; const BT_RSC="./assets/sprites/residents_c.png";
 /* 네 방향 모두 따로 그린 그림. 처음 받은 둘째 장은 첫 장을 거울처럼 뒤집은 그림이라(무기 든 손이 바뀜) 손 위치를 못 박아 다시 받았다(v2.52). */
 const BT_SHEETS=[
   /* v2.73: 파티를 거점 식구(아이린 세트)와 같은 그림체·비율로 다시 그림(2026-11-20). 인물마다 칸을 따로 떼어 담아 옆 사람 조각이 섞이지 않게 함. 네 방향 모두 같은 손에 같은 물건 */
-  {src:"./assets/sprites/party.png?v=273",w:1360,h:693,scale:0.86,cells:{
-    verrix:{f:[44,33,139,307],b:[45,373,138,313],fr:[45,26,138,314,BT_PB],bl:[45,372,138,315,BT_PB]},
+  {src:"./assets/sprites/party.png?v=274",w:1360,h:693,scale:0.86,cells:{
+    verrix:{f:[44,33,139,307],b:[45,373,138,313],fr:[45,26,139,307,BT_PB],bl:[45,372,138,313,BT_PB]},
     isabel:{f:[261,58,158,282],b:[259,389,161,298],fr:[257,55,166,285,BT_PB],bl:[260,391,160,296,BT_PB]},
-    liv:{f:[489,56,155,284],b:[492,389,149,298],fr:[484,55,166,285,BT_PB],bl:[489,393,157,294,BT_PB]},
+    liv:{f:[489,56,155,284],b:[489,389,157,294],fr:[484,55,166,285,BT_PB],bl:[489,393,157,294,BT_PB]},
     neri:{f:[714,56,159,284],b:[715,387,157,300],fr:[713,54,161,286,BT_PB],bl:[714,389,159,297,BT_PB]},
-    idra:{f:[946,51,148,289],b:[943,384,155,303],fr:[943,53,155,287,BT_PB],bl:[939,388,161,299,BT_PB]},
+    idra:{f:[946,51,148,289],b:[943,384,155,303],fr:[943,53,148,289,BT_PB],bl:[939,388,161,299,BT_PB]},
     nadin:{f:[1167,45,160,295],b:[1162,383,169,304],fr:[1156,36,181,304,BT_PB],bl:[1159,385,176,301,BT_PB]}}},
   /* v2.63: 코볼드 — 네 방향, 작은 크기라 0.78배. 날개 코볼드 셋 중 특정 개체는 토큰 sprite로 지정 */
   {src:"./assets/sprites/kobold.png",w:1024,h:682,scale:0.78,cells:{
