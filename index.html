@@ -7638,7 +7638,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.71";
+const HB_VERSION="v2.72";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -8870,7 +8870,7 @@ const ISO_OBJ={building:["#cbb894","#a8946f","#8a7758"],wall:["#b5b0a2","#8f8a7c
   crate:["#b98f57","#93703f","#74572f"],rock:["#a3a3a7","#7c7c82","#5f5f66"]};
 /* 캐릭터 그림표 — 한 장에 여러 인물. cells[key]={f:[x,y,w,h](앞모습, 왼쪽 아래를 봄), b:[...](뒷모습, 오른쪽 위를 봄)} */
 const BT_PB="./assets/sprites/party_c.png", BT_FB="./assets/sprites/foes_c.png";
-const BT_KBC="./assets/sprites/kobold_c.png", BT_F2C="./assets/sprites/foes2_c.png", BT_F3C="./assets/sprites/foes3_c.png", BT_ALC="./assets/sprites/allies_c.png";
+const BT_KBC="./assets/sprites/kobold_c.png", BT_F2C="./assets/sprites/foes2_c.png", BT_F3C="./assets/sprites/foes3_c.png", BT_ALC="./assets/sprites/allies_c.png"; const BT_RSC="./assets/sprites/residents_c.png";
 /* 네 방향 모두 따로 그린 그림. 처음 받은 둘째 장은 첫 장을 거울처럼 뒤집은 그림이라(무기 든 손이 바뀜) 손 위치를 못 박아 다시 받았다(v2.52). */
 const BT_SHEETS=[
   {src:"./assets/sprites/party.png",w:1024,h:682,cells:{
@@ -8906,6 +8906,15 @@ const BT_SHEETS=[
     m_guard:{f:[681,59,177,261],b:[683,365,178,271],fr:[689,61,176,260,BT_F3C],bl:[671,363,194,272,BT_F3C]},
     f_xbow:{f:[867,91,138,228],b:[874,395,143,239],fr:[872,91,142,231,BT_F3C],bl:[865,395,129,239,BT_F3C]}},
    match:[[/사제|신관|수도사/,"m_priest"],[/노파|대마녀|늙은 마녀/,"f_bigmage"],[/창병|창잡이/,"m_spear"],[/단검|자객|여도둑|소매치기/,"f_dagger"],[/경비|위병|방패병|호위병|기사/,"m_guard"],[/여쇠뇌|여석궁|척후/,"f_xbow"]]},
+  /* v2.72: 거점 식구 — 레아·베스퍼(빈 그릇)·코라·아이린·이네스·할데(ChatGPT 그림, 2026-11-20). 이 장은 인물이 크게 그려져 0.86배, 드워프 할데는 칸별 k로 더 작게 */
+  {src:"./assets/sprites/residents.png",w:1024,h:682,scale:0.86,cells:{
+    rea:{f:[21,31,136,293],b:[25,353,135,304],fr:[25,25,131,299,BT_RSC],bl:[21,349,132,308,BT_RSC]},
+    npc_vesperhusk_s36:{f:[203,40,109,282],b:[201,363,115,291],fr:[191,31,113,291,BT_RSC],bl:[187,355,122,300,BT_RSC]},
+    cora:{f:[360,31,120,291],b:[359,354,131,302],fr:[341,22,129,301,BT_RSC],bl:[336,351,133,305,BT_RSC]},
+    irene:{f:[513,31,155,292],b:[516,355,161,301],fr:[496,23,159,299,BT_RSC],bl:[486,351,159,306,BT_RSC]},
+    ines_calo:{f:[683,31,146,292],b:[691,356,139,299],fr:[668,25,153,297,BT_RSC],bl:[685,353,137,303,BT_RSC]},
+    halde_brunn:{f:[856,45,160,278],b:[845,368,169,288],fr:[847,37,169,285,BT_RSC],bl:[842,361,168,295,BT_RSC],k:0.8}},
+   match:[[/빈 그릇 베스퍼|베스퍼\(빈 그릇\)/,"npc_vesperhusk_s36"],[/(^|\s)레아/,"rea"],[/코라/,"cora"],[/아이린/,"irene"],[/이네스/,"ines_calo"],[/할데/,"halde_brunn"]]},
   /* v2.62: 직업 없는 아군 — 셈배 식구·세바·마을 자경단 */
   {src:"./assets/sprites/allies.png",w:1024,h:682,cells:{
     marta:{f:[20,77,132,240],b:[20,386,134,253],fr:[31,76,118,244,BT_ALC],bl:[9,384,138,259,BT_ALC]},
@@ -8951,7 +8960,7 @@ const BT_SPIRIT={src:"./assets/sprites/spirit.png",w:1024,h:682,scale:1.1,cells:
   match:[[/불의 정령|불 정령|화염 정령|불꽃 정령/,"sp_fire"],[/물의 정령|물 정령/,"sp_water"],[/바람의 정령|바람 정령|공기 정령/,"sp_air"],[/흙의 정령|흙 정령|땅 정령|돌 정령|대지 정령/,"sp_earth"],[/유령|망령|원혼|혼령/,"sp_ghost"],[/불빛|도깨비불|위습|빛덩이|정령/,"sp_wisp"]]};
 BT_SHEETS.push(BT_SPIRIT);
 BT_SHEETS.push(BT_SHADOW);
-[BT_PB,BT_FB,BT_F2C,BT_F3C,BT_ALC,BT_KBC].forEach(u=>{ const im=new Image(); im.src=u; });
+[BT_PB,BT_FB,BT_F2C,BT_F3C,BT_ALC,BT_KBC,BT_RSC].forEach(u=>{ const im=new Image(); im.src=u; });
 function btSpriteKey(t){
   if(t.sprite) return t.sprite;
   const all=Object.assign({},...BT_SHEETS.map(s=>s.cells));
@@ -9751,7 +9760,7 @@ function bt3Build(B){
       body.rotation.z=Math.PI/2; body.position.set(0,0.17,0); grp.add(body);
       const hd=new T.Mesh(new T.SphereGeometry(0.15,12,10),new T.MeshLambertMaterial({color:0xe9cfae,transparent:true,opacity:.75})); hd.position.set(-0.42,0.16,0); grp.add(hd); headY=0.45;
     }else if(spr){
-      const H=1.6*spr.c.f[3]/250*(spr.s.scale||1), W=H*spr.c.f[2]/spr.c.f[3];
+      const H=1.6*spr.c.f[3]/250*(spr.s.scale||1)*(spr.c.k||1), W=H*spr.c.f[2]/spr.c.f[3];
       sp=new T.Sprite(new T.SpriteMaterial({transparent:true,alphaTest:0.08,opacity:op}));
       sp.center.set(0.5,0.03); sp.scale.set(W,H,1); sp.position.y=0.02; grp.add(sp); headY=H+0.05;
     }else{
@@ -9792,7 +9801,7 @@ function bt3Faces(){
     else{ if(!right&&C.bl) cell=C.bl; else{ cell=C.b||C.f; flip=!right; } }
     const tex=bt3Tex(cell[4]||k.spr.s.src,cell.slice(0,4),flip);
     if(tex&&k.sp.material.map!==tex){ k.sp.material.map=tex; k.sp.material.needsUpdate=true;
-      const H=1.6*cell[3]/250*(k.spr.s.scale||1); k.sp.scale.set(H*cell[2]/cell[3],H,1); }
+      const H=1.6*cell[3]/250*(k.spr.s.scale||1)*(k.spr.c.k||1); k.sp.scale.set(H*cell[2]/cell[3],H,1); }
   });
 }
 /* 사람을 가리는 벽·건물·나무는 반투명하게 */
