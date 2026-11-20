@@ -7638,7 +7638,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.69";
+const HB_VERSION="v2.70";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -9783,13 +9783,16 @@ function bt3Faces(){
 /* 사람을 가리는 벽·건물·나무는 반투명하게 */
 function bt3Occlude(){
   const cam=BT3.camera.position, faded=new Set(), ray=BT3.ray, v=new THREE.Vector3();
+  /* 지붕을 덮은 보기에서는 흐리게 하지 않는다(v2.70) — 집이 통째로 비쳐 보이던 것 */
+  if(BT3.B&&BT3.B.roof==="on"){ BT3.occ.forEach(o=>{ if(o.userData.pick) o.userData.pick.faded=false;
+    o.traverse(n=>{ if(!n.material) return; if(n.userData.op0==null) n.userData.op0=n.material.opacity; n.material.opacity=n.userData.op0; n.material.transparent=n.userData.op0<1; n.material.depthWrite=n.userData.op0>=1; }); }); return; }
   BT3.toks.forEach(k=>{ if(k.dead) return; [0.35,k.head*0.85].forEach(hy=>{
     v.set(k.grp.position.x,k.grp.position.y+hy,k.grp.position.z); const dir=v.clone().sub(cam); const d=dir.length(); dir.normalize();
     ray.set(cam,dir); ray.far=d-0.25;
     ray.intersectObjects(BT3.occ,true).forEach(h=>{ let o=h.object; while(o&&!BT3.occ.includes(o)) o=o.parent; if(o) faded.add(o); }); }); });
   ray.far=Infinity;
   BT3.occ.forEach(o=>{ const f=faded.has(o); if(o.userData.pick) o.userData.pick.faded=f;
-    o.traverse(n=>{ if(!n.material) return; if(n.userData.op0==null) n.userData.op0=n.material.opacity; n.material.opacity=f?0.13:n.userData.op0; n.material.depthWrite=!f&&n.userData.op0>=1; }); });
+    o.traverse(n=>{ if(!n.material) return; if(n.userData.op0==null) n.userData.op0=n.material.opacity; n.material.transparent=true; n.material.opacity=f?0.13:n.userData.op0; n.material.depthWrite=!f&&n.userData.op0>=1; }); });
 }
 function bt3Overlay(){
   const w=BT3.w, h=BT3.h, v=new THREE.Vector3(), put=[];
