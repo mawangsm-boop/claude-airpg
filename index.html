@@ -394,7 +394,7 @@ summary>span:first-child>em{font-style:normal;overflow:hidden;text-overflow:elli
     <div class="card"><h2>거점 식구</h2><div id="bsRoster"></div></div>
     <div class="card">
       <h2 id="bsName">거점</h2>
-      <div class="tools" id="bs3Tools"><button id="bs3Toggle">그림</button><button id="bs3Floor" style="display:none">층: 전체</button><button id="bs3Roof" style="display:none">지붕 걷음</button><button id="bs3Fit" style="display:none">화면 맞춤</button></div>
+      <div class="tools" id="bs3Tools"><button id="bs3Toggle">그림</button><button id="bs3Floor" style="display:none">층: 전체</button><button id="bs3Roof" style="display:none">지붕 걷음</button><button id="bs3Names" style="display:none" class="on">이름 표시</button><button id="bs3Fit" style="display:none">화면 맞춤</button></div>
       <div class="tools" id="bsTabs"></div>
       <div class="legend" id="bsLegend">
         <span><i style="background:#3d2f5c"></i>잠자리</span>
@@ -7638,7 +7638,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.66";
+const HB_VERSION="v2.67";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -8969,14 +8969,14 @@ function btLoadSheets(){ BT_SHEETS.forEach(s=>{ if(s.req) return; s.req=true; co
    · three.js는 assets/vendor/three.min.js(r149)를 3D를 처음 열 때만 불러온다. 못 띄우는 기기면 평면으로 돌아간다. */
 let BT3=null, btThreeState="";
 /* v2.65: 같은 3D 판을 전투 탭과 거점 탭(디오라마)이 함께 쓴다 — 탭마다 판 자리·정보 칸·층·시점을 따로 둔다 */
-let bs3On=false, bs3Floor="all", bs3VK="", bs3FocusReq=null, bs3Roof="off";
+let bs3On=false, bs3Floor="all", bs3VK="", bs3FocusReq=null, bs3Roof="off", bs3Names=true;
 try{ if(localStorage.getItem("berix_bs3_roof")==="on") bs3Roof="on"; }catch{}
 try{ bs3On=localStorage.getItem("berix_bs3_on")==="1"; }catch{}
 const BT3_CFG={
   battle:{wrap:"btWrap",svg:"btSvg",info:"btInfo",floorBtn:"btFloor",section:"s-battle",camKey:"berix_bt3_cam",
-    active:()=>btIso, rerender:()=>renderBattle(), getFloor:()=>btFloor, setFloor:v=>{btFloor=v;}, getVK:()=>btViewKey, setVK:v=>{btViewKey=v;}},
+    active:()=>btIso, names:()=>true, rerender:()=>renderBattle(), getFloor:()=>btFloor, setFloor:v=>{btFloor=v;}, getVK:()=>btViewKey, setVK:v=>{btViewKey=v;}},
   base:{wrap:"bsWrap",svg:"bsSvg",info:"bs3Info",floorBtn:"bs3Floor",section:"s-base",camKey:"berix_bs3_cam",
-    active:()=>bs3On, rerender:()=>renderBase(), getFloor:()=>bs3Floor, setFloor:v=>{bs3Floor=v;}, getVK:()=>bs3VK, setVK:v=>{bs3VK=v;}}
+    active:()=>bs3On, names:()=>bs3Names, rerender:()=>renderBase(), getFloor:()=>bs3Floor, setFloor:v=>{bs3Floor=v;}, getVK:()=>bs3VK, setVK:v=>{bs3VK=v;}}
 };
 function bt3F(){ return BT3&&BT3.cfg?BT3.cfg.getFloor():"all"; }
 function bt3NextFloor(cur){ const m=(BT3&&BT3.maxF)||2, c0=BT3&&BT3.hasCellar; return cur==="all"?(c0?"0":"1"):(+cur>=m?"all":String(+cur+1)); }
@@ -9342,8 +9342,8 @@ function bt3Tower(o,z,ctx){
   const cap=new T.Mesh(new T.RingGeometry(R-0.3,R,48),bt3MatC("cobble")); cap.material.side=T.DoubleSide; cap.rotation.x=-Math.PI/2; cap.position.set(cx,fz+H+0.005,cy); grp.add(cap);
   const disk=(k,op)=>{ const m=new T.Mesh(new T.CylinderGeometry(R-0.28,R-0.28,0.12,40),bt3MatC("plank","#ffffff",R,R)); m.position.set(cx,fz+(k-1)*FH-0.06,cy); m.receiveShadow=true;
     if(op<1){ m.material.transparent=true; m.material.opacity=op; m.material.depthWrite=false; } grp.add(m); };
+  if(shown===0) return grp;   /* '지하' 보기: 바닥 원판을 걷어 지하 창고가 보이게 */
   disk(1,1);
-  if(shown===0) return grp;
   if(o.open) for(let k=2;k<=shown;k++) disk(k,(F!=="all"&&k===+F)?1:0.45);
   /* 문(서쪽) · 창 */
   const plane=(mat,w,h,a,y,rr)=>{ const m=new T.Mesh(new T.PlaneGeometry(w,h),mat); m.position.set(cx+Math.cos(a)*rr,y,cy+Math.sin(a)*rr); m.rotation.y=Math.PI/2-a; grp.add(m); };
@@ -9655,10 +9655,11 @@ function bt3Build(B){
   });
   /* ---- 이름표·글자(겹쳐 그리는 HTML) ---- */
   const ov=BT3.ov;
+  const showN=BT3.cfg.names(); if(!showN){ tags.length=0; labs.length=0; }   /* 거점 '이름 숨김' */
   BT3.tags=tags.map(T0=>{ const d=document.createElement("div"); d.className=`bt3tag ${T0.side||""}${T0.dead?" dead":""}${T0.dim?" dim":""}${T0.turn?" turn":""}`;
     d.innerHTML="<u></u>"+(btNames?`<b>${escAttr(T0.name)}</b>`:"")+(T0.hp!=null?`<i><s style="width:${Math.round(T0.hp*100)}%;background:${T0.hp>.6?"#7ac68f":T0.hp>.3?"#e0c060":"#d9666a"}"></s></i>`:"")+(T0.st?`<em>${escAttr(T0.st)}</em>`:"");
     d.addEventListener("click",()=>showTok(T0.t)); ov.appendChild(d); return {el:d,pos:T0.pos}; });
-  [["북",C/2,-0.9,"n"],["남",C/2,R+0.9,""],["서",-0.9,R/2,""],["동",C+0.9,R/2,""]].forEach(([n,x,y,c])=>labs.push({p:[x,0,y],text:n,cls:"cmp "+c}));
+  if(showN) [["북",C/2,-0.9,"n"],["남",C/2,R+0.9,""],["서",-0.9,R/2,""],["동",C+0.9,R/2,""]].forEach(([n,x,y,c])=>labs.push({p:[x,0,y],text:n,cls:"cmp "+c}));
   const pri=L=>/cmp|ring/.test(L.cls||"")?0:1; labs.sort((a,b)=>pri(a)-pri(b));
   BT3.labs=labs.map(L=>{ const d=document.createElement("div"); d.className="bt3lab "+(L.cls||""); const tx=L.text.replace(/\s*\(.*$/,""), s=tx.length>11?tx.slice(0,10)+"…":tx; d.title=L.text; d.textContent=s; if(L.col) d.style.color=L.col; ov.appendChild(d); return {el:d,pos:L.p}; });
   if(!live.length&&BT3.mode==="battle"){ const d=document.createElement("div"); d.className="bt3empty"; d.textContent="전투가 열리면 배치가 표시됩니다"; ov.appendChild(d); }
@@ -9736,7 +9737,7 @@ function bt3FitEnemies(){
    사람은 인물 파일의 room(방 id)대로 그 방 안에 세우고, 방마다 쓰임에 맞는 가구를 놓는다. */
 const BS3_SC=2, BS3_FH=2.6, BS3_DECK=0.15;
 /* 아래 좌표는 모두 '작은 칸'(옛 축척) — 그릴 때 BS3_SC를 곱한다 */
-const BS3_BLD={wetoar:[2,8,10,12],shop:[2,13,10,16],annex:[2,17,8,20],saltyard:[2,24,12,31],tower:[8.5,0.5,12.5,4.5],semboat:[13,13,16,25]};
+const BS3_BLD={wetoar:[2,8,10,12],shop:[2,13,10,16],annex:[2,17,8,20],saltyard:[2,24,12,31],tower:[7,0,12,5.5],semboat:[13,13,16,25]};
 const BS3_ROOMS={
   ax_front:[2,17,5,20,1], ax_bed:[5,17,8,20,1], ax_cellar:[2,17,3.5,18.5,0],
   wo_tap:[2,8,8,12,1], wo_kitchen:[8,8,10,12,1], wo_cellar:[2,8,6,10,0],
@@ -9744,7 +9745,7 @@ const BS3_ROOMS={
   sh_hall:[2,24,4,28,1], sh_kitchen:[4,24,5.5,28,1], sh_small:[5.5,24,7,28,1],
   sh_r1:[2,24,3.25,26.5,2], sh_r2:[3.25,24,4.5,26.5,2], sh_r3:[4.5,24,5.75,26.5,2], sh_r4:[5.75,24,7,26.5,2], sh_hall2:[2,26.5,7,28,2],
   sh_yard:[2,28,8,31,1], sh_store:[8,24,12,29,1], sh_loft:[8,29,12,31,1], sh_cellar:[8,24,12,28,0],
-  tw_1:[8.5,0.5,12.5,4.5,1], tw_2a:[8.5,0.5,10.5,4.5,2], tw_2b:[10.5,0.5,12.5,4.5,2], tw_3a:[8.5,0.5,10.5,4.5,3], tw_3b:[10.5,0.5,12.5,4.5,3], tw_cellar:[9,1,12,4,0],
+  tw_1:[7,0,12,5.5,1], tw_2a:[7,0,9.5,5.5,2], tw_2b:[9.5,0,12,5.5,2], tw_3a:[7,0,9.5,5.5,3], tw_3b:[9.5,0,12,5.5,3], tw_cellar:[8,1,11,4.5,0],
   sb_bow:[13,13.4,16,15.5,1], sb_deck:[13,15.5,16,20,1], sb_cabin:[13,20,16,23,1], sb_stern:[13,23,16,24.8,1],
   commute:[0.3,13.5,1.7,15.5,1]
 };
@@ -9794,10 +9795,10 @@ function bs3Board(){
   const T=[
     Object.assign(R4(0,0,2,34),{kind:"high",elev:0,surf:"stone",label:"큰길"}),
     Object.assign(R4(12,0,17,34),{type:"water",label:"거울강"}),
-    Object.assign(R4(3,5,12,7),{type:"water",label:"선창 물길"}),
+    Object.assign(R4(3,5.5,12,7.5),{type:"water",label:"선창 물길"}),
     Object.assign(R4(2,31,12,34),{kind:"high",elev:0,surf:"wood",label:"하역장"}),
     Object.assign(R4(12,31,16,33),{kind:"bridge",label:"하역장 부두"}),
-    Object.assign(R4(2,0,4,3),{type:"tree",label:"버드나무"}),Object.assign(R4(5,0,7,2),{type:"tree",label:"덤불"}),
+    Object.assign(R4(2,0,4,3),{type:"tree",label:"버드나무"}),Object.assign(R4(4.5,0,6.5,2),{type:"tree",label:"덤불"}),
     Object.assign(R4(10.5,13,11,20),{kind:"lowwall",label:"물가 말뚝 울타리"}),
     Object.assign(R4(6,32,8,33),{kind:"crate",label:"짐 상자"}),
     Object.assign(R4(2,8,8,12),{kind:"building",floors:2,label:"젖은 노",doors:["w"]}),
@@ -9807,7 +9808,7 @@ function bs3Board(){
     Object.assign(R4(2,21,6,23),{kind:"building",floors:2,label:"이웃집",doors:["w"]}),Object.assign(R4(6,21,10,23),{kind:"building",floors:1,label:"이웃집",doors:["w"]}),
     Object.assign(R4(2,24,7,28),{kind:"building",floors:2,label:"소금꽃 집",doors:["w","s"]}),
     Object.assign(R4(8,24,12,31),{kind:"building",floors:1,label:"염장 창고(목조)",doors:["w"]}),
-    Object.assign(R4(8.5,0.5,12.5,4.5),{kind:"building",shape:"round",floors:3,label:"선창 망루(석조)"}),
+    Object.assign(R4(7,0,12,5.5),{kind:"building",shape:"round",floors:3,label:"선창 망루(석조)"}),
     Object.assign(R4(13,13,16,25),{kind:"boat",deck:BS3_DECK,label:"셈배"}),
     Object.assign(R4(13,20,16,23),{kind:"building",floors:1,deck:BS3_DECK,label:"셈배 선실(목조)",doors:["s"]})
   ];
@@ -9821,15 +9822,18 @@ function bs3Board(){
     if(y1<bb[3]-0.05){ const L=x1-x0; if(L>gap+1){ const m=(x0+x1)/2; wall(x0,y1-0.06,m-gap/2-x0,0.12,f); wall(m+gap/2,y1-0.06,x1-m-gap/2,0.12,f); } else wall(x0,y1-0.06,L,0.12,f); } };
   (B.rooms||[]).forEach(r=>{ if(r.kind!=="stairs"&&rooms[r.id]) part(rooms[r.id]); });
   Object.values(BS3_PART).forEach(ids=>ids.forEach(id=>part(rooms[id])));
+  /* 둥근 탑 안의 방은 원 안의 정사각형으로 줄여 가구·사람이 벽 밖으로 나가지 않게 */
+  const tw=BS3_BLD.tower.map(v=>v*SC), tcx=(tw[0]+tw[2])/2, tcy=(tw[1]+tw[3])/2, th2=(Math.min(tw[2]-tw[0],tw[3]-tw[1])/2-0.4)/Math.SQRT2;
+  const clip=(id,r)=>/^tw_/.test(id)?[Math.max(r[0],tcx-th2),Math.max(r[1],tcy-th2),Math.min(r[2],tcx+th2),Math.min(r[3],tcy+th2),r[4]]:r;
   /* 방 이름 · 가구 */
   const bLabels=new Set(T.filter(o=>o.kind==="building").map(o=>String(o.label).replace(/\(.*$/,"")));
   Object.entries(rooms).forEach(([id,r])=>{ const [x0,y0,x1,y1,f]=r, deck=/^sb_/.test(id)?BS3_DECK:0;
     if(names[id]&&!(/^sb_/.test(id)&&id!=="sb_cabin")&&!bLabels.has(names[id])) T.push({x:(x0+x1)/2-0.01,y:(y0+y1)/2-0.01,w:0.02,h:0.02,kind:"label",label:names[id],floor:f,elev:deck+(f===0?-FH:(f-1)*FH)+0.05});
-    if(id!=="commute"&&id!=="sh_yard") bs3Furnish(T,id,names[id],kinds[id],r,f,deck); });
+    if(id!=="commute"&&id!=="sh_yard") bs3Furnish(T,id,names[id],kinds[id],clip(id,r),f,deck); });
   /* 사람 — 방마다 모아 방 안에 고르게 */
   const by={}; [S.pc,...(S.party||[]),...(S.npcs||[])].filter(a=>a&&a.room&&rooms[a.room]).forEach(a=>{ (by[a.room]=by[a.room]||[]).push(a); });
   const toks=[];
-  Object.entries(by).forEach(([rid,ppl])=>{ const [x0,y0,x1,y1,f]=rooms[rid], n=ppl.length, cols=Math.ceil(Math.sqrt(n*(x1-x0)/Math.max(0.5,y1-y0)))||1, rows=Math.ceil(n/cols);
+  Object.entries(by).forEach(([rid,ppl])=>{ const [x0,y0,x1,y1,f]=clip(rid,rooms[rid]), n=ppl.length, cols=Math.ceil(Math.sqrt(n*(x1-x0)/Math.max(0.5,y1-y0)))||1, rows=Math.ceil(n/cols);
     ppl.forEach((a,i)=>{ const cx=i%cols, cy=Math.floor(i/cols), px=x0+(x1-x0)*(cx+0.5)/cols, py=y0+(y1-y0)*(cy+0.5)/rows;
       const bd=Object.entries(BS3_BLD).find(([k,b])=>px>=b[0]*SC&&px<=b[2]*SC&&py>=b[1]*SC&&py<=b[3]*SC);
       toks.push({id:a.id||("p"+toks.length),name:String(a.name||"").replace(/\(.*?\)/g,"").trim().split(" ")[0],side:(a===S.pc||a.id==="verrix")?"pc":"ally",
@@ -9839,7 +9843,8 @@ function bs3Board(){
 }
 function bs3Sync(){
   const t=$("bs3Toggle"); if(t){ t.classList.toggle("on",bs3On); t.textContent=bs3On?"3D 디오라마":"그림"; }
-  ["bs3Fit","bs3Roof"].forEach(id=>{ const e=$(id); if(e) e.style.display=bs3On?"":"none"; });
+  ["bs3Fit","bs3Roof","bs3Names"].forEach(id=>{ const e=$(id); if(e) e.style.display=bs3On?"":"none"; });
+  const nb=$("bs3Names"); if(nb){ nb.textContent=bs3Names?"이름 표시":"이름 숨김"; nb.classList.toggle("on",bs3Names); }
   const rb=$("bs3Roof"); if(rb){ rb.textContent=bs3Roof==="on"?"지붕 덮음":"지붕 걷음"; rb.classList.toggle("on",bs3Roof==="off"); }
   if(!bs3On){ const f=$("bs3Floor"); if(f) f.style.display="none"; }
   const inf=$("bs3Info"); if(inf) inf.style.display=bs3On?"":"none";
@@ -9880,6 +9885,7 @@ btSyncButtons(); btLoadSheets();
 $("bs3Toggle").onclick=()=>{ bs3On=!bs3On; try{ localStorage.setItem("berix_bs3_on",bs3On?"1":"0"); }catch{} bs3VK=""; bs3Sync(); renderBase(); };
 $("bs3Floor").onclick=()=>{ bs3Floor=bt3NextFloor(bs3Floor); renderBase(); };
 $("bs3Fit").onclick=()=>{ bs3VK=""; renderBase(); };
+$("bs3Names").onclick=()=>{ bs3Names=!bs3Names; bs3Sync(); renderBase(); };
 $("bs3Roof").onclick=()=>{ bs3Roof=bs3Roof==="on"?"off":"on"; try{ localStorage.setItem("berix_bs3_roof",bs3Roof); }catch{} bs3Sync(); renderBase(); };
 bs3Sync();
 
