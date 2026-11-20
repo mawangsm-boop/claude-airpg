@@ -7638,7 +7638,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.76";
+const HB_VERSION="v2.77";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -8873,10 +8873,10 @@ const BT_PB="./assets/sprites/party_c.png?v=275", BT_FB="./assets/sprites/foes_c
 const BT_KBC="./assets/sprites/kobold_c.png", BT_F2C="./assets/sprites/foes2_c.png", BT_F3C="./assets/sprites/foes3_c.png", BT_ALC="./assets/sprites/allies_c.png"; const BT_RSC="./assets/sprites/residents_c.png";
 /* 네 방향 모두 따로 그린 그림. 처음 받은 둘째 장은 첫 장을 거울처럼 뒤집은 그림이라(무기 든 손이 바뀜) 손 위치를 못 박아 다시 받았다(v2.52). */
 const BT_SHEETS=[
-  /* v2.76: 리브·이자벨은 층 방식(기본 몸 + 옷 + 무기, 3D 틀·마스크 편집)으로 다시 그려 인물별 그림표(pd_*.png)로 뺌. 칸은 몸 중심이 가운데·발끝이 아래 — 긴 무기는 반대쪽에 빈 여백 */
+  /* v2.76~: 리브·이자벨·베릭스는 층 방식(기본 몸 + 옷 + 무기, 3D 틀·마스크 편집)으로 다시 그려 인물별 그림표(pd_*.png)로 뺌. 칸은 몸 중심이 가운데·발끝이 아래 — 긴 무기는 반대쪽에 빈 여백 */
   /* v2.73: 파티를 거점 식구(아이린 세트)와 같은 그림체·비율로 다시 그림(2026-11-20). 인물마다 칸을 따로 떼어 담아 옆 사람 조각이 섞이지 않게 함. 네 방향 모두 같은 손에 같은 물건 */
   {src:"./assets/sprites/party.png?v=275",w:1360,h:693,scale:0.86,cells:{
-    verrix:{f:[44,33,139,307],b:[45,373,138,313],fr:[45,26,139,307,BT_PB],bl:[45,372,138,313,BT_PB]},
+    verrix:{f:[0,0,190,289,"./assets/sprites/pd_verrix.png?v=277"],b:[196,4,148,285,"./assets/sprites/pd_verrix.png?v=277"],fr:[350,0,122,289,"./assets/sprites/pd_verrix.png?v=277"],bl:[478,2,114,287,"./assets/sprites/pd_verrix.png?v=277"]},
     isabel:{f:[0,5,262,284,"./assets/sprites/pd_isabel.png?v=276"],b:[268,3,190,286,"./assets/sprites/pd_isabel.png?v=276"],fr:[464,0,146,289,"./assets/sprites/pd_isabel.png?v=276"],bl:[616,1,160,288,"./assets/sprites/pd_isabel.png?v=276"]},
     liv:{f:[0,2,170,290,"./assets/sprites/pd_liv.png?v=276"],b:[176,0,134,292,"./assets/sprites/pd_liv.png?v=276"],fr:[316,2,170,290,"./assets/sprites/pd_liv.png?v=276"],bl:[492,0,146,292,"./assets/sprites/pd_liv.png?v=276"]},
     neri:{f:[714,56,159,284],b:[715,387,157,300],fr:[713,54,161,286,BT_PB],bl:[714,389,159,297,BT_PB]},
