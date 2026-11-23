@@ -7638,7 +7638,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.83";
+const HB_VERSION="v2.84";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -7800,13 +7800,18 @@ function combatLine(c){
   if(c.advantageOn) parts.push(`${c.advantageOn.join("·")} 판정 이점`);
   return parts.join(" · ");
 }
+/* v2.84: 창고 — 당장 들고 다니지 않는 서류·땅문서·값나가는 것은 items에 stored:true로 두고 맨 아래 '창고'에 접어 둔다(59회차 소지품 정리). */
 function renderItems(items){
-  return ITEM_CATS.map(([key,label])=>{
-    const list=items.filter(x=>(x.cat||"misc")===key);
+  const active=items.filter(x=>!x.stored), stored=items.filter(x=>x.stored);
+  let html=ITEM_CATS.map(([key,label])=>{
+    const list=active.filter(x=>(x.cat||"misc")===key);
     if(!list.length) return "";
     return `<details class="itemcat" open><summary>${label} <span class="itemcat-n">(${list.length})</span></summary>`
       +list.map(x=>det(x.n,"x"+x.q,x.d+itemStatusHTML(x),undefined,actBadge(x.act))).join("")+`</details>`;
   }).join("");
+  if(stored.length) html+=`<details class="itemcat"><summary>창고 <span class="itemcat-n">(${stored.length})</span> <span style="font-size:11px;color:var(--muted)">들고 다니지 않는 문서·땅문서·값나가는 것</span></summary>`
+      +stored.map(x=>det(x.n,"x"+x.q,x.d+itemStatusHTML(x),undefined,actBadge(x.act))).join("")+`</details>`;
+  return html;
 }
 /* v2.18: 지금 착용 중인 장비만 모아 보여주는 요약 카드. 부적·목걸이가 쌓일수록
    "지금 뭘 걸치고 있는지"를 소지품 전체 목록을 뒤지지 않고 한눈에 보기 위함. */
@@ -9877,7 +9882,10 @@ const BS3_ROOMS={
   sh_yard:[4,56,16,62,1], sh_store:[16,48,24,62,1], sh_loft:[16,58,24,62,2], sh_cellar:[17,49,23,55,0],
   tw_1:[14,0,24,11,1], tw_top:[14,0,24,11,4], tw_2a:[14,4.3,19,10.2,2], tw_2b:[19,4.3,24,10.2,2], tw_3a:[14,4.3,19,10.2,3], tw_3b:[19,4.3,24,10.2,3], tw_cellar:[16,2,22,9,0],
   sb_bow:[26,26.8,32,31,1], sb_deck:[26,31,32,40,1], sb_cabin:[26,40,32,46,1], sb_stern:[26,46,32,49.6,1],
-  commute:[0.6,27,3.4,31,1]
+  commute:[0.6,27,3.4,31,1],
+  /* v2.84: 가운데 집(페터 쿤의 옛 집)과 땅 밑 길(묻힌 옛 지하실, 59회차) — uc_*는 지하실보다 한 층 더 깊게 판다(bs3Board) */
+  px_front:[4,42,12,46,1], px_cellar:[5,42.5,8.5,45.5,0],
+  uc_wetoar:[16.5,17,19.5,21,0], uc_drain:[17,24,18.5,26.5,0], uc_shop:[14.5,26.5,19.5,40,0], uc_mid:[12.5,41,19.5,46,0], uc_salt:[12.5,46.5,16.5,52,0], uc_kobold:[9,42.5,12,45.5,0]
 };
 /* 안벽: [층, x0,y0,x1,y1(선), 문들[[시작,끝]…](선을 따라 잰 좌표), 문짝 여는 쪽(1=남·동, -1=북·서), 재질] */
 const BS3_WALLS=[
@@ -9979,7 +9987,7 @@ function bs3Board(){
     Object.assign(R4(8,8,10,12),{kind:"building",floors:1,label:"젖은 노 주방",doors:[{sd:"w",c:20},{sd:"s",c:18}]}),
     BL("shop",{kind:"building",floors:2,label:"물약 가게",doors:shopDoors.length?shopDoors:["w","e"]}),
     BL("annex",{kind:"building",floors:1,label:"물가 별채",doors:[{sd:"w",c:37},{sd:"e",c:37}]}),
-    Object.assign(R4(2,21,6,23),{kind:"building",floors:2,label:"이웃집",doors:["w"]}),Object.assign(R4(6,21,10,23),{kind:"building",floors:1,label:"이웃집",doors:["w"]}),
+    Object.assign(R4(2,21,6,23),{kind:"building",floors:1,label:"가운데 집(페터 쿤의 옛 집)",doors:["w"]}),Object.assign(R4(6,21,10,23),{kind:"building",floors:1,label:"가운데 집 헛간",doors:["w"]}),
     Object.assign(R4(2,24,7,28),{kind:"building",floors:2,label:"소금꽃 집",doors:[{sd:"w",c:49.4},{sd:"s",c:6}],holes:holes.filter(h=>h.x1<=14&&h.y0>=48&&h.y1<=56)}),
     Object.assign(R4(8,24,12,31),{kind:"building",floors:2,label:"염장 창고(목조)",doors:[{sd:"w",c:60}],upper:{2:[[16.12,58,23.88,61.88]]}}),
     Object.assign(R4(7,0,12,5.5),{kind:"building",shape:"round",floors:4,top:true,label:"선창 망루(석조)",hole:{cx:BS3_SPIRAL.cx,cy:BS3_SPIRAL.cy,r:BS3_SPIRAL.r+0.08}}),
@@ -9990,6 +9998,8 @@ function bs3Board(){
   const blk={}, add=(f,q,hard)=>{ (blk[f]=blk[f]||[]).push(Object.assign(q,{hard})); };
   /* 지하실 — '지하' 층 보기에서 땅을 파 보인다 */
   Object.entries(rooms).forEach(([id,r])=>{ if(r[4]!==0) return; T.push({x:Math.round(r[0]),y:Math.round(r[1]),w:Math.max(1,Math.round(r[2]-r[0])),h:Math.max(1,Math.round(r[3]-r[1])),kind:"cellar",depth:FH,label:""}); });
+  /* v2.84: 땅 밑 길 — 지하실보다 한 층 더 깊다(코볼드 잠자리는 그보다 더) */
+  Object.entries(rooms).forEach(([id,r])=>{ if(!/^uc_/.test(id)) return; T.push({x:Math.round(r[0]),y:Math.round(r[1]),w:Math.max(1,Math.round(r[2]-r[0])),h:Math.max(1,Math.round(r[3]-r[1])),kind:"cellar",depth:FH*(id==="uc_kobold"?2.8:2),label:""}); });
   /* 안벽 · 문 */
   walls.forEach(([f,ax,ay,bx,by,doors,sw,mat])=>{ const v=Math.abs(ax-bx)<0.01, t=0.12, a0=Math.min(ay,by,ax,bx), ds=doors||[];
     const q=v?{x:ax-t/2,y:Math.min(ay,by),w:t,h:Math.abs(by-ay)}:{x:Math.min(ax,bx),y:ay-t/2,w:Math.abs(bx-ax),h:t};

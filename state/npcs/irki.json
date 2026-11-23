@@ -36,6 +36,8 @@
         "CHA": 8
       },
       "profBonus": 2
-    }
+    },
+    "room": "uc_kobold",
+    "roomNote": "아래쪽 잠자리 — 공사 동안 숨어 지냄"
   }
 }
