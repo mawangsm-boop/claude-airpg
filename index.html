@@ -7642,7 +7642,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.86";
+const HB_VERSION="v2.87";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -9799,7 +9799,8 @@ function bt3Build(B){
     root.add(grp); BT3.pick.push(grp);
     BT3.toks.push({t,grp,sp,spr,dx,dy,dead,ghost,head:headY});
     const hm=String(t.hp||"").match(/^(\d+)\s*\/\s*(\d+)/);
-    tags.push({t,pos:[t.px!=null?t.px:t.x+0.5,z+headY+(myTurn&&!dead?0.32:0),t.py!=null?t.py:t.y+0.5],name:t.name||"",hp:hm&&!dead?Math.max(0,Math.min(1,hm[1]/hm[2])):null,dead,dim:ghost,side:t.side,turn:myTurn,st:(!dead&&t.st&&t.st.length)?t.st.join(" · "):""});
+    /* v2.87: 층을 골라 볼 때는 그 층 사람의 이름만(건물·방 이름은 그대로) */
+    if(F==="all"||fl===+F) tags.push({t,pos:[t.px!=null?t.px:t.x+0.5,z+headY+(myTurn&&!dead?0.32:0),t.py!=null?t.py:t.y+0.5],name:t.name||"",hp:hm&&!dead?Math.max(0,Math.min(1,hm[1]/hm[2])):null,dead,dim:ghost,side:t.side,turn:myTurn,st:(!dead&&t.st&&t.st.length)?t.st.join(" · "):""});
   });
   /* ---- 이름표·글자(겹쳐 그리는 HTML) ---- */
   const ov=BT3.ov;
