@@ -69,6 +69,18 @@
             "condition": "명중 시"
           }
         }
+      },
+      {
+        "slot": "feet",
+        "item": "엘프의 장화 (Boots of Elvenkind)",
+        "desc": "부드러운 가죽 장화 — 걸음 소리가 나지 않고 은신 판정 이점(조율 없음)",
+        "equipped": true,
+        "passive": true,
+        "combat": {
+          "advantageOn": [
+            "은신"
+          ]
+        }
       }
     ],
     "items": [
@@ -113,6 +125,16 @@
         "cat": "trinket",
         "equipped": true,
         "d": "53회차 6일째 밤, 소금샘 장터에서 이자벨이 고른 것. 카를렌에서는 본 적 없는 짙은 핏빛으로 물들인 가는 천. 은팔찌 위 왼쪽 손목에 감았다. 5실버."
+      },
+      {
+        "id": "item_soft_boots_s59",
+        "n": "엘프의 장화 (Boots of Elvenkind)",
+        "q": 1,
+        "cat": "accessory",
+        "d": "59회차 4일째 옛 상인 궤짝에서. 같은 날 구시가 부적 가게에서 감정(25골드). 경이로운 물건, 언커먼, 조율 없음. 신으면 어떤 바닥에서도 걸음 소리가 나지 않고, 민첩(은신) 판정에 이점. 4일째 베릭스가 이자벨에게 주었다.",
+        "sum": "조율 없음 · 걸음 소리 없음 · 은신 이점",
+        "equipped": true,
+        "passive": true
       }
     ],
     "susp": {

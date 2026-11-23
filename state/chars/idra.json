@@ -331,7 +331,7 @@
         {
           "id": "res_idra_wild_shape",
           "n": "야수 변신 (Wild Shape)",
-          "cur": 2,
+          "cur": 3,
           "max": 3,
           "recharge": "short",
           "note": "2레벨에 2회, 6레벨 3회, 17레벨 4회. 짧은 휴식에 1회 회복, 긴 휴식에 전부 회복. 5레벨 Wild Resurgence로 슬롯과 1회를 교환할 수 있다. (2026-09-21 사용자 제공 확정)",
