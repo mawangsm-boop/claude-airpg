@@ -1,0 +1,41 @@
+{
+  "char": {
+    "id": "irki",
+    "name": "이르키",
+    "role": "날개 코볼드 · 늙은 · 묻힌 옛 지하 코볼드 무리의 한 우두머리",
+    "hp": {
+      "cur": 10,
+      "max": 10
+    },
+    "tag": "59회차 · 베릭스에게 충성을 맹세",
+    "tagc": "",
+    "voice": "공용어를 무리에서 제일 잘한다. 짧게 끊고, 문장 끝에 '…큰 것' 하고 상대를 부른다. 겁나면 날개를 몸에 감는다.",
+    "code": {
+      "does": "무리를 살리는 쪽을 고른다, 큰 것에게 엎드린다",
+      "wont": "아래쪽 자기들 잠자리를 내주지 않는다"
+    },
+    "drive": "새 주인 밑에서 무리가 살아남는 것.",
+    "fear": "아래로 다시 내려가는 것.",
+    "bond": "59회차 2일째 한밤, 소금꽃 집 염장고에서 '용이 정한 주인' 베릭스가 하사한 먹을 것을 먹고 충성을 맹세했다. 쇠못 목걸이에서 못 하나를 빼 바쳤다.",
+    "knows": "큰 것(아래의 섬기던 존재)이 지난겨울부터 말하지 않게 됐다(A). 아래에서 같이 살던 것들이 돌아오지 않는다(A). 무엇이 데려가는지는 모른다. 샥의 성향(A). 베릭스가 붉은 용을 대리한다는 말과 용의 머리(믿음).",
+    "unknown": "용의 머리가 환영이라는 것, 붉은 용은 지어낸 것이라는 것(D).",
+    "look": "Irki, an old winged kobold. Faded grey scales, one wing membrane torn and ragged, folded wings rising behind the shoulders, a necklace of strung iron nails, silver-glinting eyes.",
+    "at": "묻힌 옛 지하",
+    "stance": "호의",
+    "stanceWhy": "먹을 것을 받고 '큰 것'에게 맹세함",
+    "sheet": {
+      "race": "코볼드",
+      "cls": "날개 코볼드(Winged Kobold, 2024 MM) — 수치표",
+      "ac": 15,
+      "stats": {
+        "STR": 7,
+        "DEX": 16,
+        "CON": 9,
+        "INT": 8,
+        "WIS": 7,
+        "CHA": 8
+      },
+      "profBonus": 2
+    }
+  }
+}
