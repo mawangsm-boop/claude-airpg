@@ -35,6 +35,8 @@ nav button{flex:1 1 0;min-width:0;padding:7px 2px;font-size:11.5px;font-family:v
 .floorRail button{background:transparent;border:0;color:#9aa3b8;font-size:14px;padding:10px 0;width:48px;font-family:var(--f-body);cursor:pointer}
 .floorRail button[data-f="all"]{font-size:11px;padding:8px 0;border-bottom:1px solid #2c3142}
 .floorRail button.on{background:#1f4fb3;color:#fff;font-weight:700}
+.floorRail button.mode{font-size:12px;padding:10px 0;color:#e8e2d4;background:#2a2f40;border-bottom:1px solid #3a3f52}
+.floorRail button.mode.pan{background:#7a5a1f;color:#fff}
 nav button.on{background:rgba(201,164,87,.16);border-color:var(--gold);color:var(--gold-s)}
 nav button:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
 /* v2.29: 전투 이니셔티브 바 */
@@ -7642,7 +7644,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.87";
+const HB_VERSION="v2.88";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -8999,18 +9001,23 @@ const BT3_CFG={
     active:()=>bs3On, names:()=>bs3Names, rerender:()=>renderBase(), getFloor:()=>bs3Floor, setFloor:v=>{bs3Floor=v;}, getVK:()=>bs3VK, setVK:v=>{bs3VK=v;}}
 };
 function bt3F(){ return BT3&&BT3.cfg?BT3.cfg.getFloor():"all"; }
-function bt3NextFloor(cur){ const m=(BT3&&BT3.maxF)||2, c0=BT3&&BT3.hasCellar, dp=BT3&&BT3.hasDeep; return cur==="all"?(dp?"-1":c0?"0":"1"):cur==="-1"?(c0?"0":"1"):(+cur>=m?"all":String(+cur+1)); }
+function bt3NextFloor(cur){ const m=(BT3&&BT3.maxF)||2, c0=BT3&&BT3.hasCellar, lv=(BT3&&BT3.levels)||[]; const L=["all",...lv.slice().reverse().map(String),...(c0?["0"]:[]),...Array.from({length:m},(_,k)=>String(k+1))]; const k=L.indexOf(cur); return L[(k+1)%L.length]; }
 /* v2.84: 층 손잡이 — 3D 판 왼쪽 아래 세로 막대(지도 앱처럼). 위가 높은 층, 아래가 지하(B1·B2) */
-function bt3FloorRail(cfg,maxF,c0,deep){
+let bt3PanMode=false; try{ bt3PanMode=localStorage.getItem("berix_bt3_pan")==="1"; }catch{}
+function bt3FloorRail(cfg,maxF,c0,levels){
   const w=$(cfg.wrap); if(!w) return; let r=w.querySelector(".floorRail");
-  const fl=[]; for(let f=maxF;f>=1;f--) fl.push([String(f),String(f)]); if(c0) fl.push(["0","B1"]); if(deep) fl.push(["-1","B2"]);
-  if(fl.length<2||!cfg.active()){ if(r) r.remove(); return; }
+  if(!cfg.active()){ if(r) r.remove(); return; }
+  const fl=[]; for(let f=maxF;f>=1;f--) fl.push([String(f),String(f)]); if(c0) fl.push(["0","B1"]); (levels||[]).forEach(v=>fl.push([String(v),"B"+(1-v)]));
   if(getComputedStyle(w).position==="static") w.style.position="relative";
   if(!r){ r=document.createElement("div"); r.className="floorRail"; w.appendChild(r);
     ["pointerdown","mousedown","touchstart","wheel"].forEach(ev=>r.addEventListener(ev,e=>e.stopPropagation(),{passive:true}));
-    r.addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; e.stopPropagation(); cfg.setFloor(b.dataset.f); cfg.rerender(); }); }
+    r.addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; e.stopPropagation();
+      if(b.dataset.mode!=null){ bt3PanMode=!bt3PanMode; try{ localStorage.setItem("berix_bt3_pan",bt3PanMode?"1":"0"); }catch{} b.textContent=bt3PanMode?"이동":"회전"; b.classList.toggle("pan",bt3PanMode); return; }
+      cfg.setFloor(b.dataset.f); cfg.rerender(); }); }
   const cur=cfg.getFloor();
-  r.innerHTML=`<button data-f="all" class="${cur==="all"?"on":""}">전체</button>`+fl.map(([v,l])=>`<button data-f="${v}" class="${cur===v?"on":""}">${l}</button>`).join("");
+  /* v2.88: 한 손가락 끌기를 회전 ↔ 이동으로 바꾸는 단추(층 막대 위) */
+  r.innerHTML=`<button data-mode class="mode${bt3PanMode?" pan":""}" title="한 손가락 끌기: 회전 ↔ 이동">${bt3PanMode?"이동":"회전"}</button>`
+    +(fl.length>=2?`<button data-f="all" class="${cur==="all"?"on":""}">전체</button>`+fl.map(([v,l])=>`<button data-f="${v}" class="${cur===v?"on":""}">${l}</button>`).join(""):"");
 }
 function bt3FloorRailOff(wrapId){ const w=$(wrapId); const r=w&&w.querySelector(".floorRail"); if(r) r.remove(); }
 const BT3_IMG={}, BT3_TEX={};
@@ -9120,7 +9127,7 @@ function bt3Controls(){
     const c=BT3.cam;
     if(P.size>=2){ const [a,b]=[...P.values()]; const d=Math.max(8,Math.hypot(a.x-b.x,a.y-b.y)), mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
       if(pinch){ c.dist=clamp(c.dist*pinch.d/d,3,160); bt3Pan(mx-pinch.mx,my-pinch.my); } pinch={d,mx,my}; }
-    else if(p.b===2||p.sh) bt3Pan(dx,dy);
+    else if(p.b===2||p.sh||bt3PanMode) bt3Pan(dx,dy);
     else{ c.yaw-=dx*0.0065; c.pitch=clamp(c.pitch+dy*0.005,0.12,1.55); }
     BT3.dirty=true; });
   const end=(e,pick)=>{ const had=P.delete(e.pointerId); pinch=null; if(had&&P.size===0){ if(pick&&moved<7) bt3Pick(e); else bt3SaveCam(); } };
@@ -9265,7 +9272,7 @@ function bt3House(o,z,ctx){
   const T=THREE, FH=ctx.FH||ISO.FH, grp=new T.Group(), g=bt3TG();
   const x0=o.x,y0=o.y,x1=o.x+o.w,y1=o.y+o.h, L=String(o.t.label||""), th=0.12;
   const wallMat=/목조|오두막|헛간|말뚝|움막|창고|천막|마구간|선실/.test(L)?"plankwall":/석조|탑|성|돌|요새|망루|신전|문루/.test(L)?"brick":"plaster";
-  const F=bt3F(), onDeck=o.t.deck!=null, fz=onDeck?Number(o.t.deck):z+(o.elev>0.05?o.elev:0), floors=o.floors||1, shown=(F==="0"||F==="-1")?0:(o.open&&F!=="all"?Math.min(floors,+F):floors), H=shown*FH;
+  const F=bt3F(), onDeck=o.t.deck!=null, fz=onDeck?Number(o.t.deck):z+(o.elev>0.05?o.elev:0), floors=o.floors||1, shown=(F!=="all"&&+F<=0)?0:(o.open&&F!=="all"?Math.min(floors,+F):floors), H=shown*FH;
   /* '지하' 보기: 집은 주춧돌 테두리만 */
   if(shown===0){ [[x0,y0,x1,y0+th],[x0,y1-th,x1,y1],[x0,y0,x0+th,y1],[x1-th,y0,x1,y1]].forEach(q=>bt3TBox(g,"stoneside",q[0],q[1],q[2],q[3],fz,fz+0.3,"cobble")); grp.add(bt3TMesh(g,{own:true})); return grp; }
   /* 말뚝과 마루(배 위의 선실은 갑판에 바로 선다) */
@@ -9378,7 +9385,7 @@ function bt3Prop(type,x0,y0,x1,y1,z,seed){
 function bt3Tower(o,z,ctx){
   const T=THREE, FH=ctx.FH||ISO.FH, grp=new T.Group(), F=bt3F();
   const cx=o.x+o.w/2, cy=o.y+o.h/2, R=Math.min(o.w,o.h)/2-0.1, floors=o.floors||1, fz=z, C=2*Math.PI*R;
-  const shown=(F==="0"||F==="-1")?0:(o.open&&F!=="all"?Math.min(floors,+F):floors), topOn=!!o.t.top&&shown===floors&&floors>1, H=Math.max(0.35,(topOn?floors-1:shown)*FH);
+  const shown=(F!=="all"&&+F<=0)?0:(o.open&&F!=="all"?Math.min(floors,+F):floors), topOn=!!o.t.top&&shown===floors&&floors>1, H=Math.max(0.35,(topOn?floors-1:shown)*FH);
   const wall=new T.Mesh(new T.CylinderGeometry(R,R,H,48,1,true),bt3MatC("brick","#ffffff",Math.round(C/1.4),H/1.1)); wall.material.side=T.DoubleSide; wall.position.set(cx,fz+H/2,cy); wall.castShadow=true; wall.receiveShadow=true; grp.add(wall);
   const inner=new T.Mesh(new T.CylinderGeometry(R-0.3,R-0.3,H,48,1,true),bt3MatC("stoneside","#e8e4dc",Math.round(C/1.4),H/1.1)); inner.material.side=T.DoubleSide; inner.position.copy(wall.position); grp.add(inner);
   const cap=new T.Mesh(new T.RingGeometry(R-0.3,R,48),bt3MatC("cobble")); cap.material.side=T.DoubleSide; cap.rotation.x=-Math.PI/2; cap.position.set(cx,fz+H+0.005,cy); grp.add(cap);
@@ -9451,7 +9458,7 @@ function bt3Build(B){
     if(o.kind==="building"||o.kind==="wall"){ const ins=live.filter(k=>inRect(o,k));
       o.floors=Math.max(Number(o.t.floors)||1,...ins.map(floorOf),1);
       /* 지붕: 판의 roof가 off면 모두 걷고, on이면 모두 덮는다. 정하지 않으면 사람이 든 집만 걷는다(전투판) */
-      o.open=o.kind==="building"&&(B.roof==="off"||F0==="0"||F0==="-1"||(B.roof!=="on"&&ins.length>0)); o.cut=ins.length>0&&o.kind==="wall"; }
+      o.open=o.kind==="building"&&(B.roof==="off"||(F0!=="all"&&+F0<=0)||(B.roof!=="on"&&ins.length>0)); o.cut=ins.length>0&&o.kind==="wall"; }
   });
   const cellTer={}; ter.forEach(o=>{ for(let x=o.x;x<o.x+o.w;x++) for(let y=o.y;y<o.y+o.h;y++){ if(x<0||y<0||x>=C||y>=R) continue; (cellTer[x+","+y]=cellTer[x+","+y]||[]).push(o); } });
   const at=(x,y)=>cellTer[x+","+y]||[];
@@ -9465,7 +9472,7 @@ function bt3Build(B){
     at(x,y).forEach(o=>{ if(o.kind==="water"){ z=(o.t.elev!=null?o.elev:z)-0.3; surf="water"; } if(o.kind==="pit"){ z=z-0.8; surf="pit"; } if((o.open&&o.t.shape!=="round")||o.cut) surf=o.t.surf||"floor"; });
     /* '지하' 보기: 지하실 자리의 땅을 걷어 낸다 */
     /* v2.84: 지하 2층(level -1) — B1 보기엔 B1 지하실만, B2 보기엔 가장 깊은 것까지 판다 */
-    if(F0==="0"||F0==="-1"){ let dm=null; at(x,y).forEach(o=>{ if(o.kind!=="cellar") return; if(F0==="0"&&Number(o.t.level||0)<0) return; const d=Number(o.t.depth||FH); if(dm==null||d>dm) dm=d; }); if(dm!=null){ z=-dm; surf="stone"; } }
+    if(F0!=="all"&&+F0<=0){ let dm=null; at(x,y).forEach(o=>{ if(o.kind!=="cellar") return; if(Number(o.t.level||0)<+F0) return; const d=Number(o.t.depth||FH); if(dm==null||d>dm) dm=d; }); if(dm!=null){ z=-dm; surf="stone"; } }
     return {z,surf};
   };
   const G={}; for(let x=0;x<C;x++) for(let y=0;y<R;y++) G[x+","+y]=ground(x,y);
@@ -9488,17 +9495,17 @@ function bt3Build(B){
   const bldAt=(x,y)=>at(x,y).find(o=>o.kind==="building"&&o.open);
   const stiltAt=(x,y)=>at(x,y).find(o=>o.kind==="building"&&o.elev>0.05);
   const boatAt=(x,y)=>at(x,y).find(o=>o.kind==="boat");
-  const tokZ=t=>{ if(t.elev!=null) return Number(t.elev); if(floorOf(t)<=0&&(F0==="0"||F0==="-1")&&at(t.x,t.y).some(o=>o.kind==="cellar")) return gz(t.x,t.y);
+  const tokZ=t=>{ if(t.elev!=null) return Number(t.elev); if(floorOf(t)<=0&&F0!=="all"&&floorOf(t)===+F0&&at(t.x,t.y).some(o=>o.kind==="cellar")) return gz(t.x,t.y);
     const b=bridgeAt(t.x,t.y), st=stiltAt(t.x,t.y), bo=boatAt(t.x,t.y);
     let base=b?b.deck:gz(t.x,t.y); if(st) base=Math.max(base,gz(t.x,t.y)+st.elev); if(bo) base=Number(bo.t.deck); return base+(floorOf(t)-1)*FH; };
   const say=html=>{ const e=$(BT3.cfg.info); if(e) e.innerHTML=html; };
   const pc=live.find(t=>!isDead(t)&&(t.id==="verrix"||/베릭스/.test(t.name||"")))||live.find(t=>t.side==="pc"&&!isDead(t));
-  const maxF=Math.max(1,...ter.filter(o=>o.kind==="building").map(o=>o.floors||1)); BT3.maxF=maxF; BT3.hasCellar=ter.some(o=>o.kind==="cellar"); BT3.hasDeep=ter.some(o=>o.kind==="cellar"&&Number(o.t.level||0)<0);
-  if(BT3.cfg.getFloor()!=="all"&&+BT3.cfg.getFloor()>maxF) BT3.cfg.setFloor("all"); if(BT3.cfg.getFloor()==="-1"&&!BT3.hasDeep) BT3.cfg.setFloor("all");
+  const maxF=Math.max(1,...ter.filter(o=>o.kind==="building").map(o=>o.floors||1)); BT3.maxF=maxF; BT3.hasCellar=ter.some(o=>o.kind==="cellar"); BT3.levels=[...new Set(ter.filter(o=>o.kind==="cellar").map(o=>Number(o.t.level||0)).filter(v=>v<0))].sort((a,b)=>b-a); BT3.hasDeep=BT3.levels.length>0;
+  if(BT3.cfg.getFloor()!=="all"&&+BT3.cfg.getFloor()>maxF) BT3.cfg.setFloor("all"); { const f0=BT3.cfg.getFloor(); if(f0!=="all"&&+f0<0&&!BT3.levels.includes(+f0)) BT3.cfg.setFloor("all"); }
   const F=BT3.cfg.getFloor();
   const shF=fl=>fl<=0?F===String(fl):(F!=="0"&&F!=="-1"&&(F==="all"||fl<=+F));   /* 그 층의 것이 지금 보기에 보이는가 */
-  const fb=$(BT3.cfg.floorBtn); if(fb){ const any=maxF>=2||BT3.hasCellar; fb.style.display="none"; if(!any) BT3.cfg.setFloor("all"); const f=BT3.cfg.getFloor(); fb.textContent="층: "+(f==="all"?"전체":f==="-1"?"지하 2층":f==="0"?"지하":f+"층"); fb.classList.toggle("on",f!=="all"); }
-  bt3FloorRail(BT3.cfg,maxF,BT3.hasCellar,BT3.hasDeep);
+  const fb=$(BT3.cfg.floorBtn); if(fb){ const any=maxF>=2||BT3.hasCellar; fb.style.display="none"; if(!any) BT3.cfg.setFloor("all"); const f=BT3.cfg.getFloor(); fb.textContent="층: "+(f==="all"?"전체":+f<0?"지하 "+(1-(+f))+"층":f==="0"?"지하":f+"층"); fb.classList.toggle("on",f!=="all"); }
+  bt3FloorRail(BT3.cfg,maxF,BT3.hasCellar,BT3.levels);
   /* ---- 땅(v2.61): 재질 무늬 · 두꺼운 단면(디오라마) · 물 깊이 ---- */
   const TOP={grass:"grass",dirt:"dirt",stone:"cobble",sand:"sand",snow:"snow",wood:"plank",floor:"plank",water:"bed",pit:"pit"};
   const SIDE={stone:"stoneside",wood:"plank",floor:"plank"};
@@ -9582,7 +9589,7 @@ function bt3Build(B){
       if(o.t.label) labs.push({p:[cx,d+0.15,cy],text:o.t.label,cls:"flat"});
     }else if(o.kind==="building"){
       const h=o.t.shape==="round"?bt3Tower(o,z,ctx):bt3House(o,z,ctx); occ(h,o);
-      const fz=o.t.deck!=null?Number(o.t.deck):z+(o.elev>0.05?o.elev:0), H=((F==="0"||F==="-1")?0:o.open&&F!=="all"?Math.min(o.floors||1,+F):(o.floors||1))*FH;
+      const fz=o.t.deck!=null?Number(o.t.deck):z+(o.elev>0.05?o.elev:0), H=((F!=="all"&&+F<=0)?0:o.open&&F!=="all"?Math.min(o.floors||1,+F):(o.floors||1))*FH;
       if(o.t.label) labs.push({p:[cx,fz+H+(o.open?0.15:0.9),cy],text:o.t.label});
     }else if(o.kind==="prop"){
       /* 가구 — 그 층이 보일 때만(지하 가구는 '지하' 보기에서만) */
@@ -9766,6 +9773,7 @@ function bt3Build(B){
   live.forEach(t=>{
     if(t.x<0||t.y<0||t.x>=C||t.y>=R) return;
     const dead=isDead(t), fl=floorOf(t), inB=bldAt(t.x,t.y);
+    if(F!=="all"&&fl<=0&&fl<+F) return;   /* v2.88: 보고 있는 층보다 아래 지하에 있는 사람은 그리지 않는다 */
     const ghost=F!=="all"&&fl>+F;
     const z=tokZ(t), col=BT_SIDE[t.side]||"#8792a8", myTurn=B.turn&&t.id===B.turn;
     const grp=new T.Group(); grp.position.set(t.px!=null?t.px:t.x+0.5,z,t.py!=null?t.py:t.y+0.5); grp.userData.pick={tok:t};
@@ -9906,7 +9914,7 @@ const BS3_ROOMS={
   /* v2.84: 가운데 집(페터 쿤의 옛 집)과 땅 밑 길(묻힌 옛 지하실, 59회차) — uc_*는 지하실보다 한 층 더 깊게 판다(bs3Board) */
   px_front:[4,42,12,46,1], px_cellar:[5,42.5,8.5,45.5,0],
   /* 땅 밑 길 = 지하 2층(층 -1). 지하실(B1) 바로 아래로 이어져, 지하실마다 구멍으로 내려온다 */
-  uc_wetoar:[10,17,16,21.5,-1], uc_drain:[11,21.5,12.5,27.5,-1], uc_shop:[5,27.5,14,40,-1], uc_mid:[5,40,12,46,-1], uc_salt:[11,46,23,52,-1], uc_kobold:[5,46,9,49,-1]
+  uc_wetoar:[10,17,16,21.5,-1], uc_drain:[11,21.5,12.5,27.5,-1], uc_shop:[5,27.5,14,40,-1], uc_mid:[5,40,12,46,-1], uc_salt:[11,46,23,52,-1], uc_kobold:[5,46,9,49,-2]
 };
 /* 안벽: [층, x0,y0,x1,y1(선), 문들[[시작,끝]…](선을 따라 잰 좌표), 문짝 여는 쪽(1=남·동, -1=북·서), 재질] */
 const BS3_WALLS=[
@@ -10018,8 +10026,8 @@ function bs3Board(){
   /* 막힌 자리(층별) — 가구·사람이 피한다: 벽·계단·구멍·뚜껑문·문 앞 */
   const blk={}, add=(f,q,hard)=>{ (blk[f]=blk[f]||[]).push(Object.assign(q,{hard})); };
   /* 지하실 — '지하' 층 보기에서 땅을 파 보인다 */
-  Object.entries(rooms).forEach(([id,r])=>{ if(r[4]>0) return; const lv=r[4]<0?-1:0;   /* v2.84: 층 -1 = 지하 2층(코볼드 잠자리는 더 깊다) */
-    T.push({x:Math.round(r[0]),y:Math.round(r[1]),w:Math.max(1,Math.round(r[2]-r[0])),h:Math.max(1,Math.round(r[3]-r[1])),kind:"cellar",level:lv,depth:lv<0?FH*(id==="uc_kobold"?2.8:2):FH,label:""}); });
+  Object.entries(rooms).forEach(([id,r])=>{ if(r[4]>0) return; const lv=Math.min(0,r[4]);   /* 층 0 = 지하 1층, -1 = 지하 2층, -2 = 지하 3층 */
+    T.push({x:Math.round(r[0]),y:Math.round(r[1]),w:Math.max(1,Math.round(r[2]-r[0])),h:Math.max(1,Math.round(r[3]-r[1])),kind:"cellar",level:lv,depth:FH*(1-lv),label:""}); });
   /* 안벽 · 문 */
   walls.forEach(([f,ax,ay,bx,by,doors,sw,mat])=>{ const v=Math.abs(ax-bx)<0.01, t=0.12, a0=Math.min(ay,by,ax,bx), ds=doors||[];
     const q=v?{x:ax-t/2,y:Math.min(ay,by),w:t,h:Math.abs(by-ay)}:{x:Math.min(ax,bx),y:ay-t/2,w:Math.abs(bx-ax),h:t};
