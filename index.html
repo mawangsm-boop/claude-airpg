@@ -7642,7 +7642,7 @@ function renderTension(){
   }
   box.innerHTML=h;
 }
-const HB_VERSION="v2.85";
+const HB_VERSION="v2.86";
 function header(){
   $("hTitle").textContent=S.pc.name+" · 핸드북";
   $("hMeta").textContent=`${S.session}회차 · ${S.arc} · 현재 위치 ${S.place} · ${S.checkpoint} · 핸드북 ${HB_VERSION}`;
@@ -9265,7 +9265,7 @@ function bt3House(o,z,ctx){
   const T=THREE, FH=ctx.FH||ISO.FH, grp=new T.Group(), g=bt3TG();
   const x0=o.x,y0=o.y,x1=o.x+o.w,y1=o.y+o.h, L=String(o.t.label||""), th=0.12;
   const wallMat=/목조|오두막|헛간|말뚝|움막|창고|천막|마구간|선실/.test(L)?"plankwall":/석조|탑|성|돌|요새|망루|신전|문루/.test(L)?"brick":"plaster";
-  const F=bt3F(), onDeck=o.t.deck!=null, fz=onDeck?Number(o.t.deck):z+(o.elev>0.05?o.elev:0), floors=o.floors||1, shown=F==="0"?0:(o.open&&F!=="all"?Math.min(floors,+F):floors), H=shown*FH;
+  const F=bt3F(), onDeck=o.t.deck!=null, fz=onDeck?Number(o.t.deck):z+(o.elev>0.05?o.elev:0), floors=o.floors||1, shown=(F==="0"||F==="-1")?0:(o.open&&F!=="all"?Math.min(floors,+F):floors), H=shown*FH;
   /* '지하' 보기: 집은 주춧돌 테두리만 */
   if(shown===0){ [[x0,y0,x1,y0+th],[x0,y1-th,x1,y1],[x0,y0,x0+th,y1],[x1-th,y0,x1,y1]].forEach(q=>bt3TBox(g,"stoneside",q[0],q[1],q[2],q[3],fz,fz+0.3,"cobble")); grp.add(bt3TMesh(g,{own:true})); return grp; }
   /* 말뚝과 마루(배 위의 선실은 갑판에 바로 선다) */
@@ -9378,7 +9378,7 @@ function bt3Prop(type,x0,y0,x1,y1,z,seed){
 function bt3Tower(o,z,ctx){
   const T=THREE, FH=ctx.FH||ISO.FH, grp=new T.Group(), F=bt3F();
   const cx=o.x+o.w/2, cy=o.y+o.h/2, R=Math.min(o.w,o.h)/2-0.1, floors=o.floors||1, fz=z, C=2*Math.PI*R;
-  const shown=F==="0"?0:(o.open&&F!=="all"?Math.min(floors,+F):floors), topOn=!!o.t.top&&shown===floors&&floors>1, H=Math.max(0.35,(topOn?floors-1:shown)*FH);
+  const shown=(F==="0"||F==="-1")?0:(o.open&&F!=="all"?Math.min(floors,+F):floors), topOn=!!o.t.top&&shown===floors&&floors>1, H=Math.max(0.35,(topOn?floors-1:shown)*FH);
   const wall=new T.Mesh(new T.CylinderGeometry(R,R,H,48,1,true),bt3MatC("brick","#ffffff",Math.round(C/1.4),H/1.1)); wall.material.side=T.DoubleSide; wall.position.set(cx,fz+H/2,cy); wall.castShadow=true; wall.receiveShadow=true; grp.add(wall);
   const inner=new T.Mesh(new T.CylinderGeometry(R-0.3,R-0.3,H,48,1,true),bt3MatC("stoneside","#e8e4dc",Math.round(C/1.4),H/1.1)); inner.material.side=T.DoubleSide; inner.position.copy(wall.position); grp.add(inner);
   const cap=new T.Mesh(new T.RingGeometry(R-0.3,R,48),bt3MatC("cobble")); cap.material.side=T.DoubleSide; cap.rotation.x=-Math.PI/2; cap.position.set(cx,fz+H+0.005,cy); grp.add(cap);
@@ -9582,7 +9582,7 @@ function bt3Build(B){
       if(o.t.label) labs.push({p:[cx,d+0.15,cy],text:o.t.label,cls:"flat"});
     }else if(o.kind==="building"){
       const h=o.t.shape==="round"?bt3Tower(o,z,ctx):bt3House(o,z,ctx); occ(h,o);
-      const fz=o.t.deck!=null?Number(o.t.deck):z+(o.elev>0.05?o.elev:0), H=(F==="0"?0:o.open&&F!=="all"?Math.min(o.floors||1,+F):(o.floors||1))*FH;
+      const fz=o.t.deck!=null?Number(o.t.deck):z+(o.elev>0.05?o.elev:0), H=((F==="0"||F==="-1")?0:o.open&&F!=="all"?Math.min(o.floors||1,+F):(o.floors||1))*FH;
       if(o.t.label) labs.push({p:[cx,fz+H+(o.open?0.15:0.9),cy],text:o.t.label});
     }else if(o.kind==="prop"){
       /* 가구 — 그 층이 보일 때만(지하 가구는 '지하' 보기에서만) */
