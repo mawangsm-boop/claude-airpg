@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1020" height="600" viewBox="0 0 680 400" font-family="Apple SD Gothic Neo, Noto Sans KR, sans-serif">
+<rect width="680" height="400" fill="#ffffff"/>
+<text x="40" y="24" font-size="13" fill="#444441">카를렌 위에서 본 그림 (고칠 안) — 성벽 안 동서 3.9km × 남북 2km, 북쪽이 위</text>
+<rect x="40" y="50" width="566" height="290" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="1.5"/>
+<rect x="606" y="40" width="44" height="320" fill="#B5D4F4"/>
+<text x="628" y="56" font-size="12" fill="#0C447C" text-anchor="middle">거울강</text>
+<text x="628" y="72" font-size="11" fill="#0C447C" text-anchor="middle">↓</text>
+<ellipse cx="200" cy="170" rx="110" ry="70" fill="#E4DCCB"/>
+<text x="200" y="110" font-size="12" fill="#5F5E5A" text-anchor="middle">구시가 언덕 · 신전</text>
+<rect x="390" y="150" width="70" height="30" rx="3" fill="#ffffff" stroke="#888780" stroke-width="0.5"/>
+<text x="425" y="169" font-size="11" fill="#444441" text-anchor="middle">시청·광장</text>
+<rect x="572" y="215" width="30" height="62" rx="2" fill="#FAECE7" stroke="#993C1D" stroke-width="0.8"/>
+<text x="566" y="210" font-size="11" fill="#712B13" text-anchor="end">가게 줄</text>
+<rect x="560" y="282" width="42" height="18" rx="2" fill="#ffffff" stroke="#888780" stroke-width="0.5"/>
+<text x="581" y="295" font-size="10" fill="#444441" text-anchor="middle">하역장</text>
+<text x="46" y="200" font-size="11" fill="#5F5E5A">서문</text>
+<text x="545" y="354" font-size="11" fill="#5F5E5A">남문</text>
+<path d="M95 175 C120 135, 200 120, 280 150 C340 170, 400 205, 455 240 C470 252, 470 262, 452 266 C400 262, 330 230, 270 215 C200 200, 120 215, 95 175 Z" fill="#CECBF6" fill-opacity="0.7" stroke="#534AB7" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="250" y="182" font-size="14" font-weight="500" fill="#3C3489" text-anchor="middle">마른 굴 줄기 = 지하도시 터</text>
+<text x="250" y="198" font-size="11" fill="#534AB7" text-anchor="middle">봄물이 닿지 않는 높이 · 도시 바로 밑</text>
+<circle cx="440" cy="248" r="5" fill="#534AB7"/>
+<text x="432" y="238" font-size="10" fill="#3C3489" text-anchor="end">코볼드 옛 잠자리</text>
+<path d="M585 268 C560 290, 520 300, 485 305" fill="none" stroke="#888780" stroke-width="3.5" stroke-linecap="round"/>
+<path d="M485 305 C475 290, 465 275, 452 262" fill="none" stroke="#888780" stroke-width="3.5" stroke-linecap="round"/>
+<path d="M485 305 C520 318, 560 322, 588 322" fill="none" stroke="#888780" stroke-width="3.5" stroke-linecap="round"/>
+<circle cx="485" cy="305" r="4" fill="#5F5E5A"/>
+<text x="478" y="324" font-size="11" fill="#444441" text-anchor="end">갈림목</text>
+<text x="520" y="296" font-size="10" fill="#444441" text-anchor="middle">흐르는 굴</text>
+<ellipse cx="592" cy="324" rx="16" ry="10" fill="#85B7EB"/>
+<text x="592" y="344" font-size="11" fill="#0C447C" text-anchor="middle">지하 호수</text>
+<circle cx="625" cy="322" r="3" fill="#0C447C"/>
+<path d="M578 245 L462 252" fill="none" stroke="#D85A30" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="520" y="240" font-size="10" fill="#993C1D" text-anchor="middle">다음에 팔 마른 길</text>
+<text x="40" y="372" font-size="12" fill="#3C3489">보라 영역: 시장 광장 밑에서 구시가 언덕 밑까지 이어진 마른 굴 — 땅 위 도시의 발밑</text>
+<text x="40" y="388" font-size="12" fill="#888780">회색: 지금 있는 굴(갈림목 둘레는 봄에 잠김) · 주황 점선: 봄에도 끊기지 않게 나중에 팔 길</text>
+</svg>
