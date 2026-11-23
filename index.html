@@ -8513,7 +8513,7 @@ function renderBaseRoster(){
   const idx={}; let n=0;
   baseBuildings(B).forEach(bd=>bd.rooms.forEach(r=>{ idx[r.id]={bd,r,o:n++}; }));
   (B.outside||[]).forEach(o=>{ idx[o.id]={bd:null,r:o,o:n++}; });
-  const fl=r=>r.floor===0?"지하":r.floor?r.floor+"층":"";
+  const fl=r=>r.floor===0?"지하":r.floor<0?"지하 "+(1-r.floor)+"층":r.floor?r.floor+"층":"";
   const rows=[S.pc,...(S.party||[]),...(S.npcs||[])].filter(a=>a&&a.room&&idx[a.room]).sort((a,b)=>idx[a.room].o-idx[b.room].o);
   if(!rows.length){ box.innerHTML='<div class="note">방이 적힌 인물이 없습니다.</div>'; return; }
   const blds=new Set(rows.map(a=>idx[a.room].bd&&idx[a.room].bd.id).filter(Boolean));
