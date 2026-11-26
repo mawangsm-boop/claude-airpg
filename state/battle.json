@@ -1,19 +1,169 @@
-{"battle":{"name":"느릅골 — 밤","cols":24,"rows":18,"round":0,"ground":"dirt",
-"terrain":[
- {"x":0,"y":3,"w":5,"h":4,"type":"hazard","kind":"building","floors":1,"label":"양치기 집"},
- {"x":0,"y":10,"w":5,"h":4,"type":"hazard","kind":"building","floors":1,"label":"양치기 집(오트)"},
- {"x":5,"y":1,"w":4,"h":4,"type":"hazard","kind":"lowwall","elev":0.7,"label":"돌담 양 우리 — 양을 옮겨 둔 곳"},
- {"x":11,"y":6,"w":5,"h":5,"type":"hazard","kind":"lowwall","elev":0.7,"label":"불 덫 양 우리(돌담, 동쪽 문짝 뜯김) — 안에 건초·등잔 기름, 잘린 손가락 둘"},
- {"x":12,"y":7,"w":3,"h":3,"type":"hazard","kind":"mark","label":"기름 먹인 건초"},
- {"x":20,"y":0,"w":2,"h":18,"type":"water","kind":"water","label":"얼어붙은 개울(얼음 위는 어려운 지형)"},
- {"x":17,"y":2,"w":2,"h":2,"type":"tree","kind":"tree","label":"개울가 덤불"},
- {"x":17,"y":13,"w":2,"h":2,"type":"tree","kind":"tree","label":"개울가 덤불"},
- {"x":6,"y":8,"w":4,"h":1,"type":"hazard","kind":"mark","label":"마을 길"}
-],
-"tokens":[
- {"id":"verrix","name":"베릭스","side":"pc","x":8,"y":9,"hp":"106/106","move":6,"note":"슬롯 1레벨 4/4 · 슬롯 2레벨 3/3 · 슬롯 3레벨 3/3 · 슬롯 4레벨 2/2 · 영감의 말 6/6 · 메달 5/5 · 리라 1/1 · 자리 미정"},
- {"id":"nadin","name":"나딘","side":"ally","x":8,"y":7,"hp":"37/37","move":6,"range":24,"note":"슬롯 1:4/4 2:3/3 3:2/2 · 마력 점 5/5 · 자리 미정"},
- {"id":"isabel","name":"이자벨","side":"ally","x":9,"y":10,"hp":"29/29","note":"자리 미정"},
- {"id":"liv","name":"리브","side":"ally","x":7,"y":10,"hp":"44/44","note":"자리 미정"},
- {"id":"ott","name":"오트","side":"neutral","x":3,"y":12,"note":"집 안","sprite":"militia"}
-]}}
+{
+  "battle": {
+    "name": "느릅골 — 밤",
+    "cols": 24,
+    "rows": 18,
+    "round": 0,
+    "ground": "dirt",
+    "terrain": [
+      {
+        "x": 0,
+        "y": 3,
+        "w": 5,
+        "h": 4,
+        "type": "hazard",
+        "kind": "building",
+        "floors": 1,
+        "label": "양치기 집"
+      },
+      {
+        "x": 0,
+        "y": 10,
+        "w": 5,
+        "h": 4,
+        "type": "hazard",
+        "kind": "building",
+        "floors": 1,
+        "label": "양치기 집(오트)"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "w": 4,
+        "h": 4,
+        "type": "hazard",
+        "kind": "lowwall",
+        "elev": 0.7,
+        "label": "돌담 양 우리 — 양을 옮겨 둔 곳"
+      },
+      {
+        "x": 11,
+        "y": 6,
+        "w": 5,
+        "h": 5,
+        "type": "hazard",
+        "kind": "lowwall",
+        "elev": 0.7,
+        "label": "불 덫 양 우리(돌담, 동쪽 문짝 뜯김) — 안에 건초·등잔 기름, 잘린 손가락 둘"
+      },
+      {
+        "x": 12,
+        "y": 7,
+        "w": 3,
+        "h": 3,
+        "type": "hazard",
+        "kind": "mark",
+        "label": "기름 먹인 건초"
+      },
+      {
+        "x": 20,
+        "y": 0,
+        "w": 2,
+        "h": 18,
+        "type": "water",
+        "kind": "water",
+        "label": "얼어붙은 개울(얼음 위는 어려운 지형)"
+      },
+      {
+        "x": 17,
+        "y": 2,
+        "w": 2,
+        "h": 2,
+        "type": "tree",
+        "kind": "tree",
+        "label": "개울가 덤불"
+      },
+      {
+        "x": 17,
+        "y": 13,
+        "w": 2,
+        "h": 2,
+        "type": "tree",
+        "kind": "tree",
+        "label": "개울가 덤불"
+      },
+      {
+        "x": 6,
+        "y": 8,
+        "w": 4,
+        "h": 1,
+        "type": "hazard",
+        "kind": "mark",
+        "label": "마을 길"
+      }
+    ],
+    "tokens": [
+      {
+        "id": "verrix",
+        "name": "베릭스",
+        "side": "pc",
+        "x": 6,
+        "y": 9,
+        "hp": "106/106",
+        "move": 6,
+        "note": "슬롯 1레벨 4/4 · 슬롯 2레벨 3/3 · 슬롯 3레벨 3/3 · 슬롯 4레벨 2/2 · 영감의 말 6/6 · 메달 5/5 · 리라 1/1 · 오트 집 모퉁이"
+      },
+      {
+        "id": "nadin",
+        "name": "나딘",
+        "side": "ally",
+        "x": 7,
+        "y": 5,
+        "hp": "37/37",
+        "move": 6,
+        "range": 24,
+        "note": "슬롯 1:4/4 2:3/3 3:2/2 · 마력 점 5/5 · 위쪽 우리 담 뒤"
+      },
+      {
+        "id": "isabel",
+        "name": "이자벨",
+        "side": "ally",
+        "x": 6,
+        "y": 10,
+        "hp": "29/29",
+        "note": "오트 집 모퉁이"
+      },
+      {
+        "id": "liv",
+        "name": "리브",
+        "side": "ally",
+        "x": 9,
+        "y": 5,
+        "hp": "44/44",
+        "note": "위쪽 우리 담 뒤",
+        "st": [
+          "은신"
+        ]
+      },
+      {
+        "id": "ott",
+        "name": "오트",
+        "side": "neutral",
+        "x": 3,
+        "y": 12,
+        "note": "집 안",
+        "sprite": "militia"
+      },
+      {
+        "id": "t1",
+        "name": "산 괴물",
+        "side": "enemy",
+        "x": 21,
+        "y": 6,
+        "hp": "94/94",
+        "sprite": "sh_ogre",
+        "note": "얼어붙은 개울을 건너는 중"
+      },
+      {
+        "id": "t2",
+        "name": "산 괴물",
+        "side": "enemy",
+        "x": 21,
+        "y": 9,
+        "hp": "94/94",
+        "sprite": "sh_ogre",
+        "note": "얼어붙은 개울을 건너는 중"
+      }
+    ]
+  }
+}
