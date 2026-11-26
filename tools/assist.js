@@ -48,8 +48,11 @@ function mech(c) {
   lines.push(`${hp} · AC ${sh.ac ?? "?"}${sh.slots ? " · 슬롯 " + sh.slots.map((s) => `${s.lvl}레벨 ${s.cur}/${s.max}`).join(", ") : ""}`);
   const res = (sh.resources || []).map((r) => `${r.n} ${r.cur}/${r.max}`);
   if (res.length) lines.push("자원: " + res.join(" · "));
-  const eq = [...(c.equipment || []), ...(c.items || [])].filter((x) => x.equipped).map((x) => x.item || x.n);
+  const all = [...(c.equipment || []), ...(c.items || [])];
+  const eq = [...new Set(all.filter((x) => x.equipped).map((x) => x.item || x.n))];
   if (eq.length) lines.push("장착: " + eq.join(" · "));
+  const carry = [...new Set(all.filter((x) => !x.equipped).map((x) => x.item || x.n))].filter((n) => !eq.includes(n));
+  if (carry.length) lines.push("소지(장착 아님): " + carry.join(" · "));
   if (sh.attacks) lines.push("공격: " + sh.attacks.map((a) => `${a.n} ${a.atk} ${a.dmg}`).join(" / "));
   return lines;
 }
@@ -98,4 +101,10 @@ if (mode === "list") {
     if (sh.languages) console.log("언어: " + str(sh.languages));
     console.log("");
   }
+  /* 최근 일 — 동료가 그 자리에 있었는지는 주 GM이 장면 요약에서 밝힌다(시험 호출에서 나온 지적) */
+  try {
+    const core = rj("state/core.json"), lg = rj("state/log.json");
+    const recent = (lg.log || []).filter((e) => e.t === `세션 ${core.session}`).slice(0, 10).reverse();
+    if (recent.length) { console.log(`=== 이번 회차 최근 일(오래된 것부터 · 누가 그 자리에 있었는지는 주 GM의 장면 요약을 따른다) ===`); recent.forEach((e) => console.log("- " + e.x)); }
+  } catch {}
 }

@@ -36,7 +36,7 @@ for (const id of args) {
   if (c.bond) console.log(`bond(최근): ${tail(c.bond, 700)}`);
   if (c.susp !== undefined) console.log(`susp: ${JSON.stringify(c.susp)}`);
   const items = [...(c.items || []), ...(c.equipment || [])].filter(x => x.equipped);
-  if (items.length) console.log('장착: ' + items.map(x => x.item || x.n).join(' · '));
+  if (items.length) console.log('장착: ' + [...new Set(items.map(x => x.item || x.n))].join(' · '));
   if (c.look) console.log(`look: ${c.look}`);
   console.log('');
 }
