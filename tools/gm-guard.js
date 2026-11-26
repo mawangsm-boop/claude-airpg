@@ -230,6 +230,7 @@ if (cmd === "remind") {
       "\n⑪이자벨은 35회차부터 베스퍼다 — 그 전의 일·사람(옛 인물의 얼굴 포함)은 모른다(isabel.json unknown). 옛 인물이 재등장하면 이자벨의 반응은 unknown부터 본다." +
       "\n⑫동료의 무기·장비를 서술에 넣기 전 캐릭터 파일의 equipped·attacks를 본다. 플레이어가 이미 정한 작전·조건은 다시 선택지로 묻지 않고 그대로 진행하며, 빈 곳만 묻는다. '쥐다'는 실제 손동작에만." +
       "\n⑯동료·NPC의 대사·행동을 쓰기 전 node tools/who.js <id>로 voice·code·drive·bond·장착을 통째로 읽는다 — grep으로 자르면 말투 설명이 끊긴다(60회차: 이드라를 아이 말투로, 바친 칼을 샥 허리에 씀). 말투 꼬리표만 흉내 내지 말고 그 인물의 나이·직업·관계에서 나오는 문장으로 쓴다." +
+      "\n⑱(61회차 시험) 동료가 있는 장면 — 전투 준비·동료 차례·사회·대기에서 보조 GM을 불렀는가(templates/sub_gm_companions.md, SendMessage로 이어 부름)? 받은 대사의 [지식근거]를 knows와 대조했는가?" +
       "\n⑰동료·NPC를 목격자·참여자로 적기 전 지금 동행 명단(_index party·at)과 대조한다 — 위에 남은 사람을 '봤다'고 쓰지 않는다(60회차: 네리)." +
       "\n⑬장면에 '모두'를 부르면 at:상점 명단(_minor 포함)을 다시 훑는다 — grep -l '\"at\": \"상점\"' state/npcs/*.json 와 _minor.json." +
       (fs.existsSync(path.join(ROOT, "state", "battle.json"))
