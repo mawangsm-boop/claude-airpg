@@ -70,7 +70,7 @@
         "id": "res_beguiling_magic",
         "n": "매혹의 마법 (Beguiling Magic)",
         "dice": "",
-        "cur": 1,
+        "cur": 0,
         "max": 1,
         "recharge": "long",
         "note": "효과 텍스트는 48회차 사용자 제공본. 61회차 1일째 한밤: 수면 직후 서리 전령에게 매혹 — 내성 1d20[13|9]+0=13 vs 17 실패, 1분 매혹(전령 차례 끝마다 다시 내성, 이점).",
