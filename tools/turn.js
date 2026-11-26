@@ -18,7 +18,7 @@ const path = require("path");
 const { execSync, spawnSync } = require("child_process");
 
 const ROOT = path.resolve(__dirname, "..");
-const TRAILER = "Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>";
+const TRAILER = "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>";
 const read = (rel) => JSON.parse(fs.readFileSync(path.join(ROOT, rel), "utf8"));
 const write = (rel, o) => fs.writeFileSync(path.join(ROOT, rel), JSON.stringify(o, null, 2) + "\n");
 
