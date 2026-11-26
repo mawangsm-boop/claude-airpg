@@ -13,7 +13,7 @@
     "slots": [
       {
         "lvl": 1,
-        "cur": 4,
+        "cur": 3,
         "max": 4
       },
       {
@@ -795,7 +795,7 @@
         "cat": "accessory",
         "equipped": true,
         "charge": {
-          "cur": 3,
+          "cur": 2,
           "max": 5,
           "recharge": "long"
         },
