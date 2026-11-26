@@ -1,0 +1,29 @@
+{
+  "char": {
+    "id": "berta",
+    "name": "베르타",
+    "role": "여성 · 인간 · 일흔둘 · 나무 끝 마을 노인(솔린의 할머니)",
+    "hp": {
+      "cur": 3,
+      "max": 3
+    },
+    "tag": "61회차 · 솔린의 할머니, 가슴앓이로 누워 지냄",
+    "tagc": "",
+    "stance": "호의",
+    "look": "Berta, a frail human woman of seventy-two, thin white hair in a loose braid, deep-lined weathered face, bright amused eyes, missing three fingers on her left hand, wrapped in layered furs on a bed by the hearth.",
+    "voice": "쉰 목소리, 숨이 차서 말을 끊는다. 웃음이 많은 노인 — 하오체 섞인 반말. '그 밤 얘기를 들으러 왔소? 그럼 차부터 끓이시오.'",
+    "code": {
+      "does": "손녀를 아낀다, 겪은 것을 숨기지 않고 말한다",
+      "wont": "그 밤을 부끄러워하지 않는다"
+    },
+    "drive": "손녀가 혼자 남지 않는 것.",
+    "fear": "자기가 죽은 뒤 마을 문에 다시 화살이 꽂히는 것.",
+    "bond": "61회차 9일째 저녁 처음 만남.",
+    "knows": "쉰 해 전 북쪽 겨울밤 사냥(A — 직접 뜀)·그 규칙을 겪은 대로·얼음 아래 얼굴들(A). 화살은 받은 집 사람이 '받겠다'고 말해야 했다(A).",
+    "unknown": "소금 늪의 할멈, 그 사이 누가 대신 달렸는지, 베릭스 일행의 일",
+    "sheet": {
+      "note": "싸우지 않는다."
+    },
+    "at": "나무 끝 마을"
+  }
+}
