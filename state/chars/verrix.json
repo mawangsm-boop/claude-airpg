@@ -6,7 +6,7 @@
     "level": 8,
     "ac": 14,
     "hp": {
-      "cur": 79,
+      "cur": 106,
       "max": 106,
       "tmp": 0
     },
@@ -18,7 +18,7 @@
       },
       {
         "lvl": 2,
-        "cur": 0,
+        "cur": 3,
         "max": 3
       },
       {
@@ -28,7 +28,7 @@
       },
       {
         "lvl": 4,
-        "cur": 1,
+        "cur": 2,
         "max": 2
       }
     ],
@@ -37,7 +37,7 @@
         "id": "res_bardic_inspiration",
         "n": "영감의 말 (Bardic Inspiration)",
         "dice": "d8",
-        "cur": 5,
+        "cur": 6,
         "max": 6,
         "recharge": "short",
         "note": "2024판: 매력 수정치(6)만큼. 5레벨 영감의 샘 — 짧은 휴식·긴 휴식에 모두 회복, 주문 슬롯 하나를 써서(행동 불필요) 1회 되살릴 수 있다. 50회차 갱신.",
@@ -70,7 +70,7 @@
         "id": "res_beguiling_magic",
         "n": "매혹의 마법 (Beguiling Magic)",
         "dice": "",
-        "cur": 0,
+        "cur": 1,
         "max": 1,
         "recharge": "long",
         "note": "효과 텍스트는 48회차 사용자 제공본. 61회차 1일째 한밤: 수면 직후 서리 전령에게 매혹 — 내성 1d20[13|9]+0=13 vs 17 실패, 1분 매혹(전령 차례 끝마다 다시 내성, 이점).",
@@ -99,7 +99,7 @@
         "conc": true
       }
     ],
-    "gold": 759.74,
+    "gold": 899.74,
     "stats": {
       "STR": 10,
       "DEX": 14,
@@ -795,7 +795,7 @@
         "cat": "accessory",
         "equipped": true,
         "charge": {
-          "cur": 3,
+          "cur": 5,
           "max": 5,
           "recharge": "long"
         },
@@ -926,7 +926,7 @@
         "sum": "조율 · 충전 1(새벽 회복) · 진눈깨비 폭풍(DC 17, 슬롯 없이, 집중 1분)",
         "equipped": true,
         "charge": {
-          "cur": 0,
+          "cur": 1,
           "max": 1,
           "recharge": "long"
         },
