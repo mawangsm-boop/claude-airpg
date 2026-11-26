@@ -234,7 +234,7 @@
         "cur": 11,
         "max": 11
       },
-      "at": "셈배(북행 — 노)",
+      "at": "셈배",
       "sheet": {
         "race": "인간",
         "cls": "산적(Bandit) — 몬스터 수치표, 레벨 없음 · 강배 사공",
@@ -482,7 +482,7 @@
       "stanceWhy": "강변 땅 습격에 가담해 세바와 얀을 베었고, 야영지에서 베릭스와 칼을 맞댄 뒤 패해 항복했다.",
       "knows": "의뢰인은 '카를렌 상회 영감, 접시 둘 달린 저울 인장 반지에 글자 둘을 덧새긴 것'(A, 베인 뒤에서 봄). 이름은 모른다. 일 값(B, 베인의 말).",
       "look": "Marta Coil, a stocky muscular human woman around thirty, short-cropped reddish-brown hair, a once-broken nose, iron-reinforced leather vest, two short blades.",
-      "at": "상점",
+      "at": "셈배",
       "sheet": {
         "race": "인간",
         "cls": "산적 두목(Bandit Captain) — 몬스터 수치표, 레벨 없음",
@@ -550,7 +550,7 @@
         ],
         "src": "2024 Monster Manual의 Bandit Captain — aidedd.org 2024판(DnD 5.5) 대조, 2026-11-17. SRD 5.2.1·원서와는 대조 못 함."
       },
-      "room": "back",
+      "room": "sb_bow",
       "roomNote": "해먹 — 칼 두 자루는 곁에",
       "note": " 61회차: 셈배가 북쪽으로 가는 동안 가게 뒷방에서 지냄."
     },
@@ -568,7 +568,7 @@
       "voice": "말이 거의 없다. 마르타의 말만 듣는다.",
       "stance": "경계",
       "stanceWhy": "칼잡이 패로 야영지에서 베릭스와 이자벨을 쐈고, 패한 뒤 항복했다.",
-      "at": "셈배(북행 — 노)",
+      "at": "셈배",
       "sheet": {
         "race": "인간",
         "cls": "덩치(Tough) — 몬스터 수치표, 레벨 없음",
