@@ -31,7 +31,7 @@
     "comply": "정신 지배가 아닌 자발적 공범 관계 — 순종의 이유가 지배에서 동경·이해관계로 완전히 바뀌었다.",
     "knows": "본인(베스퍼)의 과거와 새벽문 사정 전체(A등급). 46회차, 베릭스에게 전말을 직접 전해 들었다(A등급) — 심목 오염은 자연 재발이 아니라 그가 직접 되돌려놓은 것이고, '나무가 마지막으로 씨앗을 넘겨줬다'는 이야기는 이드라를 안심시키려 지어낸 기만이라는 것. 아카이브 전체에서 이 사실을 아는 것은 베릭스와 이자벨(베스퍼) 둘뿐이다.",
     "unknown": "코바·미아의 죽음을 비롯한 원래 이자벨의 과거 전체(D등급). 이드라와 핏빛숲 심목 건 — 38회차 씨앗 흡수는 베릭스 개인만 아는 실마리로 파티에 전혀 공개되지 않았으며(archive/gm_guidelines_legacy.md), 이드라라는 인물 자체도 베스퍼에게는 낯설다(D등급, 2026-09-21 정정 — 46회차 시작 시점에 GM이 38회차 참전 기록으로 잘못 짚었던 것을 사용자가 바로잡음).",
-    "look": "Isabelle Crane, a human female duelist in her early 30s. Short bob-length black hair, an old faint scar near her left eye, sharp confident expression with a hint of guardedness. Wearing a black leather halter-neck top with silver-accented bracelets and a thin black long coat worn open over fitted dark leather trousers, a silver-studded belt, tall dark riding boots, a rapier at her hip.",
+    "look": "Isabelle Crane, a human female duelist in her early 30s. Short bob-length black hair, an old faint scar near her left eye, sharp confident expression with a hint of guardedness. Wearing a black leather halter-neck top with silver-accented bracelets and a thin black long coat worn open, a short black wool half-cape slung over her left shoulder only with a deep crimson lining and a single silver-thread hem, fastened at the throat by a small silver ring clasp, over fitted dark leather trousers, a silver-studded belt, tall dark riding boots, a rapier at her hip.",
     "status": "동행",
     "gender": "여",
     "race": "인간",
@@ -135,6 +135,15 @@
         "sum": "조율 없음 · 걸음 소리 없음 · 은신 이점",
         "equipped": true,
         "passive": true
+      },
+      {
+        "id": "item_isabel_cloak_protection_s60",
+        "n": "보호의 망토 (Cloak of Protection)",
+        "q": 1,
+        "cat": "accessory",
+        "d": "60회차 10일째 검은 물 바위 턱에서 나왔다. 11일째 아침 베릭스가 '이 망토는 이자벨이 쓰시오' 하며 건넸다. 이자벨이 한쪽 어깨에 걸치는 짧은 반망토로 고쳐 맸다 — 겉은 검은 모직, 안감은 손목 천과 같은 짙은 붉은색, 단에 은실 한 줄, 목에 은 고리 걸쇠. 그날 오후 한 시간을 들여 조율했다. 2024 DMG: AC +1, 내성 굴림 +1. 고급(언커먼), 조율 필요.",
+        "sum": "AC +1 · 내성 +1 · 조율함 · 왼쪽 어깨 반망토",
+        "equipped": true
       }
     ],
     "susp": {
@@ -146,7 +155,7 @@
       "race": "인간",
       "cls": "로그 (스와시버클러)",
       "level": 6,
-      "ac": 16,
+      "ac": 17,
       "stats": {
         "STR": 8,
         "DEX": 16,
@@ -239,7 +248,7 @@
           "WIS": 1,
           "CHA": 2
         },
-        "note": "로그 내성 숙련 민첩·지능. 2026-10-13, 2024판 무료 규칙(D&D Beyond, Rogue) 원문 대조."
+        "note": "로그 내성 숙련 민첩·지능. 2026-10-13, 2024판 무료 규칙(D&D Beyond, Rogue) 원문 대조. 60회차 11일째부터 보호의 망토로 모든 내성 +1(mods에는 넣지 않음 — 굴릴 때 더한다)."
       },
       "skills": {
         "proficient": [
@@ -302,9 +311,14 @@
       ],
       "futureFeatures": "9레벨 Panache(스와시버클러) — 2026-10-13 사용자 결정으로 9레벨까지 보류. 그전 시트에 5레벨 특성처럼 들어 있었으나 2014·2024판 모두 9레벨 특성이다. 이전 회차 사용 기록은 소급 재판정하지 않는다.",
       "note_hp": "HP 최대 26은 2024판 평균값(33)과 다르지만 2026-10-13 사용자 결정으로 현재 값을 유지한다. 52회차 종결 후 6레벨: HP 1d8[2]+CON 1=3(26→29).",
-      "note_ac": "53회차 5일째 밤, +1 징 박은 가죽 속갑옷 착용 — 12+DEX 3+1 = 16(그 전의 15는 근거 없는 값이었고, 속갑옷을 얻을 때까지 두기로 사용자가 정했다)."
+      "note_ac": "53회차 5일째 밤, +1 징 박은 가죽 속갑옷 착용 — 12+DEX 3+1 = 16(그 전의 15는 근거 없는 값이었고, 속갑옷을 얻을 때까지 두기로 사용자가 정했다). 60회차 11일째, 보호의 망토 조율 +1 = 17."
     },
     "room": "tw_3b",
-    "roomNote": "선창 망루 3층 방 2 — 망루를 맡음(수리 끝날 때까지 가게 2층)"
+    "roomNote": "선창 망루 3층 방 2 — 망루를 맡음(수리 끝날 때까지 가게 2층)",
+    "attune": {
+      "cur": 1,
+      "max": 3,
+      "note": "60회차 11일째: 보호의 망토 조율(베릭스가 줌)."
+    }
   }
 }

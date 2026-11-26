@@ -10,7 +10,7 @@
 Verrix Nightblade, a male tiefling bard in his early 30s. Messy shoulder-length black wavy hair, curved purple-black horns swept back, pointed elf-like ears, pale lavender-tinted skin, glowing violet eyes, short trimmed goatee, sly confident smirk. Wearing an ornate black-and-gold longcoat over a purple satin shirt, open collar showing chest tattoos, black vest with gold buttons, thick leather belt with chains, ritual dagger with amethyst pommel sheathed at hip, gold rings and bracelets on right hand.
 
 ## 이자벨 크레인 (동료)
-Isabelle Crane, a human female duelist in her early 30s. Short bob-length black hair, an old faint scar near her left eye, sharp confident expression with a hint of guardedness. Wearing a black leather halter-neck top with silver-accented bracelets and a thin black long coat worn open over fitted dark leather trousers, a silver-studded belt, tall dark riding boots, a rapier at her hip.
+Isabelle Crane, a human female duelist in her early 30s. Short bob-length black hair, an old faint scar near her left eye, sharp confident expression with a hint of guardedness. Wearing a black leather halter-neck top with silver-accented bracelets and a thin black long coat worn open, a short black wool half-cape slung over her left shoulder only with a deep crimson lining and a single silver-thread hem, fastened at the throat by a small silver ring clasp, over fitted dark leather trousers, a silver-studded belt, tall dark riding boots, a rapier at her hip.
 
 ## 리브 코르사 (동료)
 Liv Corsa, a human female former cult operative in her late 20s. Ash-blonde hair cut short and neatly trimmed, a small brand scar near her left temple, bright alert eyes with only faint dark circles beneath and a small genuine smile. Wearing a deep burgundy leather corset-style cropped vest laced at the front and ending below the ribs, leaving her shoulders, collarbone and midriff bare, a thin deep-violet cord around her neck, fingerless black leather gloves, a short dark hooded mantle draped over one shoulder with the hood down, low-slung slim black leather trousers slit up the sides to the hip, soft-soled thigh-high boots, two daggers strapped at her thighs.
@@ -102,5 +102,26 @@ Seva Lind, a human female swordswoman in her mid-thirties. Brown hair pulled bac
 ## 나딘 (NPC)
 Nadin, a female tiefling sorcerer in her 20s. Red skin, small curved horns, mischievous sharp eyes, faint arcane energy around her hands. Light minimal gear, small burn marks.
 
-## 방앗간의 길잡이 (NPC)
+## 미라 켈 (NPC)
 Mira Kel, a female half-elf tracker around thirty. Lean, wiry build, sun-browned weathered face, faintly pointed ears, long black hair in a single tight braid down her back, narrow watchful eyes. A dry grass stalk between her lips. Wearing a faded grass-green hooded cloak over a scuffed leather jerkin, bracers, a quiver at her hip, carrying a tall longbow.
+
+## 요르크 반스 (NPC)
+Yorck Barnes, a human man in his mid-forties. Broad shoulders, close-cropped iron-grey hair, the top of his left ear cut away, weathered square face. Wearing a worn leather vest stamped with a harbor guild crest over a plain shirt, a scimitar at his hip, a light crossbow slung on his back.
+
+## 그레고르 단 (NPC)
+Gregor Dan, a human man in his mid-forties, dockworker foreman. Log-thick forearms, short grizzled beard, shoulders calloused from cargo straps, leather apron over a chain vest, an iron mooring-stake maul.
+
+## 마그다 렌 (NPC)
+Magda Ren, a human woman in her early thirties. Short-cropped black hair, an old crossbow-string scar on her left cheek, a worn dockhand's coat over leather armor, a heavy crossbow.
+
+## 헨드릭 볼 (NPC)
+Hendrik Bol, a human man in his fifties. Round belly, oiled-back forelock, silver-rimmed spectacles, ink-stained cuffs on a grey weighhouse official's coat.
+
+## 할데 브룬 (NPC)
+Halde Brunn, a dwarven female stonemason, around forty. Short braided copper hair pinned up, a white scar across the left eyebrow, broad shoulders, calloused hands, leather apron dusted with lime. Smiles with one corner of her mouth.
+
+## 이르키 (NPC)
+Irki, an old winged kobold. Faded grey scales, one wing membrane torn and ragged, folded wings rising behind the shoulders, a necklace of strung iron nails, silver-glinting eyes.
+
+## 샥 (NPC)
+Shak, a young winged kobold. Dark verdigris-green scales, taut unscarred wings folded behind his shoulders, sturdier build than the others, a plain dagger at his hip, silver eyes.
