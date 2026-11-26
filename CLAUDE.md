@@ -201,6 +201,7 @@ state/world.json         대륙 위치·발견 지점 (이동할 때만)
 state/clocks.json        진행 시계 / state/factions.json 세력 관계
 state/threads.json       실마리(st: open|resolved) / state/log.json 사용자에게 보이는 로그(최근 5회차분만 — 더 오래된 것은 archive/log_archive.json)
 state/dungeon.json       던전 안에 있을 때만 존재 / state/battle.json 전투 중에만 존재
+state/calendar.json      캠페인 달력(1026년) — 회차별 시작·끝 날짜, 정기 수입·지출(수금일·금액), 가게 어림. 핸드북 '달력' 탭(옛 로그 탭)이 그린다. 날이 바뀌면 today와 진행 중 회차의 end를, 새 회차는 sessions에 한 줄, 정기 돈이 생기거나 바뀌면 recurring을 고친다
 state/base.json          거점(가게) 단면도의 방 배치 — 인물 파일의 room 필드(방 id)·roomNote와 짝. 핸드북 "거점" 탭이 그린다
 state/checkpoint.json    체크포인트 카운터 / state/rev.json 핸드북 동기화 표식
 tools/dice.js            주사위 / tools/validate.js 상태 검증기 / tools/rest.js 휴식 처리 / tools/seed.js 내장본 갱신
