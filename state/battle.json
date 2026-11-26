@@ -1,30 +1,311 @@
-{"battle":{"name":"세 굴뚝 — 해 질 녘","cols":24,"rows":18,"round":0,"ground":"dirt",
-"terrain":[
- {"x":8,"y":6,"w":8,"h":6,"type":"hazard","kind":"building","floors":2,"label":"본채(이층 돌집) — 앞문 남쪽 가운데, 지하 저장고 바닥 창 동쪽 벽"},
- {"x":16,"y":0,"w":7,"h":5,"type":"hazard","kind":"building","floors":1,"label":"마구간(지붕 반쯤 무너짐) — 안은 못 봄"},
- {"x":4,"y":13,"w":7,"h":1,"type":"hazard","kind":"lowwall","elev":0.5,"label":"무너진 울타리"},
- {"x":13,"y":13,"w":8,"h":1,"type":"hazard","kind":"lowwall","elev":0.5,"label":"무너진 울타리"},
- {"x":10,"y":2,"w":3,"h":3,"type":"hazard","kind":"mark","label":"뒤뜰 모닥불"},
- {"x":5,"y":2,"w":1,"h":1,"type":"hazard","kind":"rock","label":"언 우물"},
- {"x":0,"y":15,"w":24,"h":2,"type":"hazard","kind":"mark","label":"하류 강변길"},
- {"x":0,"y":17,"w":24,"h":1,"type":"tree","kind":"tree","label":"강둑 갈대밭(그 아래 강)"},
- {"x":15,"y":10,"w":1,"h":1,"type":"hazard","kind":"mark","label":"저장고 바닥 창 — 붉은 손목 천"}
-],
-"tokens":[
- {"id":"verrix","name":"베릭스","side":"pc","x":22,"y":16,"hp":"106/106","move":6,"note":"슬롯 1:4/4 2:3/3 3:3/3 4:1/2 · 영감의 말 확인 · 메달 3/5"},
- {"id":"nadin","name":"나딘","side":"ally","x":23,"y":16,"hp":"37/37","move":6,"range":24,"note":"슬롯 1:4/4 2:3/3 3:2/2 · 마력 점 5/5"},
- {"id":"liv","name":"리브","side":"ally","x":21,"y":16,"hp":"44/44","move":6,"st":["은신"],"note":"집 안을 보고 나옴"},
- {"id":"isabel","name":"이자벨","side":"ally","x":14,"y":10,"hp":"29/29","note":"지하 저장고, 손이 앞으로 묶임 · 허벅지에 리브의 단검 · 레이피어 없음"},
- {"id":"porter1","name":"짐꾼","side":"neutral","x":13,"y":10,"note":"지하 저장고, 묶임","sprite":"militia"},
- {"id":"porter2","name":"짐꾼","side":"neutral","x":13,"y":9,"note":"지하 저장고, 묶임","sprite":"militia"},
- {"id":"kaya","name":"갈대밭의 여자","side":"neutral","x":17,"y":17,"note":"장궁, 갈대 속에 엎드림","sprite":"f_xbow"},
- {"id":"e_boss","name":"두목(망치 든 덩치)","side":"enemy","x":12,"y":8,"note":"아래층 — 리브가 봄","sprite":"brute"},
- {"id":"e_door","name":"문지기","side":"enemy","x":11,"y":10,"note":"아래층 앞문 곁 — 리브가 봄","sprite":"bandit"},
- {"id":"e_up1","name":"위층 활","side":"enemy","x":9,"y":11,"floor":2,"note":"위층 남쪽 창 — 리브가 봄","sprite":"archer"},
- {"id":"e_up2","name":"위층 활","side":"enemy","x":14,"y":11,"floor":2,"note":"위층 남쪽 창 — 리브가 봄","sprite":"archer"},
- {"id":"e_y1","name":"뒤뜰","side":"enemy","x":10,"y":2,"note":"모닥불 — 리브가 봄","sprite":"bandit"},
- {"id":"e_y2","name":"뒤뜰","side":"enemy","x":12,"y":2,"note":"모닥불 — 리브가 봄","sprite":"bandit"},
- {"id":"e_y3","name":"뒤뜰","side":"enemy","x":10,"y":4,"note":"모닥불 — 리브가 봄","sprite":"bandit"},
- {"id":"e_y4","name":"뒤뜰(쇠뇌)","side":"enemy","x":12,"y":4,"note":"모닥불 — 리브가 봄","sprite":"crossbow"},
- {"id":"e_y5","name":"뒤뜰(쇠뇌)","side":"enemy","x":13,"y":3,"note":"모닥불 — 리브가 봄","sprite":"crossbow"}
-]}}
+{
+  "battle": {
+    "name": "세 굴뚝 — 해 질 녘",
+    "cols": 24,
+    "rows": 18,
+    "round": 2,
+    "ground": "dirt",
+    "terrain": [
+      {
+        "x": 8,
+        "y": 6,
+        "w": 8,
+        "h": 6,
+        "type": "hazard",
+        "kind": "building",
+        "floors": 2,
+        "label": "본채(이층 돌집) — 앞문 남쪽 가운데, 지하 저장고 바닥 창 동쪽 벽"
+      },
+      {
+        "x": 16,
+        "y": 0,
+        "w": 7,
+        "h": 5,
+        "type": "hazard",
+        "kind": "building",
+        "floors": 1,
+        "label": "마구간(지붕 반쯤 무너짐) — 안은 못 봄"
+      },
+      {
+        "x": 4,
+        "y": 13,
+        "w": 7,
+        "h": 1,
+        "type": "hazard",
+        "kind": "lowwall",
+        "elev": 0.5,
+        "label": "무너진 울타리"
+      },
+      {
+        "x": 13,
+        "y": 13,
+        "w": 8,
+        "h": 1,
+        "type": "hazard",
+        "kind": "lowwall",
+        "elev": 0.5,
+        "label": "무너진 울타리"
+      },
+      {
+        "x": 10,
+        "y": 2,
+        "w": 3,
+        "h": 3,
+        "type": "hazard",
+        "kind": "mark",
+        "label": "뒤뜰 모닥불"
+      },
+      {
+        "x": 5,
+        "y": 2,
+        "w": 1,
+        "h": 1,
+        "type": "hazard",
+        "kind": "rock",
+        "label": "언 우물"
+      },
+      {
+        "x": 0,
+        "y": 15,
+        "w": 24,
+        "h": 2,
+        "type": "hazard",
+        "kind": "mark",
+        "label": "하류 강변길"
+      },
+      {
+        "x": 0,
+        "y": 17,
+        "w": 24,
+        "h": 1,
+        "type": "tree",
+        "kind": "tree",
+        "label": "강둑 갈대밭(그 아래 강)"
+      },
+      {
+        "x": 15,
+        "y": 10,
+        "w": 1,
+        "h": 1,
+        "type": "hazard",
+        "kind": "mark",
+        "label": "저장고 바닥 창 — 붉은 손목 천"
+      }
+    ],
+    "tokens": [
+      {
+        "id": "verrix",
+        "name": "베릭스",
+        "side": "pc",
+        "x": 16,
+        "y": 14,
+        "hp": "85/106",
+        "move": 6,
+        "note": "슬롯 1레벨 4/4 · 슬롯 2레벨 2/3 · 슬롯 3레벨 3/3 · 슬롯 4레벨 1/2 · 영감의 말 5/6 · 메달 3/5",
+        "st": []
+      },
+      {
+        "id": "nadin",
+        "name": "나딘",
+        "side": "ally",
+        "x": 19,
+        "y": 15,
+        "hp": "37/37",
+        "move": 6,
+        "range": 24,
+        "note": "슬롯 1:4/4 2:3/3 3:2/2 · 마력 점 5/5 · 반응 1R 사용(준비한 불꽃 화살) · 임시 HP 14(영감의 망토)",
+        "from": {
+          "x": 23,
+          "y": 16
+        },
+        "tmp": 14
+      },
+      {
+        "id": "liv",
+        "name": "리브",
+        "side": "ally",
+        "x": 13,
+        "y": 11,
+        "hp": "44/44",
+        "move": 6,
+        "st": [
+          "은신"
+        ],
+        "note": "위층 — 활 둘 처리 · 임시 HP 14(영감의 망토)",
+        "floor": 2,
+        "from": {
+          "x": 13,
+          "y": 10
+        },
+        "tmp": 14
+      },
+      {
+        "id": "isabel",
+        "name": "이자벨",
+        "side": "ally",
+        "x": 14,
+        "y": 10,
+        "hp": "29/29",
+        "note": "지하 저장고 — 손 풀림, 레이피어 받음, 짐꾼 둘 풀어 줌 · 임시 HP 14(영감의 망토)",
+        "st": [],
+        "tmp": 14
+      },
+      {
+        "id": "porter1",
+        "name": "짐꾼",
+        "side": "neutral",
+        "x": 13,
+        "y": 10,
+        "note": "지하 저장고 — 풀림, 엎드려 있음",
+        "sprite": "militia"
+      },
+      {
+        "id": "porter2",
+        "name": "짐꾼",
+        "side": "neutral",
+        "x": 13,
+        "y": 9,
+        "note": "지하 저장고 — 풀림, 엎드려 있음",
+        "sprite": "militia"
+      },
+      {
+        "id": "kaya",
+        "name": "갈대밭의 여자",
+        "side": "ally",
+        "x": 17,
+        "y": 17,
+        "note": "갈대 속 — 장궁 둘(+4, 1d8+2)",
+        "sprite": "f_xbow"
+      },
+      {
+        "id": "e_boss",
+        "name": "두목(망치 든 덩치)",
+        "side": "enemy",
+        "x": 11,
+        "y": 11,
+        "note": "부서진 앞문 — 중쇠뇌",
+        "sprite": "brute",
+        "from": {
+          "x": 12,
+          "y": 8
+        },
+        "hp": "82/82"
+      },
+      {
+        "id": "e_door",
+        "name": "문지기",
+        "side": "enemy",
+        "x": 11,
+        "y": 10,
+        "note": "분쇄에 쓰러짐",
+        "sprite": "bandit",
+        "hp": "0/11",
+        "down": true
+      },
+      {
+        "id": "e_up1",
+        "name": "위층 활",
+        "side": "enemy",
+        "x": 9,
+        "y": 11,
+        "floor": 2,
+        "note": "분쇄 15 → 나딘 불꽃 화살",
+        "sprite": "archer",
+        "hp": "0/16",
+        "down": true
+      },
+      {
+        "id": "e_up2",
+        "name": "위층 활",
+        "side": "enemy",
+        "x": 14,
+        "y": 11,
+        "floor": 2,
+        "note": "리브",
+        "sprite": "archer",
+        "hp": "0/16",
+        "down": true
+      },
+      {
+        "id": "e_y1",
+        "name": "뒤뜰",
+        "side": "enemy",
+        "x": 7,
+        "y": 12,
+        "note": "카야 치명타",
+        "sprite": "bandit",
+        "hp": "0/11",
+        "down": true
+      },
+      {
+        "id": "e_y2",
+        "name": "뒤뜰",
+        "side": "enemy",
+        "x": 6,
+        "y": 13,
+        "note": "카야 6 → 나딘 불꽃 화살",
+        "sprite": "bandit",
+        "hp": "0/11",
+        "down": true
+      },
+      {
+        "id": "e_y3",
+        "name": "뒤뜰",
+        "side": "enemy",
+        "x": 10,
+        "y": 7,
+        "note": "뒷문으로 아래층에 들어옴",
+        "sprite": "bandit",
+        "from": {
+          "x": 10,
+          "y": 4
+        }
+      },
+      {
+        "id": "e_y4",
+        "name": "뒤뜰(쇠뇌)",
+        "side": "enemy",
+        "x": 16,
+        "y": 9,
+        "note": "동쪽 옆뜰 — 중쇠뇌",
+        "sprite": "crossbow",
+        "from": {
+          "x": 12,
+          "y": 4
+        },
+        "hp": "32/32"
+      },
+      {
+        "id": "e_y5",
+        "name": "뒤뜰(쇠뇌)",
+        "side": "enemy",
+        "x": 17,
+        "y": 10,
+        "note": "동쪽 옆뜰 — 중쇠뇌",
+        "sprite": "crossbow",
+        "from": {
+          "x": 13,
+          "y": 3
+        },
+        "hp": "32/32"
+      }
+    ],
+    "turn": "verrix",
+    "init": [
+      "liv",
+      "kaya",
+      "isabel",
+      "nadin",
+      "e_y4",
+      "e_y5",
+      "e_boss",
+      "e_up1",
+      "e_up2",
+      "verrix",
+      "e_door",
+      "e_y1",
+      "e_y2",
+      "e_y3"
+    ]
+  }
+}
