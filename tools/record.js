@@ -213,7 +213,15 @@ function hook() {
 }
 
 const [cmd, arg] = process.argv.slice(2);
-if (cmd === "start") start(arg);
+if (cmd === "start") {
+  start(arg);
+  /* 60회차 강평 ㄹ: 회차를 열 때 묵은 자원(긴 휴식 누락)을 미리보기로 보여 준다 */
+  try {
+    const out = require("child_process").execSync("node tools/rest.js long --dry", { cwd: path.join(__dirname, ".."), encoding: "utf8" });
+    const lines = out.split("\n").filter((l) => l.trim().startsWith("·") && !/짧은 휴식 횟수/.test(l));
+    console.log(lines.length ? "[묵은 자원 — 마지막 긴 휴식 뒤 회복되지 않은 것. 장면상 긴 휴식이 있었다면 rest.js long]\n" + lines.join("\n") : "[묵은 자원 없음]");
+  } catch (e) { console.log("[묵은 자원 확인 실패] " + e.message); }
+}
 else if (cmd === "stop") stop();
 else if (cmd === "status") status();
 else if (cmd === "hook") {

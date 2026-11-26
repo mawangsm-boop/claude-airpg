@@ -51,6 +51,16 @@ if (cmd === "log") {
     console.log("검증 오류 — 커밋하지 않았습니다.\n" + v.stdout.trim());
     process.exit(1);
   }
+  /* 60회차 강평 ㄴ: 장소·시각(core.place)이 바뀐 턴이면 '자동' 칸이 있는 열린 시계를 띄운다 — 정오·새벽 자동 칸을 놓치지 않게 */
+  let clockNote = "";
+  try {
+    const prev = JSON.parse(execSync("git show HEAD:state/core.json", { cwd: ROOT, encoding: "utf8" }));
+    if (prev.place !== core.place) {
+      const cl = read("state/clocks.json"); const list = Array.isArray(cl) ? cl : (cl.clocks || []);
+      const auto = list.filter((k) => k.st !== "done" && /자동/.test(k.note || ""));
+      if (auto.length) clockNote = "\n[시각이 바뀜 — 자동 칸 확인] " + auto.map((k) => `${k.n} ${k.cur}/${k.max}: ${(k.note.match(/[^.·|]*자동[^.·|]*/g) || []).join(" / ").trim()}`).join("\n  ");
+    }
+  } catch {}
   const paths = ["state", "logs", "gm_notes", "characters.md", "archive/sessions/_checkpoints"].filter((p) => fs.existsSync(path.join(ROOT, p)));
   execSync(`git add -A ${paths.join(" ")}`, { cwd: ROOT });
   const msgFile = path.join(ROOT, ".git", "TURN_MSG");
@@ -67,7 +77,7 @@ if (cmd === "log") {
     pushed = `푸시 안 함 (밀린 커밋 ${n}개)`;
   }
   const head = execSync("git log --oneline -1", { cwd: ROOT, encoding: "utf8" }).trim();
-  console.log(`${r.rev} · ${head} · ${pushed}${/경고/.test(tail) ? "\n" + tail : ""}`);
+  console.log(`${r.rev} · ${head} · ${pushed}${/경고/.test(tail) ? "\n" + tail : ""}${clockNote}`);
 } else if (cmd === "push") {
   const p = spawnSync("git", ["push", "-q", "origin", "HEAD:main"], { cwd: ROOT, encoding: "utf8" });
   console.log(p.status === 0 ? "main 푸시 완료 (밀린 커밋 없음)" : "푸시 실패:\n" + (p.stdout + p.stderr).trim());

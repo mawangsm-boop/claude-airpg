@@ -40,6 +40,13 @@ function restoreCharges(list, who, label) {
   });
 }
 
+/* 자원 회복: 짧은 휴식에 일부만 돌아오는 자원은 shortAmount(예: 2024 야수 변신 1회)만큼만 (60회차 강평 ㄱ) */
+function refillRes(r, who) {
+  if (!refills(r.recharge) || r.cur >= r.max) return;
+  const to = (!isLong && r.shortAmount) ? Math.min(r.max, r.cur + r.shortAmount) : r.max;
+  changes.push(`${who}: ${r.n} ${r.cur}→${to}`); r.cur = to;
+}
+
 const idx = rj(S("chars", "_index.json"));
 
 /* --- PC --- */
@@ -65,10 +72,7 @@ const idx = rj(S("chars", "_index.json"));
     changes.push(`${c.name}: 슬롯 ${c.slots.cur}→${c.slots.max}`);
     c.slots.cur = c.slots.max;
   }
-  (c.resources || []).forEach((r) => {
-    if (!refills(r.recharge)) return;
-    if (r.cur < r.max) { changes.push(`${c.name}: ${r.n} ${r.cur}→${r.max}`); r.cur = r.max; }
-  });
+  (c.resources || []).forEach((r) => refillRes(r, c.name));
   /* 생명 주사위(50회차 신설): 2024판은 긴 휴식에 전부 회복. */
   if (isLong && c.hitDice && c.hitDice.cur < c.hitDice.max) {
     changes.push(`${c.name}: 생명 주사위 ${c.hitDice.cur}→${c.hitDice.max}`);
@@ -86,10 +90,7 @@ const idx = rj(S("chars", "_index.json"));
   if (isLong && c.hp && c.hp.tmp) { changes.push(`${c.name}: 임시HP ${c.hp.tmp}→0`); c.hp.tmp = 0; }
   restoreCharges(c.items, c.name);
   restoreCharges(c.equipment, c.name);
-  ((c.sheet && c.sheet.resources) || []).forEach((r) => {
-    if (!refills(r.recharge)) return;
-    if (r.cur < r.max) { changes.push(`${c.name}: ${r.n} ${r.cur}→${r.max}`); r.cur = r.max; }
-  });
+  ((c.sheet && c.sheet.resources) || []).forEach((r) => refillRes(r, c.name));
   /* 동료 주문 슬롯(sheet.slots) — 50회차, 이드라 슬롯이 긴 휴식에 안 돌아온 일로 추가. */
   ((c.sheet && Array.isArray(c.sheet.slots) && c.sheet.slots) || []).forEach((sl) => {
     if (sl.cur < sl.max && refills(sl.recharge || "long")) {

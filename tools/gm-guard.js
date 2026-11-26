@@ -147,6 +147,13 @@ function check(raw, opts = {}) {
     if (fig) out.push(`'쥐다' 비유 「${fig[0]}」 — 맡다·갖고 있다·건네다로(실제 손동작만 '쥐다')`);
     else if (n >= 3) out.push(`'쥐다'가 한 답변에 ${n}번 — 실제 손동작이 아니면 맡다·갖다·건네다로 바꾼다`);
     out.push(...weaponCheck(prose0));
+    /* 60회차 강평 ㅁ: 서술에 영어 문장이 섞임(큰 것이 솟는 장면을 영어로 씀). 괄호 속 원어 표기·인라인 코드는 뺀다 */
+    const eng = prose0.split("\n").find((l) => {
+      const t = l.replace(/`[^`]*`/g, "").replace(/\([^)]*\)/g, "").replace(/https?:\S+/g, "");
+      const words = (t.match(/[A-Za-z]{2,}/g) || []).length, han = (t.match(/[가-힣]/g) || []).length, lat = (t.match(/[A-Za-z]/g) || []).length;
+      return words >= 6 && lat > han;
+    });
+    if (eng) out.push(`서술에 영어 문장 — "${eng.trim().slice(0, 40)}…" 서술·대사는 모두 한국어로 쓴다(원어는 괄호 속 이름에만)`);
   }
   if (opts.combat || ROLL.test(text)) out.push(...combatCheck(text));
   if (opts.combat) out.push(...oaCheck(text));
@@ -223,6 +230,7 @@ if (cmd === "remind") {
       "\n⑪이자벨은 35회차부터 베스퍼다 — 그 전의 일·사람(옛 인물의 얼굴 포함)은 모른다(isabel.json unknown). 옛 인물이 재등장하면 이자벨의 반응은 unknown부터 본다." +
       "\n⑫동료의 무기·장비를 서술에 넣기 전 캐릭터 파일의 equipped·attacks를 본다. 플레이어가 이미 정한 작전·조건은 다시 선택지로 묻지 않고 그대로 진행하며, 빈 곳만 묻는다. '쥐다'는 실제 손동작에만." +
       "\n⑯동료·NPC의 대사·행동을 쓰기 전 node tools/who.js <id>로 voice·code·drive·bond·장착을 통째로 읽는다 — grep으로 자르면 말투 설명이 끊긴다(60회차: 이드라를 아이 말투로, 바친 칼을 샥 허리에 씀). 말투 꼬리표만 흉내 내지 말고 그 인물의 나이·직업·관계에서 나오는 문장으로 쓴다." +
+      "\n⑰동료·NPC를 목격자·참여자로 적기 전 지금 동행 명단(_index party·at)과 대조한다 — 위에 남은 사람을 '봤다'고 쓰지 않는다(60회차: 네리)." +
       "\n⑬장면에 '모두'를 부르면 at:상점 명단(_minor 포함)을 다시 훑는다 — grep -l '\"at\": \"상점\"' state/npcs/*.json 와 _minor.json." +
       (fs.existsSync(path.join(ROOT, "state", "battle.json"))
         ? "\n⑨전투 중 — CLAUDE.md '전투 서술 예문'대로: 라운드 제목만 두고, 행동마다 굵은 제목 없이 서술 문단(누가 누구에게·어떻게·보이는 결과, 두세 문장 이상) → 바로 아래 > 인용 블록에 '공격자 → 대상: 합계 vs AC — 명중(보정 설명)' / '피해: 주사위[값]+보정 = 합 → 대상 현재/최대'. 좌표는 서술에 넣지 않고 '현재 상황' 목록에만." +
