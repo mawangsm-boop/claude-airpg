@@ -795,7 +795,7 @@
         "cat": "accessory",
         "equipped": true,
         "charge": {
-          "cur": 4,
+          "cur": 5,
           "max": 5,
           "recharge": "long"
         },
