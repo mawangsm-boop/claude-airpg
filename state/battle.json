@@ -252,10 +252,70 @@
           "x": 13,
           "y": 10
         }
+      },
+      {
+        "id": "shed_tough1",
+        "name": "건조장 사내 1",
+        "side": "enemy",
+        "x": 19,
+        "y": 13,
+        "hp": "27/32",
+        "sprite": "sh_brute",
+        "st": [
+          "진눈깨비 장막 안(안 보임)",
+          "넘어짐"
+        ],
+        "note": "철퇴·몽둥이 — 위치는 소리로 짐작한 것"
+      },
+      {
+        "id": "shed_tough2",
+        "name": "건조장 사내 2",
+        "side": "enemy",
+        "x": 20,
+        "y": 13,
+        "hp": "26/32",
+        "sprite": "sh_brute",
+        "st": [
+          "진눈깨비 장막 안(안 보임)",
+          "넘어짐"
+        ],
+        "note": "철퇴·몽둥이 — 위치는 소리로 짐작한 것"
+      },
+      {
+        "id": "shed_tough3",
+        "name": "건조장 사내 3",
+        "side": "enemy",
+        "x": 19,
+        "y": 14,
+        "hp": "27/32",
+        "sprite": "sh_brute",
+        "st": [
+          "진눈깨비 장막 안(안 보임)",
+          "서 있음"
+        ],
+        "note": "철퇴·몽둥이 — 위치는 소리로 짐작한 것"
+      },
+      {
+        "id": "shed_tough4",
+        "name": "건조장 사내 4",
+        "side": "enemy",
+        "x": 20,
+        "y": 14,
+        "hp": "28/32",
+        "sprite": "sh_brute",
+        "st": [
+          "진눈깨비 장막 안(안 보임)",
+          "넘어짐"
+        ],
+        "note": "철퇴·몽둥이 — 위치는 소리로 짐작한 것"
       }
     ],
     "init": [
       "verrix",
+      "shed_tough1",
+      "shed_tough2",
+      "shed_tough3",
+      "shed_tough4",
       "gate_xbow1",
       "nadin",
       "liv",
