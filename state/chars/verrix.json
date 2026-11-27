@@ -926,7 +926,7 @@
         "sum": "조율 · 충전 1(새벽 회복) · 진눈깨비 폭풍(DC 17, 슬롯 없이, 집중 1분)",
         "equipped": true,
         "charge": {
-          "cur": 1,
+          "cur": 0,
           "max": 1,
           "recharge": "long"
         },
